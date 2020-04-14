@@ -29,6 +29,9 @@ public interface PlayerHistoryEntry {
     List<PlayerHistoryEntryData> getAll();
 
 
+    //update
+
+
     List<PlayerNote> getNotes();
 
     default PlayerNote createNote(DKBansPlayer creator, String message){

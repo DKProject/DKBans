@@ -1,5 +1,6 @@
 package net.pretronic.dkbans.api.player.note;
 
+import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 
 public interface PlayerNote {
@@ -12,7 +13,7 @@ public interface PlayerNote {
 
     String getMessage();
 
-    DKBansPlayer getCreator();
+    DKBansExecutor getCreator();
 
 
 

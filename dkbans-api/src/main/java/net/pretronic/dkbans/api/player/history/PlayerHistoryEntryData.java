@@ -1,7 +1,7 @@
 package net.pretronic.dkbans.api.player.history;
 
+import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.DKBansScope;
-import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.libraries.document.Document;
 
 public interface PlayerHistoryEntryData {
@@ -14,7 +14,7 @@ public interface PlayerHistoryEntryData {
 
     long getTimeout();
 
-    DKBansPlayer getStuff();
+    DKBansExecutor getStuff();
 
     DKBansScope getScope();
 
@@ -23,7 +23,7 @@ public interface PlayerHistoryEntryData {
 
     long getModifyTime();
 
-    DKBansPlayer getModifiedBy();
+    DKBansExecutor getModifiedBy();
 
     boolean isActive();
 
