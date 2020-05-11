@@ -1,19 +1,27 @@
 package net.pretronic.dkbans.api.player.history;
 
-public enum PunishmentType {
+public class PunishmentType {
 
-    BAN(0),
-    MUTE(1),
-    WARN(2);
+    public static final PunishmentType BAN = new PunishmentType(1,"Ban");
+
+    public static final PunishmentType MUTE = new PunishmentType(1,"Mute");
+
+    public static final PunishmentType WARN = new PunishmentType(1,"Warn");
+
 
     private final int id;
+    private final String name;
 
-    PunishmentType(int id){
+    public PunishmentType(int id, String name) {
         this.id = id;
+        this.name = name;
     }
 
     public int getId() {
         return id;
     }
 
+    public String getName() {
+        return name;
+    }
 }
