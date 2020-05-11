@@ -1,5 +1,6 @@
 package net.pretronic.dkbans.api.player.history;
 
+import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.PlayerSession;
 import net.pretronic.dkbans.api.player.note.PlayerNote;
@@ -7,7 +8,7 @@ import net.pretronic.dkbans.api.player.note.PlayerNoteType;
 
 import java.util.List;
 
-public interface PlayerHistoryEntry {
+public interface PlayerHistoryEntry extends Iterable<PlayerHistoryEntrySnapshot>{
 
     int getId();
 
@@ -15,19 +16,15 @@ public interface PlayerHistoryEntry {
 
     PlayerSession getSession();
 
-    PlayerHistoryType getHistoryType();
 
-    PunishmentType getPunishmentType();
+    PlayerHistoryEntrySnapshot getCurrent();
 
-    //getTempalte
+    PlayerHistoryEntrySnapshot getFirst();
+
+    List<PlayerHistoryEntrySnapshot> getAll();
 
 
-    PlayerHistoryEntryData getCurrent();
-
-    PlayerHistoryEntryData getFirst();
-
-    List<PlayerHistoryEntryData> getAll();
-
+    PlayerHistoryEntrySnapshotBuilder newSnapshot(DKBansExecutor executor);
 
     //update
 

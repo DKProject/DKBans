@@ -4,15 +4,24 @@ import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.DKBansScope;
 import net.pretronic.libraries.document.Document;
 
-public interface PlayerHistoryEntryData {
+public interface PlayerHistoryEntrySnapshot {
 
     PlayerHistoryEntry getEntry();
 
     int getId();
 
+
+    PlayerHistoryType getHistoryType();
+
+    PunishmentType getPunishmentType();
+
+
+
     String getReason();
 
     long getTimeout();
+
+    //getTempalte
 
     DKBansExecutor getStuff();
 
@@ -21,13 +30,18 @@ public interface PlayerHistoryEntryData {
     int getPoints();
 
 
-    long getModifyTime();
-
-    DKBansExecutor getModifiedBy();
-
     boolean isActive();
 
     Document getProperties();
+
+    String getRevokeMessage();
+
+    //getRevokeTemplate
+
+
+    long getModifyTime();
+
+    DKBansExecutor getModifiedBy();
 
 
 }
