@@ -1,4 +1,4 @@
 package net.pretronic.dkbans.api.storage;
 
-public class DKBansStorage {
+public interface DKBansStorage {
 }

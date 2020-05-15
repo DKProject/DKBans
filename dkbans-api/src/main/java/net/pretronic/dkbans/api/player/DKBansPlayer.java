@@ -35,7 +35,7 @@ public interface DKBansPlayer extends DKBansExecutor {
 
     PlayerSetting getSetting(String key);
 
-    PlayerSetting setSetting(String key, Object value);
+    PlayerSetting setSetting(String key, String value);
 
     boolean hasSetting(String key);
 

@@ -10,6 +10,7 @@
     <version>1.0.0.0-SNAPSHOT</version>
     <modules>
         <module>dkbans-api</module>
+        <module>dkbans-common</module>
     </modules>
 
     <distributionManagement>
@@ -27,6 +28,7 @@
 
         <dependency.pretronic.libraries>1.0.101.74-SNAPSHOT</dependency.pretronic.libraries>
         <dependency.mcnative.version>1.0.182.118-SNAPSHOT</dependency.mcnative.version>
+        <dependency.pretronic.databasequery>1.2.20.46-SNAPSHOT</dependency.pretronic.databasequery>
     </properties>
 
     <repositories>
