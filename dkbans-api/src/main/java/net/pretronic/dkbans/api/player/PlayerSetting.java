@@ -24,4 +24,6 @@ public interface PlayerSetting {
 
     void setValue(Object value);
 
+    boolean equalsValue(Object value);
+
 }

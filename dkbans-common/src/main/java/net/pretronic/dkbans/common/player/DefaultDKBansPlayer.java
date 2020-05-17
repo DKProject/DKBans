@@ -26,6 +26,7 @@ public class DefaultDKBansPlayer implements DKBansPlayer {
     private final UUID uniqueId;
     private final String name;
     private final Collection<PlayerSetting> settings;
+    private final PlayerSession lastSession;
 
     @Override
     public PlayerHistory getHistory() {
@@ -34,12 +35,12 @@ public class DefaultDKBansPlayer implements DKBansPlayer {
 
     @Override
     public PlayerSession getActiveSession() {
-         throw new UnsupportedOperationException();
+         return lastSession.isActive() ? lastSession : null;
     }
 
     @Override
     public PlayerSession getLastSession() {
-         throw new UnsupportedOperationException();
+         return lastSession;
     }
 
     @Override
@@ -49,7 +50,7 @@ public class DefaultDKBansPlayer implements DKBansPlayer {
 
     @Override
     public Collection<PlayerSetting> getSettings() {
-         throw new UnsupportedOperationException();
+         return settings;
     }
 
     @Override
@@ -72,7 +73,8 @@ public class DefaultDKBansPlayer implements DKBansPlayer {
 
     @Override
     public boolean hasSetting(String key, Object value) {
-        return false;
+        PlayerSetting settings = getSetting(key);
+        return settings != null && settings.equalsValue(value);
     }
 
     @Override
@@ -87,6 +89,9 @@ public class DefaultDKBansPlayer implements DKBansPlayer {
 
     @Override
     public PlayerNote createNote(DKBansExecutor creator, String message, PlayerNoteType type) {
+        //@Todo create to storage
+        int id = -1;
+        PlayerNote note = new DefaultPlayerNote(id,type,System.currentTimeMillis(),message,creator);
          throw new UnsupportedOperationException();
     }
 

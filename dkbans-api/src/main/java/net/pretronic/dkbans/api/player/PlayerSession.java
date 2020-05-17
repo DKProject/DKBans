@@ -32,10 +32,16 @@ public interface PlayerSession {
 
     int getClientProtocolVersion();//@Todo maybe use from McNative
 
-    String getClientLanguage();
+   // String getClientLanguage();
 
     long getConnectTime();
 
     long getDisconnectTime();
+
+    default long getDuration(){
+        return getDisconnectTime()-getConnectTime();
+    }
+
+    boolean isActive();
 
 }
