@@ -44,5 +44,12 @@
             <version>${dependency.pretronic.libraries}</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>net.pretronic.libraries</groupId>
+            <artifactId>pretroniclibraries-utility</artifactId>
+            <version>${dependency.pretronic.libraries}</version>
+            <scope>provided</scope>
+        </dependency>
+
     </dependencies>
 </project>

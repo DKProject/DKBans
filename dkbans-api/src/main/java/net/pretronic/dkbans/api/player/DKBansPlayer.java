@@ -27,9 +27,10 @@ public interface DKBansPlayer extends DKBansExecutor {
     @Nullable
     PlayerSession getLastSession();
 
+    long getOnlineTime();
+
 
     DKBansScope getCurrentScope();//Ableitung von Active Session (Server)
-
 
     Collection<PlayerSetting> getSettings();
 
