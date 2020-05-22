@@ -10,7 +10,7 @@ import net.pretronic.dkbans.api.player.note.PlayerNote;
 import net.pretronic.dkbans.api.player.note.PlayerNoteType;
 import net.pretronic.dkbans.api.player.report.PlayerReport;
 import net.pretronic.dkbans.api.player.report.PlayerReportEntry;
-import net.pretronic.dkbans.api.template.PunishmentTemplate;
+import net.pretronic.dkbans.api.template.Template;
 import net.pretronic.libraries.utility.annonations.Nullable;
 
 import java.util.Collection;
@@ -56,7 +56,7 @@ public interface DKBansPlayer extends DKBansExecutor {
 
     boolean hasActivePunish(PunishmentType type);
 
-    PlayerHistoryEntry punish(DKBansExecutor player,PunishmentTemplate template);
+    PlayerHistoryEntry punish(DKBansExecutor player, Template template);
 
     PunishmentBuilder punish();
 
@@ -66,11 +66,11 @@ public interface DKBansPlayer extends DKBansExecutor {
     PlayerReport getReport();
 
 
-    default PlayerReportEntry report(DKBansExecutor player, PunishmentTemplate template){
+    default PlayerReportEntry report(DKBansExecutor player, Template template){
         return report(player,template,getCurrentScope());
     }
 
-    PlayerReportEntry report(DKBansExecutor player, PunishmentTemplate template, DKBansScope scope);
+    PlayerReportEntry report(DKBansExecutor player, Template template, DKBansScope scope);
 
     default PlayerReportEntry report(DKBansExecutor player,String reason){
         return report(player,reason,getCurrentScope());

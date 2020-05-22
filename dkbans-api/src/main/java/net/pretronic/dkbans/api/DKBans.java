@@ -6,9 +6,14 @@ import net.pretronic.dkbans.api.player.history.PlayerHistoryManager;
 import net.pretronic.dkbans.api.player.report.ReportManager;
 import net.pretronic.dkbans.api.storage.DKBansStorage;
 import net.pretronic.dkbans.api.support.SupportTicketManager;
-import net.pretronic.dkbans.api.template.PunishmentTemplateManager;
+import net.pretronic.dkbans.api.template.TemplateManager;
 import net.pretronic.libraries.logging.PretronicLogger;
 
+/*
+- PUNISH
+- UNPUNISH
+- REPORT
+ */
 public abstract class DKBans {
 
     private static DKBans INSTANCE;
@@ -29,7 +34,7 @@ public abstract class DKBans {
 
     public abstract FilterManager getFilterManager();
 
-    public abstract PunishmentTemplateManager getTemplateManager();
+    public abstract TemplateManager getTemplateManager();
 
 
 

@@ -2,7 +2,7 @@ package net.pretronic.dkbans.api.player.history;
 
 import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.DKBansScope;
-import net.pretronic.dkbans.api.template.PunishmentTemplate;
+import net.pretronic.dkbans.api.template.Template;
 import net.pretronic.libraries.document.Document;
 
 public interface PlayerHistoryEntrySnapshot {
@@ -23,7 +23,7 @@ public interface PlayerHistoryEntrySnapshot {
     long getTimeout();
 
 
-    PunishmentTemplate getTemplate();
+    Template getTemplate();
 
 
     DKBansExecutor getStuff();

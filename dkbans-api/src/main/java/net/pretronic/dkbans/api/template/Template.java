@@ -1,10 +1,13 @@
 package net.pretronic.dkbans.api.template;
 
+import net.pretronic.dkbans.api.DKBansScope;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryType;
 import net.pretronic.dkbans.api.player.history.PunishmentType;
 import net.pretronic.libraries.document.Document;
 
-public interface PunishmentTemplate {
+import java.util.Collection;
+
+public interface Template {
 
     int getId();
 
@@ -12,18 +15,23 @@ public interface PunishmentTemplate {
 
     String getDisplayName();
 
+    String getPermission();
+
+    Collection<String> getAliases();
+
     PlayerHistoryType getHistoryType();
 
     PunishmentType getPunishmentType();
 
     boolean isEnabled();
 
+    boolean isHidden();
+
+    Collection<DKBansScope> getScopes();
+
+    TemplateCategory getCategory();
+
     Document getData();
-
-
-    PunishmentTemplateCategory getCategory();
-
-
 
 
 }
