@@ -8,9 +8,11 @@
     <artifactId>DKBans</artifactId>
     <packaging>pom</packaging>
     <version>1.0.0.0-SNAPSHOT</version>
+
     <modules>
         <module>dkbans-api</module>
         <module>dkbans-common</module>
+        <module>dkbans-minecraft</module>
     </modules>
 
     <distributionManagement>
@@ -20,17 +22,6 @@
         </repository>
     </distributionManagement>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <plugin.maven.compiler>3.8.1</plugin.maven.compiler>
-        <plugin.maven.shade>3.2.2</plugin.maven.shade>
-        <plugin.maven.deploy>3.0.0-M1</plugin.maven.deploy>
-
-        <dependency.pretronic.libraries>1.0.101.74-SNAPSHOT</dependency.pretronic.libraries>
-        <dependency.mcnative.version>1.0.182.118-SNAPSHOT</dependency.mcnative.version>
-        <dependency.pretronic.databasequery>1.2.20.46-SNAPSHOT</dependency.pretronic.databasequery>
-    </properties>
-
     <repositories>
         <repository>
             <id>pretronic</id>
@@ -38,5 +29,28 @@
         </repository>
     </repositories>
 
+    <pluginRepositories>
+        <pluginRepository>
+            <id>pretronic</id>
+            <url>https://repository.pretronic.net/repository/pretronic/</url>
+        </pluginRepository>
+    </pluginRepositories>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <plugin.maven.compiler>3.8.1</plugin.maven.compiler>
+        <plugin.maven.shade>3.2.2</plugin.maven.shade>
+        <plugin.maven.deploy>3.0.0-M1</plugin.maven.deploy>
+
+        <!-- Dependency version -->
+        <dependency.pretronic.libraries>1.2.2.138-SNAPSHOT</dependency.pretronic.libraries>
+        <dependency.mcnative.version>1.3.7.195-SNAPSHOT</dependency.mcnative.version>
+        <dependency.pretronic.databasequery>1.1.19.17-SNAPSHOT</dependency.pretronic.databasequery>
+
+        <!-- Maven plugins -->
+        <plugin.compiler>3.8.1</plugin.compiler>
+        <plugin.maven.shade>3.2.2</plugin.maven.shade>
+        <plugin.maven.deploy>3.0.0-M1</plugin.maven.deploy>
+    </properties>
 
 </project>
