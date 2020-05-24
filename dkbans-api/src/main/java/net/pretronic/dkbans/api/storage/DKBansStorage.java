@@ -3,6 +3,8 @@ package net.pretronic.dkbans.api.storage;
 import net.pretronic.dkbans.api.player.PlayerSetting;
 import net.pretronic.dkbans.api.player.note.PlayerNote;
 import net.pretronic.dkbans.api.player.note.PlayerNoteType;
+import net.pretronic.dkbans.api.template.Template;
+import net.pretronic.dkbans.api.template.TemplateCategory;
 
 import java.util.Collection;
 import java.util.UUID;
@@ -23,5 +25,7 @@ public interface DKBansStorage {
     int createPlayerNote(UUID playerId, UUID creatorId,PlayerNoteType type,String message);
 
 
+    Collection<TemplateCategory> loadTemplateCategories();
 
+    Collection<Template> loadTemplates();
 }

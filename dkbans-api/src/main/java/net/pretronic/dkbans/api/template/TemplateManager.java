@@ -1,10 +1,8 @@
 package net.pretronic.dkbans.api.template;
 
 import net.pretronic.dkbans.api.player.history.PunishmentType;
-import net.pretronic.libraries.document.Document;
 
 import java.util.Collection;
-import java.util.function.Function;
 
 public interface TemplateManager {
 
@@ -26,9 +24,7 @@ public interface TemplateManager {
     boolean removeTemplate(Template template);
 
 
-    Function<Template, Template> getTemplateTransformer(PunishmentType type);
+    Collection<TemplateCategory> getTemplateCategories();
 
-    void registerTemplateTransformer(PunishmentType type, Function<Template, Template> transformer);
-
-    void loadTemplates(Document file);
+    TemplateCategory getTemplateCategory(int id);
 }

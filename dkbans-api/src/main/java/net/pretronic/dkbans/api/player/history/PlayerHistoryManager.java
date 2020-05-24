@@ -7,4 +7,6 @@ public interface PlayerHistoryManager {
     //@Todo add callback with size maybe create in library
     Collection<PlayerHistoryEntry> getActivePunishments(String type);
 
+    PlayerHistoryType getHistoryType(int id);
+
 }

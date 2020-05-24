@@ -1,27 +1,35 @@
 package net.pretronic.dkbans.api.player.history;
 
+import net.pretronic.libraries.utility.Iterators;
+
+import java.util.ArrayList;
+import java.util.Collection;
+
 public class PunishmentType {
 
-    public static final PunishmentType ALL = new PunishmentType(0,"ALL");
+    private static final Collection<PunishmentType> REGISTRY = new ArrayList<>();
 
-    public static final PunishmentType BAN = new PunishmentType(1,"BAN");
 
-    public static final PunishmentType MUTE = new PunishmentType(2,"MUTE");
+    public static final PunishmentType ALL = registerPunishmentType(0,"ALL");
 
-    public static final PunishmentType WARN = new PunishmentType(3,"WARN");
+    public static final PunishmentType BAN = registerPunishmentType(1,"BAN");
 
-    public static final PunishmentType REPORT = new PunishmentType(4,"REPORT");
+    public static final PunishmentType MUTE = registerPunishmentType(2,"MUTE");
 
-    public static final PunishmentType UNBAN = new PunishmentType(5,"UNBAN");
+    public static final PunishmentType WARN = registerPunishmentType(3,"WARN");
 
-    public static final PunishmentType KICK = new PunishmentType(5,"KICK");
+    public static final PunishmentType REPORT = registerPunishmentType(4,"REPORT");
+
+    public static final PunishmentType UNBAN = registerPunishmentType(5,"UNBAN");
+
+    public static final PunishmentType KICK = registerPunishmentType(5,"KICK");
 
 
 
     private final int id;
     private final String name;
 
-    public PunishmentType(int id, String name) {
+    private PunishmentType(int id, String name) {
         this.id = id;
         this.name = name;
     }
@@ -38,5 +46,20 @@ public class PunishmentType {
     public boolean equals(Object o) {
         return o instanceof PunishmentType &&
                 ((PunishmentType)o).getId() == getId();
+    }
+
+
+    public static PunishmentType getPunishmentType(int id) {
+        return Iterators.findOne(REGISTRY, type -> type.getId() == id);
+    }
+
+    public static PunishmentType getPunishmentType(String name) {
+        return Iterators.findOne(REGISTRY, type -> type.getName().equalsIgnoreCase(name));
+    }
+
+    public static PunishmentType registerPunishmentType(int id, String name) {
+        PunishmentType punishmentType = new PunishmentType(id, name);
+        REGISTRY.add(punishmentType);
+        return punishmentType;
     }
 }

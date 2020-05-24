@@ -5,7 +5,26 @@ import net.pretronic.databasequery.api.collection.DatabaseCollection;
 import net.pretronic.databasequery.api.collection.field.FieldOption;
 import net.pretronic.databasequery.api.datatype.DataType;
 import net.pretronic.databasequery.api.query.ForeignKey;
+import net.pretronic.databasequery.api.query.result.QueryResultEntry;
+import net.pretronic.dkbans.api.DKBans;
+import net.pretronic.dkbans.api.DKBansScope;
+import net.pretronic.dkbans.api.player.PlayerSetting;
+import net.pretronic.dkbans.api.player.history.PunishmentType;
+import net.pretronic.dkbans.api.player.note.PlayerNote;
+import net.pretronic.dkbans.api.player.note.PlayerNoteType;
 import net.pretronic.dkbans.api.storage.DKBansStorage;
+import net.pretronic.dkbans.api.template.Template;
+import net.pretronic.dkbans.api.template.TemplateCategory;
+import net.pretronic.dkbans.api.template.TemplateFactory;
+import net.pretronic.dkbans.api.template.TemplateType;
+import net.pretronic.dkbans.common.DefaultDKBansScope;
+import net.pretronic.dkbans.common.template.DefaultTemplateCategory;
+import net.pretronic.libraries.document.type.DocumentFileType;
+import net.pretronic.libraries.utility.Validate;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.UUID;
 
 public class DefaultDKBansStorage implements DKBansStorage {
 
@@ -48,6 +67,72 @@ public class DefaultDKBansStorage implements DKBansStorage {
         this.templateCategories = createTemplateCategoriesCollection();
         this.template = createTemplateCollection();
 
+    }
+
+
+    @Override
+    public Collection<PlayerSetting> loadPlayerSettings(UUID uniqueId) {
+        return null;
+    }
+
+    @Override
+    public int createPlayerSetting(UUID uniqueId, String key, String value) {
+        return 0;
+    }
+
+    @Override
+    public void updatePlayerSetting(int entryId, String value) {
+
+    }
+
+    @Override
+    public Collection<PlayerNote> loadPlayerNotes(UUID uniqueId) {
+        return null;
+    }
+
+    @Override
+    public int createPlayerNote(UUID playerId, UUID creatorId, PlayerNoteType type, String message) {
+        return 0;
+    }
+
+    @Override
+    public Collection<TemplateCategory> loadTemplateCategories() {
+        Collection<TemplateCategory> categories = new ArrayList<>();
+        for (QueryResultEntry resultEntry : this.templateCategories.find().execute()) {
+            DefaultTemplateCategory category = new DefaultTemplateCategory(resultEntry.getInt("Id"),
+                    resultEntry.getString("Name"), resultEntry.getString("DisplayName"));
+            categories.add(category);
+        }
+        return categories;
+    }
+
+    @Override
+    public Collection<Template> loadTemplates() {
+        Collection<Template> templates = new ArrayList<>();
+
+        for (QueryResultEntry resultEntry : this.template.find().execute()) {
+            String name = resultEntry.getString("Name");
+            String type = resultEntry.getString("Type");
+            TemplateType templateType = TemplateType.byName(type);
+
+            Collection<String> aliases = DocumentFileType.JSON.getReader().read(resultEntry.getString("Aliases")).getAsCollection(String.class);
+            TemplateCategory category = DKBans.getInstance().getTemplateManager().getTemplateCategory(resultEntry.getInt("CategoryId"));
+            Collection<DefaultDKBansScope> scopes = DocumentFileType.JSON.getReader().read(resultEntry.getString("Scopes")).getAsCollection(DefaultDKBansScope.class);
+            templates.add(TemplateFactory.create(templateType,
+                    resultEntry.getInt("Id"),
+                    name,
+                    resultEntry.getString("DisplayName"),
+                    resultEntry.getString("Permission"),
+                    aliases,
+                    DKBans.getInstance().getHistoryManager().getHistoryType(resultEntry.getInt("HistoryTypeId")),
+                    PunishmentType.getPunishmentType(resultEntry.getInt("PunishmentTypeId")),
+                    resultEntry.getBoolean("Enabled"),
+                    resultEntry.getBoolean("Hidden"),
+                    scopes,
+                    category,
+                    DocumentFileType.JSON.getReader().read("Data")));
+        }
+        return templates;
     }
 
     private DatabaseCollection createPlayerSessionsCollection() {
@@ -195,12 +280,17 @@ public class DefaultDKBansStorage implements DKBansStorage {
     private DatabaseCollection createTemplateCollection() {
         return database.createCollection("dkbans_template")
                 .field("Id", DataType.INTEGER, FieldOption.PRIMARY_KEY, FieldOption.AUTO_INCREMENT)
-                .field("CategoryId", DataType.INTEGER, ForeignKey.of(this.templateCategories, "Id"), FieldOption.NOT_NULL)
+                .field("Type", DataType.STRING, FieldOption.NOT_NULL)
                 .field("Name", DataType.STRING, FieldOption.NOT_NULL)
                 .field("DisplayName", DataType.STRING, FieldOption.NOT_NULL)
+                .field("Permission", DataType.STRING, FieldOption.NOT_NULL)
+                .field("Aliases", DataType.STRING, FieldOption.NOT_NULL)
                 .field("HistoryTypeId", DataType.INTEGER, ForeignKey.of(this.historyType, "Id"), FieldOption.NOT_NULL)
-                .field("PunishmentType", DataType.INTEGER, FieldOption.NOT_NULL)//@Todo foreign key maybe / save as string
+                .field("PunishmentTypeId", DataType.INTEGER, FieldOption.NOT_NULL)//@Todo foreign key maybe / save as string
                 .field("Enabled", DataType.BOOLEAN, FieldOption.NOT_NULL)
+                .field("Hidden", DataType.BOOLEAN, FieldOption.NOT_NULL)
+                .field("Scopes", DataType.STRING, FieldOption.NOT_NULL)
+                .field("CategoryId", DataType.INTEGER, ForeignKey.of(this.templateCategories, "Id"), FieldOption.NOT_NULL)
                 .field("Data", DataType.STRING, -1, "{}", FieldOption.NOT_NULL)
                 .create();
     }

@@ -14,7 +14,7 @@ import net.pretronic.dkbans.api.player.note.PlayerNote;
 import net.pretronic.dkbans.api.player.note.PlayerNoteType;
 import net.pretronic.dkbans.api.player.report.PlayerReport;
 import net.pretronic.dkbans.api.player.report.PlayerReportEntry;
-import net.pretronic.dkbans.api.template.PunishmentTemplate;
+import net.pretronic.dkbans.api.template.Template;
 import net.pretronic.libraries.utility.Iterators;
 
 import java.util.Collection;
@@ -101,7 +101,7 @@ public class DefaultDKBansPlayer implements DKBansPlayer {
     }
 
     @Override
-    public PlayerHistoryEntry punish(DKBansExecutor player, PunishmentTemplate template) {
+    public PlayerHistoryEntry punish(DKBansExecutor player, Template template) {
          throw new UnsupportedOperationException();
     }
 
@@ -121,7 +121,7 @@ public class DefaultDKBansPlayer implements DKBansPlayer {
     }
 
     @Override
-    public PlayerReportEntry report(DKBansExecutor player, PunishmentTemplate template, DKBansScope scope) {
+    public PlayerReportEntry report(DKBansExecutor player, Template template, DKBansScope scope) {
          throw new UnsupportedOperationException();
     }
 
