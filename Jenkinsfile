@@ -112,7 +112,7 @@ pipeline {
                                 httpMode: 'POST', ignoreSslErrors: true, timeout: 3000,
                                 multipartName: 'file',
                                 responseHandle: 'NONE',
-                                uploadFile: "dkcoins-minecraft/target/dkbans-minecraft-${VERSION}.jar",
+                                uploadFile: "dkbans-minecraft/target/dkbans-minecraft-${VERSION}.jar",
                                 customHeaders:[[name:'token', value:"${SECRET}", maskValue:true]],
                                 url: "https://mirror.pretronic.net/v1/$RESOURCE_ID/versions/$BUILD_NUMBER/publish?edition=default")
 
@@ -120,7 +120,7 @@ pipeline {
                                 httpMode: 'POST', ignoreSslErrors: true, timeout: 3000,
                                 multipartName: 'file',
                                 responseHandle: 'NONE',
-                                uploadFile: "dkcoins-minecraft/target/dkbans-minecraft-${VERSION}-loader.jar",
+                                uploadFile: "dkbans-minecraft/target/dkbans-minecraft-${VERSION}-loader.jar",
                                 customHeaders:[[name:'token', value:"${SECRET}", maskValue:true]],
                                 url: "https://mirror.pretronic.net/v1/$RESOURCE_ID/versions/$BUILD_NUMBER/publish?edition=loader")
                     }
