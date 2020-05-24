@@ -64,4 +64,9 @@ public class DefaultPlayerSetting implements PlayerSetting {
     public void setValue(Object value) {
         this.value = value.toString();
     }
+
+    @Override
+    public boolean equalsValue(Object value) {
+        throw new UnsupportedOperationException();
+    }
 }
