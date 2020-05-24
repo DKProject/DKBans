@@ -28,6 +28,13 @@ public class DefaultDKBansPlayer implements DKBansPlayer {
     private final Collection<PlayerSetting> settings;
     private final PlayerSession lastSession;
 
+    public DefaultDKBansPlayer() {
+        this.uniqueId = null;
+        this.name = null;
+        this.settings = null;
+        this.lastSession = null;
+    }
+
     @Override
     public PlayerHistory getHistory() {
         throw new UnsupportedOperationException();
@@ -41,6 +48,11 @@ public class DefaultDKBansPlayer implements DKBansPlayer {
     @Override
     public PlayerSession getLastSession() {
          return lastSession;
+    }
+
+    @Override
+    public long getOnlineTime() {
+        throw new UnsupportedOperationException();
     }
 
     @Override
