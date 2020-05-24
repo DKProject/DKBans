@@ -8,7 +8,7 @@ import net.pretronic.dkbans.api.player.note.PlayerNoteType;
 
 import java.util.List;
 
-public interface PlayerHistoryEntry extends Iterable<PlayerHistoryEntrySnapshot>{
+public interface PlayerHistoryEntry extends Iterable<PlayerHistoryEntrySnapshot> {
 
     int getId();
 
@@ -31,10 +31,10 @@ public interface PlayerHistoryEntry extends Iterable<PlayerHistoryEntrySnapshot>
 
     List<PlayerNote> getNotes();
 
-    default PlayerNote createNote(DKBansPlayer creator, String message){
+    default PlayerNote createNote(DKBansExecutor creator, String message){
         return createNote(creator,message, PlayerNoteType.NORMAL);
     }
 
-    PlayerNote createNote(DKBansPlayer creator, String message, PlayerNoteType type);
+    PlayerNote createNote(DKBansExecutor creator, String message, PlayerNoteType type);
 
 }
