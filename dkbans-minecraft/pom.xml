@@ -22,7 +22,6 @@
                     <target>8</target>
                 </configuration>
             </plugin>
-
             <plugin>
                 <groupId>org.mcnative</groupId>
                 <artifactId>mcnative-buildtool-maven</artifactId>
@@ -38,7 +37,6 @@
                 <configuration>
                     <mcnative-loader-version>${dependency.mcnative.version}</mcnative-loader-version>
                     <resource-loader-version>${dependency.pretronic.libraries}</resource-loader-version>
-
                     <manifest>
                         <name>DKBans</name>
                         <id>ea6d0f4d-1a8f-4f9b-835a-c17b9169df17</id>
@@ -49,7 +47,6 @@
                         <author>Davide Wietlisbach &amp; Philipp Elvin Friedhoff</author>
                         <messageModule>DKBans</messageModule>
                     </manifest>
-
                     <loader>
                         <version>${project.version}</version>
                         <versionUrl>https://mirror.pretronic.net/v1/{plugin.id}/versions/latest?plain=true&amp;qualifier={qualifier}</versionUrl>
@@ -57,7 +54,6 @@
                     </loader>
                 </configuration>
             </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
@@ -74,7 +70,6 @@
                     </execution>
                 </executions>
             </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
@@ -114,8 +109,5 @@
             <version>${dependency.pretronic.libraries}</version>
             <scope>provided</scope>
         </dependency>
-
     </dependencies>
-
-
 </project>
