@@ -39,41 +39,41 @@ public class DefaultDKBans extends DKBans {
 
     @Override
     public PretronicLogger getLogger() {
-        return null;
+        return this.logger;
     }
 
     @Override
     public DKBansStorage getStorage() {
-        return null;
+        return this.storage;
     }
 
     @Override
     public PlayerHistoryManager getHistoryManager() {
-        return null;
+        return this.historyManager;
     }
 
     @Override
     public ReportManager getReportManager() {
-        return null;
+        return this.reportManager;
     }
 
     @Override
     public SupportTicketManager getTicketManager() {
-        return null;
+        return this.ticketManager;
     }
 
     @Override
     public BroadcastManager getBroadcastManager() {
-        return null;
+        return this.broadcastManager;
     }
 
     @Override
     public FilterManager getFilterManager() {
-        return null;
+        return this.filterManager;
     }
 
     @Override
     public TemplateManager getTemplateManager() {
-        return null;
+        return this.templateManager;
     }
 }

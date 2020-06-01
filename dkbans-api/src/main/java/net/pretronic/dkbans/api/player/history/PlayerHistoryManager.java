@@ -9,4 +9,6 @@ public interface PlayerHistoryManager {
 
     PlayerHistoryType getHistoryType(int id);
 
+    PlayerHistoryType getHistoryType(String name);
+
 }

@@ -214,7 +214,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 .field("ModifiedTime", DataType.LONG)//@Todo nullAble ?
                 .field("ModifiedBy", DataType.UUID)//@Todo nullAble ?
                 .field("Active", DataType.BOOLEAN, FieldOption.NOT_NULL)
-                .field("Properties", DataType.STRING, -1, "{}", FieldOption.NOT_NULL)
+                .field("Properties", DataType.LONG_TEXT, -1, "{}", FieldOption.NOT_NULL)
                 .field("HistoryTypeId", DataType.INTEGER, ForeignKey.of(this.historyType, "Id"), FieldOption.NOT_NULL)
                 .field("PunishmentType", DataType.INTEGER, FieldOption.NOT_NULL)//@Todo foreign key maybe / save as string
                 .field("TemplateId", DataType.INTEGER)//@Todo add foreign key
@@ -253,7 +253,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 .field("ServerName", DataType.STRING, FieldOption.NOT_NULL)
                 .field("ServerId", DataType.UUID, FieldOption.NOT_NULL)
                 .field("Time", DataType.LONG, FieldOption.NOT_NULL)
-                .field("Properties", DataType.STRING, -1, "{}", FieldOption.NOT_NULL)
+                .field("Properties", DataType.LONG_TEXT, -1, "{}", FieldOption.NOT_NULL)
                 .create();
     }
 
@@ -291,7 +291,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 .field("Hidden", DataType.BOOLEAN, FieldOption.NOT_NULL)
                 .field("Scopes", DataType.STRING, FieldOption.NOT_NULL)
                 .field("CategoryId", DataType.INTEGER, ForeignKey.of(this.templateCategories, "Id"), FieldOption.NOT_NULL)
-                .field("Data", DataType.STRING, -1, "{}", FieldOption.NOT_NULL)
+                .field("Data", DataType.LONG_TEXT, -1, "{}", FieldOption.NOT_NULL)
                 .create();
     }
 }

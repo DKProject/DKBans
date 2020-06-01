@@ -1,4 +1,4 @@
-package net.pretronic.dkbans.common.player;
+package net.pretronic.dkbans.common.player.note;
 
 import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.player.note.PlayerNote;

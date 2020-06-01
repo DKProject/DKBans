@@ -12,6 +12,7 @@ import net.pretronic.dkbans.api.template.punishment.PunishmentTemplateEntryFacto
 import net.pretronic.dkbans.common.template.DefaultTemplate;
 import net.pretronic.libraries.document.Document;
 import net.pretronic.libraries.document.entry.DocumentEntry;
+import net.pretronic.libraries.document.type.DocumentFileType;
 import net.pretronic.libraries.utility.Convert;
 import net.pretronic.libraries.utility.map.Pair;
 import net.pretronic.libraries.utility.map.Triple;
@@ -34,7 +35,7 @@ public class DefaultPunishmentTemplate extends DefaultTemplate implements Punish
 
         this.durations = loadDurations(data.getDocument("durations"));
 
-        Triple<Map<Integer, PunishmentTemplateEntry>, Integer, Double> points = loadPoints(data);
+        Triple<Map<Integer, PunishmentTemplateEntry>, Integer, Double> points = loadPoints(data.getDocument("points"));
         this.points = points.getFirst();
         this.addedPoints = points.getSecond();
         this.pointsDivider = points.getThird();
@@ -61,21 +62,23 @@ public class DefaultPunishmentTemplate extends DefaultTemplate implements Punish
     }
 
     private Map<Integer, PunishmentTemplateEntry> loadDurations(Document data) {
+        System.out.println(DocumentFileType.JSON.getWriter().write(data, true));
         Map<Integer, PunishmentTemplateEntry> durations = new HashMap<>();
 
         for (DocumentEntry entry0 : data) {
             Pair<Integer, PunishmentTemplateEntry> entry = loadEntry(entry0);
-            points.put(entry.getKey(), entry.getValue());
+            durations.put(entry.getKey(), entry.getValue());
         }
         return durations;
     }
 
     private Triple<Map<Integer, PunishmentTemplateEntry>, Integer, Double> loadPoints(Document data) {
+        System.out.println(DocumentFileType.JSON.getWriter().write(data, true));
         int addedPoints = data.getInt("addedPoints");
         double pointsDivider = data.getDouble("pointsDivider");
         Map<Integer, PunishmentTemplateEntry> points = new HashMap<>();
 
-        for (DocumentEntry entry0 : data) {
+        for (DocumentEntry entry0 : data.getDocument("durations")) {
             Pair<Integer, PunishmentTemplateEntry> entry = loadEntry(entry0);
             points.put(entry.getKey(), entry.getValue());
         }

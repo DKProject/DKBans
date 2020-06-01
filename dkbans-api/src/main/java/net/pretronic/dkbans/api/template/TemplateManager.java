@@ -27,4 +27,7 @@ public interface TemplateManager {
     Collection<TemplateCategory> getTemplateCategories();
 
     TemplateCategory getTemplateCategory(int id);
+
+    TemplateCategory getTemplateCategory(String name);
+
 }

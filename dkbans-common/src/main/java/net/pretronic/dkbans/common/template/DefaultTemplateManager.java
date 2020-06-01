@@ -81,6 +81,11 @@ public class DefaultTemplateManager implements TemplateManager {
         return Iterators.findOne(this.templateCategories, category -> category.getId() == id);
     }
 
+    @Override
+    public TemplateCategory getTemplateCategory(String name) {
+        return Iterators.findOne(this.templateCategories, category -> category.getName().equalsIgnoreCase(name));
+    }
+
     private void registerDefaultFactories() {
         TemplateFactory.register(TemplateType.PUNISHMENT, new DefaultPunishmentTemplate.Factory());
 

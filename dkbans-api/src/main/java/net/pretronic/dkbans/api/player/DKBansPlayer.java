@@ -8,13 +8,13 @@ import net.pretronic.dkbans.api.player.history.PlayerHistoryEntry;
 import net.pretronic.dkbans.api.player.history.PunishmentType;
 import net.pretronic.dkbans.api.player.note.PlayerNote;
 import net.pretronic.dkbans.api.player.note.PlayerNoteType;
+import net.pretronic.dkbans.api.player.note.PlayerNoteList;
 import net.pretronic.dkbans.api.player.report.PlayerReport;
 import net.pretronic.dkbans.api.player.report.PlayerReportEntry;
 import net.pretronic.dkbans.api.template.Template;
 import net.pretronic.libraries.utility.annonations.Nullable;
 
 import java.util.Collection;
-import java.util.List;
 
 public interface DKBansPlayer extends DKBansExecutor {
 
@@ -45,7 +45,7 @@ public interface DKBansPlayer extends DKBansExecutor {
 
     PlayerChatLog getChatLog();
 
-    List<PlayerNote> getNotes();
+    PlayerNoteList getNotes();
 
     default PlayerNote createNote(DKBansExecutor creator, String message){
         return createNote(creator,message,PlayerNoteType.NORMAL);

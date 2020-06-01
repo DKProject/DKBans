@@ -12,13 +12,14 @@ import net.pretronic.dkbans.api.player.history.PlayerHistoryEntry;
 import net.pretronic.dkbans.api.player.history.PunishmentType;
 import net.pretronic.dkbans.api.player.note.PlayerNote;
 import net.pretronic.dkbans.api.player.note.PlayerNoteType;
+import net.pretronic.dkbans.api.player.note.PlayerNoteList;
 import net.pretronic.dkbans.api.player.report.PlayerReport;
 import net.pretronic.dkbans.api.player.report.PlayerReportEntry;
 import net.pretronic.dkbans.api.template.Template;
+import net.pretronic.dkbans.common.player.note.DefaultPlayerNote;
 import net.pretronic.libraries.utility.Iterators;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.UUID;
 
 public class DefaultDKBansPlayer implements DKBansPlayer {
@@ -95,7 +96,7 @@ public class DefaultDKBansPlayer implements DKBansPlayer {
     }
 
     @Override
-    public List<PlayerNote> getNotes() {
+    public PlayerNoteList getNotes() {
          throw new UnsupportedOperationException();
     }
 

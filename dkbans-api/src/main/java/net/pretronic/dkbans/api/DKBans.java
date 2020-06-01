@@ -41,6 +41,7 @@ public abstract class DKBans {
 
 
     public static DKBans getInstance() {
+        if(INSTANCE == null) throw new IllegalArgumentException("Instance not set");
         return INSTANCE;
     }
 
