@@ -37,9 +37,10 @@ public interface PlayerHistoryEntrySnapshot {
 
     Document getProperties();
 
-    String getRevokeMessage();
 
-    //getRevokeTemplate
+    String getRevokeReason();
+
+    Template getRevokeTemplate();
 
 
     long getModifyTime();

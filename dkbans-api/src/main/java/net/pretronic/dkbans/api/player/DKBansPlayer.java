@@ -3,9 +3,7 @@ package net.pretronic.dkbans.api.player;
 import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.DKBansScope;
 import net.pretronic.dkbans.api.player.chatlog.PlayerChatLog;
-import net.pretronic.dkbans.api.player.history.PlayerHistory;
-import net.pretronic.dkbans.api.player.history.PlayerHistoryEntry;
-import net.pretronic.dkbans.api.player.history.PunishmentType;
+import net.pretronic.dkbans.api.player.history.*;
 import net.pretronic.dkbans.api.player.note.PlayerNote;
 import net.pretronic.dkbans.api.player.note.PlayerNoteType;
 import net.pretronic.dkbans.api.player.report.PlayerReport;
@@ -32,6 +30,7 @@ public interface DKBansPlayer extends DKBansExecutor {
 
     DKBansScope getCurrentScope();//Ableitung von Active Session (Server)
 
+
     Collection<PlayerSetting> getSettings();
 
     PlayerSetting getSetting(String key);
@@ -41,6 +40,11 @@ public interface DKBansPlayer extends DKBansExecutor {
     boolean hasSetting(String key);
 
     boolean hasSetting(String key,Object value);
+
+
+    boolean hasBypass();
+
+    void setBypass(boolean bypass);
 
 
     PlayerChatLog getChatLog();
@@ -57,9 +61,15 @@ public interface DKBansPlayer extends DKBansExecutor {
 
     boolean hasActivePunish(PunishmentType type);
 
-    PlayerHistoryEntry punish(DKBansExecutor player, Template template);
+    PlayerHistoryEntrySnapshot punish(DKBansExecutor executor, Template template);
 
-    PunishmentBuilder punish();
+    PlayerHistoryEntrySnapshotBuilder punish();
+
+
+    void unpunish(DKBansExecutor executor,PunishmentType type,String reason);
+
+
+    PlayerHistoryEntrySnapshot kick(DKBansExecutor executor,String reason);
 
 
     boolean hasReport();
