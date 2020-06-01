@@ -12,7 +12,7 @@ public interface PlayerHistoryEntry extends Iterable<PlayerHistoryEntrySnapshot>
 
     int getId();
 
-    DKBansPlayer getPlayer();
+    PlayerHistory getHistory();
 
     PlayerSession getSession();
 
