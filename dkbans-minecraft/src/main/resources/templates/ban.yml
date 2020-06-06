@@ -11,7 +11,6 @@ templates:
     hidden: false
     historyType: CHAT
     category: TEST
-    punishmentType: BAN
     scopes:
       - SERVER_GROUP:TTT
     durations:

@@ -64,6 +64,16 @@ public class DefaultPunishmentTemplate extends DefaultTemplate implements Punish
     @Override
     public void build(DKBansPlayer player, DKBansExecutor executor, PlayerHistoryEntrySnapshotBuilder builder) {
         PunishmentTemplateEntry entry = getNextEntry(player);
+        builder.historyType(getHistoryType())
+                .punishmentType(entry.getType())
+                .stuff(executor)
+                .reason(getDisplayName())
+                .template(this)
+                .points(addedPoints);
+        if(entry instanceof DurationAble) {
+            builder.duration(((DurationAble)entry).getDuration());
+        }
+
     }
 
     @Override
@@ -73,6 +83,9 @@ public class DefaultPunishmentTemplate extends DefaultTemplate implements Punish
         else data = points;
 
         int count = player.getHistory().calculate(getGroup().getCalculationType(), getHistoryType());
+        if(getGroup().getCalculationType() == CalculationType.POINTS) {
+            count = (int) Math.round(count/pointsDivider);
+        }
 
         PunishmentTemplateEntry punishmentTemplateEntry = null;
 

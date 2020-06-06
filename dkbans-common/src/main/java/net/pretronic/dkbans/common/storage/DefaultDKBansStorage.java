@@ -129,7 +129,6 @@ public class DefaultDKBansStorage implements DKBansStorage {
                         subResultEntry.getString("Permission"),
                         aliases,
                         DKBans.getInstance().getHistoryManager().getHistoryType(subResultEntry.getInt("HistoryTypeId")),
-                        PunishmentType.getPunishmentType(subResultEntry.getInt("PunishmentTypeId")),
                         subResultEntry.getBoolean("Enabled"),
                         subResultEntry.getBoolean("Hidden"),
                         scopes,
@@ -164,7 +163,6 @@ public class DefaultDKBansStorage implements DKBansStorage {
                         .set("Permission", template.getPermission())
                         .set("Aliases", template.getAliases())
                         .set("HistoryTypeId", template.getHistoryType().getId())
-                        .set("PunishmentTypeId", template.getPunishmentType().getId())
                         .set("Enabled", template.isEnabled())
                         .set("Hidden", template.isHidden())
                         .set("Scopes", DocumentFileType.JSON.getWriter().write(Document.newDocument(template.getScopes()), false))
@@ -179,7 +177,6 @@ public class DefaultDKBansStorage implements DKBansStorage {
                         .set("Permission", template.getPermission())
                         .set("Aliases", template.getAliases())
                         .set("HistoryTypeId", template.getHistoryType().getId())
-                        .set("PunishmentTypeId", template.getPunishmentType().getId())
                         .set("Enabled", template.isEnabled())
                         .set("Hidden", template.isHidden())
                         .set("Scopes", DocumentFileType.JSON.getWriter().write(Document.newDocument(template.getScopes()), false))
@@ -408,7 +405,6 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 .field("Permission", DataType.STRING, FieldOption.NOT_NULL)
                 .field("Aliases", DataType.STRING, FieldOption.NOT_NULL)
                 .field("HistoryTypeId", DataType.INTEGER, ForeignKey.of(this.historyType, "Id"), FieldOption.NOT_NULL)
-                .field("PunishmentTypeId", DataType.INTEGER, FieldOption.NOT_NULL)//@Todo foreign key maybe / save as string
                 .field("Enabled", DataType.BOOLEAN, FieldOption.NOT_NULL)
                 .field("Hidden", DataType.BOOLEAN, FieldOption.NOT_NULL)
                 .field("Scopes", DataType.STRING, FieldOption.NOT_NULL)

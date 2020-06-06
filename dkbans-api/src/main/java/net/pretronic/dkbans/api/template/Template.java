@@ -28,8 +28,6 @@ public interface Template {
 
     PlayerHistoryType getHistoryType();
 
-    PunishmentType getPunishmentType();
-
     boolean isEnabled();
 
     boolean isHidden();

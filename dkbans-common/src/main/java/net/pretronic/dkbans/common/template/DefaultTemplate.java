@@ -25,7 +25,6 @@ public class DefaultTemplate implements Template {
     private final String permission;
     private final Collection<String> aliases;
     private final PlayerHistoryType historyType;
-    private final PunishmentType punishmentType;
     private final boolean enabled;
     private final boolean hidden;
     private final Collection<? extends DKBansScope> scopes;
@@ -33,7 +32,7 @@ public class DefaultTemplate implements Template {
     private final Document data;
 
     public DefaultTemplate(int id, String name, TemplateGroup group, String displayName, String permission, Collection<String> aliases, PlayerHistoryType historyType,
-                           PunishmentType punishmentType, boolean enabled, boolean hidden, Collection<? extends DKBansScope> scopes,
+                           boolean enabled, boolean hidden, Collection<? extends DKBansScope> scopes,
                            TemplateCategory category, Document data) {
         this.id = id;
         this.name = name;
@@ -42,7 +41,6 @@ public class DefaultTemplate implements Template {
         this.permission = permission;
         this.aliases = aliases;
         this.historyType = historyType;
-        this.punishmentType = punishmentType;
         this.enabled = enabled;
         this.hidden = hidden;
         this.scopes = scopes;
@@ -83,11 +81,6 @@ public class DefaultTemplate implements Template {
     @Override
     public PlayerHistoryType getHistoryType() {
         return this.historyType;
-    }
-
-    @Override
-    public PunishmentType getPunishmentType() {
-        return this.punishmentType;
     }
 
     @Override
