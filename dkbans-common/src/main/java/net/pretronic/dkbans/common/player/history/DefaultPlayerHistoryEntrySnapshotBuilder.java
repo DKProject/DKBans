@@ -7,6 +7,7 @@ import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.history.*;
 import net.pretronic.dkbans.api.template.Template;
 import net.pretronic.libraries.document.Document;
+import net.pretronic.libraries.utility.map.Pair;
 
 import java.time.Duration;
 import java.util.concurrent.TimeUnit;
@@ -121,16 +122,22 @@ public class DefaultPlayerHistoryEntrySnapshotBuilder implements PlayerHistoryEn
     @Override
     public PlayerHistoryEntrySnapshot execute() {
         //@Todo validate settings
-        PlayerHistoryEntry historyEntry = entry;
-        if(historyEntry == null){
-            historyEntry = DKBans.getInstance().getStorage().createHistoryEntry(player,player.getActiveSession());
-            return historyEntry.getCurrent();
-        }else{
+        if(entry == null){
+            DefaultPlayerHistoryEntrySnapshot snapshot = new DefaultPlayerHistoryEntrySnapshot(null, -1, historyType, punishmentType,
+                    reason, timeout, template, stuff, scope, points, active, properties, revokeReason, revokeTemplate,
+                    System.currentTimeMillis(), modifier);
 
+            Pair<PlayerHistoryEntry, Integer> result = DKBans.getInstance().getStorage().createHistoryEntry(player, snapshot);
+            snapshot.setInsertResult(result);
+            return snapshot;
+        }else{
+            DefaultPlayerHistoryEntrySnapshot snapshot = new DefaultPlayerHistoryEntrySnapshot(entry, -1, historyType,
+                    punishmentType, reason, timeout, template, stuff, scope, points, active, properties, revokeReason,
+                    revokeTemplate, System.currentTimeMillis(), modifier);
+            int id = DKBans.getInstance().getStorage().insertHistoryEntrySnapshot(snapshot);
+            snapshot.setId(id);
+            return snapshot;
         }
-        //@Todo create snapshot
-        //        return new DefaultPlayerHistoryEntrySnapshot(entry, id, historyType, punishmentType, reason, timeout, template, stuff, scope, points, active, properties, revokeMessage, revokeTemplate, modifyTime, modifier);
-        return null;
     }
 
 }

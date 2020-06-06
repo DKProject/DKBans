@@ -28,11 +28,9 @@ public interface PlayerHistory {
     }
 
 
-    int calculateAmount(PunishmentType punishmentType);
+    int calculate(CalculationType calculationType, PlayerHistoryType type);
 
-    int calculateAmount(PlayerHistoryType historyType,PunishmentType punishmentType);
+    int calculate(CalculationType calculationType, PunishmentType type);
 
-
-    int calculatePoints(PlayerHistoryType type);
 
 }

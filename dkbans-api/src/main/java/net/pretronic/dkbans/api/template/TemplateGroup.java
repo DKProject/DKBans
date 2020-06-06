@@ -1,5 +1,6 @@
 package net.pretronic.dkbans.api.template;
 
+import net.pretronic.dkbans.api.player.history.CalculationType;
 import net.pretronic.libraries.utility.Iterators;
 
 import java.util.List;
@@ -11,7 +12,9 @@ public interface TemplateGroup extends Iterable<Template> {
 
     String getName();
 
-    TemplateType getType();
+    TemplateType getTemplateType();
+
+    CalculationType getCalculationType();
 
     List<Template> getTemplates();
 

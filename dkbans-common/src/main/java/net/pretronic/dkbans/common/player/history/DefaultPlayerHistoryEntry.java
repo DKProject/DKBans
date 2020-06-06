@@ -19,19 +19,26 @@ public class DefaultPlayerHistoryEntry implements PlayerHistoryEntry {
 
     private final PlayerHistory history;
     private final int id;
+    private final long created;
 
     private PlayerHistoryEntrySnapshot current;
     private List<PlayerHistoryEntrySnapshot> snapshots;
 
-    public DefaultPlayerHistoryEntry(PlayerHistory history, int id, PlayerHistoryEntrySnapshot current) {
+    public DefaultPlayerHistoryEntry(PlayerHistory history, int id, PlayerHistoryEntrySnapshot current, long created) {
         this.history = history;
         this.id = id;
+        this.created = created;
         this.current = current;
     }
 
     @Override
     public int getId() {
         return id;
+    }
+
+    @Override
+    public long getCreated() {
+        return this.created;
     }
 
     @Override

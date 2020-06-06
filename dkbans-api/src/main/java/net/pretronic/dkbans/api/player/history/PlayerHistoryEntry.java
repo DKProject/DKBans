@@ -13,6 +13,8 @@ public interface PlayerHistoryEntry extends Iterable<PlayerHistoryEntrySnapshot>
 
     int getId();
 
+    long getCreated();
+
     PlayerHistory getHistory();
 
     PlayerSession getSession();

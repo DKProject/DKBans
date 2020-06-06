@@ -43,7 +43,9 @@ public interface PlayerHistoryEntrySnapshot {
     Template getRevokeTemplate();
 
 
-    long getModifyTime();
+    boolean isModifiedActive();
+
+    long getModifiedTime();
 
     DKBansExecutor getModifiedBy();
 

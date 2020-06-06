@@ -15,7 +15,7 @@ public abstract class TemplateFactory {
     private static final Map<TemplateType, TemplateFactory> FACTORY = new HashMap<>();
 
 
-    public abstract Template create(int id, String name, String displayName, String permission, Collection<String> aliases,
+    public abstract Template create(int id, String name, TemplateGroup group, String displayName, String permission, Collection<String> aliases,
                                     PlayerHistoryType historyType, PunishmentType punishmentType, boolean enabled, boolean hidden,
                                     Collection<? extends DKBansScope> scopes, TemplateCategory category, Document data);
 
@@ -26,22 +26,23 @@ public abstract class TemplateFactory {
         FACTORY.put(templateType, factory);
     }
 
-    public static Template create(TemplateType templateType, int id, String name, String displayName, String permission, Collection<String> aliases,
-                                  PlayerHistoryType historyType, PunishmentType punishmentType, boolean enabled, boolean hidden,
+    public static Template create(TemplateType templateType, int id, String name, TemplateGroup group, String displayName,
+                                  String permission, Collection<String> aliases, PlayerHistoryType historyType,
+                                  PunishmentType punishmentType, boolean enabled, boolean hidden,
                                   Collection<? extends DKBansScope> scopes, TemplateCategory category, Document data) {
 
         Validate.notNull(templateType, name, category);
         TemplateFactory factory = FACTORY.get(templateType);
         if(factory == null) throw new IllegalArgumentException("No template factory for template type " + templateType.getName() + " found");
 
-        return factory.create(id, name, displayName, permission, aliases, historyType, punishmentType, enabled, hidden, scopes, category, data);
+        return factory.create(id, name, group, displayName, permission, aliases, historyType, punishmentType, enabled, hidden, scopes, category, data);
     }
 
     public static Document toData(Template template) {
 
         Validate.notNull(template);
-        TemplateFactory factory = FACTORY.get(template.getType());
-        if(factory == null) throw new IllegalArgumentException("No template factory for template type " + template.getType().getName() + " found");
+        TemplateFactory factory = FACTORY.get(template.getGroup().getTemplateType());
+        if(factory == null) throw new IllegalArgumentException("No template factory for template type " + template.getGroup().getTemplateType().getName() + " found");
 
         return factory.createData(template);
     }

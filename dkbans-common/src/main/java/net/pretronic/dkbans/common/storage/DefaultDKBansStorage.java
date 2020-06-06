@@ -8,9 +8,12 @@ import net.pretronic.databasequery.api.query.ForeignKey;
 import net.pretronic.databasequery.api.query.SearchOrder;
 import net.pretronic.databasequery.api.query.result.QueryResult;
 import net.pretronic.databasequery.api.query.result.QueryResultEntry;
+import net.pretronic.databasequery.api.query.type.FindQuery;
 import net.pretronic.databasequery.api.query.type.SearchQuery;
 import net.pretronic.dkbans.api.DKBans;
+import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.PlayerSetting;
+import net.pretronic.dkbans.api.player.history.PlayerHistory;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryEntry;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryEntrySnapshot;
 import net.pretronic.dkbans.api.player.history.PunishmentType;
@@ -19,11 +22,14 @@ import net.pretronic.dkbans.api.player.note.PlayerNoteType;
 import net.pretronic.dkbans.api.storage.DKBansStorage;
 import net.pretronic.dkbans.api.template.*;
 import net.pretronic.dkbans.common.DefaultDKBansScope;
+import net.pretronic.dkbans.common.player.history.DefaultPlayerHistoryEntry;
+import net.pretronic.dkbans.common.player.history.DefaultPlayerHistoryEntrySnapshot;
 import net.pretronic.dkbans.common.template.DefaultTemplate;
 import net.pretronic.dkbans.common.template.DefaultTemplateCategory;
 import net.pretronic.dkbans.common.template.DefaultTemplateGroup;
 import net.pretronic.libraries.document.Document;
 import net.pretronic.libraries.document.type.DocumentFileType;
+import net.pretronic.libraries.utility.map.Pair;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -118,6 +124,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 templateGroup.addTemplateInternal(TemplateFactory.create(templateType,
                         subResultEntry.getInt("Id"),
                         name,
+                        templateGroup,
                         subResultEntry.getString("DisplayName"),
                         subResultEntry.getString("Permission"),
                         aliases,
@@ -137,7 +144,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
     @Override
     public void importTemplateGroup(TemplateGroup templateGroup) {
         FindQuery groupExist = this.templateGroups.find().where("Name", templateGroup.getName())
-                .where("Type", templateGroup.getType().getName());
+                .where("TemplateType", templateGroup.getTemplateType().getName());
         if(templateGroup.getId() != -1) {
             groupExist.where("Id", templateGroup.getId());
         }
@@ -186,8 +193,8 @@ public class DefaultDKBansStorage implements DKBansStorage {
     }
 
     @Override
-    public int createHistoryEntry(int playerId, int sessionId) {
-        return 0;
+    public Pair<PlayerHistoryEntry, Integer> createHistoryEntry(DKBansPlayer player, PlayerHistoryEntrySnapshot snapshot) {
+        return null;
     }
 
     @Override
@@ -196,27 +203,44 @@ public class DefaultDKBansStorage implements DKBansStorage {
     }
 
     @Override
-    public int createHistoryEntry(int playerId, int sessionId) {
-        return 0;
-    }
-
-    @Override
-    public int insertHistoryEntrySnapshot(PlayerHistoryEntrySnapshot snapshot) {
-        return 0;
-    }
-
-    @Override
-    public List<PlayerHistoryEntry> loadActiveEntries(UUID uniqueId) {
+    public List<PlayerHistoryEntry> loadActiveEntries(PlayerHistory playerHistory) {
         List<PlayerHistoryEntry> result = new ArrayList<>();
         QueryResult result0 = history.find()
+                .getAs(this.history, "Id", "HistoryId")
+                .getAs(this.historyVersion, "Id", "SnapshotId")
+                .get("Created", "Reason", "Timeout", "StaffId", "ScopeType", "ScopeName", "ScopeId", "Points", "Active", "Properties",
+                        "HistoryTypeId", "PunishmentType", "TemplateId", "RevokeTemplateId", "RevokeReason", "ModifiedTime", "ModifiedBy", "ModifiedActive")
                 .join(historyVersion).on(historyVersion,"HistoryId",history,"Id")
                 .where("ModifiedActive",true).where("Active",true)
                 .or(query -> query.where("Timeout",-1).whereLower("Timeout",System.currentTimeMillis()))
-                .orderBy("ModifiedTime", SearchOrder.ASC)
+                .orderBy("ModifiedTime", SearchOrder.DESC)
                 .execute();
-        if(!result0.isEmpty()){
-            for (QueryResultEntry entry : result0) {
 
+        if(!result0.isEmpty()){
+            for (QueryResultEntry resultEntry : result0) {
+                DefaultPlayerHistoryEntrySnapshot snapshot = new DefaultPlayerHistoryEntrySnapshot(null,
+                        resultEntry.getInt("SnapshotId"),
+                        DKBans.getInstance().getHistoryManager().getHistoryType(resultEntry.getInt("HistoryTypeId")),
+                        PunishmentType.getPunishmentType(resultEntry.getString("PunishmentType")),
+                        resultEntry.getString("Reason"),
+                        resultEntry.getLong("Timeout"),
+                        DKBans.getInstance().getTemplateManager().getTemplate(resultEntry.getInt("TemplateId")),
+                        null/*@Todo add stuff*/,
+                        new DefaultDKBansScope(resultEntry.getString("ScopeType"), resultEntry.getString("ScopeName"), resultEntry.getUniqueId("ScopeId")),
+                        resultEntry.getInt("Points"),
+                        resultEntry.getBoolean("Active"),
+                        null/*@Todo add properties*/,
+                        resultEntry.getString("RevokeReason"),
+                        DKBans.getInstance().getTemplateManager().getTemplate(resultEntry.getInt("RevokeTemplateId")),
+                        resultEntry.getBoolean("ModifiedActive"),
+                        resultEntry.getLong("ModifiedTime"),
+                        null/*@Todo add modified by*/);
+                DefaultPlayerHistoryEntry entry = new DefaultPlayerHistoryEntry(playerHistory,
+                        resultEntry.getInt("HistoryId"),
+                        snapshot,
+                        resultEntry.getLong("Created"));
+                snapshot.setEntry(entry);
+                result.add(entry);
             }
         }
         return result;
@@ -284,6 +308,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
         return database.createCollection("dkbans_history")
                 .field("Id", DataType.INTEGER, FieldOption.PRIMARY_KEY, FieldOption.AUTO_INCREMENT)
                 .field("SessionId", DataType.INTEGER, ForeignKey.of(this.playerSessions, "Id"), FieldOption.NOT_NULL)
+                .field("Created", DataType.LONG, FieldOption.NOT_NULL)
                 .create();
     }
 
@@ -298,8 +323,6 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 .field("ScopeName", DataType.STRING, FieldOption.NOT_NULL)
                 .field("ScopeId", DataType.UUID, FieldOption.NOT_NULL)
                 .field("Points", DataType.INTEGER)
-                .field("ModifiedTime", DataType.LONG)//@Todo nullAble ?
-                .field("ModifiedBy", DataType.UUID)//@Todo nullAble ?
                 .field("Active", DataType.BOOLEAN, FieldOption.NOT_NULL)
                 .field("Properties", DataType.LONG_TEXT, -1, "{}", FieldOption.NOT_NULL)
                 .field("HistoryTypeId", DataType.INTEGER, ForeignKey.of(this.historyType, "Id"), FieldOption.NOT_NULL)
@@ -371,7 +394,8 @@ public class DefaultDKBansStorage implements DKBansStorage {
         return database.createCollection("dkbans_template_groups")
                 .field("Id", DataType.INTEGER, FieldOption.PRIMARY_KEY, FieldOption.AUTO_INCREMENT)
                 .field("Name", DataType.STRING, FieldOption.NOT_NULL)
-                .field("Type", DataType.STRING, FieldOption.NOT_NULL)
+                .field("TemplateType", DataType.STRING, FieldOption.NOT_NULL)
+                .field("CalculationType", DataType.STRING, FieldOption.NOT_NULL)
                 .create();
     }
 

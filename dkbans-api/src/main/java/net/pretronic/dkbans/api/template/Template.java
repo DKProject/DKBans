@@ -18,7 +18,7 @@ public interface Template {
 
     String getName();
 
-    TemplateType getType();
+    TemplateGroup getGroup();
 
     String getDisplayName();
 
@@ -39,10 +39,6 @@ public interface Template {
     TemplateCategory getCategory();
 
     Document getData();
-
-    void build(DKBansPlayer player, DKBansExecutor executor,PlayerHistoryEntrySnapshotBuilder builder);
-
-    PunishmentTemplateEntry getNextEntry(DKBansPlayer player);
 
     default boolean hasName(String name){
         if(getName().equalsIgnoreCase(name) || GeneralUtil.isNaturalNumber(name) && getId() == Integer.parseInt(name)) return true;
