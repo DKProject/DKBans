@@ -46,7 +46,7 @@ public class DefaultPlayerHistory implements PlayerHistory {
 
     @Override
     public List<PlayerHistoryEntry> getEntries() {
-        return entries;
+        return getActiveEntries();//@Todo load all
     }
 
     @Override
@@ -65,7 +65,7 @@ public class DefaultPlayerHistory implements PlayerHistory {
             return Iterators.filter(entries, entry -> entry.getCurrent().isActive());
         }else {
             if(!loadedActive){
-                entries.addAll(DKBans.getInstance().getStorage().loadActiveEntries(player.getUniqueId()));
+                entries.addAll(DKBans.getInstance().getStorage().loadActiveEntries(this));
                 loadedActive = true;
             }
             return entries;
@@ -73,24 +73,49 @@ public class DefaultPlayerHistory implements PlayerHistory {
     }
 
     @Override
-    public int calculateAmount(PunishmentType punishmentType) {
-        return 0;
+    public List<PlayerHistoryEntry> getEntries(int page, int size) {
+        return null;
     }
 
     @Override
-    public int calculateAmount(PlayerHistoryType historyType, PunishmentType punishmentType) {
-        return 0;
-    }
-
-    @Override
-    public int calculatePoints(PlayerHistoryType type) {
-        int result = 0;
-        for (PlayerHistoryEntry entry : getEntries()) {
-            PlayerHistoryEntrySnapshot snapshot = entry.getCurrent();
-            if(snapshot.getHistoryType().equals(type)){
-                result += snapshot.getPoints();
+    public int calculate(CalculationType calculationType, PlayerHistoryType type) {
+        if(calculationType == CalculationType.AMOUNT){
+            int amount = 0;
+            for (PlayerHistoryEntry entry : getEntries()) {
+                if(entry.getCurrent().getHistoryType().equals(type)) amount++;
             }
+            return amount;
+        }else if(calculationType == CalculationType.POINTS){
+            int result = 0;
+            for (PlayerHistoryEntry entry : getEntries()) {
+                PlayerHistoryEntrySnapshot snapshot = entry.getCurrent();
+                if(snapshot.getHistoryType().equals(type)){
+                    result += snapshot.getPoints();
+                }
+            }
+            return result;
         }
-        return result;
+        throw new IllegalArgumentException("Invalid calculation type");
+    }
+
+    @Override
+    public int calculate(CalculationType calculationType, PunishmentType type) {
+        if(calculationType == CalculationType.AMOUNT){
+            int amount = 0;
+            for (PlayerHistoryEntry entry : getEntries()) {
+                if(entry.getCurrent().getPunishmentType().equals(type)) amount++;
+            }
+            return amount;
+        }else if(calculationType == CalculationType.POINTS){
+            int result = 0;
+            for (PlayerHistoryEntry entry : getEntries()) {
+                PlayerHistoryEntrySnapshot snapshot = entry.getCurrent();
+                if(snapshot.getPunishmentType().equals(type)){
+                    result += snapshot.getPoints();
+                }
+            }
+            return result;
+        }
+        throw new IllegalArgumentException("Invalid calculation type");
     }
 }

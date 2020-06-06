@@ -5,10 +5,14 @@ import net.pretronic.databasequery.api.collection.DatabaseCollection;
 import net.pretronic.databasequery.api.collection.field.FieldOption;
 import net.pretronic.databasequery.api.datatype.DataType;
 import net.pretronic.databasequery.api.query.ForeignKey;
+import net.pretronic.databasequery.api.query.QueryGroup;
 import net.pretronic.databasequery.api.query.SearchOrder;
 import net.pretronic.databasequery.api.query.result.QueryResult;
 import net.pretronic.databasequery.api.query.result.QueryResultEntry;
 import net.pretronic.databasequery.api.query.type.FindQuery;
+import net.pretronic.databasequery.api.query.type.InsertQuery;
+import net.pretronic.databasequery.api.query.type.SearchQuery;
+import net.pretronic.databasequery.api.query.type.UpdateQuery;
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.history.*;
@@ -188,12 +192,44 @@ public class DefaultDKBansStorage implements DKBansStorage {
 
     @Override
     public Pair<PlayerHistoryEntry, Integer> createHistoryEntry(DKBansPlayer player, PlayerHistoryEntrySnapshot snapshot) {
-        return null;
+        long created = System.currentTimeMillis();
+        int id = history.insert()
+                .set("PlayerId",player.getUniqueId())
+                .set("Created",created)
+                .executeAndGetGeneratedKeyAsInt("Id");
+        int snapId = buildSnapshotQuery(id,snapshot);
+        return new Pair<>(new DefaultPlayerHistoryEntry(player.getHistory(),id,snapshot,created),snapId);
     }
 
     @Override
-    public int insertHistoryEntrySnapshot(PlayerHistoryEntrySnapshot snapshot) {
-        return 0;
+    public int insertHistoryEntrySnapshot(PlayerHistoryEntrySnapshot snapshot) {//@Todo optimize with group execution
+        historyVersion.update().set("ModifiedActive").where("HistoryId",snapshot.getEntry().getId()).execute();
+        return buildSnapshotQuery(snapshot.getEntry().getId(),snapshot);
+    }
+
+    private int buildSnapshotQuery(int historyId,PlayerHistoryEntrySnapshot snapshot){
+       InsertQuery query = historyVersion.insert()
+                .set("HistoryId",historyId)
+                .set("Reason",snapshot.getReason())
+                .set("Timeout",snapshot.getTimeout())
+                .set("StaffId",snapshot.getStuff().getUniqueId())
+                .set("Points",snapshot.getPoints())
+                .set("Active",snapshot.isActive())
+                .set("Properties","{}")
+                .set("HistoryTypeId",snapshot.getHistoryType().getId())
+                .set("PunishmentType",snapshot.getPunishmentType().getId())
+                .set("RevokeReason",snapshot.getReason())
+                .set("ModifiedTime",snapshot.getModifiedTime())
+                .set("ModifiedBy",snapshot.getModifiedBy().getUniqueId())
+                .set("ModifiedActive",snapshot.isModifiedActive());
+       if(snapshot.getRevokeTemplate() != null) query.set("RevokeTemplateId",snapshot.getRevokeTemplate().getId());
+       if(snapshot.getTemplate() != null) query.set("TemplateId",snapshot.getTemplate().getId());
+       if(snapshot.getScope() != null){
+           query.set("ScopeType",snapshot.getScope().getType())
+                   .set("ScopeName",snapshot.getScope().getName())
+                   .set("ScopeId",snapshot.getScope().getId());
+       }
+       return query.executeAndGetGeneratedKeyAsInt("Id");
     }
 
     @Override
@@ -301,7 +337,8 @@ public class DefaultDKBansStorage implements DKBansStorage {
     private DatabaseCollection createHistoryCollection() {
         return database.createCollection("dkbans_history")
                 .field("Id", DataType.INTEGER, FieldOption.PRIMARY_KEY, FieldOption.AUTO_INCREMENT)
-                .field("SessionId", DataType.INTEGER, ForeignKey.of(this.playerSessions, "Id"), FieldOption.NOT_NULL)
+                .field("PlayerId", DataType.UUID, FieldOption.NOT_NULL)
+                .field("SessionId", DataType.INTEGER, ForeignKey.of(this.playerSessions, "Id"))
                 .field("Created", DataType.LONG, FieldOption.NOT_NULL)
                 .create();
     }

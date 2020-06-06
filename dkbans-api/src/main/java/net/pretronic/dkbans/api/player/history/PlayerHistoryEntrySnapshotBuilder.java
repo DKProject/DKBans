@@ -44,6 +44,8 @@ public interface PlayerHistoryEntrySnapshotBuilder {
     PlayerHistoryEntrySnapshotBuilder revokeTemplate(Template template);
 
 
+    PlayerHistoryEntrySnapshotBuilder modifiedBy(DKBansExecutor executor);
+
     PlayerHistoryEntrySnapshot execute();
 
 }
