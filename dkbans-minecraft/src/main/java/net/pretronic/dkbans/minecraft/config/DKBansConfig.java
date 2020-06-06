@@ -71,7 +71,7 @@ public class DKBansConfig {
         TemplateType templateType = TemplateType.byNameOrNull(document.getString("type"));
 
         if(templateType == null) {
-            DKBans.getInstance().getLogger().warn("Could not load template group {} with type {}", groupName, document.getString("type"));
+            dkBans.getLogger().warn("Could not load template group {} with type {}", groupName, document.getString("type"));
             return null;
         }
 
