@@ -4,6 +4,7 @@ import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.PlayerSession;
 import net.pretronic.dkbans.api.player.note.PlayerNote;
+import net.pretronic.dkbans.api.player.note.PlayerNoteList;
 import net.pretronic.dkbans.api.player.note.PlayerNoteType;
 
 import java.util.List;
@@ -29,7 +30,7 @@ public interface PlayerHistoryEntry extends Iterable<PlayerHistoryEntrySnapshot>
     //update
 
 
-    List<PlayerNote> getNotes();
+    PlayerNoteList getNotes();
 
     default PlayerNote createNote(DKBansExecutor creator, String message){
         return createNote(creator,message, PlayerNoteType.NORMAL);

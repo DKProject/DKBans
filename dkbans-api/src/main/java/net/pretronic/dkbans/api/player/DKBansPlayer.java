@@ -3,16 +3,19 @@ package net.pretronic.dkbans.api.player;
 import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.DKBansScope;
 import net.pretronic.dkbans.api.player.chatlog.PlayerChatLog;
-import net.pretronic.dkbans.api.player.history.*;
+import net.pretronic.dkbans.api.player.history.PlayerHistory;
+import net.pretronic.dkbans.api.player.history.PlayerHistoryEntrySnapshot;
+import net.pretronic.dkbans.api.player.history.PlayerHistoryEntrySnapshotBuilder;
+import net.pretronic.dkbans.api.player.history.PunishmentType;
 import net.pretronic.dkbans.api.player.note.PlayerNote;
-import net.pretronic.dkbans.api.player.note.PlayerNoteType;
 import net.pretronic.dkbans.api.player.note.PlayerNoteList;
+import net.pretronic.dkbans.api.player.note.PlayerNoteType;
 import net.pretronic.dkbans.api.player.report.PlayerReport;
 import net.pretronic.dkbans.api.player.report.PlayerReportEntry;
 import net.pretronic.dkbans.api.template.Template;
 import net.pretronic.libraries.utility.annonations.Nullable;
 
-import java.util.Collection;
+import java.net.InetAddress;
 
 public interface DKBansPlayer extends DKBansExecutor {
 
@@ -31,20 +34,7 @@ public interface DKBansPlayer extends DKBansExecutor {
     DKBansScope getCurrentScope();//Ableitung von Active Session (Server)
 
 
-    Collection<PlayerSetting> getSettings();
-
-    PlayerSetting getSetting(String key);
-
-    PlayerSetting setSetting(String key, String value);
-
-    boolean hasSetting(String key);
-
-    boolean hasSetting(String key,Object value);
-
-
     boolean hasBypass();
-
-    void setBypass(boolean bypass);
 
 
     PlayerChatLog getChatLog();
@@ -90,8 +80,9 @@ public interface DKBansPlayer extends DKBansExecutor {
     PlayerReportEntry report(DKBansExecutor player,String reason, DKBansScope scope);
 
 
+    void startSession(String currentName, InetAddress address);
 
-
+    void finishSession();
 
 
 }

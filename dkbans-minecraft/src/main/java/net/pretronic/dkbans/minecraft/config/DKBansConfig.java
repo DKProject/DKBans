@@ -7,6 +7,7 @@ import net.pretronic.dkbans.api.template.*;
 import net.pretronic.dkbans.common.DefaultDKBansScope;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
 import net.pretronic.libraries.document.Document;
+import net.pretronic.libraries.document.annotations.DocumentKey;
 import net.pretronic.libraries.document.entry.DocumentEntry;
 import net.pretronic.libraries.utility.Convert;
 import net.pretronic.libraries.utility.io.FileUtil;
@@ -18,28 +19,17 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class DKBansConfig {
 
     public static boolean PLAYER_ON_JOIN_CLEAR_CHAT = true;
+    public static boolean PLAYER_ON_JOIN_INFO_TEAMCHAT = true;
+    public static boolean PLAYER_ON_JOIN_INFO_REPORT = true;
 
-
-    public static CommandConfiguration COMMAND_JUMP_TO = CommandConfiguration.newBuilder()
-            .name("jumpto")
-            .aliases("goto")
-            .permission("dkbans.command.jumpto")
-            .create();
-
-    public static CommandConfiguration COMMAND_ONLINE_TIME = CommandConfiguration.newBuilder()
-            .name("onlinetime")
-            .permission("dkbans.command.onlinetime")
-            .create();
-
-    public static CommandConfiguration COMMAND_PING = CommandConfiguration.newBuilder()
-            .name("ping")
-            .permission("dkbans.command.ping")
-            .create();
+    public static boolean PLAYER_SESSION_LOGGING = true;
+    public static long PLAYER_SESSION_RETENTION = TimeUnit.DAYS.toMillis(180);
 
     public static void load(DKBans dkBans) {
         File templates = new File("plugins/DKBans/templates/");

@@ -1,0 +1,20 @@
+
+
+
+
+
+
+
+
+dkbans.command.playerInfo.online: '${dkbans.prefix}
+
+&8» &7Name&8: &c{player.displayName} &8(&cOffline)
+&8» &7UniqueId&8: &c{player.firstLoginFormatted}
+&8» &7FirstLog&8: &c{player.lastLoginFormatted}
+&8» &7Server&8: &c{player.xxx}
+&8» &7OnlineTime&8: &c{player.onlineTimeFormatted}
+&8» &7Ip&8: &c{player.lastSession.hostName}
+&8» &7Country&8: &c{player.lastSession.country}
+&8» &7Region&8: &c{player.lastSession.region}
+
+'

@@ -1,9 +1,11 @@
 package net.pretronic.dkbans.common.player.history;
 
+import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.history.*;
 import net.pretronic.libraries.utility.Iterators;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -11,12 +13,15 @@ public class DefaultPlayerHistory implements PlayerHistory {
 
     private final DKBansPlayer player;
 
-    private final List<PlayerHistoryEntry> entries;
+    private List<PlayerHistoryEntry> entries;
 
+    private boolean loadedActive;
+    private boolean loadedAll;
 
 
     public DefaultPlayerHistory(DKBansPlayer player) {
         this.player = player;
+        this.entries = new ArrayList<>();
     }
 
     @Override
@@ -36,7 +41,7 @@ public class DefaultPlayerHistory implements PlayerHistory {
 
     @Override
     public PlayerHistoryEntry getLastEntry(PunishmentType type) {
-        return  null;
+        return null;
     }
 
     @Override
@@ -56,7 +61,15 @@ public class DefaultPlayerHistory implements PlayerHistory {
 
     @Override
     public List<PlayerHistoryEntry> getActiveEntries() {
-        return Iterators.filter(entries, entry -> entry.getCurrent().isActive());
+        if(loadedAll){
+            return Iterators.filter(entries, entry -> entry.getCurrent().isActive());
+        }else {
+            if(!loadedActive){
+                entries.addAll(DKBans.getInstance().getStorage().loadActiveEntries(player.getUniqueId()));
+                loadedActive = true;
+            }
+            return entries;
+        }
     }
 
     @Override

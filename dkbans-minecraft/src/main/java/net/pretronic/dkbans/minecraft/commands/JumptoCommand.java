@@ -27,11 +27,8 @@ public class JumptoCommand extends BasicCommand {
             sender.sendMessage(Messages.COMMAND_HELP_JUMPTO);
             return;
         }
-        MinecraftPlayer player = McNative.getInstance().getPlayerManager().getPlayer(arguments[0]);
-        if(player == null){
-            sender.sendMessage(Messages.PLAYER_NOT_FOUND, VariableSet.create().add("name",arguments[0]));
-            return;
-        }
+        MinecraftPlayer player = CommandUtil.getPlayer(sender,arguments[0]);
+        if(player == null) return;
 
         OnlineMinecraftPlayer onlinePlayer = player.getAsOnlinePlayer();
         if(onlinePlayer == null){

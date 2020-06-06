@@ -24,4 +24,6 @@ public interface Filter {
 
     void delete();
 
+    boolean check(String input);
+
 }

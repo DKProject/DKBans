@@ -8,7 +8,9 @@ import net.pretronic.dkbans.api.player.history.PlayerHistoryEntry;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryEntrySnapshot;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryEntrySnapshotBuilder;
 import net.pretronic.dkbans.api.player.note.PlayerNote;
+import net.pretronic.dkbans.api.player.note.PlayerNoteList;
 import net.pretronic.dkbans.api.player.note.PlayerNoteType;
+import net.pretronic.libraries.utility.annonations.Internal;
 
 import java.util.Iterator;
 import java.util.List;
@@ -18,9 +20,18 @@ public class DefaultPlayerHistoryEntry implements PlayerHistoryEntry {
     private final PlayerHistory history;
     private final int id;
 
+    private PlayerHistoryEntrySnapshot current;
+    private List<PlayerHistoryEntrySnapshot> snapshots;
+
+    public DefaultPlayerHistoryEntry(PlayerHistory history, int id, PlayerHistoryEntrySnapshot current) {
+        this.history = history;
+        this.id = id;
+        this.current = current;
+    }
+
     @Override
     public int getId() {
-        return 0;
+        return id;
     }
 
     @Override
@@ -30,41 +41,49 @@ public class DefaultPlayerHistoryEntry implements PlayerHistoryEntry {
 
     @Override
     public PlayerSession getSession() {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public PlayerHistoryEntrySnapshot getCurrent() {
-        return null;
+        return current;
     }
 
     @Override
     public PlayerHistoryEntrySnapshot getFirst() {
-        return null;
+        return getAll().get(0);
     }
 
     @Override
     public List<PlayerHistoryEntrySnapshot> getAll() {
-        return null;
+        if(snapshots == null){
+            //@Todo load
+        }
+        return snapshots;
     }
 
     @Override
     public PlayerHistoryEntrySnapshotBuilder newSnapshot(DKBansExecutor executor) {
-        return null;
+        return new DefaultPlayerHistoryEntrySnapshotBuilder(history.getPlayer(),this);
     }
 
     @Override
-    public List<PlayerNote> getNotes() {
-        return null;
+    public PlayerNoteList getNotes() {
+        throw new UnsupportedOperationException();
     }
 
     @Override
-    public PlayerNote createNote(DKBansPlayer creator, String message, PlayerNoteType type) {
-        return null;
+    public PlayerNote createNote(DKBansExecutor creator, String message, PlayerNoteType type) {
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public Iterator<PlayerHistoryEntrySnapshot> iterator() {
         return getAll().iterator();
+    }
+
+    @Internal
+    public void setCurrent(PlayerHistoryEntrySnapshot current){
+        this.current = current;
     }
 }

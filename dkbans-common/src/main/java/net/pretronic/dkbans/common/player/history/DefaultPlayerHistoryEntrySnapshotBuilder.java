@@ -19,7 +19,7 @@ public class DefaultPlayerHistoryEntrySnapshotBuilder implements PlayerHistoryEn
 
     private PlayerHistoryType historyType;
     private PunishmentType punishmentType;
-    private String reason;
+    private String reason = "Unknown";
     private long timeout = -1;
     private Template template = null;
     private DKBansExecutor stuff = null;
@@ -30,6 +30,12 @@ public class DefaultPlayerHistoryEntrySnapshotBuilder implements PlayerHistoryEn
     private String revokeReason = null;
     private Template revokeTemplate = null;
     private DKBansExecutor modifier;
+
+    public DefaultPlayerHistoryEntrySnapshotBuilder(DKBansPlayer player, PlayerHistoryEntry entry) {
+        this.player = player;
+        this.history = player.getHistory();
+        this.entry = entry;
+    }
 
     @Override
     public DefaultPlayerHistoryEntrySnapshotBuilder historyType(PlayerHistoryType historyType) {
@@ -118,6 +124,9 @@ public class DefaultPlayerHistoryEntrySnapshotBuilder implements PlayerHistoryEn
         PlayerHistoryEntry historyEntry = entry;
         if(historyEntry == null){
             historyEntry = DKBans.getInstance().getStorage().createHistoryEntry(player,player.getActiveSession());
+            return historyEntry.getCurrent();
+        }else{
+
         }
         //@Todo create snapshot
         //        return new DefaultPlayerHistoryEntrySnapshot(entry, id, historyType, punishmentType, reason, timeout, template, stuff, scope, points, active, properties, revokeMessage, revokeTemplate, modifyTime, modifier);

@@ -27,7 +27,7 @@ public class TempPunishCommand extends BasicCommand {
             return;
         }
 
-        MinecraftPlayer player = CommandUtil.getPlayer(sender,arguments[0]);
+        MinecraftPlayer player = CommandUtil.getPlayer(sender,arguments[0],true);
         if(player == null) return;
 
         DKBansPlayer dkBansPlayer = player.getAs(DKBansPlayer.class);

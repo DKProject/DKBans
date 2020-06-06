@@ -14,6 +14,8 @@ public interface PlayerHistory {
 
     List<PlayerHistoryEntry> getEntries();
 
+    List<PlayerHistoryEntry> getEntries(int page, int size);
+
     List<PlayerHistoryEntry> getEntries(PunishmentType punishmentType);
 
     List<PlayerHistoryEntry> getEntries(PlayerHistoryType historyType);

@@ -1,31 +1,27 @@
 package net.pretronic.dkbans.minecraft;
 
 import net.pretronic.dkbans.api.DKBans;
-import net.pretronic.dkbans.api.DKBansScope;
 import net.pretronic.dkbans.api.player.history.PunishmentType;
-import net.pretronic.dkbans.api.template.Template;
-import net.pretronic.dkbans.api.template.TemplateCategory;
-import net.pretronic.dkbans.api.template.TemplateFactory;
-import net.pretronic.dkbans.api.template.TemplateType;
+import net.pretronic.dkbans.api.template.TemplateGroup;
 import net.pretronic.dkbans.common.DefaultDKBans;
-import net.pretronic.dkbans.common.DefaultDKBansScope;
 import net.pretronic.dkbans.minecraft.commands.JumptoCommand;
 import net.pretronic.dkbans.minecraft.commands.OnlineTimeCommand;
 import net.pretronic.dkbans.minecraft.commands.PingCommand;
+import net.pretronic.dkbans.minecraft.commands.PlayerInfoCommand;
+import net.pretronic.dkbans.minecraft.commands.punish.KickCommand;
+import net.pretronic.dkbans.minecraft.commands.punish.PermaPunishCommand;
+import net.pretronic.dkbans.minecraft.commands.punish.TempPunishCommand;
+import net.pretronic.dkbans.minecraft.commands.punish.TemplatePunishCommand;
+import net.pretronic.dkbans.minecraft.config.CommandConfig;
 import net.pretronic.dkbans.minecraft.config.DKBansConfig;
-import net.pretronic.libraries.document.Document;
-import net.pretronic.libraries.document.entry.DocumentEntry;
+import net.pretronic.dkbans.minecraft.listeners.PlayerListener;
+import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
 import net.pretronic.libraries.plugin.lifecycle.Lifecycle;
 import net.pretronic.libraries.plugin.lifecycle.LifecycleState;
-import net.pretronic.libraries.utility.Convert;
-import net.pretronic.libraries.utility.map.Pair;
-import org.mcnative.common.McNative;
 import org.mcnative.common.plugin.MinecraftPlugin;
-import org.mcnative.common.plugin.configuration.Configuration;
 import org.mcnative.common.plugin.configuration.ConfigurationProvider;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Map;
 
 public class DKBansPlugin extends MinecraftPlugin {
 
@@ -35,14 +31,11 @@ public class DKBansPlugin extends MinecraftPlugin {
     public void onLoad(LifecycleState state){
         getLogger().info("DKBans is starting, please wait..");
 
-        this.dkBans = new DefaultDKBans(getLogger(), McNative.getInstance().getRegistry().getService(ConfigurationProvider.class).getDatabase(this, true));
+        this.dkBans = new DefaultDKBans(getLogger(), getRuntime().getRegistry().getService(ConfigurationProvider.class).getDatabase(this, true));
 
-        Configuration config = getConfiguration();
-
-        config.load(DKBansConfig.class);
-
+        getConfiguration().load(DKBansConfig.class);
+        getConfiguration("commands").load(CommandConfig.class);
         DKBansConfig.load(dkBans);
-
 
         registerCommands();
 
@@ -53,8 +46,25 @@ public class DKBansPlugin extends MinecraftPlugin {
     }
 
     private void registerCommands(){
-        McNative.getInstance().getLocal().getCommandManager().registerCommand(new JumptoCommand(this, DKBansConfig.COMMAND_JUMP_TO));
-        McNative.getInstance().getLocal().getCommandManager().registerCommand(new OnlineTimeCommand(this, DKBansConfig.COMMAND_ONLINE_TIME));
-        McNative.getInstance().getLocal().getCommandManager().registerCommand(new PingCommand(this, DKBansConfig.COMMAND_PING));
+        getRuntime().getLocal().getCommandManager().registerCommand(new JumptoCommand(this, CommandConfig.COMMAND_JUMP_TO));
+        getRuntime().getLocal().getCommandManager().registerCommand(new OnlineTimeCommand(this, CommandConfig.COMMAND_ONLINE_TIME));
+        getRuntime().getLocal().getCommandManager().registerCommand(new PingCommand(this, CommandConfig.COMMAND_PING));
+        getRuntime().getLocal().getCommandManager().registerCommand(new PlayerInfoCommand(this, CommandConfig.COMMAND_PLAYER_INFO));
+
+        getRuntime().getLocal().getCommandManager().registerCommand(new KickCommand(this, CommandConfig.COMMAND_PUNISH_KICK));
+
+        getRuntime().getLocal().getCommandManager().registerCommand(new PermaPunishCommand(this, CommandConfig.COMMAND_PUNISH_BAN_PERMANENT, PunishmentType.BAN));
+        getRuntime().getLocal().getCommandManager().registerCommand(new TempPunishCommand(this, CommandConfig.COMMAND_PUNISH_BAN_TEMPORARY, PunishmentType.BAN));
+        getRuntime().getLocal().getCommandManager().registerCommand(new PermaPunishCommand(this, CommandConfig.COMMAND_PUNISH_MUTE_PERMANENT, PunishmentType.MUTE));
+        getRuntime().getLocal().getCommandManager().registerCommand(new TempPunishCommand(this, CommandConfig.COMMAND_PUNISH_MUTE_TEMPORARY, PunishmentType.MUTE));
+
+        for (Map.Entry<String, CommandConfiguration> entry : CommandConfig.COMMAND_TEMPLATE_PUNISHMENT.entrySet()) {
+            TemplateGroup group = dkBans.getTemplateManager().getTemplateGroup(entry.getKey());
+            if(group == null){
+                getLogger().warn("Configured template group "+entry.getKey()+" does not exist");
+            }else{
+                getRuntime().getLocal().getCommandManager().registerCommand(new TemplatePunishCommand(this,entry.getValue(),group));
+            }
+        }
     }
 }

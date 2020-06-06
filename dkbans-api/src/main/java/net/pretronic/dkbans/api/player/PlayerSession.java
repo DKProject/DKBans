@@ -13,6 +13,11 @@ public interface PlayerSession {
 
     InetAddress getIpAddress();
 
+    default String getHostName(){
+        InetAddress address = getIpAddress();
+        return address != null ? address.getHostAddress() : "Unknown";
+    }
+
     String getCountry();
 
     String getRegion();

@@ -9,4 +9,7 @@ public interface DKBansScope {
     String getName();
 
     UUID getId();
+
+
+    boolean isCurrent();
 }

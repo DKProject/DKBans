@@ -24,10 +24,11 @@ public class PermaPunishCommand extends BasicCommand {
     @Override
     public void execute(CommandSender sender, String[] arguments) {
         if(arguments.length <= 1){
+            //@Todo usage
             return;
         }
 
-        MinecraftPlayer player = CommandUtil.getPlayer(sender,arguments[0]);
+        MinecraftPlayer player = CommandUtil.getPlayer(sender,arguments[0],true);
         if(player == null) return;
 
         DKBansPlayer dkBansPlayer = player.getAs(DKBansPlayer.class);

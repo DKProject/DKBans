@@ -5,9 +5,14 @@ import net.pretronic.databasequery.api.collection.DatabaseCollection;
 import net.pretronic.databasequery.api.collection.field.FieldOption;
 import net.pretronic.databasequery.api.datatype.DataType;
 import net.pretronic.databasequery.api.query.ForeignKey;
+import net.pretronic.databasequery.api.query.SearchOrder;
+import net.pretronic.databasequery.api.query.result.QueryResult;
 import net.pretronic.databasequery.api.query.result.QueryResultEntry;
+import net.pretronic.databasequery.api.query.type.SearchQuery;
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.player.PlayerSetting;
+import net.pretronic.dkbans.api.player.history.PlayerHistoryEntry;
+import net.pretronic.dkbans.api.player.history.PlayerHistoryEntrySnapshot;
 import net.pretronic.dkbans.api.player.history.PunishmentType;
 import net.pretronic.dkbans.api.player.note.PlayerNote;
 import net.pretronic.dkbans.api.player.note.PlayerNoteType;
@@ -20,6 +25,7 @@ import net.pretronic.libraries.document.type.DocumentFileType;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 public class DefaultDKBansStorage implements DKBansStorage {
@@ -65,22 +71,6 @@ public class DefaultDKBansStorage implements DKBansStorage {
         this.templateGroups = createTemplateGroupsCollection();
 
         this.template = createTemplateCollection();
-
-    }
-
-
-    @Override
-    public Collection<PlayerSetting> loadPlayerSettings(UUID uniqueId) {
-        return null;
-    }
-
-    @Override
-    public int createPlayerSetting(UUID uniqueId, String key, String value) {
-        return 0;
-    }
-
-    @Override
-    public void updatePlayerSetting(int entryId, String value) {
 
     }
 
@@ -164,6 +154,33 @@ public class DefaultDKBansStorage implements DKBansStorage {
         return templateGroups;
     }
 
+    @Override
+    public int createHistoryEntry(int playerId, int sessionId) {
+        return 0;
+    }
+
+    @Override
+    public int insertHistoryEntrySnapshot(PlayerHistoryEntrySnapshot snapshot) {
+        return 0;
+    }
+
+    @Override
+    public List<PlayerHistoryEntry> loadActiveEntries(UUID uniqueId) {
+        List<PlayerHistoryEntry> result = new ArrayList<>();
+        QueryResult result0 = history.find()
+                .join(historyVersion).on(historyVersion,"HistoryId",history,"Id")
+                .where("ModifiedActive",true).where("Active",true)
+                .or(query -> query.where("Timeout",-1).whereLower("Timeout",System.currentTimeMillis()))
+                .orderBy("ModifiedTime", SearchOrder.ASC)
+                .execute();
+        if(!result0.isEmpty()){
+            for (QueryResultEntry entry : result0) {
+
+            }
+        }
+        return result;
+    }
+
     private DatabaseCollection createPlayerSessionsCollection() {
         return database.createCollection("dkbans_player_sessions")
                 .field("Id", DataType.INTEGER, FieldOption.PRIMARY_KEY, FieldOption.AUTO_INCREMENT)
@@ -240,8 +257,6 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 .field("ScopeName", DataType.STRING, FieldOption.NOT_NULL)
                 .field("ScopeId", DataType.UUID, FieldOption.NOT_NULL)
                 .field("Points", DataType.INTEGER)
-                .field("ModifiedTime", DataType.LONG)//@Todo nullAble ?
-                .field("ModifiedBy", DataType.UUID)//@Todo nullAble ?
                 .field("Active", DataType.BOOLEAN, FieldOption.NOT_NULL)
                 .field("Properties", DataType.LONG_TEXT, -1, "{}", FieldOption.NOT_NULL)
                 .field("HistoryTypeId", DataType.INTEGER, ForeignKey.of(this.historyType, "Id"), FieldOption.NOT_NULL)
@@ -249,6 +264,9 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 .field("TemplateId", DataType.INTEGER)//@Todo add foreign key
                 .field("RevokeTemplateId", DataType.INTEGER)//@Todo add foreign key
                 .field("RevokeReason", DataType.STRING)
+                .field("ModifiedTime", DataType.LONG)//@Todo nullAble ?
+                .field("ModifiedBy", DataType.UUID)//@Todo nullAble ?
+                .field("ModifiedActive", DataType.BOOLEAN)
                 .create();
     }
 

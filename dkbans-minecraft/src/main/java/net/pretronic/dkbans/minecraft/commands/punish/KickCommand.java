@@ -24,7 +24,7 @@ public class KickCommand extends BasicCommand {
             sender.sendMessage(Messages.COMMAND_HELP_KICK);
             return;
         }
-        MinecraftPlayer player = CommandUtil.getPlayer(sender,arguments[0]);
+        MinecraftPlayer player = CommandUtil.getPlayer(sender,arguments[0],true);
         if(player == null) return;
 
         if(!player.isOnline()){
