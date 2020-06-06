@@ -187,6 +187,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
                         .set("Scopes", DocumentFileType.JSON.getWriter().write(Document.newDocument(template.getScopes()), false))
                         .set("CategoryId", template.getCategory().getId())
                         .set("Data", TemplateFactory.toData(template))
+                        .set("GroupId", templateGroup.getId())
                         .executeAndGetGeneratedKeyAsInt("Id");
 
                 ((DefaultTemplate)template).setIdInternal(id);
