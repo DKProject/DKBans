@@ -26,12 +26,12 @@ public class PlayerListener {
         //@Todo online mode check
         if(event.isCancelled()) return;
 
-        if(!DKBans.getInstance().getFilterManager().checkFilter(FilterAffiliationArea.PLAYER_NAME,event.getPlayer().getName())){
+        /*if(!DKBans.getInstance().getFilterManager().checkFilter(FilterAffiliationArea.PLAYER_NAME,event.getPlayer().getName())){
             event.setCancelled(true);
             event.setCancelReason(Messages.FILTER_BLOCKED_NAME,VariableSet.create()
                     .add("name",event.getPlayer().getName()));
             return;
-        }
+        }*/
 
         DKBansPlayer player = event.getPlayer().getAs(DKBansPlayer.class);
 
