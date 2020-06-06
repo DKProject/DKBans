@@ -27,4 +27,6 @@ public interface TemplateManager {
 
     TemplateCategory getTemplateCategory(String name);
 
+    TemplateCategory createTemplateCategory(String name, String displayName);
+
 }

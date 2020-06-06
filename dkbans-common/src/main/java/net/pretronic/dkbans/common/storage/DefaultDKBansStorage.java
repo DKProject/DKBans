@@ -90,6 +90,12 @@ public class DefaultDKBansStorage implements DKBansStorage {
     }
 
     @Override
+    public TemplateCategory createTemplateCategory(String name, String displayName) {
+        int id = this.templateCategories.insert().set("Name", name).set("DisplayName", displayName).executeAndGetGeneratedKeyAsInt("Id");
+        return new DefaultTemplateCategory(id, name, displayName);
+    }
+
+    @Override
     public Collection<TemplateCategory> loadTemplateCategories() {
         Collection<TemplateCategory> categories = new ArrayList<>();
         for (QueryResultEntry resultEntry : this.templateCategories.find().execute()) {

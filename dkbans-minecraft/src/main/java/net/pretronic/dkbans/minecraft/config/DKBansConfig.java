@@ -104,6 +104,10 @@ public class DKBansConfig {
 
             TemplateCategory category = dkBans.getTemplateManager().getTemplateCategory(entry.getString("category"));
 
+            if(category == null) {
+                category = dkBans.getTemplateManager().c
+            }
+
             Collection<String> aliases = new ArrayList<>();
             for (DocumentEntry alias : entry.getDocument("aliases")) {
                 aliases.add(alias.toPrimitive().getAsString());

@@ -22,7 +22,11 @@ public interface DKBansStorage {
     int createPlayerNote(UUID playerId, UUID creatorId,PlayerNoteType type,String message);
 
 
+    TemplateCategory createTemplateCategory(String name, String displayName);
+
     Collection<TemplateCategory> loadTemplateCategories();
+
+
 
     Collection<TemplateGroup> loadTemplateGroups();
 
