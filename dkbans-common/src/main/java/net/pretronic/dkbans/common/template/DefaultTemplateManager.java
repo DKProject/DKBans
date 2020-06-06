@@ -1,5 +1,6 @@
 package net.pretronic.dkbans.common.template;
 
+import net.pretronic.dkbans.api.player.history.CalculationType;
 import net.pretronic.dkbans.api.player.history.PunishmentType;
 import net.pretronic.dkbans.api.template.*;
 import net.pretronic.dkbans.api.template.punishment.PunishmentTemplateEntryFactory;
@@ -36,16 +37,23 @@ public class DefaultTemplateManager implements TemplateManager {
     }
 
     @Override
-    public void createTemplateGroup(String name, TemplateType type, List<Template> templates) {
+    public void createTemplateGroup(String name, TemplateType templateType, CalculationType calculationType, List<Template> templates) {
         //@Todo id from database
         int id = -1;
-        this.templateGroups.add(new DefaultTemplateGroup(id, name, type, templates));
+        this.templateGroups.add(new DefaultTemplateGroup(id, name, templateType, calculationType, templates));
     }
 
     @Override
     public Collection<Template> getTemplates() {
         Collection<Template> templates = new ArrayList<>();
         this.templateGroups.forEach(group -> templates.addAll(group.getTemplates()));
+        return templates;
+    }
+
+    @Override
+    public Collection<Template> getTemplates(TemplateCategory category) {
+        Collection<Template> templates = new ArrayList<>();
+        this.templateGroups.forEach(group -> templates.addAll(Iterators.filter(group.getTemplates(), template -> template.getCategory().equals(category))));
         return templates;
     }
 

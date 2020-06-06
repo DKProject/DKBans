@@ -15,6 +15,7 @@ import net.pretronic.dkbans.api.player.note.PlayerNoteType;
 import net.pretronic.dkbans.api.player.report.PlayerReport;
 import net.pretronic.dkbans.api.player.report.PlayerReportEntry;
 import net.pretronic.dkbans.api.template.Template;
+import net.pretronic.dkbans.api.template.punishment.PunishmentTemplate;
 import net.pretronic.dkbans.common.player.history.DefaultPlayerHistory;
 import net.pretronic.dkbans.common.player.history.DefaultPlayerHistoryEntrySnapshotBuilder;
 import net.pretronic.dkbans.common.player.note.DefaultPlayerNote;
@@ -96,7 +97,7 @@ public class DefaultDKBansPlayer implements DKBansPlayer {
     public PlayerHistoryEntrySnapshot punish(DKBansExecutor executor, Template template) {
         Validate.notNull(executor,template);
         PlayerHistoryEntrySnapshotBuilder builder = punish();
-        template.build(this,executor,builder);
+        ((PunishmentTemplate)template).build(this,executor,builder);
         return builder.execute();
     }
 
@@ -137,6 +138,11 @@ public class DefaultDKBansPlayer implements DKBansPlayer {
 
     @Override
     public void startSession(String currentName, InetAddress address) {
+
+    }
+
+    @Override
+    public void finishSession() {
 
     }
 

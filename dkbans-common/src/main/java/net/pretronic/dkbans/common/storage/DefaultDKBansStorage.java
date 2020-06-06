@@ -9,14 +9,9 @@ import net.pretronic.databasequery.api.query.SearchOrder;
 import net.pretronic.databasequery.api.query.result.QueryResult;
 import net.pretronic.databasequery.api.query.result.QueryResultEntry;
 import net.pretronic.databasequery.api.query.type.FindQuery;
-import net.pretronic.databasequery.api.query.type.SearchQuery;
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
-import net.pretronic.dkbans.api.player.PlayerSetting;
-import net.pretronic.dkbans.api.player.history.PlayerHistory;
-import net.pretronic.dkbans.api.player.history.PlayerHistoryEntry;
-import net.pretronic.dkbans.api.player.history.PlayerHistoryEntrySnapshot;
-import net.pretronic.dkbans.api.player.history.PunishmentType;
+import net.pretronic.dkbans.api.player.history.*;
 import net.pretronic.dkbans.api.player.note.PlayerNote;
 import net.pretronic.dkbans.api.player.note.PlayerNoteType;
 import net.pretronic.dkbans.api.storage.DKBansStorage;
@@ -110,10 +105,12 @@ public class DefaultDKBansStorage implements DKBansStorage {
             int groupId = resultEntry.getInt("Id");
             String groupName = resultEntry.getString("Name");
 
-            String type = resultEntry.getString("Type");
+            String type = resultEntry.getString("TemplateType");
             TemplateType templateType = TemplateType.byName(type);
 
-            DefaultTemplateGroup templateGroup = new DefaultTemplateGroup(groupId, groupName, templateType);
+            CalculationType calculationType = CalculationType.byName("CalculationType");
+
+            DefaultTemplateGroup templateGroup = new DefaultTemplateGroup(groupId, groupName, templateType, calculationType);
 
             for (QueryResultEntry subResultEntry : this.template.find().where("GroupId").execute()) {
                 String name = subResultEntry.getString("Name");

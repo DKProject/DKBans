@@ -34,6 +34,11 @@ public class DefaultDKBansScope implements DKBansScope {
         return this.id;
     }
 
+    @Override
+    public boolean isCurrent() {
+        return true;//@Todo implement current scope check
+    }
+
     public static DefaultDKBansScope fromData(Document data) {
         return new DefaultDKBansScope(data.getString("scopeType"), data.getString("scopeName"), ZERO_UUID);
     }

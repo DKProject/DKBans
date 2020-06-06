@@ -1,5 +1,6 @@
 package net.pretronic.dkbans.common.template;
 
+import net.pretronic.dkbans.api.player.history.CalculationType;
 import net.pretronic.dkbans.api.template.Template;
 import net.pretronic.dkbans.api.template.TemplateGroup;
 import net.pretronic.dkbans.api.template.TemplateType;
@@ -13,18 +14,20 @@ public class DefaultTemplateGroup implements TemplateGroup {
 
     private int id;
     private final String name;
-    private final TemplateType type;
+    private final TemplateType templateType;
+    private final CalculationType calculationType;
     private final List<Template> templates;
 
-    public DefaultTemplateGroup(int id, String name, TemplateType type, List<Template> templates) {
+    public DefaultTemplateGroup(int id, String name, TemplateType templateType, CalculationType calculationType, List<Template> templates) {
         this.id = id;
         this.name = name;
-        this.type = type;
+        this.templateType = templateType;
+        this.calculationType = calculationType;
         this.templates = templates;
     }
 
-    public DefaultTemplateGroup(int id, String name, TemplateType type) {
-        this(id, name, type, new ArrayList<>());
+    public DefaultTemplateGroup(int id, String name, TemplateType templateType, CalculationType calculationType) {
+        this(id, name, templateType, calculationType, new ArrayList<>());
     }
 
     @Override
@@ -38,8 +41,13 @@ public class DefaultTemplateGroup implements TemplateGroup {
     }
 
     @Override
-    public TemplateType getType() {
-        return this.type;
+    public TemplateType getTemplateType() {
+        return this.templateType;
+    }
+
+    @Override
+    public CalculationType getCalculationType() {
+        return this.calculationType;
     }
 
     @Override

@@ -125,7 +125,7 @@ public class DefaultPlayerHistoryEntrySnapshotBuilder implements PlayerHistoryEn
         if(entry == null){
             DefaultPlayerHistoryEntrySnapshot snapshot = new DefaultPlayerHistoryEntrySnapshot(null, -1, historyType, punishmentType,
                     reason, timeout, template, stuff, scope, points, active, properties, revokeReason, revokeTemplate,
-                    System.currentTimeMillis(), modifier);
+                    true, System.currentTimeMillis(), modifier);
 
             Pair<PlayerHistoryEntry, Integer> result = DKBans.getInstance().getStorage().createHistoryEntry(player, snapshot);
             snapshot.setInsertResult(result);
@@ -133,7 +133,7 @@ public class DefaultPlayerHistoryEntrySnapshotBuilder implements PlayerHistoryEn
         }else{
             DefaultPlayerHistoryEntrySnapshot snapshot = new DefaultPlayerHistoryEntrySnapshot(entry, -1, historyType,
                     punishmentType, reason, timeout, template, stuff, scope, points, active, properties, revokeReason,
-                    revokeTemplate, System.currentTimeMillis(), modifier);
+                    revokeTemplate, true, System.currentTimeMillis(), modifier);
             int id = DKBans.getInstance().getStorage().insertHistoryEntrySnapshot(snapshot);
             snapshot.setId(id);
             return snapshot;
