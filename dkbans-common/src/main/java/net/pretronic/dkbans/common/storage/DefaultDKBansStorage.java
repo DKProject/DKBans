@@ -459,7 +459,6 @@ public class DefaultDKBansStorage implements DKBansStorage {
     private DatabaseCollection createTemplateCollection() {
         return database.createCollection("dkbans_template")
                 .field("Id", DataType.INTEGER, FieldOption.PRIMARY_KEY, FieldOption.AUTO_INCREMENT)
-                .field("Type", DataType.STRING, FieldOption.NOT_NULL)
                 .field("Name", DataType.STRING, FieldOption.NOT_NULL)
                 .field("DisplayName", DataType.STRING, FieldOption.NOT_NULL)
                 .field("Permission", DataType.STRING, FieldOption.NOT_NULL)
