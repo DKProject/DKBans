@@ -31,7 +31,7 @@ public class CommandConfig {
             .permission("dkbans.command.playerInfo")
             .create();
 
-    public static CommandConfiguration COMMAND_Kick = CommandConfiguration.newBuilder()
+    public static CommandConfiguration COMMAND_KICK = CommandConfiguration.newBuilder()
             .name("kick")
             .permission("dkbans.command.kick")
             .create();
@@ -74,6 +74,7 @@ public class CommandConfig {
 
     static {
         COMMAND_TEMPLATE_PUNISHMENT.put("ban",CommandConfiguration.newBuilder()
+                .name("ban")
                 .aliases("mute")
                 .permission("dkbans.ban")
                 .create());
