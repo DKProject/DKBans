@@ -124,7 +124,7 @@ public class DKBansConfig {
                     id,
                     name,
                     templateGroup,
-                    entry.getString("displayName"),
+                    entry.getString("display"),
                     entry.getString("permission"),
                     aliases,
                     historyType,
