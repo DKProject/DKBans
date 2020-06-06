@@ -37,6 +37,7 @@ public class DKBansPlugin extends MinecraftPlugin {
         getLogger().info("DKBans is starting, please wait..");
 
         this.dkBans = new DefaultDKBans(getLogger(), getRuntime().getRegistry().getService(ConfigurationProvider.class).getDatabase(this, true));
+        DKBans.setInstance(dkBans);
 
         getConfiguration().load(DKBansConfig.class);
         getConfiguration("commands").load(CommandConfig.class);
@@ -51,7 +52,6 @@ public class DKBansPlugin extends MinecraftPlugin {
         getRuntime().getPlayerManager().registerPlayerAdapter(DKBansPlayer.class, playerManager::getPlayer);
 
         getLogger().info("DKBans started successfully");
-        DKBans.setInstance(dkBans);
     }
 
     private void registerCommands(){
