@@ -172,7 +172,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
                         .set("Hidden", template.isHidden())
                         .set("Scopes", DocumentFileType.JSON.getWriter().write(Document.newDocument(template.getScopes()), false))
                         .set("CategoryId", template.getCategory().getId())
-                        .set("Data", TemplateFactory.toData(template))
+                        .set("Data", DocumentFileType.JSON.getWriter().write(TemplateFactory.toData(template), false))
                         .where("Id", template.getId())
                         .execute();
             } else {
@@ -186,7 +186,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
                         .set("Hidden", template.isHidden())
                         .set("Scopes", DocumentFileType.JSON.getWriter().write(Document.newDocument(template.getScopes()), false))
                         .set("CategoryId", template.getCategory().getId())
-                        .set("Data", TemplateFactory.toData(template))
+                        .set("Data", DocumentFileType.JSON.getWriter().write(TemplateFactory.toData(template), false))
                         .set("GroupId", templateGroup.getId())
                         .executeAndGetGeneratedKeyAsInt("Id");
 
