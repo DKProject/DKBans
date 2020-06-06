@@ -13,4 +13,5 @@ public interface PlayerHistoryManager {
 
     PlayerHistoryType getHistoryType(String name);
 
+    PlayerHistoryType createHistoryType(String name);
 }

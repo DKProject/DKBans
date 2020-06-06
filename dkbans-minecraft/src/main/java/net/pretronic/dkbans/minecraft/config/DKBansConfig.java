@@ -3,6 +3,7 @@ package net.pretronic.dkbans.minecraft.config;
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.DKBansScope;
 import net.pretronic.dkbans.api.player.history.CalculationType;
+import net.pretronic.dkbans.api.player.history.PlayerHistoryType;
 import net.pretronic.dkbans.api.template.*;
 import net.pretronic.dkbans.common.DefaultDKBansScope;
 import net.pretronic.dkbans.common.template.DefaultTemplateGroup;
@@ -108,6 +109,13 @@ public class DKBansConfig {
                 aliases.add(alias.toPrimitive().getAsString());
             }
 
+            String historyType0 = entry.getString("historyType");
+
+            PlayerHistoryType historyType = dkBans.getHistoryManager().getHistoryType(historyType0);
+            if(historyType == null) {
+                historyType = dkBans.getHistoryManager().createHistoryType(historyType0);
+            }
+
             Template template = TemplateFactory.create(templateType, //@Todo remove because defined in template group
                     id,
                     name,
@@ -115,7 +123,7 @@ public class DKBansConfig {
                     entry.getString("displayName"),
                     entry.getString("permission"),
                     aliases,
-                    dkBans.getHistoryManager().getHistoryType(entry.getString("historyType")),
+                    historyType,
                     entry.getBoolean("enabled"),
                     entry.getBoolean("hidden"),
                     scopes,

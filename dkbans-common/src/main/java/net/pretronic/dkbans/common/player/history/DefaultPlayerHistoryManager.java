@@ -35,4 +35,11 @@ public class DefaultPlayerHistoryManager implements PlayerHistoryManager {
     public PlayerHistoryType getHistoryType(String name) {
         return Iterators.findOne(this.historyTypes, historyType -> historyType.getName().equalsIgnoreCase(name));
     }
+
+    @Override
+    public PlayerHistoryType createHistoryType(String name) {
+        PlayerHistoryType historyType = DKBans.getInstance().getStorage().createPlayerHistoryType(name);
+        this.historyTypes.add(historyType);
+        return historyType;
+    }
 }

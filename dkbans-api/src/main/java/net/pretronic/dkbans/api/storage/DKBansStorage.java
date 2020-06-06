@@ -37,7 +37,12 @@ public interface DKBansStorage {
 
     List<PlayerHistoryEntry> loadActiveEntries(PlayerHistory history);
 
+
+    PlayerHistoryType createPlayerHistoryType(String name);
+
     Collection<PlayerHistoryType> loadPlayerHistoryTypes();
+
+
 
     TemplateGroup createTemplateGroup(String name, TemplateType templateType, CalculationType calculationType);
 

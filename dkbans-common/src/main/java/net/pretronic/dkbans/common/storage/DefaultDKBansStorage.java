@@ -275,6 +275,12 @@ public class DefaultDKBansStorage implements DKBansStorage {
     }
 
     @Override
+    public PlayerHistoryType createPlayerHistoryType(String name) {
+        int id = this.historyType.insert().set("Name", name).executeAndGetGeneratedKeyAsInt("Id");
+        return new DefaultPlayerHistoryType(id, name);
+    }
+
+    @Override
     public Collection<PlayerHistoryType> loadPlayerHistoryTypes() {
         Collection<PlayerHistoryType> types = new ArrayList<>();
         this.historyType.find().execute().loadIn(types, entry -> new DefaultPlayerHistoryType(entry.getInt("Id"), entry.getString("Name")));
