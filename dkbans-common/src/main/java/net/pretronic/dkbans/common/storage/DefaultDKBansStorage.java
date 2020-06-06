@@ -5,14 +5,11 @@ import net.pretronic.databasequery.api.collection.DatabaseCollection;
 import net.pretronic.databasequery.api.collection.field.FieldOption;
 import net.pretronic.databasequery.api.datatype.DataType;
 import net.pretronic.databasequery.api.query.ForeignKey;
-import net.pretronic.databasequery.api.query.QueryGroup;
 import net.pretronic.databasequery.api.query.SearchOrder;
 import net.pretronic.databasequery.api.query.result.QueryResult;
 import net.pretronic.databasequery.api.query.result.QueryResultEntry;
 import net.pretronic.databasequery.api.query.type.FindQuery;
 import net.pretronic.databasequery.api.query.type.InsertQuery;
-import net.pretronic.databasequery.api.query.type.SearchQuery;
-import net.pretronic.databasequery.api.query.type.UpdateQuery;
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.history.*;
@@ -35,7 +32,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
-import java.util.function.Function;
 
 public class DefaultDKBansStorage implements DKBansStorage {
 

@@ -4,7 +4,6 @@ import net.pretronic.dkbans.api.player.history.CalculationType;
 import net.pretronic.libraries.utility.Iterators;
 
 import java.util.List;
-import java.util.function.Predicate;
 
 public interface TemplateGroup extends Iterable<Template> {
 

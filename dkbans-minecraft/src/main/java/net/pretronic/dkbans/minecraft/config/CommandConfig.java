@@ -1,8 +1,6 @@
 package net.pretronic.dkbans.minecraft.config;
 
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
-import net.pretronic.libraries.document.annotations.DocumentKey;
-import net.pretronic.libraries.document.annotations.OnDocumentConfigurationLoad;
 
 import java.util.HashMap;
 import java.util.Map;

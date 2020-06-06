@@ -7,7 +7,6 @@ import net.pretronic.libraries.utility.Iterators;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
 
 public class DefaultPlayerHistory implements PlayerHistory {
 

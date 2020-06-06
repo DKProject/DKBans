@@ -19,7 +19,10 @@ import net.pretronic.libraries.utility.Convert;
 import net.pretronic.libraries.utility.map.Pair;
 import net.pretronic.libraries.utility.map.Triple;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 
 public class DefaultPunishmentTemplate extends DefaultTemplate implements PunishmentTemplate {
 

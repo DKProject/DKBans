@@ -1,6 +1,5 @@
 package net.pretronic.dkbans.minecraft.commands.punish;
 
-import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryEntrySnapshot;
 import net.pretronic.dkbans.minecraft.commands.CommandUtil;

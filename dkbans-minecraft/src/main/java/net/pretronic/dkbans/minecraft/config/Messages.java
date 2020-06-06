@@ -1,9 +1,7 @@
 package net.pretronic.dkbans.minecraft.config;
 
-import net.pretronic.dkbans.api.template.Template;
 import org.mcnative.common.text.Text;
 import org.mcnative.common.text.components.MessageComponent;
-import org.mcnative.common.text.format.TextColor;
 
 public class Messages {
 

@@ -2,11 +2,8 @@ package net.pretronic.dkbans.api.storage;
 
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.history.*;
-import net.pretronic.dkbans.api.player.PlayerSetting;
-import net.pretronic.dkbans.api.player.history.PlayerHistoryEntrySnapshot;
 import net.pretronic.dkbans.api.player.note.PlayerNote;
 import net.pretronic.dkbans.api.player.note.PlayerNoteType;
-import net.pretronic.dkbans.api.template.Template;
 import net.pretronic.dkbans.api.template.TemplateCategory;
 import net.pretronic.dkbans.api.template.TemplateGroup;
 import net.pretronic.dkbans.api.template.TemplateType;

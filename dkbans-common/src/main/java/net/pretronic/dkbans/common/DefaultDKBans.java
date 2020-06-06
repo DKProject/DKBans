@@ -14,8 +14,6 @@ import net.pretronic.dkbans.common.storage.DefaultDKBansStorage;
 import net.pretronic.dkbans.common.template.DefaultTemplateManager;
 import net.pretronic.libraries.logging.PretronicLogger;
 
-import java.util.Map;
-
 public class DefaultDKBans extends DKBans {
 
     private final PretronicLogger logger;

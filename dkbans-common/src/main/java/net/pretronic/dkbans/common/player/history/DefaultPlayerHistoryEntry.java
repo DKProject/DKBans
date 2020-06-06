@@ -1,7 +1,6 @@
 package net.pretronic.dkbans.common.player.history;
 
 import net.pretronic.dkbans.api.DKBansExecutor;
-import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.PlayerSession;
 import net.pretronic.dkbans.api.player.history.PlayerHistory;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryEntry;

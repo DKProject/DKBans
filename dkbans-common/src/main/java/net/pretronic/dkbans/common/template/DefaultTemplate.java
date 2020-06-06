@@ -1,16 +1,10 @@
 package net.pretronic.dkbans.common.template;
 
-import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.DKBansScope;
-import net.pretronic.dkbans.api.player.DKBansPlayer;
-import net.pretronic.dkbans.api.player.history.PlayerHistoryEntrySnapshotBuilder;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryType;
-import net.pretronic.dkbans.api.player.history.PunishmentType;
 import net.pretronic.dkbans.api.template.Template;
 import net.pretronic.dkbans.api.template.TemplateCategory;
 import net.pretronic.dkbans.api.template.TemplateGroup;
-import net.pretronic.dkbans.api.template.TemplateType;
-import net.pretronic.dkbans.api.template.punishment.PunishmentTemplateEntry;
 import net.pretronic.libraries.document.Document;
 import net.pretronic.libraries.utility.annonations.Internal;
 

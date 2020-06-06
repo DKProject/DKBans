@@ -2,13 +2,10 @@ package net.pretronic.dkbans.minecraft.config;
 
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.DKBansScope;
-import net.pretronic.dkbans.api.player.history.PunishmentType;
 import net.pretronic.dkbans.api.template.*;
 import net.pretronic.dkbans.common.DefaultDKBansScope;
 import net.pretronic.dkbans.common.template.DefaultTemplateGroup;
-import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
 import net.pretronic.libraries.document.Document;
-import net.pretronic.libraries.document.annotations.DocumentKey;
 import net.pretronic.libraries.document.entry.DocumentEntry;
 import net.pretronic.libraries.utility.Convert;
 import net.pretronic.libraries.utility.io.FileUtil;
@@ -21,7 +18,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class DKBansConfig {
