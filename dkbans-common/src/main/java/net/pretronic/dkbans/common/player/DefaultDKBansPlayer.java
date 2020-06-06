@@ -5,11 +5,8 @@ import net.pretronic.dkbans.api.DKBansScope;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.PlayerSession;
 import net.pretronic.dkbans.api.player.PlayerSetting;
-import net.pretronic.dkbans.api.player.PunishmentBuilder;
 import net.pretronic.dkbans.api.player.chatlog.PlayerChatLog;
-import net.pretronic.dkbans.api.player.history.PlayerHistory;
-import net.pretronic.dkbans.api.player.history.PlayerHistoryEntry;
-import net.pretronic.dkbans.api.player.history.PunishmentType;
+import net.pretronic.dkbans.api.player.history.*;
 import net.pretronic.dkbans.api.player.note.PlayerNote;
 import net.pretronic.dkbans.api.player.note.PlayerNoteType;
 import net.pretronic.dkbans.api.player.note.PlayerNoteList;
@@ -18,6 +15,7 @@ import net.pretronic.dkbans.api.player.report.PlayerReportEntry;
 import net.pretronic.dkbans.api.template.Template;
 import net.pretronic.dkbans.common.player.note.DefaultPlayerNote;
 import net.pretronic.libraries.utility.Iterators;
+import net.pretronic.libraries.utility.Validate;
 
 import java.util.Collection;
 import java.util.UUID;
@@ -29,6 +27,8 @@ public class DefaultDKBansPlayer implements DKBansPlayer {
     private final Collection<PlayerSetting> settings;
     private final PlayerSession lastSession;
 
+    private final PlayerHistory history;
+
     public DefaultDKBansPlayer() {
         this.uniqueId = null;
         this.name = null;
@@ -38,12 +38,12 @@ public class DefaultDKBansPlayer implements DKBansPlayer {
 
     @Override
     public PlayerHistory getHistory() {
-        throw new UnsupportedOperationException();
+        return history;
     }
 
     @Override
     public PlayerSession getActiveSession() {
-         return lastSession.isActive() ? lastSession : null;
+         return lastSession != null && lastSession.isActive() ? lastSession : null;
     }
 
     @Override
@@ -110,16 +110,19 @@ public class DefaultDKBansPlayer implements DKBansPlayer {
 
     @Override
     public boolean hasActivePunish(PunishmentType type) {
-        return false;
+        return history.hasActivePunish(type);
     }
 
     @Override
-    public PlayerHistoryEntry punish(DKBansExecutor player, Template template) {
-         throw new UnsupportedOperationException();
+    public PlayerHistoryEntrySnapshot punish(DKBansExecutor executor, Template template) {
+        Validate.notNull(executor,template);
+        PlayerHistoryEntrySnapshotBuilder builder = punish();
+        template.build(this,executor,builder);
+        return builder.execute();
     }
 
     @Override
-    public PunishmentBuilder punish() {
+    public PlayerHistoryEntrySnapshotBuilder punish() {
          throw new UnsupportedOperationException();
     }
 

@@ -22,6 +22,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class DKBansConfig {
 
+    public static boolean PLAYER_ON_JOIN_CLEAR_CHAT = true;
+
+
     public static CommandConfiguration COMMAND_JUMP_TO = CommandConfiguration.newBuilder()
             .name("jumpto")
             .aliases("goto")

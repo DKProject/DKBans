@@ -24,7 +24,7 @@ public class JumptoCommand extends BasicCommand {
             return;
         }
         if(arguments.length < 1){
-            sender.sendMessage(Messages.JUMPTO_HELP);
+            sender.sendMessage(Messages.COMMAND_HELP_JUMPTO);
             return;
         }
         MinecraftPlayer player = McNative.getInstance().getPlayerManager().getPlayer(arguments[0]);
