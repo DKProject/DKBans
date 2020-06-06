@@ -1,9 +1,7 @@
 package net.pretronic.dkbans.api.storage;
 
 import net.pretronic.dkbans.api.player.DKBansPlayer;
-import net.pretronic.dkbans.api.player.history.PlayerHistory;
-import net.pretronic.dkbans.api.player.history.PlayerHistoryEntry;
-import net.pretronic.dkbans.api.player.history.PlayerHistoryEntrySnapshot;
+import net.pretronic.dkbans.api.player.history.*;
 import net.pretronic.dkbans.api.player.PlayerSetting;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryEntrySnapshot;
 import net.pretronic.dkbans.api.player.note.PlayerNote;
@@ -11,6 +9,7 @@ import net.pretronic.dkbans.api.player.note.PlayerNoteType;
 import net.pretronic.dkbans.api.template.Template;
 import net.pretronic.dkbans.api.template.TemplateCategory;
 import net.pretronic.dkbans.api.template.TemplateGroup;
+import net.pretronic.dkbans.api.template.TemplateType;
 import net.pretronic.libraries.utility.map.Pair;
 
 import java.util.Collection;
@@ -40,6 +39,10 @@ public interface DKBansStorage {
 
 
     List<PlayerHistoryEntry> loadActiveEntries(PlayerHistory history);
+
+    Collection<PlayerHistoryType> loadPlayerHistoryTypes();
+
+    TemplateGroup createTemplateGroup(String name, TemplateType templateType, CalculationType calculationType);
 
       /*
     private final PlayerHistoryEntry entry;

@@ -23,6 +23,7 @@ import net.pretronic.dkbans.api.template.*;
 import net.pretronic.dkbans.common.DefaultDKBansScope;
 import net.pretronic.dkbans.common.player.history.DefaultPlayerHistoryEntry;
 import net.pretronic.dkbans.common.player.history.DefaultPlayerHistoryEntrySnapshot;
+import net.pretronic.dkbans.common.player.history.DefaultPlayerHistoryType;
 import net.pretronic.dkbans.common.template.DefaultTemplate;
 import net.pretronic.dkbans.common.template.DefaultTemplateCategory;
 import net.pretronic.dkbans.common.template.DefaultTemplateGroup;
@@ -34,6 +35,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Function;
 
 public class DefaultDKBansStorage implements DKBansStorage {
 
@@ -274,6 +276,22 @@ public class DefaultDKBansStorage implements DKBansStorage {
             }
         }
         return result;
+    }
+
+    @Override
+    public Collection<PlayerHistoryType> loadPlayerHistoryTypes() {
+        Collection<PlayerHistoryType> types = new ArrayList<>();
+        this.historyType.find().execute().loadIn(types, entry -> new DefaultPlayerHistoryType(entry.getInt("Id"), entry.getString("Name")));
+        return types;
+    }
+
+    @Override
+    public TemplateGroup createTemplateGroup(String name, TemplateType templateType, CalculationType calculationType) {
+        int id = this.templateGroups.insert().set("Name", name)
+                .set("TemplateType", templateType.getName())
+                .set("CalculationType", calculationType)
+                .executeAndGetGeneratedKeyAsInt("id");
+        return new DefaultTemplateGroup(id, name, templateType, calculationType);
     }
 
     private DatabaseCollection createPlayerSessionsCollection() {

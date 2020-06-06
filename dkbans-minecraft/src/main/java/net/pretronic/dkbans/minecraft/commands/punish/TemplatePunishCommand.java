@@ -6,6 +6,7 @@ import net.pretronic.dkbans.api.player.history.PlayerHistoryEntrySnapshot;
 import net.pretronic.dkbans.api.player.history.PunishmentType;
 import net.pretronic.dkbans.api.template.Template;
 import net.pretronic.dkbans.api.template.TemplateGroup;
+import net.pretronic.dkbans.api.template.punishment.PunishmentTemplate;
 import net.pretronic.dkbans.api.template.punishment.PunishmentTemplateEntry;
 import net.pretronic.dkbans.minecraft.commands.CommandUtil;
 import net.pretronic.dkbans.minecraft.config.Messages;
@@ -36,7 +37,7 @@ public class TemplatePunishCommand extends BasicCommand {
         DKBansPlayer dkBansPlayer = player.getAs(DKBansPlayer.class);
         if(CommandUtil.checkBypass(sender,dkBansPlayer)) return;
 
-        Template template = templates.getTemplate(arguments[1]);
+        PunishmentTemplate template = (PunishmentTemplate) templates.getTemplate(arguments[1]);
         if(template == null){
             sendTemplates(sender);
             return;

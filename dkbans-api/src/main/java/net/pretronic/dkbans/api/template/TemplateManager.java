@@ -11,7 +11,7 @@ public interface TemplateManager {
 
     TemplateGroup getTemplateGroup(String name);
 
-    void createTemplateGroup(String name, TemplateType templateType, CalculationType calculationType, List<Template> templates);
+    TemplateGroup createTemplateGroup(String name, TemplateType templateType, CalculationType calculationType, List<Template> templates);
 
 
     Collection<Template> getTemplates();

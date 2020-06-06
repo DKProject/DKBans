@@ -55,6 +55,7 @@ public class DefaultTemplateGroup implements TemplateGroup {
         return this.templates;
     }
 
+    //@Todo add to database
     @Override
     public void addTemplate(Template template) {
         this.templates.add(template);
@@ -74,6 +75,11 @@ public class DefaultTemplateGroup implements TemplateGroup {
     @Internal
     public void addTemplateInternal(Template template) {
         this.templates.add(template);
+    }
+
+    @Internal
+    public void addTemplatesInternal(List<Template> templates) {
+        this.templates.addAll(templates);
     }
 
     @Internal
