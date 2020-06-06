@@ -2,6 +2,7 @@ package net.pretronic.dkbans.minecraft.config;
 
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.DKBansScope;
+import net.pretronic.dkbans.api.player.history.CalculationType;
 import net.pretronic.dkbans.api.template.*;
 import net.pretronic.dkbans.common.DefaultDKBansScope;
 import net.pretronic.dkbans.common.template.DefaultTemplateGroup;
@@ -75,11 +76,13 @@ public class DKBansConfig {
             return null;
         }
 
+        CalculationType calculationType = CalculationType.byName(document.getString("calculation"));
+
         List<Template> templates = new ArrayList<>();
 
         TemplateGroup templateGroup = dkBans.getTemplateManager().getTemplateGroup(groupName);
         if(templateGroup == null) {
-            templateGroup = dkBans.getTemplateManager().createTemplateGroup(groupName, templateType, null, new ArrayList<>());
+            templateGroup = dkBans.getTemplateManager().createTemplateGroup(groupName, templateType, calculationType, new ArrayList<>());
         }
 
         for (DocumentEntry entry0 : document.getDocument("templates")) {
