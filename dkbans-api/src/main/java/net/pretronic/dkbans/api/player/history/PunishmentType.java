@@ -1,6 +1,7 @@
 package net.pretronic.dkbans.api.player.history;
 
 import net.pretronic.libraries.utility.Iterators;
+import net.pretronic.libraries.utility.Validate;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -54,7 +55,10 @@ public class PunishmentType {
     }
 
     public static PunishmentType getPunishmentType(String name) {
-        return Iterators.findOne(REGISTRY, type -> type.getName().equalsIgnoreCase(name));
+        Validate.notNull(name);
+        PunishmentType punishmentType = Iterators.findOne(REGISTRY, type -> type.getName().equalsIgnoreCase(name));
+        if(punishmentType == null) throw new IllegalArgumentException("No punishment type for name " + name + " found");
+        return punishmentType;
     }
 
     public static PunishmentType registerPunishmentType(int id, String name) {

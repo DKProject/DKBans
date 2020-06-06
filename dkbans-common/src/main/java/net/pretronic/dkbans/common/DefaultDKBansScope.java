@@ -7,6 +7,8 @@ import java.util.UUID;
 
 public class DefaultDKBansScope implements DKBansScope {
 
+    private static final UUID ZERO_UUID = new UUID(0, 0);
+
     private final String type;
     private final String name;
     private final UUID id;
@@ -33,7 +35,6 @@ public class DefaultDKBansScope implements DKBansScope {
     }
 
     public static DefaultDKBansScope fromData(Document data) {
-        //@Todo maybe zero uuid
-        return new DefaultDKBansScope(data.getString("scopeType"), data.getString("scopeName"), null);
+        return new DefaultDKBansScope(data.getString("scopeType"), data.getString("scopeName"), ZERO_UUID);
     }
 }

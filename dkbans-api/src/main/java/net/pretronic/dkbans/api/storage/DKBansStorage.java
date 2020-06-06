@@ -5,6 +5,7 @@ import net.pretronic.dkbans.api.player.note.PlayerNote;
 import net.pretronic.dkbans.api.player.note.PlayerNoteType;
 import net.pretronic.dkbans.api.template.Template;
 import net.pretronic.dkbans.api.template.TemplateCategory;
+import net.pretronic.dkbans.api.template.TemplateGroup;
 
 import java.util.Collection;
 import java.util.UUID;
@@ -27,5 +28,5 @@ public interface DKBansStorage {
 
     Collection<TemplateCategory> loadTemplateCategories();
 
-    Collection<Template> loadTemplates();
+    Collection<TemplateGroup> loadTemplateGroups();
 }

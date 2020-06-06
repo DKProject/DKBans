@@ -1,27 +1,20 @@
 package net.pretronic.dkbans.api.template;
 
-import net.pretronic.dkbans.api.player.history.PunishmentType;
-
 import java.util.Collection;
+import java.util.List;
 
 public interface TemplateManager {
 
+    Collection<TemplateGroup> getTemplateGroups();
+
+    TemplateGroup getTemplateGroup(String name);
+
+    void createTemplateGroup(String name, List<Template> templates);
+
+
     Collection<Template> getTemplates();
 
-    Collection<Template> getTemplates(PunishmentType type);
-
-    <T extends Template> Collection<T> getTemplates(PunishmentType type, Class<T> templateClass);
-
-    Collection<Template> getTemplates(TemplateCategory category);
-
     Template getTemplate(int id);
-
-    Template getTemplate(String name);
-
-
-    void addTemplate(Template template);
-
-    boolean removeTemplate(Template template);
 
 
     Collection<TemplateCategory> getTemplateCategories();

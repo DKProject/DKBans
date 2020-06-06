@@ -7,20 +7,16 @@ import net.pretronic.databasequery.api.datatype.DataType;
 import net.pretronic.databasequery.api.query.ForeignKey;
 import net.pretronic.databasequery.api.query.result.QueryResultEntry;
 import net.pretronic.dkbans.api.DKBans;
-import net.pretronic.dkbans.api.DKBansScope;
 import net.pretronic.dkbans.api.player.PlayerSetting;
 import net.pretronic.dkbans.api.player.history.PunishmentType;
 import net.pretronic.dkbans.api.player.note.PlayerNote;
 import net.pretronic.dkbans.api.player.note.PlayerNoteType;
 import net.pretronic.dkbans.api.storage.DKBansStorage;
-import net.pretronic.dkbans.api.template.Template;
-import net.pretronic.dkbans.api.template.TemplateCategory;
-import net.pretronic.dkbans.api.template.TemplateFactory;
-import net.pretronic.dkbans.api.template.TemplateType;
+import net.pretronic.dkbans.api.template.*;
 import net.pretronic.dkbans.common.DefaultDKBansScope;
 import net.pretronic.dkbans.common.template.DefaultTemplateCategory;
+import net.pretronic.dkbans.common.template.DefaultTemplateGroup;
 import net.pretronic.libraries.document.type.DocumentFileType;
-import net.pretronic.libraries.utility.Validate;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -42,6 +38,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
     private final DatabaseCollection reportEntries;
     private final DatabaseCollection ipAddressBlacklist;
     private final DatabaseCollection templateCategories;
+    private final DatabaseCollection templateGroups;
     private final DatabaseCollection template;
     /*private final DatabaseCollection filter;
     private final DatabaseCollection broadcast;
@@ -65,6 +62,8 @@ public class DefaultDKBansStorage implements DKBansStorage {
         this.reportEntries = createReportEntriesCollection();
         this.ipAddressBlacklist = createIpAddressBlacklistCollection();
         this.templateCategories = createTemplateCategoriesCollection();
+        this.templateGroups = createTemplateGroupsCollection();
+
         this.template = createTemplateCollection();
 
     }
@@ -107,10 +106,10 @@ public class DefaultDKBansStorage implements DKBansStorage {
     }
 
     @Override
-    public Collection<Template> loadTemplates() {
-        Collection<Template> templates = new ArrayList<>();
+    public Collection<TemplateGroup> loadTemplateGroups() {
+        Collection<TemplateGroup> templateGroups = new ArrayList<>();
 
-        for (QueryResultEntry resultEntry : this.template.find().execute()) {
+        /*for (QueryResultEntry resultEntry : this.template.find().execute()) {
             String name = resultEntry.getString("Name");
             String type = resultEntry.getString("Type");
             TemplateType templateType = TemplateType.byName(type);
@@ -131,8 +130,38 @@ public class DefaultDKBansStorage implements DKBansStorage {
                     scopes,
                     category,
                     DocumentFileType.JSON.getReader().read("Data")));
+        }*/
+        for (QueryResultEntry resultEntry : this.templateGroups.find().execute()) {
+            int groupId = resultEntry.getInt("Id");
+            String groupName = resultEntry.getString("Name");
+
+            DefaultTemplateGroup templateGroup = new DefaultTemplateGroup(groupId, groupName);
+
+            for (QueryResultEntry subResultEntry : this.template.find().where("GroupId").execute()) {
+                String name = subResultEntry.getString("Name");
+                String type = subResultEntry.getString("Type");
+                TemplateType templateType = TemplateType.byName(type);
+
+                Collection<String> aliases = DocumentFileType.JSON.getReader().read(subResultEntry.getString("Aliases")).getAsCollection(String.class);
+                TemplateCategory category = DKBans.getInstance().getTemplateManager().getTemplateCategory(subResultEntry.getInt("CategoryId"));
+                Collection<DefaultDKBansScope> scopes = DocumentFileType.JSON.getReader().read(subResultEntry.getString("Scopes")).getAsCollection(DefaultDKBansScope.class);
+                templateGroup.addTemplateInternal(TemplateFactory.create(templateType,
+                        subResultEntry.getInt("Id"),
+                        name,
+                        subResultEntry.getString("DisplayName"),
+                        subResultEntry.getString("Permission"),
+                        aliases,
+                        DKBans.getInstance().getHistoryManager().getHistoryType(subResultEntry.getInt("HistoryTypeId")),
+                        PunishmentType.getPunishmentType(subResultEntry.getInt("PunishmentTypeId")),
+                        subResultEntry.getBoolean("Enabled"),
+                        subResultEntry.getBoolean("Hidden"),
+                        scopes,
+                        category,
+                        DocumentFileType.JSON.getReader().read("Data")));
+            }
+            templateGroups.add(templateGroup);
         }
-        return templates;
+        return templateGroups;
     }
 
     private DatabaseCollection createPlayerSessionsCollection() {
@@ -277,6 +306,13 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 .create();
     }
 
+    private DatabaseCollection createTemplateGroupsCollection() {
+        return database.createCollection("dkbans_template_groups")
+                .field("Id", DataType.INTEGER, FieldOption.PRIMARY_KEY, FieldOption.AUTO_INCREMENT)
+                .field("Name", DataType.STRING, FieldOption.NOT_NULL)
+                .create();
+    }
+
     private DatabaseCollection createTemplateCollection() {
         return database.createCollection("dkbans_template")
                 .field("Id", DataType.INTEGER, FieldOption.PRIMARY_KEY, FieldOption.AUTO_INCREMENT)
@@ -291,6 +327,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 .field("Hidden", DataType.BOOLEAN, FieldOption.NOT_NULL)
                 .field("Scopes", DataType.STRING, FieldOption.NOT_NULL)
                 .field("CategoryId", DataType.INTEGER, ForeignKey.of(this.templateCategories, "Id"), FieldOption.NOT_NULL)
+                .field("GroupId", DataType.INTEGER, ForeignKey.of(this.templateGroups, "id"), FieldOption.NOT_NULL)
                 .field("Data", DataType.LONG_TEXT, -1, "{}", FieldOption.NOT_NULL)
                 .create();
     }

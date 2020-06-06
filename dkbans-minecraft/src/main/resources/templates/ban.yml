@@ -1,0 +1,38 @@
+type: PUNISHMENT
+name: ban
+templates:
+  1:
+    name: Provocation
+    display: Provocation
+    permission: dkbans.ban.reason.provocation
+    aliases:
+      - provocation
+      - provo
+    hidden: false
+    historyType: CHAT
+    category: TEST
+    punishmentType: BAN
+    scopes:
+      - SERVER_GROUP:TTT
+    durations:
+      1:
+        type: WARN
+        kick: true
+        banId: 10
+      2:
+        type: MUTE
+        scopeType: SERVER_GROUP
+        scopeName: TTT
+        duration: 3d
+      5:
+        type: BAN
+        scope: GLOBAL
+        duration: 30d
+    points:
+      addedPoints: 7
+      pointsDivider: 2.0
+      durations:
+        1:
+          type: WARN
+          kick: true
+          duration: 10d

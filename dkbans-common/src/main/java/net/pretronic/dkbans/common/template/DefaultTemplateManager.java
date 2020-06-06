@@ -12,63 +12,46 @@ import net.pretronic.libraries.utility.Iterators;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class DefaultTemplateManager implements TemplateManager {
 
-    private final Collection<Template> templates;
+    private final Collection<TemplateGroup> templateGroups;
     private final Collection<TemplateCategory> templateCategories;
 
     public DefaultTemplateManager() {
-        this.templates = new ArrayList<>();
+        this.templateGroups = new ArrayList<>();
         this.templateCategories = new ArrayList<>();
         registerDefaultFactories();
     }
 
     @Override
+    public Collection<TemplateGroup> getTemplateGroups() {
+        return this.templateGroups;
+    }
+
+    @Override
+    public void createTemplateGroup(String name, List<Template> templates) {
+        //@Todo id from database
+        int id = -1;
+        this.templateGroups.add(new DefaultTemplateGroup(id, name, templates));
+    }
+
+    @Override
     public Collection<Template> getTemplates() {
-        return this.templates;
-    }
-
-    @Override
-    public Collection<Template> getTemplates(PunishmentType type) {
-        return Iterators.filter(this.templates, template -> template.getPunishmentType().equals(type));
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public <T extends Template> Collection<T> getTemplates(PunishmentType type, Class<T> templateClass) {
-        Collection<T> templates = new ArrayList<>();
-        for (Template template : this.templates) {
-            if(template.getPunishmentType().equals(type)) {
-                templates.add((T) template);
-            }
-        }
+        Collection<Template> templates = new ArrayList<>();
+        this.templateGroups.forEach(group -> templates.addAll(group.getTemplates()));
         return templates;
     }
 
     @Override
-    public Collection<Template> getTemplates(TemplateCategory category) {
-        return Iterators.filter(this.templates, template -> template.getCategory().equals(category));
-    }
-
-    @Override
     public Template getTemplate(int id) {
-        return Iterators.findOne(this.templates, template -> template.getId() == id);
-    }
-
-    @Override
-    public Template getTemplate(String name) {
-        return Iterators.findOne(this.templates, template -> template.getName().equalsIgnoreCase(name));
-    }
-
-    @Override
-    public void addTemplate(Template template) {
-        this.templates.add(template);
-    }
-
-    @Override
-    public boolean removeTemplate(Template template) {
-        return this.templates.remove(template);
+        for (TemplateGroup group : this.templateGroups) {
+            for (Template template : group.getTemplates()) {
+                if(template.getId() == id) return template;
+            }
+        }
+        return null;
     }
 
     @Override

@@ -3,20 +3,22 @@ package net.pretronic.dkbans.minecraft.config;
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.DKBansScope;
 import net.pretronic.dkbans.api.player.history.PunishmentType;
-import net.pretronic.dkbans.api.template.Template;
-import net.pretronic.dkbans.api.template.TemplateCategory;
-import net.pretronic.dkbans.api.template.TemplateFactory;
-import net.pretronic.dkbans.api.template.TemplateType;
+import net.pretronic.dkbans.api.template.*;
 import net.pretronic.dkbans.common.DefaultDKBansScope;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
 import net.pretronic.libraries.document.Document;
 import net.pretronic.libraries.document.entry.DocumentEntry;
-import net.pretronic.libraries.document.type.DocumentFileType;
 import net.pretronic.libraries.utility.Convert;
+import net.pretronic.libraries.utility.io.FileUtil;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class DKBansConfig {
 
@@ -36,22 +38,69 @@ public class DKBansConfig {
             .permission("dkbans.command.ping")
             .create();
 
-
     public static void load(DKBans dkBans) {
-        //@Todo just for testing
-        loadTemplateConfig(dkBans, TemplateType.PUNISHMENT, DocumentFileType.YAML.getReader().read(new File("plugins/DKBans/demo.yml")));
+        File templates = new File("plugins/DKBans/templates/");
+
+        if(!templates.exists()) templates.mkdirs();
+
+        AtomicBoolean createDefaultPunishmentTemplate = new AtomicBoolean(true);
+        AtomicBoolean createDefaultUnPunishmentTemplate = new AtomicBoolean(true);
+        AtomicBoolean createDefaultReportTemplate = new AtomicBoolean(true);
+
+
+        FileUtil.processFilesHierarchically(templates, file -> {
+            TemplateType templateType = loadTemplateConfig(dkBans, Document.read(file));
+            if(templateType != null) {
+                if(templateType.equals(TemplateType.PUNISHMENT)) createDefaultPunishmentTemplate.set(false);
+                else if(templateType.equals(TemplateType.UNPUNISHMENT)) createDefaultUnPunishmentTemplate.set(false);
+                else if(templateType.equals(TemplateType.REPORT)) createDefaultReportTemplate.set(false);
+            }
+        });
+
+        if(createDefaultPunishmentTemplate.get()) {
+            try {
+                Files.copy(DKBansConfig.class.getResourceAsStream("/templates/ban.yml"), Paths.get(templates.getPath()+"/ban.yml"));
+            } catch (IOException exception) {
+                exception.printStackTrace();
+            }
+        }
+        if(createDefaultUnPunishmentTemplate.get()) {
+            try {
+                Files.copy(DKBansConfig.class.getResourceAsStream("/templates/unban.yml"), Paths.get(templates.getPath()+"/unban.yml"));
+            } catch (IOException exception) {
+                exception.printStackTrace();
+            }
+        }
+        if(createDefaultReportTemplate.get()) {
+            try {
+                Files.copy(DKBansConfig.class.getResourceAsStream("/templates/report.yml"), Paths.get(templates.getPath()+"/report.yml"));
+            } catch (IOException exception) {
+                exception.printStackTrace();
+            }
+        }
     }
 
-    private static void loadTemplateConfig(DKBans dkBans, TemplateType templateType, Document document) {
-        System.out.println(DocumentFileType.JSON.getWriter().write(document, true));
-        for (DocumentEntry entry0 : document) {
+    private static TemplateType loadTemplateConfig(DKBans dkBans, Document document) {
+
+        String groupName = document.getString("name");
+        TemplateType templateType = TemplateType.byNameOrNull(document.getString("type"));
+
+        if(templateType == null) {
+            DKBans.getInstance().getLogger().warn("Could not load template group {} with type {}", groupName, document.getString("type"));
+            return null;
+        }
+
+        List<Template> templates = new ArrayList<>();
+
+        for (DocumentEntry entry0 : document.getDocument("templates")) {
             Document entry = entry0.toDocument();
 
+
+            String name = entry.getString("name");
             int id = Convert.toInteger(entry.getKey());
 
             Collection<DKBansScope> scopes = new ArrayList<>();
 
-            //@Todo maybe scope id
             Document scopes0 = entry.getDocument("scopes");
             if(scopes0 != null) scopes0.forEach(dummyScope -> {
                 for (DocumentEntry documentEntry : dummyScope.toDocument()) {
@@ -65,20 +114,29 @@ public class DKBansConfig {
             for (DocumentEntry alias : entry.getDocument("aliases")) {
                 aliases.add(alias.toPrimitive().getAsString());
             }
-            Template template = TemplateFactory.create(templateType,
+
+            Template template = TemplateFactory.create(templateType, //@Todo remove because defined in template group
                     id,
-                    entry.getString("name"),
+                    name,
                     entry.getString("displayName"),
                     entry.getString("permission"),
                     aliases,
-                    null/*dkBans.getHistoryManager().getHistoryType(entry.getString("historyType"))@Todo replace if history manager exists*/,
+                    null/*dkBans.getHistoryManager().getHistoryType(entry.getString("historyType"))@Todo replace if history manager exists, create if not exists*/,
                     PunishmentType.getPunishmentType(entry.getString("punishmentType")),
                     entry.getBoolean("enabled"),
                     entry.getBoolean("hidden"),
                     scopes,
                     category,
                     Document.newDocument().add("durations", entry.getDocument("durations")).add("points", entry.getDocument("points")));
-            dkBans.getTemplateManager().addTemplate(template);
+            templates.add(template);
         }
+
+        TemplateGroup templateGroup = dkBans.getTemplateManager().getTemplateGroup(groupName);
+        if(templateGroup == null) {
+            dkBans.getTemplateManager().createTemplateGroup(groupName, templates);
+        } else {
+            templateGroup.addTemplates(templates);
+        }
+        return templateType;
     }
 }

@@ -1,6 +1,8 @@
 package net.pretronic.dkbans.api.template;
 
 import net.pretronic.dkbans.api.template.punishment.PunishmentTemplate;
+import net.pretronic.dkbans.api.template.report.ReportTemplate;
+import net.pretronic.dkbans.api.template.unpunishment.UnPunishmentTemplate;
 import net.pretronic.libraries.utility.Iterators;
 import net.pretronic.libraries.utility.Validate;
 
@@ -12,6 +14,8 @@ public final class TemplateType {
     private static final Collection<TemplateType> REGISTRY = new ArrayList<>();
 
     public static final TemplateType PUNISHMENT = register("PUNISHMENT", PunishmentTemplate.class);
+    public static final TemplateType UNPUNISHMENT = register("UNPUNISHMENT", UnPunishmentTemplate.class);
+    public static final TemplateType REPORT = register("REPORT", ReportTemplate.class);
 
 
     private final String name;
@@ -42,5 +46,9 @@ public final class TemplateType {
         TemplateType templateType = Iterators.findOne(REGISTRY, type -> type.getName().equalsIgnoreCase(name));
         if(templateType == null) throw new IllegalArgumentException("No template type for name " + name + " found");
         return templateType;
+    }
+
+    public static TemplateType byNameOrNull(String name) {
+        return Iterators.findOne(REGISTRY, type -> type.getName().equalsIgnoreCase(name));
     }
 }
