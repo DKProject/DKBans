@@ -34,6 +34,7 @@ public class DKBansConfig {
 
         if(!templates.exists()) templates.mkdirs();
         if(templates.listFiles().length == 0) {
+            System.out.println("create defaults");
             try {
                 Files.copy(DKBansConfig.class.getResourceAsStream("/templates/ban.yml"), Paths.get(templates.getPath()+"/ban.yml"));
                 Files.copy(DKBansConfig.class.getResourceAsStream("/templates/unban.yml"), Paths.get(templates.getPath()+"/unban.yml"));
@@ -43,6 +44,7 @@ public class DKBansConfig {
             }
 
             FileUtil.processFilesHierarchically(templates, file -> {
+                System.out.println("process " + file.getName());
                 TemplateGroup group = loadTemplateConfig(dkBans, Document.read(file));
                 dkBans.getStorage().importTemplateGroup(group);
             });
@@ -62,6 +64,7 @@ public class DKBansConfig {
     }
 
     private static TemplateGroup loadTemplateConfig(DKBans dkBans, Document document) {
+        System.out.println("load template config");
 
         String groupName = document.getString("name");
         TemplateType templateType = TemplateType.byNameOrNull(document.getString("type"));
