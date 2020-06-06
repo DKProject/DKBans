@@ -32,5 +32,13 @@ public class DefaultBanPunishmentTemplateEntry extends DefaultPunishmentTemplate
         public PunishmentTemplateEntry create(Document data) {
             return new DefaultBanPunishmentTemplateEntry(DefaultDKBansScope.fromData(data), DurationProcessor.getStandard().parse(data.getString("duration")));
         }
+
+        @Override
+        public Document createData(PunishmentTemplateEntry entry0) {
+            BanPunishmentTemplateEntry entry = (BanPunishmentTemplateEntry) entry0;
+            return Document.newDocument().add("scopeType", entry.getScope().getType())
+                    .add("scopeName", entry.getScope().getName())
+                    .add("duration", DurationProcessor.getStandard().format(entry.getDuration()));
+        }
     }
 }

@@ -96,6 +96,13 @@ public class DefaultPunishmentTemplate extends DefaultTemplate implements Punish
         return new Pair<>(id, templateEntry);
     }
 
+    private static Document entryToDocument(DefaultPunishmentTemplate template) {
+        Document data = Document.newDocument();
+        for (Map.Entry<Integer, PunishmentTemplateEntry> entry : template.durations.entrySet()) {
+            data.add(entry.getKey().toString(), PunishmentTemplateEntryFactory.toData(entry.getValue()));
+        }
+        return data;
+    }
 
     public static class Factory extends TemplateFactory {
 
@@ -105,6 +112,19 @@ public class DefaultPunishmentTemplate extends DefaultTemplate implements Punish
                                Collection<? extends DKBansScope> scopes, TemplateCategory category, Document data) {
             return new DefaultPunishmentTemplate(id, name, displayName, permission, aliases, historyType, punishmentType, enabled,
                     hidden, scopes, category, data);
+        }
+
+        @Override
+        public Document createData(Template template0) {
+            DefaultPunishmentTemplate template = (DefaultPunishmentTemplate) template0;
+
+            Document data = Document.newDocument();
+
+            data.add("durations", entryToDocument(template));
+            data.add("points", entryToDocument(template)
+                    .add("addedPoints", template.addedPoints)
+                    .add("pointsDivider", template.pointsDivider));
+            return data;
         }
     }
 }

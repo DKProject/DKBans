@@ -21,6 +21,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class DKBansConfig {
 
@@ -35,45 +36,35 @@ public class DKBansConfig {
         File templates = new File("plugins/DKBans/templates/");
 
         if(!templates.exists()) templates.mkdirs();
-
-        AtomicBoolean createDefaultPunishmentTemplate = new AtomicBoolean(true);
-        AtomicBoolean createDefaultUnPunishmentTemplate = new AtomicBoolean(true);
-        AtomicBoolean createDefaultReportTemplate = new AtomicBoolean(true);
-
-
-        FileUtil.processFilesHierarchically(templates, file -> {
-            TemplateType templateType = loadTemplateConfig(dkBans, Document.read(file));
-            if(templateType != null) {
-                if(templateType.equals(TemplateType.PUNISHMENT)) createDefaultPunishmentTemplate.set(false);
-                else if(templateType.equals(TemplateType.UNPUNISHMENT)) createDefaultUnPunishmentTemplate.set(false);
-                else if(templateType.equals(TemplateType.REPORT)) createDefaultReportTemplate.set(false);
-            }
-        });
-
-        if(createDefaultPunishmentTemplate.get()) {
+        if(templates.listFiles().length == 0) {
             try {
                 Files.copy(DKBansConfig.class.getResourceAsStream("/templates/ban.yml"), Paths.get(templates.getPath()+"/ban.yml"));
-            } catch (IOException exception) {
-                exception.printStackTrace();
-            }
-        }
-        if(createDefaultUnPunishmentTemplate.get()) {
-            try {
                 Files.copy(DKBansConfig.class.getResourceAsStream("/templates/unban.yml"), Paths.get(templates.getPath()+"/unban.yml"));
-            } catch (IOException exception) {
-                exception.printStackTrace();
-            }
-        }
-        if(createDefaultReportTemplate.get()) {
-            try {
                 Files.copy(DKBansConfig.class.getResourceAsStream("/templates/report.yml"), Paths.get(templates.getPath()+"/report.yml"));
             } catch (IOException exception) {
                 exception.printStackTrace();
             }
+
+            FileUtil.processFilesHierarchically(templates, file -> {
+                TemplateGroup group = loadTemplateConfig(dkBans, Document.read(file));
+                dkBans.getStorage().importTemplateGroup(group);
+            });
         }
     }
 
-    private static TemplateType loadTemplateConfig(DKBans dkBans, Document document) {
+    public static int importTemplates() {
+        File templates = new File("plugins/DKBans/templates/");
+
+        AtomicInteger count = new AtomicInteger();
+        FileUtil.processFilesHierarchically(templates, file -> {
+            TemplateGroup group = loadTemplateConfig(DKBans.getInstance(), Document.read(file));
+            DKBans.getInstance().getStorage().importTemplateGroup(group);
+            count.incrementAndGet();
+        });
+        return count.get();
+    }
+
+    private static TemplateGroup loadTemplateConfig(DKBans dkBans, Document document) {
 
         String groupName = document.getString("name");
         TemplateType templateType = TemplateType.byNameOrNull(document.getString("type"));
@@ -126,10 +117,10 @@ public class DKBansConfig {
 
         TemplateGroup templateGroup = dkBans.getTemplateManager().getTemplateGroup(groupName);
         if(templateGroup == null) {
-            dkBans.getTemplateManager().createTemplateGroup(groupName, templates);
+            dkBans.getTemplateManager().createTemplateGroup(groupName, templateType, templates);
         } else {
             templateGroup.addTemplates(templates);
         }
-        return templateType;
+        return templateGroup;
     }
 }

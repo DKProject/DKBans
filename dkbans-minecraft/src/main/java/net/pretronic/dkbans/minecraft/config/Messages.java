@@ -1,7 +1,9 @@
 package net.pretronic.dkbans.minecraft.config;
 
+import net.pretronic.dkbans.api.template.Template;
 import org.mcnative.common.text.Text;
 import org.mcnative.common.text.components.MessageComponent;
+import org.mcnative.common.text.format.TextColor;
 
 public class Messages {
 
@@ -45,4 +47,6 @@ public class Messages {
     public static MessageComponent<?> COMMAND_HELP_PUNISH = Text.ofMessageKey("dkbans.command.help.punish");
 
     public static MessageComponent<?> FILTER_BLOCKED_NAME = Text.ofMessageKey("dkbans.filter.blockedName");
+
+    public static MessageComponent<?> COMMAND_TEMPLATE_IMPORT = Text.ofMessageKey("dkbans.command.template.import");
 }

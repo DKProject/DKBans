@@ -31,10 +31,15 @@ public class DefaultTemplateManager implements TemplateManager {
     }
 
     @Override
-    public void createTemplateGroup(String name, List<Template> templates) {
+    public TemplateGroup getTemplateGroup(String name) {
+        return Iterators.findOne(templateGroups, templateGroup -> templateGroup.getName().equalsIgnoreCase(name));
+    }
+
+    @Override
+    public void createTemplateGroup(String name, TemplateType type, List<Template> templates) {
         //@Todo id from database
         int id = -1;
-        this.templateGroups.add(new DefaultTemplateGroup(id, name, templates));
+        this.templateGroups.add(new DefaultTemplateGroup(id, name, type, templates));
     }
 
     @Override

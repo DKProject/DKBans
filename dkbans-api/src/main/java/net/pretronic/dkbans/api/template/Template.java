@@ -18,6 +18,8 @@ public interface Template {
 
     String getName();
 
+    TemplateType getType();
+
     String getDisplayName();
 
     String getPermission();

@@ -19,8 +19,10 @@ import net.pretronic.dkbans.api.player.note.PlayerNoteType;
 import net.pretronic.dkbans.api.storage.DKBansStorage;
 import net.pretronic.dkbans.api.template.*;
 import net.pretronic.dkbans.common.DefaultDKBansScope;
+import net.pretronic.dkbans.common.template.DefaultTemplate;
 import net.pretronic.dkbans.common.template.DefaultTemplateCategory;
 import net.pretronic.dkbans.common.template.DefaultTemplateGroup;
+import net.pretronic.libraries.document.Document;
 import net.pretronic.libraries.document.type.DocumentFileType;
 
 import java.util.ArrayList;
@@ -98,39 +100,17 @@ public class DefaultDKBansStorage implements DKBansStorage {
     @Override
     public Collection<TemplateGroup> loadTemplateGroups() {
         Collection<TemplateGroup> templateGroups = new ArrayList<>();
-
-        /*for (QueryResultEntry resultEntry : this.template.find().execute()) {
-            String name = resultEntry.getString("Name");
-            String type = resultEntry.getString("Type");
-            TemplateType templateType = TemplateType.byName(type);
-
-            Collection<String> aliases = DocumentFileType.JSON.getReader().read(resultEntry.getString("Aliases")).getAsCollection(String.class);
-            TemplateCategory category = DKBans.getInstance().getTemplateManager().getTemplateCategory(resultEntry.getInt("CategoryId"));
-            Collection<DefaultDKBansScope> scopes = DocumentFileType.JSON.getReader().read(resultEntry.getString("Scopes")).getAsCollection(DefaultDKBansScope.class);
-            templates.add(TemplateFactory.create(templateType,
-                    resultEntry.getInt("Id"),
-                    name,
-                    resultEntry.getString("DisplayName"),
-                    resultEntry.getString("Permission"),
-                    aliases,
-                    DKBans.getInstance().getHistoryManager().getHistoryType(resultEntry.getInt("HistoryTypeId")),
-                    PunishmentType.getPunishmentType(resultEntry.getInt("PunishmentTypeId")),
-                    resultEntry.getBoolean("Enabled"),
-                    resultEntry.getBoolean("Hidden"),
-                    scopes,
-                    category,
-                    DocumentFileType.JSON.getReader().read("Data")));
-        }*/
         for (QueryResultEntry resultEntry : this.templateGroups.find().execute()) {
             int groupId = resultEntry.getInt("Id");
             String groupName = resultEntry.getString("Name");
 
-            DefaultTemplateGroup templateGroup = new DefaultTemplateGroup(groupId, groupName);
+            String type = resultEntry.getString("Type");
+            TemplateType templateType = TemplateType.byName(type);
+
+            DefaultTemplateGroup templateGroup = new DefaultTemplateGroup(groupId, groupName, templateType);
 
             for (QueryResultEntry subResultEntry : this.template.find().where("GroupId").execute()) {
                 String name = subResultEntry.getString("Name");
-                String type = subResultEntry.getString("Type");
-                TemplateType templateType = TemplateType.byName(type);
 
                 Collection<String> aliases = DocumentFileType.JSON.getReader().read(subResultEntry.getString("Aliases")).getAsCollection(String.class);
                 TemplateCategory category = DKBans.getInstance().getTemplateManager().getTemplateCategory(subResultEntry.getInt("CategoryId"));
@@ -152,6 +132,67 @@ public class DefaultDKBansStorage implements DKBansStorage {
             templateGroups.add(templateGroup);
         }
         return templateGroups;
+    }
+
+    @Override
+    public void importTemplateGroup(TemplateGroup templateGroup) {
+        FindQuery groupExist = this.templateGroups.find().where("Name", templateGroup.getName())
+                .where("Type", templateGroup.getType().getName());
+        if(templateGroup.getId() != -1) {
+            groupExist.where("Id", templateGroup.getId());
+        }
+        if(groupExist.execute().isEmpty()) {
+            int id = templateGroups.insert().set("Name", templateGroup.getName())
+                    .set("Type", templateGroup.getName())
+                    .executeAndGetGeneratedKeyAsInt("Id");
+            ((DefaultTemplateGroup)templateGroup).setIdInternal(id);
+        }
+        for (Template template : templateGroup.getTemplates()) {
+            boolean exist = !this.template.find().where("Id", template.getId())
+                    .where("Name", template.getName())
+                    .where("GroupId", templateGroup.getId())
+                    .execute().isEmpty();
+            if(exist) {
+                this.template.update().set("DisplayName", template.getDisplayName())
+                        .set("Permission", template.getPermission())
+                        .set("Aliases", template.getAliases())
+                        .set("HistoryTypeId", template.getHistoryType().getId())
+                        .set("PunishmentTypeId", template.getPunishmentType().getId())
+                        .set("Enabled", template.isEnabled())
+                        .set("Hidden", template.isHidden())
+                        .set("Scopes", DocumentFileType.JSON.getWriter().write(Document.newDocument(template.getScopes()), false))
+                        .set("CategoryId", template.getCategory().getId())
+                        .set("Data", TemplateFactory.toData(template))
+                        .where("Id", template.getId())
+                        .execute();
+            } else {
+                int id = this.template.insert()
+                        .set("Name", template.getName())
+                        .set("DisplayName", template.getDisplayName())
+                        .set("Permission", template.getPermission())
+                        .set("Aliases", template.getAliases())
+                        .set("HistoryTypeId", template.getHistoryType().getId())
+                        .set("PunishmentTypeId", template.getPunishmentType().getId())
+                        .set("Enabled", template.isEnabled())
+                        .set("Hidden", template.isHidden())
+                        .set("Scopes", DocumentFileType.JSON.getWriter().write(Document.newDocument(template.getScopes()), false))
+                        .set("CategoryId", template.getCategory().getId())
+                        .set("Data", TemplateFactory.toData(template))
+                        .executeAndGetGeneratedKeyAsInt("Id");
+
+                ((DefaultTemplate)template).setIdInternal(id);
+            }
+        }
+    }
+
+    @Override
+    public int createHistoryEntry(int playerId, int sessionId) {
+        return 0;
+    }
+
+    @Override
+    public int insertHistoryEntrySnapshot(PlayerHistoryEntrySnapshot snapshot) {
+        return 0;
     }
 
     @Override
@@ -257,6 +298,8 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 .field("ScopeName", DataType.STRING, FieldOption.NOT_NULL)
                 .field("ScopeId", DataType.UUID, FieldOption.NOT_NULL)
                 .field("Points", DataType.INTEGER)
+                .field("ModifiedTime", DataType.LONG)//@Todo nullAble ?
+                .field("ModifiedBy", DataType.UUID)//@Todo nullAble ?
                 .field("Active", DataType.BOOLEAN, FieldOption.NOT_NULL)
                 .field("Properties", DataType.LONG_TEXT, -1, "{}", FieldOption.NOT_NULL)
                 .field("HistoryTypeId", DataType.INTEGER, ForeignKey.of(this.historyType, "Id"), FieldOption.NOT_NULL)
@@ -328,6 +371,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
         return database.createCollection("dkbans_template_groups")
                 .field("Id", DataType.INTEGER, FieldOption.PRIMARY_KEY, FieldOption.AUTO_INCREMENT)
                 .field("Name", DataType.STRING, FieldOption.NOT_NULL)
+                .field("Type", DataType.STRING, FieldOption.NOT_NULL)
                 .create();
     }
 

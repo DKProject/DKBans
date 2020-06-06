@@ -21,5 +21,11 @@ public class DefaultKickPunishmentTemplateEntry extends DefaultPunishmentTemplat
         public PunishmentTemplateEntry create(Document data) {
             return new DefaultKickPunishmentTemplateEntry(DefaultDKBansScope.fromData(data));
         }
+
+        @Override
+        public Document createData(PunishmentTemplateEntry entry) {
+            return Document.newDocument().add("scopeType", entry.getScope().getType())
+                    .add("scopeName", entry.getScope().getName());
+        }
     }
 }

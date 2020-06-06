@@ -11,6 +11,8 @@ public interface TemplateGroup extends Iterable<Template> {
 
     String getName();
 
+    TemplateType getType();
+
     List<Template> getTemplates();
 
     void addTemplate(Template template);

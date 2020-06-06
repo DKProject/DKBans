@@ -2,8 +2,11 @@ package net.pretronic.dkbans.api.storage;
 
 import net.pretronic.dkbans.api.player.history.PlayerHistoryEntry;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryEntrySnapshot;
+import net.pretronic.dkbans.api.player.PlayerSetting;
+import net.pretronic.dkbans.api.player.history.PlayerHistoryEntrySnapshot;
 import net.pretronic.dkbans.api.player.note.PlayerNote;
 import net.pretronic.dkbans.api.player.note.PlayerNoteType;
+import net.pretronic.dkbans.api.template.Template;
 import net.pretronic.dkbans.api.template.TemplateCategory;
 import net.pretronic.dkbans.api.template.TemplateGroup;
 
@@ -15,6 +18,13 @@ public interface DKBansStorage {
 
     /* Player */
 
+    Collection<PlayerSetting> loadPlayerSettings(UUID uniqueId);
+
+    int createPlayerSetting(UUID uniqueId, String key, String value);
+
+    void updatePlayerSetting(int entryId, String value);
+
+
     Collection<PlayerNote> loadPlayerNotes(UUID uniqueId);
 
     int createPlayerNote(UUID playerId, UUID creatorId,PlayerNoteType type,String message);
@@ -24,12 +34,11 @@ public interface DKBansStorage {
 
     Collection<TemplateGroup> loadTemplateGroups();
 
-
-
+    void importTemplateGroup(TemplateGroup templateGroup);
 
     /* History */
 
-    PlayerHistoryEntrySnapshot createHistoryEntry(UUID playerId,int sessionId);
+    int createHistoryEntry(int playerId,int sessionId);//Braucht player, session kann null sein
 
     int insertHistoryEntrySnapshot(PlayerHistoryEntrySnapshot snapshot);
 

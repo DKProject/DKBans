@@ -19,6 +19,8 @@ public abstract class TemplateFactory {
                                     PlayerHistoryType historyType, PunishmentType punishmentType, boolean enabled, boolean hidden,
                                     Collection<? extends DKBansScope> scopes, TemplateCategory category, Document data);
 
+    public abstract Document createData(Template template);
+
 
     public static void register(TemplateType templateType, TemplateFactory factory) {
         FACTORY.put(templateType, factory);
@@ -33,5 +35,14 @@ public abstract class TemplateFactory {
         if(factory == null) throw new IllegalArgumentException("No template factory for template type " + templateType.getName() + " found");
 
         return factory.create(id, name, displayName, permission, aliases, historyType, punishmentType, enabled, hidden, scopes, category, data);
+    }
+
+    public static Document toData(Template template) {
+
+        Validate.notNull(template);
+        TemplateFactory factory = FACTORY.get(template.getType());
+        if(factory == null) throw new IllegalArgumentException("No template factory for template type " + template.getType().getName() + " found");
+
+        return factory.createData(template);
     }
 }

@@ -9,7 +9,7 @@ public interface TemplateManager {
 
     TemplateGroup getTemplateGroup(String name);
 
-    void createTemplateGroup(String name, List<Template> templates);
+    void createTemplateGroup(String name, TemplateType type, List<Template> templates);
 
 
     Collection<Template> getTemplates();

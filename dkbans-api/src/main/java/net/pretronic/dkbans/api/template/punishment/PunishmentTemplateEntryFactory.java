@@ -14,12 +14,21 @@ public abstract class PunishmentTemplateEntryFactory {
 
     public abstract PunishmentTemplateEntry create(Document data);
 
+    public abstract Document createData(PunishmentTemplateEntry entry);
+
 
     public static PunishmentTemplateEntry create(PunishmentType punishmentType, Document data) {
         Validate.notNull(punishmentType, data);
         PunishmentTemplateEntryFactory factory = FACTORY.get(punishmentType);
         if(factory == null) throw new IllegalArgumentException("No punishment entry factory for punishment type " + punishmentType.getName() + " found");
         return factory.create(data);
+    }
+
+    public static Document toData(PunishmentTemplateEntry entry) {
+        Validate.notNull(entry);
+        PunishmentTemplateEntryFactory factory = FACTORY.get(entry.getType());
+        if(factory == null) throw new IllegalArgumentException("No punishment entry factory for punishment type " + entry.getType().getName() + " found");
+        return factory.createData(entry);
     }
 
     public static void register(PunishmentType punishmentType, PunishmentTemplateEntryFactory factory) {

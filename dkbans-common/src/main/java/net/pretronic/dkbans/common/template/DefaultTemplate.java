@@ -6,12 +6,13 @@ import net.pretronic.dkbans.api.player.history.PunishmentType;
 import net.pretronic.dkbans.api.template.Template;
 import net.pretronic.dkbans.api.template.TemplateCategory;
 import net.pretronic.libraries.document.Document;
+import net.pretronic.libraries.utility.annonations.Internal;
 
 import java.util.Collection;
 
 public class DefaultTemplate implements Template {
 
-    private final int id;
+    private int id;
     private final String name;
     private final String displayName;
     private final String permission;
@@ -99,5 +100,11 @@ public class DefaultTemplate implements Template {
     @Override
     public Document getData() {
         return this.data;
+    }
+
+
+    @Internal
+    public void setIdInternal(int id) {
+        this.id = id;
     }
 }

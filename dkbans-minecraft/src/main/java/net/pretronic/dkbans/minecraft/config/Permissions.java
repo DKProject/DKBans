@@ -10,4 +10,7 @@ public class Permissions {
     public static final String PUNISH_OVERRIDE_OWN = "dkbans.punish.override";
 
     public static final String PUNISH_OVERRIDE_ALL = "dkbans.bypass.override.all";
+
+
+    public static final String COMMAND_TEMPLATE = "dkbans.command.template";
 }
