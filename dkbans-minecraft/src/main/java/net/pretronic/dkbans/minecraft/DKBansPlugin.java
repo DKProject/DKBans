@@ -46,7 +46,7 @@ public class DKBansPlugin extends MinecraftPlugin {
 
         registerCommands();
 
-        getRuntime().getLocal().getEventBus().subscribe(this,new PlayerListener());
+        //getRuntime().getLocal().getEventBus().subscribe(this,new PlayerListener());
 
         MinecraftPlayerManager playerManager = new MinecraftPlayerManager();
         getRuntime().getPlayerManager().registerPlayerAdapter(DKBansPlayer.class, playerManager::getPlayer);
