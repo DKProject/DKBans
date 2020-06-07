@@ -54,7 +54,7 @@ public class PlayerListener {
     @Listener(priority = EventPriority.LOWEST)
     public void onPlayerPostLoginLow(MinecraftPlayerPostLoginEvent event){
         if(DKBansConfig.PLAYER_ON_JOIN_CLEAR_CHAT){
-            for(int i = 1; i < 120; i++) event.getOnlinePlayer().sendMessage(Text.EMPTY);
+          //  for(int i = 1; i < 120; i++) event.getOnlinePlayer().sendMessage(Text.EMPTY);
         }
     }
 

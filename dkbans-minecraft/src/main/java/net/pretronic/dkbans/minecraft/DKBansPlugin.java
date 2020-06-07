@@ -2,11 +2,9 @@ package net.pretronic.dkbans.minecraft;
 
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
-import net.pretronic.dkbans.api.player.DKBansPlayerManager;
 import net.pretronic.dkbans.api.player.history.PunishmentType;
 import net.pretronic.dkbans.api.template.TemplateGroup;
 import net.pretronic.dkbans.common.DefaultDKBans;
-import net.pretronic.dkbans.common.player.DefaultDKBansPlayer;
 import net.pretronic.dkbans.minecraft.commands.JumptoCommand;
 import net.pretronic.dkbans.minecraft.commands.OnlineTimeCommand;
 import net.pretronic.dkbans.minecraft.commands.PingCommand;
@@ -17,16 +15,13 @@ import net.pretronic.dkbans.minecraft.commands.punish.TempPunishCommand;
 import net.pretronic.dkbans.minecraft.commands.punish.TemplatePunishCommand;
 import net.pretronic.dkbans.minecraft.config.CommandConfig;
 import net.pretronic.dkbans.minecraft.config.DKBansConfig;
-import net.pretronic.dkbans.minecraft.listeners.PlayerListener;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
 import net.pretronic.libraries.plugin.lifecycle.Lifecycle;
 import net.pretronic.libraries.plugin.lifecycle.LifecycleState;
-import org.mcnative.common.player.MinecraftPlayer;
 import org.mcnative.common.plugin.MinecraftPlugin;
 import org.mcnative.common.plugin.configuration.ConfigurationProvider;
 
 import java.util.Map;
-import java.util.function.Function;
 
 public class DKBansPlugin extends MinecraftPlugin {
 

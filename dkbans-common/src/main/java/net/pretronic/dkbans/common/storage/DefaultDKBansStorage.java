@@ -221,12 +221,12 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 .set("Points",snapshot.getPoints())
                 .set("Active",snapshot.isActive())
                 .set("Properties","{}")
-                .set("HistoryTypeId",snapshot.getHistoryType().getId())
                 .set("PunishmentType",snapshot.getPunishmentType().getId())
                 .set("RevokeReason",snapshot.getReason())
                 .set("ModifiedTime",snapshot.getModifiedTime())
                 .set("ModifiedBy",snapshot.getModifiedBy().getUniqueId())
                 .set("ModifiedActive",snapshot.isModifiedActive());
+       if(snapshot.getHistoryType() != null)  query.set("HistoryTypeId",snapshot.getHistoryType().getId());
        if(snapshot.getRevokeTemplate() != null) query.set("RevokeTemplateId",snapshot.getRevokeTemplate().getId());
        if(snapshot.getTemplate() != null) query.set("TemplateId",snapshot.getTemplate().getId());
        if(snapshot.getScope() != null){
@@ -383,7 +383,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 .field("Points", DataType.INTEGER)
                 .field("Active", DataType.BOOLEAN, FieldOption.NOT_NULL)
                 .field("Properties", DataType.LONG_TEXT, -1, "{}", FieldOption.NOT_NULL)
-                .field("HistoryTypeId", DataType.INTEGER, ForeignKey.of(this.historyType, "Id"), FieldOption.NOT_NULL)
+                .field("HistoryTypeId", DataType.INTEGER, ForeignKey.of(this.historyType, "Id"))
                 .field("PunishmentType", DataType.INTEGER, FieldOption.NOT_NULL)//@Todo foreign key maybe / save as string
                 .field("TemplateId", DataType.INTEGER)//@Todo add foreign key
                 .field("RevokeTemplateId", DataType.INTEGER)//@Todo add foreign key
