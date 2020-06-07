@@ -77,7 +77,7 @@ public class PlayerListener {
         }
 
         if(DKBansConfig.PLAYER_SESSION_LOGGING){
-            dkBansPlayer.startSession(player.getName(),player.getAddress().getAddress());
+           // dkBansPlayer.startSession(player.getName(),player.getAddress().getAddress());
         }
     }
 
