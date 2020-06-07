@@ -2,6 +2,8 @@ package net.pretronic.dkbans.minecraft.config;
 
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.DKBansScope;
+import net.pretronic.dkbans.api.player.history.CalculationType;
+import net.pretronic.dkbans.api.player.history.PlayerHistoryType;
 import net.pretronic.dkbans.api.template.*;
 import net.pretronic.dkbans.common.DefaultDKBansScope;
 import net.pretronic.dkbans.common.template.DefaultTemplateGroup;
@@ -38,8 +40,8 @@ public class DKBansConfig {
             System.out.println("create defaults");
             try {
                 Files.copy(DKBansConfig.class.getResourceAsStream("/templates/ban.yml"), Paths.get(templates.getPath()+"/ban.yml"));
-                Files.copy(DKBansConfig.class.getResourceAsStream("/templates/unban.yml"), Paths.get(templates.getPath()+"/unban.yml"));
-                Files.copy(DKBansConfig.class.getResourceAsStream("/templates/report.yml"), Paths.get(templates.getPath()+"/report.yml"));
+                //Files.copy(DKBansConfig.class.getResourceAsStream("/templates/unban.yml"), Paths.get(templates.getPath()+"/unban.yml"));
+                //Files.copy(DKBansConfig.class.getResourceAsStream("/templates/report.yml"), Paths.get(templates.getPath()+"/report.yml"));
             } catch (IOException exception) {
                 exception.printStackTrace();
             }
@@ -71,15 +73,17 @@ public class DKBansConfig {
         TemplateType templateType = TemplateType.byNameOrNull(document.getString("type"));
 
         if(templateType == null) {
-            DKBans.getInstance().getLogger().warn("Could not load template group {} with type {}", groupName, document.getString("type"));
+            dkBans.getLogger().warn("Could not load template group {} with type {}", groupName, document.getString("type"));
             return null;
         }
+
+        CalculationType calculationType = CalculationType.byName(document.getString("calculation"));
 
         List<Template> templates = new ArrayList<>();
 
         TemplateGroup templateGroup = dkBans.getTemplateManager().getTemplateGroup(groupName);
         if(templateGroup == null) {
-            templateGroup = dkBans.getTemplateManager().createTemplateGroup(groupName, templateType, null, new ArrayList<>());
+            templateGroup = dkBans.getTemplateManager().createTemplateGroup(groupName, templateType, calculationType, new ArrayList<>());
         }
 
         for (DocumentEntry entry0 : document.getDocument("templates")) {
@@ -100,19 +104,30 @@ public class DKBansConfig {
 
             TemplateCategory category = dkBans.getTemplateManager().getTemplateCategory(entry.getString("category"));
 
+            if(category == null) {
+                category = dkBans.getTemplateManager().createTemplateCategory(name, name);
+            }
+
             Collection<String> aliases = new ArrayList<>();
             for (DocumentEntry alias : entry.getDocument("aliases")) {
                 aliases.add(alias.toPrimitive().getAsString());
+            }
+
+            String historyType0 = entry.getString("historyType");
+
+            PlayerHistoryType historyType = dkBans.getHistoryManager().getHistoryType(historyType0);
+            if(historyType == null) {
+                historyType = dkBans.getHistoryManager().createHistoryType(historyType0);
             }
 
             Template template = TemplateFactory.create(templateType, //@Todo remove because defined in template group
                     id,
                     name,
                     templateGroup,
-                    entry.getString("displayName"),
+                    entry.getString("display"),
                     entry.getString("permission"),
                     aliases,
-                    dkBans.getHistoryManager().getHistoryType(entry.getString("historyType")),
+                    historyType,
                     entry.getBoolean("enabled"),
                     entry.getBoolean("hidden"),
                     scopes,

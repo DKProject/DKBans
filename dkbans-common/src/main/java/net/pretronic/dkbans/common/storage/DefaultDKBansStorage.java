@@ -90,6 +90,12 @@ public class DefaultDKBansStorage implements DKBansStorage {
     }
 
     @Override
+    public TemplateCategory createTemplateCategory(String name, String displayName) {
+        int id = this.templateCategories.insert().set("Name", name).set("DisplayName", displayName).executeAndGetGeneratedKeyAsInt("Id");
+        return new DefaultTemplateCategory(id, name, displayName);
+    }
+
+    @Override
     public Collection<TemplateCategory> loadTemplateCategories() {
         Collection<TemplateCategory> categories = new ArrayList<>();
         for (QueryResultEntry resultEntry : this.templateCategories.find().execute()) {
@@ -166,7 +172,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
                         .set("Hidden", template.isHidden())
                         .set("Scopes", DocumentFileType.JSON.getWriter().write(Document.newDocument(template.getScopes()), false))
                         .set("CategoryId", template.getCategory().getId())
-                        .set("Data", TemplateFactory.toData(template))
+                        .set("Data", DocumentFileType.JSON.getWriter().write(TemplateFactory.toData(template), false))
                         .where("Id", template.getId())
                         .execute();
             } else {
@@ -180,7 +186,8 @@ public class DefaultDKBansStorage implements DKBansStorage {
                         .set("Hidden", template.isHidden())
                         .set("Scopes", DocumentFileType.JSON.getWriter().write(Document.newDocument(template.getScopes()), false))
                         .set("CategoryId", template.getCategory().getId())
-                        .set("Data", TemplateFactory.toData(template))
+                        .set("Data", DocumentFileType.JSON.getWriter().write(TemplateFactory.toData(template), false))
+                        .set("GroupId", templateGroup.getId())
                         .executeAndGetGeneratedKeyAsInt("Id");
 
                 ((DefaultTemplate)template).setIdInternal(id);
@@ -272,6 +279,12 @@ public class DefaultDKBansStorage implements DKBansStorage {
             }
         }
         return result;
+    }
+
+    @Override
+    public PlayerHistoryType createPlayerHistoryType(String name) {
+        int id = this.historyType.insert().set("Name", name).executeAndGetGeneratedKeyAsInt("Id");
+        return new DefaultPlayerHistoryType(id, name);
     }
 
     @Override
@@ -447,7 +460,6 @@ public class DefaultDKBansStorage implements DKBansStorage {
     private DatabaseCollection createTemplateCollection() {
         return database.createCollection("dkbans_template")
                 .field("Id", DataType.INTEGER, FieldOption.PRIMARY_KEY, FieldOption.AUTO_INCREMENT)
-                .field("Type", DataType.STRING, FieldOption.NOT_NULL)
                 .field("Name", DataType.STRING, FieldOption.NOT_NULL)
                 .field("DisplayName", DataType.STRING, FieldOption.NOT_NULL)
                 .field("Permission", DataType.STRING, FieldOption.NOT_NULL)

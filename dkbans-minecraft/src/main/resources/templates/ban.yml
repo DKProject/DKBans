@@ -1,4 +1,5 @@
 type: PUNISHMENT
+calculation: AMOUNT
 name: ban
 templates:
   1:

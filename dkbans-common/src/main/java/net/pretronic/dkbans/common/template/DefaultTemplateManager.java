@@ -83,6 +83,13 @@ public class DefaultTemplateManager implements TemplateManager {
         return Iterators.findOne(this.templateCategories, category -> category.getName().equalsIgnoreCase(name));
     }
 
+    @Override
+    public TemplateCategory createTemplateCategory(String name, String displayName) {
+        TemplateCategory category = DKBans.getInstance().getStorage().createTemplateCategory(name, displayName);
+        this.templateCategories.add(category);
+        return category;
+    }
+
     private void registerDefaultFactories() {
         TemplateFactory.register(TemplateType.PUNISHMENT, new DefaultPunishmentTemplate.Factory());
 
