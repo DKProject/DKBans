@@ -15,6 +15,7 @@ import net.pretronic.dkbans.minecraft.commands.punish.TempPunishCommand;
 import net.pretronic.dkbans.minecraft.commands.punish.TemplatePunishCommand;
 import net.pretronic.dkbans.minecraft.config.CommandConfig;
 import net.pretronic.dkbans.minecraft.config.DKBansConfig;
+import net.pretronic.dkbans.minecraft.listeners.PlayerListener;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
 import net.pretronic.libraries.plugin.lifecycle.Lifecycle;
 import net.pretronic.libraries.plugin.lifecycle.LifecycleState;
@@ -41,7 +42,7 @@ public class DKBansPlugin extends MinecraftPlugin {
 
         registerCommands();
 
-        //getRuntime().getLocal().getEventBus().subscribe(this,new PlayerListener());
+        getRuntime().getLocal().getEventBus().subscribe(this,new PlayerListener());
 
         MinecraftPlayerManager playerManager = new MinecraftPlayerManager();
         getRuntime().getPlayerManager().registerPlayerAdapter(DKBansPlayer.class, playerManager::getPlayer);

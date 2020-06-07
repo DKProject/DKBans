@@ -29,7 +29,7 @@ public class CommandUtil {
     }
 
     public static MinecraftPlayer getPlayer(CommandSender sender,String name, boolean notSelf){
-        if(!notSelf && sender.getName().equalsIgnoreCase(name)){
+        if(notSelf && sender.getName().equalsIgnoreCase(name)){
             sender.sendMessage(Messages.PLAYER_NOT_SELF, VariableSet.newEmptySet());
             return null;
         }
