@@ -13,6 +13,8 @@ import net.pretronic.dkbans.api.player.note.PlayerNoteType;
 import net.pretronic.dkbans.api.player.report.PlayerReport;
 import net.pretronic.dkbans.api.player.report.PlayerReportEntry;
 import net.pretronic.dkbans.api.template.Template;
+import net.pretronic.dkbans.api.template.punishment.PunishmentTemplate;
+import net.pretronic.dkbans.api.template.unpunishment.UnPunishmentTemplate;
 import net.pretronic.libraries.utility.annonations.Nullable;
 
 import java.net.InetAddress;
@@ -51,10 +53,12 @@ public interface DKBansPlayer extends DKBansExecutor {
 
     boolean hasActivePunish(PunishmentType type);
 
-    PlayerHistoryEntrySnapshot punish(DKBansExecutor executor, Template template);
+    PlayerHistoryEntrySnapshot punish(DKBansExecutor executor, PunishmentTemplate template);
 
     PlayerHistoryEntrySnapshotBuilder punish();
 
+
+    void unpunish(DKBansExecutor executor, UnPunishmentTemplate template);
 
     void unpunish(DKBansExecutor executor,PunishmentType type,String reason);
 

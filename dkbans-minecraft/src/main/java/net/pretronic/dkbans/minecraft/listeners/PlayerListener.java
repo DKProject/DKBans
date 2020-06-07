@@ -1,11 +1,13 @@
 package net.pretronic.dkbans.minecraft.listeners;
 
+import net.md_5.bungee.api.chat.TextComponent;
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.filter.FilterAffiliationArea;
 import net.pretronic.dkbans.api.filter.FilterManager;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryEntry;
 import net.pretronic.dkbans.api.player.history.PunishmentType;
+import net.pretronic.dkbans.api.template.punishment.PunishmentTemplateEntry;
 import net.pretronic.dkbans.minecraft.config.DKBansConfig;
 import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.libraries.event.EventPriority;
@@ -38,11 +40,11 @@ public class PlayerListener {
         if(player.hasActivePunish(PunishmentType.BAN)){
             PlayerHistoryEntry ban = player.getHistory().getActiveEntry(PunishmentType.BAN);
             event.setCancelled(true);
-            MessageComponent<?> message = ban.getCurrent().getTimeout() == -1
-                    ? Messages.PUNISH_BAN_SCREEN_PERMANENTLY : Messages.PUNISH_BAN_SCREEN_TEMPORARY;
-            event.setCancelReason(message
-                    ,VariableSet.create()
+            MessageComponent<?> message = ban.getCurrent().isPermanently()
+                    ? Messages.PUNISH_BAN_MESSAGE_PERMANENTLY : Messages.PUNISH_BAN_MESSAGE_TEMPORARY;
+            event.setCancelReason(message,VariableSet.create()
                     .addDescribed("ban",ban)
+                    .addDescribed("punish",ban)
                     .addDescribed("player",event.getPlayer()));
             return;
         }
@@ -54,7 +56,7 @@ public class PlayerListener {
     @Listener(priority = EventPriority.LOWEST)
     public void onPlayerPostLoginLow(MinecraftPlayerPostLoginEvent event){
         if(DKBansConfig.PLAYER_ON_JOIN_CLEAR_CHAT){
-          //  for(int i = 1; i < 120; i++) event.getOnlinePlayer().sendMessage(Text.EMPTY);
+            for(int i = 1; i < 120; i++) event.getOnlinePlayer().sendMessage(Text.EMPTY);
         }
     }
 
@@ -63,17 +65,19 @@ public class PlayerListener {
         OnlineMinecraftPlayer player = event.getOnlinePlayer();
         DKBansPlayer dkBansPlayer = player.getAs(DKBansPlayer.class);
 
-        //@Todo send info message
-
         if(DKBansConfig.PLAYER_ON_JOIN_INFO_TEAMCHAT){
             boolean teamChat = event.getPlayer().hasSetting("DKBans","TeamChatLogin",true);
-
+            player.sendMessage(Messages.STAFF_STATUS_NOW,VariableSet.create()
+                    .add("status",teamChat)
+                    .add("statusFormatted", teamChat ? Messages.STAFF_STATUS_LOGIN :  Messages.STAFF_STATUS_LOGOUT));
         }
 
         if(DKBansConfig.PLAYER_ON_JOIN_INFO_REPORT){
             boolean report = event.getPlayer().hasSetting("DKBans","ReportLogin",true);
-
-            //@Todo send amount open reports
+            player.sendMessage(Messages.STAFF_STATUS_NOW,VariableSet.create()
+                    .add("status",report)
+                    .add("statusFormatted", report ? Messages.STAFF_STATUS_LOGIN :  Messages.STAFF_STATUS_LOGOUT));
+            //@Todo send amount of open reports
         }
 
         if(DKBansConfig.PLAYER_SESSION_LOGGING){
@@ -91,9 +95,15 @@ public class PlayerListener {
         if(event.isCancelled()) return;
         DKBansPlayer player = event.getPlayer().getAs(DKBansPlayer.class);
 
-        if(player.hasActivePunish(PunishmentType.MUTE)){
-            //@Todo send mute message
+        PlayerHistoryEntry mute = player.getHistory().getActiveEntry(PunishmentType.MUTE);
+        if(mute != null){
             event.setCancelled(true);
+            MessageComponent<?> message = mute.getCurrent().isPermanently()
+                    ? Messages.PUNISH_MUTE_MESSAGE_PERMANENTLY : Messages.PUNISH_MUTE_MESSAGE_TEMPORARY;
+            event.getOnlinePlayer().sendMessage(message,VariableSet.create()
+                    .addDescribed("mute",mute)
+                    .addDescribed("punish",mute)
+                    .addDescribed("player",event.getPlayer()));
             return;
         }
     }

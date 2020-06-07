@@ -22,6 +22,10 @@ public interface PlayerHistoryEntrySnapshot {
 
     long getTimeout();
 
+    default boolean isPermanently(){
+        return getTimeout() <= 0;
+    }
+
 
     Template getTemplate();
 

@@ -29,6 +29,19 @@ public class CommandConfig {
             .permission("dkbans.command.playerInfo")
             .create();
 
+    public static CommandConfiguration COMMAND_TEAMCHAT = CommandConfiguration.newBuilder()
+            .name("teamchat")
+            .aliases("team","tc","sc","staffchat")
+            .permission("dkbans.command.teamchat")
+            .create();
+
+    public static CommandConfiguration COMMAND_HELP = CommandConfiguration.newBuilder()
+            .name("help")
+            .aliases("?")
+            .permission("dkbans.command.help")
+            .create();
+
+
     public static CommandConfiguration COMMAND_KICK = CommandConfiguration.newBuilder()
             .name("kick")
             .permission("dkbans.command.kick")

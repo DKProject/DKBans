@@ -8,6 +8,7 @@ import net.pretronic.dkbans.api.template.*;
 import net.pretronic.dkbans.common.DefaultDKBansScope;
 import net.pretronic.dkbans.common.template.DefaultTemplateGroup;
 import net.pretronic.libraries.document.Document;
+import net.pretronic.libraries.document.annotations.DocumentKey;
 import net.pretronic.libraries.document.entry.DocumentEntry;
 import net.pretronic.libraries.utility.Convert;
 import net.pretronic.libraries.utility.io.FileUtil;
@@ -20,13 +21,15 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class DKBansConfig {
 
+    @DocumentKey("player.onJoin.clearChat")
     public static boolean PLAYER_ON_JOIN_CLEAR_CHAT = true;
+    @DocumentKey("player.onJoin.info.teamChat")
     public static boolean PLAYER_ON_JOIN_INFO_TEAMCHAT = true;
+    @DocumentKey("player.onJoin.info.report")
     public static boolean PLAYER_ON_JOIN_INFO_REPORT = true;
 
     public static boolean PLAYER_SESSION_LOGGING = true;
@@ -36,8 +39,8 @@ public class DKBansConfig {
         File templates = new File("plugins/DKBans/templates/");
 
         if(!templates.exists()) templates.mkdirs();
-        if(templates.listFiles().length == 0) {
-            System.out.println("create defaults");
+        File[] files = templates.listFiles();
+        if(files != null && files.length == 0) {
             try {
                 Files.copy(DKBansConfig.class.getResourceAsStream("/templates/ban.yml"), Paths.get(templates.getPath()+"/ban.yml"));
                 //Files.copy(DKBansConfig.class.getResourceAsStream("/templates/unban.yml"), Paths.get(templates.getPath()+"/unban.yml"));
@@ -47,7 +50,6 @@ public class DKBansConfig {
             }
 
             FileUtil.processFilesHierarchically(templates, file -> {
-                System.out.println("process " + file.getName());
                 TemplateGroup group = loadTemplateConfig(dkBans, Document.read(file));
                 dkBans.getStorage().importTemplateGroup(group);
             });

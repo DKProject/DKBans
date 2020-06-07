@@ -5,10 +5,7 @@ import net.pretronic.dkbans.api.DKBansScope;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.PlayerSession;
 import net.pretronic.dkbans.api.player.chatlog.PlayerChatLog;
-import net.pretronic.dkbans.api.player.history.PlayerHistory;
-import net.pretronic.dkbans.api.player.history.PlayerHistoryEntrySnapshot;
-import net.pretronic.dkbans.api.player.history.PlayerHistoryEntrySnapshotBuilder;
-import net.pretronic.dkbans.api.player.history.PunishmentType;
+import net.pretronic.dkbans.api.player.history.*;
 import net.pretronic.dkbans.api.player.note.PlayerNote;
 import net.pretronic.dkbans.api.player.note.PlayerNoteList;
 import net.pretronic.dkbans.api.player.note.PlayerNoteType;
@@ -16,6 +13,7 @@ import net.pretronic.dkbans.api.player.report.PlayerReport;
 import net.pretronic.dkbans.api.player.report.PlayerReportEntry;
 import net.pretronic.dkbans.api.template.Template;
 import net.pretronic.dkbans.api.template.punishment.PunishmentTemplate;
+import net.pretronic.dkbans.api.template.unpunishment.UnPunishmentTemplate;
 import net.pretronic.dkbans.common.player.history.DefaultPlayerHistory;
 import net.pretronic.dkbans.common.player.history.DefaultPlayerHistoryEntrySnapshotBuilder;
 import net.pretronic.dkbans.common.player.note.DefaultPlayerNote;
@@ -82,6 +80,7 @@ public class DefaultDKBansPlayer implements DKBansPlayer {
 
     @Override
     public PlayerNote createNote(DKBansExecutor creator, String message, PlayerNoteType type) {
+        Validate.notNull(creator,message,type);
         //@Todo create to storage
         int id = -1;
         PlayerNote note = new DefaultPlayerNote(id,type,System.currentTimeMillis(),message,creator);
@@ -90,14 +89,15 @@ public class DefaultDKBansPlayer implements DKBansPlayer {
 
     @Override
     public boolean hasActivePunish(PunishmentType type) {
+        Validate.notNull(type);
         return history.hasActivePunish(type);
     }
 
     @Override
-    public PlayerHistoryEntrySnapshot punish(DKBansExecutor executor, Template template) {
+    public PlayerHistoryEntrySnapshot punish(DKBansExecutor executor, PunishmentTemplate template) {
         Validate.notNull(executor,template);
         PlayerHistoryEntrySnapshotBuilder builder = punish();
-        ((PunishmentTemplate)template).build(this,executor,builder);
+        template.build(this,executor,builder);
         return builder.execute();
     }
 
@@ -107,13 +107,30 @@ public class DefaultDKBansPlayer implements DKBansPlayer {
     }
 
     @Override
-    public void unpunish(DKBansExecutor executor, PunishmentType type, String reason) {
+    public void unpunish(DKBansExecutor executor, UnPunishmentTemplate template) {
+        Validate.notNull(executor,template);
+        throw new UnsupportedOperationException();
+    }
 
+    @Override
+    public void unpunish(DKBansExecutor executor, PunishmentType type, String reason) {
+        Validate.notNull(executor,type,reason);
+        PlayerHistoryEntry entry = getHistory().getActiveEntry(type);
+        if(entry != null){
+            entry.newSnapshot(executor)
+                    .active(false)
+                    .revokeReason(reason);
+        }
     }
 
     @Override
     public PlayerHistoryEntrySnapshot kick(DKBansExecutor executor, String reason) {
-        return null;
+        Validate.notNull(executor,reason);
+        return punish()
+                .stuff(executor)
+                .punishmentType(PunishmentType.KICK)
+                .reason(reason)
+                .execute();
     }
 
     @Override
@@ -143,6 +160,8 @@ public class DefaultDKBansPlayer implements DKBansPlayer {
 
     @Override
     public void finishSession() {
+        PlayerSession session = getActiveSession();
+        //if(session == null) throw new IllegalArgumentException("No active session found");
 
     }
 
