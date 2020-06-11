@@ -29,10 +29,7 @@ import net.pretronic.libraries.document.type.DocumentFileType;
 import net.pretronic.libraries.utility.map.Pair;
 import net.pretronic.libraries.utility.reflect.TypeReference;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class DefaultDKBansStorage implements DKBansStorage {
 
@@ -124,7 +121,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
             for (QueryResultEntry subResultEntry : this.template.find().where("GroupId", groupId).execute()) {
                 String name = subResultEntry.getString("Name");
 
-                Collection<String> aliases = DocumentFileType.JSON.getReader().read(subResultEntry.getString("Aliases")).getAsObject(new TypeReference<Collection<String>>(){}.getType());
+                Collection<String> aliases = loadAliases(subResultEntry.getString("Aliases"));
                 TemplateCategory category = DKBans.getInstance().getTemplateManager().getTemplateCategory(subResultEntry.getInt("CategoryId"));
                 Collection<DefaultDKBansScope> scopes = DocumentFileType.JSON.getReader().read(subResultEntry.getString("Scopes")).getAsCollection(DefaultDKBansScope.class);
                 templateGroup.addTemplateInternal(TemplateFactory.create(templateType,
@@ -167,7 +164,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
             if(exist) {
                 this.template.update().set("DisplayName", template.getDisplayName())
                         .set("Permission", template.getPermission())
-                        .set("Aliases", template.getAliases())
+                        .set("Aliases", buildAliases(template.getAliases()))
                         .set("HistoryTypeId", template.getHistoryType().getId())
                         .set("Enabled", template.isEnabled())
                         .set("Hidden", template.isHidden())
@@ -181,7 +178,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
                         .set("Name", template.getName())
                         .set("DisplayName", template.getDisplayName())
                         .set("Permission", template.getPermission())
-                        .set("Aliases", template.getAliases())
+                        .set("Aliases", buildAliases(template.getAliases()))
                         .set("HistoryTypeId", template.getHistoryType().getId())
                         .set("Enabled", template.isEnabled())
                         .set("Hidden", template.isHidden())
@@ -194,6 +191,19 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 ((DefaultTemplate)template).setIdInternal(id);
             }
         }
+    }
+
+    private String buildAliases(Collection<String> aliases) {
+        StringBuilder builder = new StringBuilder();
+        for (String alias : aliases) {
+            if(builder.length() > 0) builder.append(",");
+            builder.append(alias);
+        }
+        return builder.toString();
+    }
+
+    private Collection<String> loadAliases(String aliases0) {
+        return new ArrayList<>(Arrays.asList(aliases0.split(",")));
     }
 
     @Override
