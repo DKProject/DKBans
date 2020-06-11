@@ -125,7 +125,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
 
                 Collection<String> aliases = loadAliases(subResultEntry.getString("Aliases"));
                 TemplateCategory category = dkBans.getTemplateManager().getTemplateCategory(subResultEntry.getInt("CategoryId"));
-                Collection<DefaultDKBansScope> scopes = DocumentFileType.JSON.getReader().read(subResultEntry.getString("Scopes")).getAsCollection(DefaultDKBansScope.class);
+                Collection<DefaultDKBansScope> scopes = DocumentFileType.JSON.getReader().read(subResultEntry.getString("Scopes")).getAsObject(new TypeReference<Collection<DefaultDKBansScope>>(){});
                 templateGroup.addTemplateInternal(TemplateFactory.create(templateType,
                         subResultEntry.getInt("Id"),
                         name,
