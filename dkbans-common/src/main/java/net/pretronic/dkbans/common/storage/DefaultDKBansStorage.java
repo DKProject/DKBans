@@ -221,7 +221,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 .set("Points",snapshot.getPoints())
                 .set("Active",snapshot.isActive())
                 .set("Properties","{}")
-                .set("PunishmentType",snapshot.getPunishmentType().getId())
+                .set("PunishmentType",snapshot.getPunishmentType().getName())
                 .set("RevokeReason",snapshot.getReason())
                 .set("ModifiedTime",snapshot.getModifiedTime())
                 .set("ModifiedBy",snapshot.getModifiedBy().getUniqueId())
