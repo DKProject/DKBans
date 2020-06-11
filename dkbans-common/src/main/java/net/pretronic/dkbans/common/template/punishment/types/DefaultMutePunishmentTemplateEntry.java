@@ -36,7 +36,9 @@ public class DefaultMutePunishmentTemplateEntry extends DefaultPunishmentTemplat
         @Override
         public Document createData(PunishmentTemplateEntry entry0) {
             MutePunishmentTemplateEntry entry = (MutePunishmentTemplateEntry) entry0;
-            return Document.newDocument().add("scopeType", entry.getScope().getType())
+            return Document.newDocument()
+                    .add("type", entry.getType().getName())
+                    .add("scopeType", entry.getScope().getType())
                     .add("scopeName", entry.getScope().getName())
                     .add("duration", DurationProcessor.getStandard().format(entry.getDuration()));
         }

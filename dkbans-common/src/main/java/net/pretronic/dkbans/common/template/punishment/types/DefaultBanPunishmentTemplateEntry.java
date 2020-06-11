@@ -36,7 +36,9 @@ public class DefaultBanPunishmentTemplateEntry extends DefaultPunishmentTemplate
         @Override
         public Document createData(PunishmentTemplateEntry entry0) {
             BanPunishmentTemplateEntry entry = (BanPunishmentTemplateEntry) entry0;
-            return Document.newDocument().add("scopeType", entry.getScope().getType())
+            return Document.newDocument()
+                    .add("type", entry.getType().getName())
+                    .add("scopeType", entry.getScope().getType())
                     .add("scopeName", entry.getScope().getName())
                     .add("duration", DurationProcessor.getStandard().format(entry.getDuration()));
         }
