@@ -120,7 +120,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
 
             DefaultTemplateGroup templateGroup = new DefaultTemplateGroup(groupId, groupName, templateType, calculationType);
 
-            for (QueryResultEntry subResultEntry : this.template.find().where("GroupId").execute()) {
+            for (QueryResultEntry subResultEntry : this.template.find().where("GroupId", groupId).execute()) {
                 String name = subResultEntry.getString("Name");
 
                 Collection<String> aliases = DocumentFileType.JSON.getReader().read(subResultEntry.getString("Aliases")).getAsCollection(String.class);
