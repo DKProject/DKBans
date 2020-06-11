@@ -27,6 +27,7 @@ import net.pretronic.dkbans.common.template.DefaultTemplateGroup;
 import net.pretronic.libraries.document.Document;
 import net.pretronic.libraries.document.type.DocumentFileType;
 import net.pretronic.libraries.utility.map.Pair;
+import net.pretronic.libraries.utility.reflect.TypeReference;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -123,7 +124,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
             for (QueryResultEntry subResultEntry : this.template.find().where("GroupId", groupId).execute()) {
                 String name = subResultEntry.getString("Name");
 
-                Collection<String> aliases = DocumentFileType.JSON.getReader().read(subResultEntry.getString("Aliases")).getAsCollection(String.class);
+                Collection<String> aliases = DocumentFileType.JSON.getReader().read(subResultEntry.getString("Aliases")).getAsObject(new TypeReference<Collection<String>>(){}.getType());
                 TemplateCategory category = DKBans.getInstance().getTemplateManager().getTemplateCategory(subResultEntry.getInt("CategoryId"));
                 Collection<DefaultDKBansScope> scopes = DocumentFileType.JSON.getReader().read(subResultEntry.getString("Scopes")).getAsCollection(DefaultDKBansScope.class);
                 templateGroup.addTemplateInternal(TemplateFactory.create(templateType,
