@@ -138,7 +138,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
                         subResultEntry.getBoolean("Hidden"),
                         scopes,
                         category,
-                        DocumentFileType.JSON.getReader().read("Data")));
+                        DocumentFileType.JSON.getReader().read(subResultEntry.getString("Data"))));
             }
             templateGroups.add(templateGroup);
         }
