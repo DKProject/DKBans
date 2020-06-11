@@ -397,7 +397,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 .field("Active", DataType.BOOLEAN, FieldOption.NOT_NULL)
                 .field("Properties", DataType.LONG_TEXT, -1, "{}", FieldOption.NOT_NULL)
                 .field("HistoryTypeId", DataType.INTEGER, ForeignKey.of(this.historyType, "Id"))
-                .field("PunishmentType", DataType.INTEGER, FieldOption.NOT_NULL)//@Todo foreign key maybe / save as string
+                .field("PunishmentType", DataType.STRING, FieldOption.NOT_NULL)//@Todo foreign key maybe / save as string
                 .field("TemplateId", DataType.INTEGER)//@Todo add foreign key
                 .field("RevokeTemplateId", DataType.INTEGER)//@Todo add foreign key
                 .field("RevokeReason", DataType.STRING)
