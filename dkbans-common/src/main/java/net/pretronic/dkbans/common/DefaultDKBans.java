@@ -33,7 +33,7 @@ public class DefaultDKBans extends DKBans {
         this.ticketManager = null;
         this.broadcastManager = null;
         this.filterManager = null;
-        this.templateManager = new DefaultTemplateManager();
+        this.templateManager = new DefaultTemplateManager(this);
     }
 
     @Override
