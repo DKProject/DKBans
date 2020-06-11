@@ -23,7 +23,7 @@ public class DefaultDKBans extends DKBans {
     private final SupportTicketManager ticketManager;
     private final BroadcastManager broadcastManager;
     private final FilterManager filterManager;
-    private final TemplateManager templateManager;
+    private final DefaultTemplateManager templateManager;
 
     public DefaultDKBans(PretronicLogger logger, Database database) {
         this.logger = logger;
@@ -72,7 +72,7 @@ public class DefaultDKBans extends DKBans {
     }
 
     @Override
-    public TemplateManager getTemplateManager() {
+    public DefaultTemplateManager getTemplateManager() {
         return this.templateManager;
     }
 }

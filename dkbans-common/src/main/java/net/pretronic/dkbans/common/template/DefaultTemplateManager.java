@@ -25,7 +25,6 @@ public class DefaultTemplateManager implements TemplateManager {
         this.templateGroups = new ArrayList<>();
         this.templateCategories = new ArrayList<>();
         registerDefaultFactories();
-        initialize(dkBans);
     }
 
     @Override
@@ -102,5 +101,6 @@ public class DefaultTemplateManager implements TemplateManager {
 
     public void initialize(DKBans dkBans) {
         this.templateGroups.addAll(dkBans.getStorage().loadTemplateGroups());
+        this.templateCategories.addAll(dkBans.getStorage().loadTemplateCategories());
     }
 }
