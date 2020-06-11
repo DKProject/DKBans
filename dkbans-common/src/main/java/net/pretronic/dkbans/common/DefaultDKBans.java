@@ -27,7 +27,7 @@ public class DefaultDKBans extends DKBans {
 
     public DefaultDKBans(PretronicLogger logger, Database database) {
         this.logger = logger;
-        this.storage = new DefaultDKBansStorage(database);
+        this.storage = new DefaultDKBansStorage(this, database);
         this.historyManager = new DefaultPlayerHistoryManager(this);
         this.reportManager = null;
         this.ticketManager = null;
