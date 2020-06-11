@@ -160,7 +160,8 @@ public class DefaultPunishmentTemplate extends DefaultTemplate implements Punish
             Document data = Document.newDocument();
 
             data.add("durations", entryToDocument(template));
-            data.add("points", entryToDocument(template)
+            data.add("points", Document.newDocument()
+                    .add("durations", entryToDocument(template))
                     .add("addedPoints", template.addedPoints)
                     .add("pointsDivider", template.pointsDivider));
             return data;
