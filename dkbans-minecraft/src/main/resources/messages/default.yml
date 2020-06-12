@@ -1,20 +1,53 @@
+meta:
+  name: 'DKBans English'
+  module: 'DKBans'
+  language:
+    name: 'English'
+    localizedName: 'English'
+    code: 'en'
+messages:
+  dkbans.prefix: '&8» &4DKBans &8|&f'
+  dkbans.prefix.network: '&8» &4DKNetwork &8|&f'
+  dkbans.prefix.report: '&8» &6DKReport &8||&f'
+  dkbans.prefix.teamchat: '&8» &eTeamChat &8|&f'
+  dkbans.prefix.chat: '&8» &eChat &8|&f'
 
+  dkbans.error.internal: '{prefix} &cAn internal server error occurred, please contact a network administrator"'
+  dkbans.error.invalidDurationFormat: '{prefix} &e{duration} &cis not a valid duration"'
+  dkbans.error.onlyPlayer: '{prefix} &cThis command can only be executed as a player"'
 
+  dkbans.player.notFound: '{prefix} &cThe player &e{name} &cwas not found"'
+  dkbans.player.notOnline: '{prefix} &cThe player &e{player.displayName} &cis not &aonline'
+  dkbans.player.notSelf: '{prefix} &cYou can''t interact with your self'
+  dkbans.player.hasBypass: '{prefix} &cYou are not allowed to punish this player'
 
+  dkbans.player.staff.status.now: '{prefix} &7You are {status}'
+  dkbans.player.staff.status.already: '{prefix} &7You are already {status}'
+  dkbans.player.staff.status.change: '{prefix} &7You have [status]'
+  dkbans.player.staff.status.not: '{prefix} &7You are not [status]'
+  dkbans.player.staff.status.login: '&alogged in'
+  dkbans.player.staff.status.logout: '&clogged out'
 
+  dkbans.server.notFound: '${dkbans.prefix.network} &cThe server &e{name} &c was not found'
+  dkbans.server.alreadyConnected: '${dkbans.prefix.network} &cYou are already connected to this server'
+  dkbans.server.connecting: '${dkbans.prefix.network} &7Connecting to {server.name}...'
 
+  ping.self: '${dkbans.prefix.network} &7Your ping is &e{ping}&cms'
+  ping.other: '${dkbans.prefix.network} &7The ping of &e{player.displayName} &7is &a{ping}&cms'
 
-
-
-dkbans.command.playerInfo.online: '${dkbans.prefix}
-
-&8» &7Name&8: &c{player.displayName} &8(&cOffline)
-&8» &7UniqueId&8: &c{player.firstLoginFormatted}
-&8» &7FirstLog&8: &c{player.lastLoginFormatted}
-&8» &7Server&8: &c{player.xxx}
-&8» &7OnlineTime&8: &c{player.onlineTimeFormatted}
-&8» &7Ip&8: &c{player.lastSession.hostName}
-&8» &7Country&8: &c{player.lastSession.country}
-&8» &7Region&8: &c{player.lastSession.region}
-
-'
+  dkbans.punish.message.ban.permanently: '&e&lexample.net
+  &e
+  &cYou are &4&lpermanently banned &cfrom this network
+  &3Reason&8: &4&l{ban.current.reason}
+  &3BanID&8: &7{ban.id}
+  &e
+  &aYou can make a unban request at &eforum.example.net.'
+  dkbans.punish.message.ban.temporary: '&e&lexample.net
+  &e
+  &cYou are &e&l{ban.current.durationFormatted} &cbanned from this network
+  &3Reason&8: &4&l{ban.current.reason}
+  &3BanID&8: &7{ban.id}
+  &e
+  &3Remaining time&8: &e{ban.current.remainingFormatted}
+  &e
+  &aYou can make a unban request at &eforum.example.net'
