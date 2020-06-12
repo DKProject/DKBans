@@ -27,14 +27,13 @@ import net.pretronic.dkbans.common.template.DefaultTemplateGroup;
 import net.pretronic.libraries.document.Document;
 import net.pretronic.libraries.document.type.DocumentFileType;
 import net.pretronic.libraries.utility.map.Pair;
+import net.pretronic.libraries.utility.reflect.TypeReference;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class DefaultDKBansStorage implements DKBansStorage {
 
+    private final DKBans dkBans;
     private final Database database;
 
     private final DatabaseCollection playerSessions;
@@ -59,7 +58,8 @@ public class DefaultDKBansStorage implements DKBansStorage {
     private final DatabaseCollection supportTicketParticipants;
     private final DatabaseCollection supportTicketMessages;*/
 
-    public DefaultDKBansStorage(Database database) {
+    public DefaultDKBansStorage(DKBans dkBans, Database database) {
+        this.dkBans = dkBans;
         this.database = database;
         this.playerSessions = createPlayerSessionsCollection();
         this.playerChatLog = createPlayerChatLogCollection();
@@ -120,12 +120,12 @@ public class DefaultDKBansStorage implements DKBansStorage {
 
             DefaultTemplateGroup templateGroup = new DefaultTemplateGroup(groupId, groupName, templateType, calculationType);
 
-            for (QueryResultEntry subResultEntry : this.template.find().where("GroupId").execute()) {
+            for (QueryResultEntry subResultEntry : this.template.find().where("GroupId", groupId).execute()) {
                 String name = subResultEntry.getString("Name");
 
-                Collection<String> aliases = DocumentFileType.JSON.getReader().read(subResultEntry.getString("Aliases")).getAsCollection(String.class);
-                TemplateCategory category = DKBans.getInstance().getTemplateManager().getTemplateCategory(subResultEntry.getInt("CategoryId"));
-                Collection<DefaultDKBansScope> scopes = DocumentFileType.JSON.getReader().read(subResultEntry.getString("Scopes")).getAsCollection(DefaultDKBansScope.class);
+                Collection<String> aliases = loadAliases(subResultEntry.getString("Aliases"));
+                TemplateCategory category = dkBans.getTemplateManager().getTemplateCategory(subResultEntry.getInt("CategoryId"));
+                Collection<DefaultDKBansScope> scopes = DocumentFileType.JSON.getReader().read(subResultEntry.getString("Scopes")).getAsObject(new TypeReference<Collection<DefaultDKBansScope>>(){});
                 templateGroup.addTemplateInternal(TemplateFactory.create(templateType,
                         subResultEntry.getInt("Id"),
                         name,
@@ -133,12 +133,12 @@ public class DefaultDKBansStorage implements DKBansStorage {
                         subResultEntry.getString("DisplayName"),
                         subResultEntry.getString("Permission"),
                         aliases,
-                        DKBans.getInstance().getHistoryManager().getHistoryType(subResultEntry.getInt("HistoryTypeId")),
+                        dkBans.getHistoryManager().getHistoryType(subResultEntry.getInt("HistoryTypeId")),
                         subResultEntry.getBoolean("Enabled"),
                         subResultEntry.getBoolean("Hidden"),
                         scopes,
                         category,
-                        DocumentFileType.JSON.getReader().read("Data")));
+                        DocumentFileType.JSON.getReader().read(subResultEntry.getString("Data"))));
             }
             templateGroups.add(templateGroup);
         }
@@ -166,7 +166,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
             if(exist) {
                 this.template.update().set("DisplayName", template.getDisplayName())
                         .set("Permission", template.getPermission())
-                        .set("Aliases", template.getAliases())
+                        .set("Aliases", buildAliases(template.getAliases()))
                         .set("HistoryTypeId", template.getHistoryType().getId())
                         .set("Enabled", template.isEnabled())
                         .set("Hidden", template.isHidden())
@@ -180,7 +180,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
                         .set("Name", template.getName())
                         .set("DisplayName", template.getDisplayName())
                         .set("Permission", template.getPermission())
-                        .set("Aliases", template.getAliases())
+                        .set("Aliases", buildAliases(template.getAliases()))
                         .set("HistoryTypeId", template.getHistoryType().getId())
                         .set("Enabled", template.isEnabled())
                         .set("Hidden", template.isHidden())
@@ -193,6 +193,19 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 ((DefaultTemplate)template).setIdInternal(id);
             }
         }
+    }
+
+    private String buildAliases(Collection<String> aliases) {
+        StringBuilder builder = new StringBuilder();
+        for (String alias : aliases) {
+            if(builder.length() > 0) builder.append(",");
+            builder.append(alias);
+        }
+        return builder.toString();
+    }
+
+    private Collection<String> loadAliases(String aliases0) {
+        return new ArrayList<>(Arrays.asList(aliases0.split(",")));
     }
 
     @Override
@@ -221,7 +234,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 .set("Points",snapshot.getPoints())
                 .set("Active",snapshot.isActive())
                 .set("Properties","{}")
-                .set("PunishmentType",snapshot.getPunishmentType().getId())
+                .set("PunishmentType",snapshot.getPunishmentType().getName())
                 .set("RevokeReason",snapshot.getReason())
                 .set("ModifiedTime",snapshot.getModifiedTime())
                 .set("ModifiedBy",snapshot.getModifiedBy().getUniqueId())
@@ -255,18 +268,18 @@ public class DefaultDKBansStorage implements DKBansStorage {
             for (QueryResultEntry resultEntry : result0) {
                 DefaultPlayerHistoryEntrySnapshot snapshot = new DefaultPlayerHistoryEntrySnapshot(null,
                         resultEntry.getInt("SnapshotId"),
-                        DKBans.getInstance().getHistoryManager().getHistoryType(resultEntry.getInt("HistoryTypeId")),
+                        dkBans.getHistoryManager().getHistoryType(resultEntry.getInt("HistoryTypeId")),
                         PunishmentType.getPunishmentType(resultEntry.getString("PunishmentType")),
                         resultEntry.getString("Reason"),
                         resultEntry.getLong("Timeout"),
-                        DKBans.getInstance().getTemplateManager().getTemplate(resultEntry.getInt("TemplateId")),
+                        dkBans.getTemplateManager().getTemplate(resultEntry.getInt("TemplateId")),
                         null/*@Todo add stuff*/,
                         new DefaultDKBansScope(resultEntry.getString("ScopeType"), resultEntry.getString("ScopeName"), resultEntry.getUniqueId("ScopeId")),
                         resultEntry.getInt("Points"),
                         resultEntry.getBoolean("Active"),
                         null/*@Todo add properties*/,
                         resultEntry.getString("RevokeReason"),
-                        DKBans.getInstance().getTemplateManager().getTemplate(resultEntry.getInt("RevokeTemplateId")),
+                        dkBans.getTemplateManager().getTemplate(resultEntry.getInt("RevokeTemplateId")),
                         resultEntry.getBoolean("ModifiedActive"),
                         resultEntry.getLong("ModifiedTime"),
                         null/*@Todo add modified by*/);
@@ -384,7 +397,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 .field("Active", DataType.BOOLEAN, FieldOption.NOT_NULL)
                 .field("Properties", DataType.LONG_TEXT, -1, "{}", FieldOption.NOT_NULL)
                 .field("HistoryTypeId", DataType.INTEGER, ForeignKey.of(this.historyType, "Id"))
-                .field("PunishmentType", DataType.INTEGER, FieldOption.NOT_NULL)//@Todo foreign key maybe / save as string
+                .field("PunishmentType", DataType.STRING, FieldOption.NOT_NULL)//@Todo foreign key maybe / save as string
                 .field("TemplateId", DataType.INTEGER)//@Todo add foreign key
                 .field("RevokeTemplateId", DataType.INTEGER)//@Todo add foreign key
                 .field("RevokeReason", DataType.STRING)

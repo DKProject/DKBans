@@ -23,17 +23,17 @@ public class DefaultDKBans extends DKBans {
     private final SupportTicketManager ticketManager;
     private final BroadcastManager broadcastManager;
     private final FilterManager filterManager;
-    private final TemplateManager templateManager;
+    private final DefaultTemplateManager templateManager;
 
     public DefaultDKBans(PretronicLogger logger, Database database) {
         this.logger = logger;
-        this.storage = new DefaultDKBansStorage(database);
+        this.storage = new DefaultDKBansStorage(this, database);
         this.historyManager = new DefaultPlayerHistoryManager(this);
         this.reportManager = null;
         this.ticketManager = null;
         this.broadcastManager = null;
         this.filterManager = null;
-        this.templateManager = new DefaultTemplateManager();
+        this.templateManager = new DefaultTemplateManager(this);
     }
 
     @Override
@@ -72,7 +72,7 @@ public class DefaultDKBans extends DKBans {
     }
 
     @Override
-    public TemplateManager getTemplateManager() {
+    public DefaultTemplateManager getTemplateManager() {
         return this.templateManager;
     }
 }

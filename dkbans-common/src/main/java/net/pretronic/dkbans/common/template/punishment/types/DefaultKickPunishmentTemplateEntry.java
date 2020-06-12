@@ -24,7 +24,9 @@ public class DefaultKickPunishmentTemplateEntry extends DefaultPunishmentTemplat
 
         @Override
         public Document createData(PunishmentTemplateEntry entry) {
-            return Document.newDocument().add("scopeType", entry.getScope().getType())
+            return Document.newDocument()
+                    .add("type", entry.getType().getName())
+                    .add("scopeType", entry.getScope().getType())
                     .add("scopeName", entry.getScope().getName());
         }
     }

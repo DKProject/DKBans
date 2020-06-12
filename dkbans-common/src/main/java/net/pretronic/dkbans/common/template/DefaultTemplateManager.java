@@ -21,7 +21,7 @@ public class DefaultTemplateManager implements TemplateManager {
     private final Collection<TemplateGroup> templateGroups;
     private final Collection<TemplateCategory> templateCategories;
 
-    public DefaultTemplateManager() {
+    public DefaultTemplateManager(DKBans dkBans) {
         this.templateGroups = new ArrayList<>();
         this.templateCategories = new ArrayList<>();
         registerDefaultFactories();
@@ -97,5 +97,10 @@ public class DefaultTemplateManager implements TemplateManager {
         PunishmentTemplateEntryFactory.register(PunishmentType.KICK, new DefaultKickPunishmentTemplateEntry.Factory());
         PunishmentTemplateEntryFactory.register(PunishmentType.MUTE, new DefaultMutePunishmentTemplateEntry.Factory());
         PunishmentTemplateEntryFactory.register(PunishmentType.WARN, new DefaultWarnPunishmentTemplateEntry.Factory());
+    }
+
+    public void initialize(DKBans dkBans) {
+        this.templateGroups.addAll(dkBans.getStorage().loadTemplateGroups());
+        this.templateCategories.addAll(dkBans.getStorage().loadTemplateCategories());
     }
 }

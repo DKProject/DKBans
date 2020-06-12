@@ -31,6 +31,7 @@ public class DKBansPlugin extends MinecraftPlugin {
 
         this.dkBans = new DefaultDKBans(getLogger(), getRuntime().getRegistry().getService(ConfigurationProvider.class).getDatabase(this, true));
         DKBans.setInstance(dkBans);
+        dkBans.getTemplateManager().initialize(dkBans);
 
         getConfiguration().load(DKBansConfig.class);
         getConfiguration("commands").load(CommandConfig.class);
