@@ -19,6 +19,7 @@
 
 package net.pretronic.dkbans.common.player;
 
+import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.DKBansScope;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
@@ -41,11 +42,11 @@ import net.pretronic.libraries.utility.Validate;
 import java.net.InetAddress;
 import java.util.UUID;
 
-public class DefaultDKBansPlayer implements DKBansPlayer {
+public abstract class DefaultDKBansPlayer implements DKBansPlayer {
 
     private final UUID uniqueId;
     private final String name;
-    private final PlayerSession lastSession;
+    protected PlayerSession lastSession;
 
     private final PlayerHistory history;
 
@@ -173,15 +174,12 @@ public class DefaultDKBansPlayer implements DKBansPlayer {
     }
 
     @Override
-    public void startSession(String currentName, InetAddress address) {
-
-    }
-
-    @Override
     public void finishSession() {
         PlayerSession session = getActiveSession();
-        //if(session == null) throw new IllegalArgumentException("No active session found");
+        if(session == null) throw new IllegalArgumentException("No active session found");
 
+        DKBans.getInstance().getStorage().completePlayerSession(session);
+        this.lastSession = null;
     }
 
     @Override

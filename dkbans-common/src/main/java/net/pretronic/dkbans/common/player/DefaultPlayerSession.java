@@ -28,7 +28,7 @@ import java.util.UUID;
 
 public class DefaultPlayerSession implements PlayerSession {
 
-    private final int id;
+    private int id;
     private final DKBansPlayer player;
     private final String sessionName;
 
@@ -142,7 +142,7 @@ public class DefaultPlayerSession implements PlayerSession {
     }
 
     @Internal
-    public void completeSession(){
-
+    public void setId(int id) {
+        this.id = id;
     }
 }

@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package net.pretronic.dkbans.minecraft;
+package net.pretronic.dkbans.minecraft.player;
 
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.DKBansPlayerManager;
@@ -54,7 +54,7 @@ public class MinecraftPlayerManager implements DKBansPlayerManager {
         if(player == null) return null;
         DKBansPlayer player1 = players.get(player0 -> player0.getUniqueId().equals(player.getUniqueId()));
         if(player1 == null) {
-            player1 = new DefaultDKBansPlayer(player.getUniqueId(),player.getName());
+            player1 = new MinecraftDKBansPlayer(player.getUniqueId(),player.getName());
             this.players.insert(player1);
         }
         return player1;

@@ -31,6 +31,7 @@ import net.pretronic.databasequery.api.query.type.FindQuery;
 import net.pretronic.databasequery.api.query.type.InsertQuery;
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
+import net.pretronic.dkbans.api.player.PlayerSession;
 import net.pretronic.dkbans.api.player.history.*;
 import net.pretronic.dkbans.api.player.note.PlayerNote;
 import net.pretronic.dkbans.api.player.note.PlayerNoteType;
@@ -335,20 +336,46 @@ public class DefaultDKBansStorage implements DKBansStorage {
         return new DefaultTemplateGroup(id, name, templateType, calculationType);
     }
 
+    @Override
+    public int startPlayerSession(PlayerSession session) {
+        return this.playerSessions.insert()
+                .set("PlayerId", session.getPlayer().getUniqueId())
+                .set("PlayerSessionName", session.getPlayerSessionName())
+                .set("IpAddress", session.getIpAddress())
+                .set("Country", session.getCountry())
+                .set("Region", session.getRegion())
+                .set("LastServerId", session.getLastServerId())
+                .set("LastServerName", session.getLastServerName())
+                .set("ProxyId", session.getProxyId())
+                .set("ProxyName", session.getProxyName())
+                .set("ClientEdition", session.getClientEdition())
+                .set("ClientProtocolVersion", session.getClientProtocolVersion())
+                .set("ConnectTime", session.getConnectTime())
+                .executeAndGetGeneratedKeyAsInt("Id");
+    }
+
+    @Override
+    public void completePlayerSession(PlayerSession session) {
+        this.playerSessions.update()
+                .set("DisconnectTime", System.currentTimeMillis())
+                .where("Id", session.getId())
+                .execute();
+    }
+
     private DatabaseCollection createPlayerSessionsCollection() {
         return database.createCollection("dkbans_player_sessions")
                 .field("Id", DataType.INTEGER, FieldOption.PRIMARY_KEY, FieldOption.AUTO_INCREMENT)
                 .field("PlayerId", DataType.UUID, FieldOption.NOT_NULL)
-                .field("SessionName", DataType.STRING, FieldOption.NOT_NULL)
+                .field("PlayerSessionName", DataType.STRING, FieldOption.NOT_NULL)
                 .field("IpAddress", DataType.STRING, FieldOption.NOT_NULL)
                 .field("Country", DataType.STRING, FieldOption.NOT_NULL)
                 .field("Region", DataType.STRING, FieldOption.NOT_NULL)
-                .field("LastServerName", DataType.STRING, FieldOption.NOT_NULL)
                 .field("LastServerId", DataType.UUID, FieldOption.NOT_NULL)
-                .field("ProxyName", DataType.STRING, FieldOption.NOT_NULL)
+                .field("LastServerName", DataType.STRING, FieldOption.NOT_NULL)
                 .field("ProxyId", DataType.UUID, FieldOption.NOT_NULL)
+                .field("ProxyName", DataType.STRING, FieldOption.NOT_NULL)
+                .field("ClientEdition", DataType.INTEGER, FieldOption.NOT_NULL)
                 .field("ClientProtocolVersion", DataType.INTEGER, FieldOption.NOT_NULL)
-                .field("ClientLanguage", DataType.STRING, FieldOption.NOT_NULL)
                 .field("ConnectTime", DataType.LONG, FieldOption.NOT_NULL)
                 .field("DisconnectTime", DataType.LONG)
                 .create();

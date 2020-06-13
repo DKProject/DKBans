@@ -20,6 +20,7 @@
 package net.pretronic.dkbans.api.storage;
 
 import net.pretronic.dkbans.api.player.DKBansPlayer;
+import net.pretronic.dkbans.api.player.PlayerSession;
 import net.pretronic.dkbans.api.player.history.*;
 import net.pretronic.dkbans.api.player.note.PlayerNote;
 import net.pretronic.dkbans.api.player.note.PlayerNoteType;
@@ -68,6 +69,11 @@ public interface DKBansStorage {
 
 
     TemplateGroup createTemplateGroup(String name, TemplateType templateType, CalculationType calculationType);
+
+
+    int startPlayerSession(PlayerSession session);
+
+    void completePlayerSession(PlayerSession session);
 
       /*
     private final PlayerHistoryEntry entry;

@@ -34,6 +34,7 @@ import org.mcnative.common.event.player.MinecraftPlayerChatEvent;
 import org.mcnative.common.event.player.MinecraftPlayerCommandPreprocessEvent;
 import org.mcnative.common.event.player.login.MinecraftPlayerLoginEvent;
 import org.mcnative.common.event.player.login.MinecraftPlayerPostLoginEvent;
+import org.mcnative.common.event.server.MinecraftPlayerServerDisconnectedEvent;
 import org.mcnative.common.player.OnlineMinecraftPlayer;
 import org.mcnative.common.text.Text;
 import org.mcnative.common.text.components.MessageComponent;
@@ -98,12 +99,12 @@ public class PlayerListener {
         }
 
         if(DKBansConfig.PLAYER_SESSION_LOGGING){
-           // dkBansPlayer.startSession(player.getName(),player.getAddress().getAddress());
+            dkBansPlayer.startSession(player.getName(),player.getAddress().getAddress());
         }
     }
 
     @Listener//@Todo async
-    public void onPlayerDisconnect(MinecraftPlayerPostLoginEvent event){
+    public void onPlayerDisconnect(MinecraftPlayerServerDisconnectedEvent event){
         event.getPlayer().getAs(DKBansPlayer.class).finishSession();
     }
 
