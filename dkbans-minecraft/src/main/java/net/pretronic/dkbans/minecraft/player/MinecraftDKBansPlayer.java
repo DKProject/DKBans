@@ -28,7 +28,7 @@ public class MinecraftDKBansPlayer extends DefaultDKBansPlayer {
                 "none",//player.getProxy().getName()
                 UUID.randomUUID(),//player.getProxy().getIdentifier().getUniqueId()
                 player.getServer().getName(),
-                player.getServer().getIdentifier().getUniqueId(),
+                UUID.randomUUID(),//player.getServer().getIdentifier().getUniqueId()
                 player.getProtocolVersion().getEdition().getName(),
                 player.getProtocolVersion().getNumber(),
                 System.currentTimeMillis(),
