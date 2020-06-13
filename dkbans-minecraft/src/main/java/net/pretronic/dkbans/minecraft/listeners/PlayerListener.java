@@ -32,6 +32,7 @@ import net.pretronic.libraries.event.Listener;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
 import org.mcnative.common.event.player.MinecraftPlayerChatEvent;
 import org.mcnative.common.event.player.MinecraftPlayerCommandPreprocessEvent;
+import org.mcnative.common.event.player.MinecraftPlayerLogoutEvent;
 import org.mcnative.common.event.player.login.MinecraftPlayerLoginEvent;
 import org.mcnative.common.event.player.login.MinecraftPlayerPostLoginEvent;
 import org.mcnative.common.event.server.MinecraftPlayerServerDisconnectedEvent;
@@ -72,7 +73,7 @@ public class PlayerListener {
     }
 
     @Listener(priority = EventPriority.LOWEST)
-    public void onPlayerPostLoginLow(MinecraftPlayerPostLoginEvent event){
+    public void onPlayerPostLoginLow(MinecraftPlayerLogoutEvent event){
         if(DKBansConfig.PLAYER_ON_JOIN_CLEAR_CHAT){
             for(int i = 1; i < 120; i++) event.getOnlinePlayer().sendMessage(Text.EMPTY);
         }
