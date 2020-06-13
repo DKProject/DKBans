@@ -18,14 +18,15 @@ public class MinecraftDKBansPlayer extends DefaultDKBansPlayer {
     @Override
     public void startSession(String currentName, InetAddress address) {
         ConnectedMinecraftPlayer player = McNative.getInstance().getLocal().getConnectedPlayer(getUniqueId());
+        //@Todo set missing data
         DefaultPlayerSession session = new DefaultPlayerSession(-1,
                 this,
                 getName(),
                 player.getAddress().getAddress(),
                 "none",
                 "none",
-                player.getProxy().getName(),
-                player.getProxy().getIdentifier().getUniqueId(),
+                "none",//player.getProxy().getName()
+                UUID.randomUUID(),//player.getProxy().getIdentifier().getUniqueId()
                 player.getServer().getName(),
                 player.getServer().getIdentifier().getUniqueId(),
                 player.getProtocolVersion().getEdition().getName(),
