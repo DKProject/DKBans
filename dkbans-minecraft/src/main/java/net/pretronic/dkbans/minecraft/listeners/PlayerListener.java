@@ -35,7 +35,6 @@ import org.mcnative.common.event.player.MinecraftPlayerCommandPreprocessEvent;
 import org.mcnative.common.event.player.MinecraftPlayerLogoutEvent;
 import org.mcnative.common.event.player.login.MinecraftPlayerLoginEvent;
 import org.mcnative.common.event.player.login.MinecraftPlayerPostLoginEvent;
-import org.mcnative.common.event.server.MinecraftPlayerServerDisconnectedEvent;
 import org.mcnative.common.player.OnlineMinecraftPlayer;
 import org.mcnative.common.text.Text;
 import org.mcnative.common.text.components.MessageComponent;
@@ -73,7 +72,7 @@ public class PlayerListener {
     }
 
     @Listener(priority = EventPriority.LOWEST)
-    public void onPlayerPostLoginLow(MinecraftPlayerLogoutEvent event){
+    public void onPlayerPostLoginLow(MinecraftPlayerPostLoginEvent event){
         if(DKBansConfig.PLAYER_ON_JOIN_CLEAR_CHAT){
             for(int i = 1; i < 120; i++) event.getOnlinePlayer().sendMessage(Text.EMPTY);
         }
@@ -105,7 +104,7 @@ public class PlayerListener {
     }
 
     @Listener//@Todo async
-    public void onPlayerDisconnect(MinecraftPlayerServerDisconnectedEvent event){
+    public void onPlayerDisconnect(MinecraftPlayerLogoutEvent event){
         event.getPlayer().getAs(DKBansPlayer.class).finishSession();
     }
 
