@@ -26,7 +26,7 @@
     <groupId>net.pretronic.dkbans</groupId>
     <artifactId>DKBans</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.36.52-SNAPSHOT</version>
+    <version>1.0.37.53-SNAPSHOT</version>
 
     <modules>
         <module>dkbans-api</module>
