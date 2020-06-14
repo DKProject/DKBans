@@ -34,4 +34,11 @@ public enum PlayerNoteType {
     public int getId() {
         return id;
     }
+
+    public static PlayerNoteType byId(int id) {
+        for (PlayerNoteType value : PlayerNoteType.values()) {
+            if(value.getId() == id) return value;
+        }
+        throw new UnsupportedOperationException("Player note type with id " + id + " does not exist");
+    }
 }

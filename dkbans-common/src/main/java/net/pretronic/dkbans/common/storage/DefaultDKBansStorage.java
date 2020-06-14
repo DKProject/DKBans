@@ -41,6 +41,7 @@ import net.pretronic.dkbans.common.DefaultDKBansScope;
 import net.pretronic.dkbans.common.player.history.DefaultPlayerHistoryEntry;
 import net.pretronic.dkbans.common.player.history.DefaultPlayerHistoryEntrySnapshot;
 import net.pretronic.dkbans.common.player.history.DefaultPlayerHistoryType;
+import net.pretronic.dkbans.common.player.note.DefaultPlayerNote;
 import net.pretronic.dkbans.common.player.session.DefaultPlayerSession;
 import net.pretronic.dkbans.common.template.DefaultTemplate;
 import net.pretronic.dkbans.common.template.DefaultTemplateCategory;
@@ -458,6 +459,91 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 entry.getLong("DisconnectTime"));
     }
 
+
+
+    @Override
+    public List<PlayerNote> getPlayerNotes(DKBansPlayer player) {
+        return getPlayerNotesByResult(player, this.playerNotes.find().where("PlayerId", player.getUniqueId()).execute());
+    }
+
+    @Override
+    public List<PlayerNote> getLastPlayerNotes(DKBansPlayer player, int amount) {
+        return getPlayerNotesByResult(player, this.playerNotes.find()
+                .where("PlayerId", player.getUniqueId())
+                .orderBy("Time", SearchOrder.DESC)
+                .limit(amount)
+                .execute());
+    }
+
+    @Override
+    public List<PlayerNote> getFirstPlayerNotes(DKBansPlayer player, int amount) {
+        return getPlayerNotesByResult(player, this.playerNotes.find()
+                .where("PlayerId", player.getUniqueId())
+                .orderBy("Time", SearchOrder.ASC)
+                .limit(amount)
+                .execute());
+    }
+
+    @Override
+    public PlayerNote getPlayerNoteByIndex(DKBansPlayer player, int index) {
+        return getPlayerNoteByResultEntry(player, this.playerNotes.find()
+                .where("PlayerId", player.getUniqueId())
+                .orderBy("Time", SearchOrder.DESC)
+                .index(index, index)
+                .execute().firstOrNull());
+    }
+
+    @Override
+    public List<PlayerNote> getPlayerNotesByIndexRange(DKBansPlayer player, int startIndex, int lastIndex) {
+        return getPlayerNotesByResult(player, this.playerNotes.find()
+                .where("PlayerId", player.getUniqueId())
+                .orderBy("Time", SearchOrder.DESC)
+                .index(startIndex, lastIndex)
+                .execute());
+    }
+
+    @Override
+    public List<PlayerNote> getSincePlayerNotes(DKBansPlayer player, long time) {
+        return getPlayerNotesByResult(player, this.playerNotes.find()
+                .where("PlayerId", player.getUniqueId())
+                .whereHigher("Time", time)
+                .orderBy("Time", SearchOrder.ASC)
+                .execute());
+    }
+
+    @Override
+    public List<PlayerNote> getUntilPlayerNotes(DKBansPlayer player, long time) {
+        return getPlayerNotesByResult(player, this.playerNotes.find()
+                .where("PlayerId", player.getUniqueId())
+                .whereLower("Time", time)
+                .orderBy("Time", SearchOrder.ASC)
+                .execute());
+    }
+
+    @Override
+    public List<PlayerNote> getBetweenPlayerNotes(DKBansPlayer player, long startTime, long endTime) {
+        return getPlayerNotesByResult(player, this.playerNotes.find()
+                .where("PlayerId", player.getUniqueId())
+                .whereBetween("Time", startTime, endTime)
+                .orderBy("Time", SearchOrder.ASC)
+                .execute());
+    }
+
+    private List<PlayerNote> getPlayerNotesByResult(DKBansPlayer player, QueryResult result) {
+        List<PlayerNote> sessions = new ArrayList<>();
+        result.loadIn(sessions, entry -> getPlayerNoteByResultEntry(player, entry));
+        return sessions;
+    }
+
+    private PlayerNote getPlayerNoteByResultEntry(DKBansPlayer player, QueryResultEntry entry) {
+        if(entry == null) return null;
+        return new DefaultPlayerNote(entry.getInt("Id"),
+                PlayerNoteType.byId(entry.getInt("TypeId")),
+                entry.getLong("Time"),
+                entry.getString("Message"),
+                player);
+    }
+
     private DatabaseCollection createPlayerSessionsCollection() {
         return database.createCollection("dkbans_player_sessions")
                 .field("Id", DataType.INTEGER, FieldOption.PRIMARY_KEY, FieldOption.AUTO_INCREMENT)
@@ -505,7 +591,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 .field("SenderId", DataType.UUID, FieldOption.NOT_NULL)
                 .field("Time", DataType.LONG, FieldOption.NOT_NULL)
                 .field("Message", DataType.STRING, FieldOption.NOT_NULL)
-                .field("Type", DataType.STRING, FieldOption.NOT_NULL)//@Todo maybe id
+                .field("TypeId", DataType.INTEGER, FieldOption.NOT_NULL)//@Todo maybe id
                 .create();
     }
 

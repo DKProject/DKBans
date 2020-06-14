@@ -92,6 +92,21 @@ public interface DKBansStorage {
     List<PlayerSession> getBetweenPlayerSessions(DKBansPlayer player, long startTime, long endTime);
 
 
+    List<PlayerNote> getPlayerNotes(DKBansPlayer player);
+
+    List<PlayerNote> getLastPlayerNotes(DKBansPlayer player, int amount);
+
+    List<PlayerNote> getFirstPlayerNotes(DKBansPlayer player, int amount);
+
+    PlayerNote getPlayerNoteByIndex(DKBansPlayer player, int index);
+
+    List<PlayerNote> getPlayerNotesByIndexRange(DKBansPlayer player, int startIndex, int lastIndex);
+
+    List<PlayerNote> getSincePlayerNotes(DKBansPlayer player, long time);
+
+    List<PlayerNote> getUntilPlayerNotes(DKBansPlayer player, long time);
+
+    List<PlayerNote> getBetweenPlayerNotes(DKBansPlayer player, long startTime, long endTime);
 
       /*
     private final PlayerHistoryEntry entry;

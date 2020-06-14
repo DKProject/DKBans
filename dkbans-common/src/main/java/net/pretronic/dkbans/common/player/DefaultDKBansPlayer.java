@@ -38,6 +38,7 @@ import net.pretronic.dkbans.api.template.unpunishment.UnPunishmentTemplate;
 import net.pretronic.dkbans.common.player.history.DefaultPlayerHistory;
 import net.pretronic.dkbans.common.player.history.DefaultPlayerHistoryEntrySnapshotBuilder;
 import net.pretronic.dkbans.common.player.note.DefaultPlayerNote;
+import net.pretronic.dkbans.common.player.note.DefaultPlayerNoteList;
 import net.pretronic.dkbans.common.player.session.DefaultPlayerSession;
 import net.pretronic.dkbans.common.player.session.DefaultPlayerSessionList;
 import net.pretronic.libraries.utility.Validate;
@@ -54,12 +55,15 @@ public  class DefaultDKBansPlayer implements DKBansPlayer {
     private final PlayerHistory history;
     private final DefaultPlayerSessionList sessionList;
 
+    private final PlayerNoteList noteList;
+
     public DefaultDKBansPlayer(UUID uniqueId, String name) {
         this.uniqueId = uniqueId;
         this.name = name;
         this.history = new DefaultPlayerHistory(this);
 
-        this.sessionList = new DefaultPlayerSessionList();
+        this.sessionList = new DefaultPlayerSessionList(this);
+        this.noteList = new DefaultPlayerNoteList(this);
     }
 
     @Override
@@ -104,7 +108,7 @@ public  class DefaultDKBansPlayer implements DKBansPlayer {
 
     @Override
     public PlayerNoteList getNotes() {
-         throw new UnsupportedOperationException();
+         return this.noteList;
     }
 
     @Override

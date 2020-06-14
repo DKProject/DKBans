@@ -19,63 +19,68 @@
 
 package net.pretronic.dkbans.common.player.note;
 
+import net.pretronic.dkbans.api.DKBans;
+import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.note.PlayerNote;
 import net.pretronic.dkbans.api.player.note.PlayerNoteList;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 public class DefaultPlayerNoteList implements PlayerNoteList {
 
-    private final Collection<PlayerNote> cached;
+    private final DKBansPlayer player;
 
-    public DefaultPlayerNoteList() {
-        this.cached = new ArrayList<>();
+    public DefaultPlayerNoteList(DKBansPlayer player) {
+        this.player = player;
     }
 
     @Override
-    public Collection<PlayerNote> getAll() {
-        return this.cached;
+    public List<PlayerNote> getAll() {
+        return DKBans.getInstance().getStorage().getPlayerNotes(player);
     }
 
     @Override
-    public Collection<PlayerNote> getLast(int amount) {
-        throw new UnsupportedOperationException();
+    public List<PlayerNote> getLast(int amount) {
+        return DKBans.getInstance().getStorage().getLastPlayerNotes(player, amount);
     }
 
     @Override
-    public Collection<PlayerNote> getFirst(int amount) {
-        throw new UnsupportedOperationException();
+    public PlayerNote getLast() {
+        List<PlayerNote> notes = getLast(1);
+        if(!notes.isEmpty()) return notes.get(0);
+        return null;
     }
 
     @Override
-    public Collection<PlayerNote> getByIndex(int index) {
-        throw new UnsupportedOperationException();
+    public List<PlayerNote> getFirst(int amount) {
+        return DKBans.getInstance().getStorage().getFirstPlayerNotes(player, amount);
     }
 
     @Override
-    public Collection<PlayerNote> getByIndexRange(int startIndex, int endIndex) {
-        throw new UnsupportedOperationException();
+    public PlayerNote getByIndex(int index) {
+        return DKBans.getInstance().getStorage().getPlayerNoteByIndex(player, index);
     }
 
     @Override
-    public Collection<PlayerNote> getSince(long time) {
-        throw new UnsupportedOperationException();
+    public List<PlayerNote> getByIndexRange(int startIndex, int endIndex) {
+        return DKBans.getInstance().getStorage().getPlayerNotesByIndexRange(player, startIndex, endIndex);
     }
 
     @Override
-    public Collection<PlayerNote> getUntil(long time) {
-        throw new UnsupportedOperationException();
+    public List<PlayerNote> getSince(long time) {
+        return DKBans.getInstance().getStorage().getSincePlayerNotes(player, time);
     }
 
     @Override
-    public Collection<PlayerNote> getBetween(long startTime, long endTime) {
-        throw new UnsupportedOperationException();
+    public List<PlayerNote> getUntil(long time) {
+        return DKBans.getInstance().getStorage().getUntilPlayerNotes(player, time);
     }
 
     @Override
-    public Iterator<PlayerNote> iterator() {
-        throw new UnsupportedOperationException();
+    public List<PlayerNote> getBetween(long startTime, long endTime) {
+        return DKBans.getInstance().getStorage().getBetweenPlayerNotes(player, startTime, endTime);
     }
 }
