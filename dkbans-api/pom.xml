@@ -24,7 +24,7 @@
     <parent>
         <artifactId>DKBans</artifactId>
         <groupId>net.pretronic.dkbans</groupId>
-        <version>1.0.41.57-SNAPSHOT</version>
+        <version>1.0.42.58-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
