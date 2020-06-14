@@ -34,7 +34,7 @@ public class InternalListener {
     public void onPlayerPunish(PlayerPunishEvent event){
         OnlineMinecraftPlayer player = McNative.getInstance().getLocal().getConnectedPlayer(event.getPlayer().getUniqueId());
         if(event.getSnapshot().getPunishmentType() == PunishmentType.BAN){
-            if(player != null){ //@Todo kick player
+            if(player != null){
                 MessageComponent<?> message = event.getSnapshot().isPermanently()
                         ? Messages.PUNISH_BAN_MESSAGE_PERMANENTLY : Messages.PUNISH_BAN_MESSAGE_TEMPORARY;
                 player.kick(message,VariableSet.create()
@@ -42,7 +42,7 @@ public class InternalListener {
                         .addDescribed("punish",event.getEntry())
                         .addDescribed("player",event.getPlayer()));
             }
-        }else if(event.getSnapshot().getPunishmentType() == PunishmentType.KICK){
+        }else if(event.getSnapshot().getPunishmentType() == PunishmentType.MUTE){
             MessageComponent<?> message = event.getSnapshot().isPermanently()
                     ? Messages.PUNISH_MUTE_MESSAGE_PERMANENTLY : Messages.PUNISH_MUTE_MESSAGE_TEMPORARY;
             player.sendMessage(message,VariableSet.create()

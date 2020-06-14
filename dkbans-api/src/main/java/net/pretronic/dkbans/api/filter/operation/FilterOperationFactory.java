@@ -2,7 +2,7 @@
  * (C) Copyright 2020 The DKBans Project (Davide Wietlisbach & Philipp Elvin Friedhoff)
  *
  * @author Davide Wietlisbach
- * @since 13.06.20, 17:19
+ * @since 14.06.20, 09:25
  *
  * The DKBans Project is under the Apache License, version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,13 +17,12 @@
  * under the License.
  */
 
-package net.pretronic.dkbans.api.filter;
+package net.pretronic.dkbans.api.filter.operation;
 
-public enum FilterOperation {
+public interface FilterOperationFactory {
 
-    EQUALS(),
-    CONTAINS(),
-    STARTS_WITH(),
-    ENDS_WITH();
+    String getName();
+
+    FilterOperation build(String value);
 
 }
