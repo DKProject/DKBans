@@ -22,6 +22,7 @@ package net.pretronic.dkbans.api.storage;
 import net.pretronic.dkbans.api.filter.Filter;
 import net.pretronic.dkbans.api.filter.operation.FilterOperation;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
+import net.pretronic.dkbans.api.player.session.PlayerSession;
 import net.pretronic.dkbans.api.player.history.*;
 import net.pretronic.dkbans.api.player.note.PlayerNote;
 import net.pretronic.dkbans.api.player.note.PlayerNoteType;
@@ -70,6 +71,29 @@ public interface DKBansStorage {
 
 
     TemplateGroup createTemplateGroup(String name, TemplateType templateType, CalculationType calculationType);
+
+
+    int startPlayerSession(PlayerSession session);
+
+    void completePlayerSession(PlayerSession session);
+
+    List<PlayerSession> getPlayerSessions(DKBansPlayer player);
+
+    List<PlayerSession> getLastPlayerSessions(DKBansPlayer player, int amount);
+
+    List<PlayerSession> getFirstPlayerSessions(DKBansPlayer player, int amount);
+
+    PlayerSession getPlayerSessionByIndex(DKBansPlayer player, int index);
+
+    List<PlayerSession> getPlayerSessionByIndexRange(DKBansPlayer player, int startIndex, int lastIndex);
+
+    List<PlayerSession> getSincePlayerSessions(DKBansPlayer player, long time);
+
+    List<PlayerSession> getUntilPlayerSessions(DKBansPlayer player, long time);
+
+    List<PlayerSession> getBetweenPlayerSessions(DKBansPlayer player, long startTime, long endTime);
+
+
 
 
     //Filter

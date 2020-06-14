@@ -17,7 +17,9 @@
  * under the License.
  */
 
-package net.pretronic.dkbans.api.player;
+package net.pretronic.dkbans.api.player.session;
+
+import net.pretronic.dkbans.api.player.DKBansPlayer;
 
 import java.net.InetAddress;
 import java.util.UUID;
@@ -55,8 +57,6 @@ public interface PlayerSession {
     String getClientEdition();
 
     int getClientProtocolVersion();//@Todo maybe use from McNative
-
-   // String getClientLanguage();
 
     long getConnectTime();
 

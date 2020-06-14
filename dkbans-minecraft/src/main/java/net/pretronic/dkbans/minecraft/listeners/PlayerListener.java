@@ -30,13 +30,18 @@ import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.libraries.event.EventPriority;
 import net.pretronic.libraries.event.Listener;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
+import org.mcnative.common.McNative;
 import org.mcnative.common.event.player.MinecraftPlayerChatEvent;
 import org.mcnative.common.event.player.MinecraftPlayerCommandPreprocessEvent;
+import org.mcnative.common.event.player.MinecraftPlayerLogoutEvent;
 import org.mcnative.common.event.player.login.MinecraftPlayerLoginEvent;
 import org.mcnative.common.event.player.login.MinecraftPlayerPostLoginEvent;
+import org.mcnative.common.player.ConnectedMinecraftPlayer;
 import org.mcnative.common.player.OnlineMinecraftPlayer;
 import org.mcnative.common.text.Text;
 import org.mcnative.common.text.components.MessageComponent;
+
+import java.util.UUID;
 
 public class PlayerListener {
 
@@ -96,13 +101,18 @@ public class PlayerListener {
         }
 
         if(DKBansConfig.PLAYER_SESSION_LOGGING){
-           // dkBansPlayer.startSession(player.getName(),player.getAddress().getAddress());
+            ConnectedMinecraftPlayer connectedPlayer = McNative.getInstance().getLocal().getConnectedPlayer(player.getUniqueId());
+
+            dkBansPlayer.startSession(player.getName(),player.getAddress().getAddress(), "none", "none",
+                    "none", UUID.randomUUID(), connectedPlayer.getProtocolVersion().getEdition().getName(),
+                    connectedPlayer.getProtocolVersion().getNumber());
         }
     }
 
     @Listener//@Todo async
-    public void onPlayerDisconnect(MinecraftPlayerPostLoginEvent event){
-        event.getPlayer().getAs(DKBansPlayer.class).finishSession();
+    public void onPlayerDisconnect(MinecraftPlayerLogoutEvent event) {
+        event.getPlayer().getAs(DKBansPlayer.class).finishSession(event.getOnlinePlayer().getServer().getName(),
+                event.getOnlinePlayer().getServer().getIdentifier().getUniqueId());
     }
 
     @Listener(priority = EventPriority.HIGHEST)//@Todo async

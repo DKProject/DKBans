@@ -32,6 +32,7 @@ import net.pretronic.dkbans.minecraft.commands.punish.TemplatePunishCommand;
 import net.pretronic.dkbans.minecraft.config.CommandConfig;
 import net.pretronic.dkbans.minecraft.config.DKBansConfig;
 import net.pretronic.dkbans.minecraft.listeners.PlayerListener;
+import net.pretronic.dkbans.minecraft.player.MinecraftPlayerManager;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
 import net.pretronic.libraries.plugin.lifecycle.Lifecycle;
 import net.pretronic.libraries.plugin.lifecycle.LifecycleState;

@@ -32,6 +32,7 @@ import net.pretronic.databasequery.api.query.type.InsertQuery;
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.filter.Filter;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
+import net.pretronic.dkbans.api.player.session.PlayerSession;
 import net.pretronic.dkbans.api.player.history.*;
 import net.pretronic.dkbans.api.player.note.PlayerNote;
 import net.pretronic.dkbans.api.player.note.PlayerNoteType;
@@ -42,6 +43,7 @@ import net.pretronic.dkbans.common.filter.DefaultFilter;
 import net.pretronic.dkbans.common.player.history.DefaultPlayerHistoryEntry;
 import net.pretronic.dkbans.common.player.history.DefaultPlayerHistoryEntrySnapshot;
 import net.pretronic.dkbans.common.player.history.DefaultPlayerHistoryType;
+import net.pretronic.dkbans.common.player.session.DefaultPlayerSession;
 import net.pretronic.dkbans.common.template.DefaultTemplate;
 import net.pretronic.dkbans.common.template.DefaultTemplateCategory;
 import net.pretronic.dkbans.common.template.DefaultTemplateGroup;
@@ -50,6 +52,7 @@ import net.pretronic.libraries.document.type.DocumentFileType;
 import net.pretronic.libraries.utility.map.Pair;
 import net.pretronic.libraries.utility.reflect.TypeReference;
 
+import java.net.InetAddress;
 import java.util.*;
 
 public class DefaultDKBansStorage implements DKBansStorage {
@@ -342,49 +345,138 @@ public class DefaultDKBansStorage implements DKBansStorage {
     }
 
     @Override
-    public Collection<Filter> loadFilters() {
-        Collection<Filter> result = new ArrayList<>();
-        for (QueryResultEntry entry : filter.find().execute()) {
-            result.add(new DefaultFilter(entry.getInt("Id")
-                    ,entry.getString("AffiliationArea")
-                    ,entry.getString("Operation")
-                    ,entry.getString("Value")));
-        }
-        return result;
-    }
+    public int startPlayerSession(PlayerSession session) {
+        this.playerSessions.delete().where("DisconnectTime", null).execute();
 
-    @Override
-    public int createFilter(String area, String operation, String value) {
-        return filter.insert()
-                .set("AffiliationArea",area)
-                .set("Operation",operation)
-                .set("Value",value)
+        return this.playerSessions.insert()
+                .set("PlayerId", session.getPlayer().getUniqueId())
+                .set("PlayerSessionName", session.getPlayerSessionName())
+                .set("IpAddress", session.getIpAddress())
+                .set("Country", session.getCountry())
+                .set("Region", session.getRegion())
+                .set("ProxyId", session.getProxyId())
+                .set("ProxyName", session.getProxyName())
+                .set("ClientEdition", session.getClientEdition())
+                .set("ClientProtocolVersion", session.getClientProtocolVersion())
+                .set("ConnectTime", session.getConnectTime())
                 .executeAndGetGeneratedKeyAsInt("Id");
     }
 
     @Override
-    public void deleteFilter(int id) {
-        filter.delete().where("Id",id).execute();
+    public void completePlayerSession(PlayerSession session) {
+        this.playerSessions.update()
+                .set("LastServerId", session.getLastServerId())
+                .set("LastServerName", session.getLastServerName())
+                .set("DisconnectTime", session.getDisconnectTime())
+                .where("Id", session.getId())
+                .execute();
     }
 
+    @Override
+    public List<PlayerSession> getPlayerSessions(DKBansPlayer player) {
+        return getPlayerSessionsByResult(player, this.playerSessions.find().where("PlayerId", player.getUniqueId()).execute());
+    }
 
-    //Filter
+    @Override
+    public List<PlayerSession> getLastPlayerSessions(DKBansPlayer player, int amount) {
+        return getPlayerSessionsByResult(player, this.playerSessions.find()
+                .where("PlayerId", player.getUniqueId())
+                .orderBy("DisconnectTime", SearchOrder.DESC)
+                .limit(amount)
+                .execute());
+    }
 
+    @Override
+    public List<PlayerSession> getFirstPlayerSessions(DKBansPlayer player, int amount) {
+        return getPlayerSessionsByResult(player, this.playerSessions.find()
+                .where("PlayerId", player.getUniqueId())
+                .orderBy("DisconnectTime", SearchOrder.ASC)
+                .limit(amount)
+                .execute());
+    }
 
+    @Override
+    public PlayerSession getPlayerSessionByIndex(DKBansPlayer player, int index) {
+        return getPlayerSessionByResultEntry(player, this.playerSessions.find()
+                .where("PlayerId", player.getUniqueId())
+                .orderBy("DisconnectTime", SearchOrder.DESC)
+                .index(index, index)
+                .execute().firstOrNull());
+    }
 
+    @Override
+    public List<PlayerSession> getPlayerSessionByIndexRange(DKBansPlayer player, int startIndex, int lastIndex) {
+        return getPlayerSessionsByResult(player, this.playerSessions.find()
+                .where("PlayerId", player.getUniqueId())
+                .orderBy("DisconnectTime", SearchOrder.DESC)
+                .index(startIndex, lastIndex)
+                .execute());
+    }
+
+    @Override
+    public List<PlayerSession> getSincePlayerSessions(DKBansPlayer player, long time) {
+        return getPlayerSessionsByResult(player, this.playerSessions.find()
+                .where("PlayerId", player.getUniqueId())
+                .whereHigher("DisconnectTime", time)
+                .orderBy("DisconnectTime", SearchOrder.ASC)
+                .execute());
+    }
+
+    @Override
+    public List<PlayerSession> getUntilPlayerSessions(DKBansPlayer player, long time) {
+        return getPlayerSessionsByResult(player, this.playerSessions.find()
+                .where("PlayerId", player.getUniqueId())
+                .whereLower("DisconnectTime", time)
+                .orderBy("DisconnectTime", SearchOrder.ASC)
+                .execute());
+    }
+
+    @Override
+    public List<PlayerSession> getBetweenPlayerSessions(DKBansPlayer player, long startTime, long endTime) {
+        return getPlayerSessionsByResult(player, this.playerSessions.find()
+                .where("PlayerId", player.getUniqueId())
+                .whereBetween("DisconnectTime", startTime, endTime)
+                .orderBy("DisconnectTime", SearchOrder.ASC)
+                .execute());
+    }
+
+    private List<PlayerSession> getPlayerSessionsByResult(DKBansPlayer player, QueryResult result) {
+        List<PlayerSession> sessions = new ArrayList<>();
+        result.loadIn(sessions, entry -> getPlayerSessionByResultEntry(player, entry));
+        return sessions;
+    }
+
+    private PlayerSession getPlayerSessionByResultEntry(DKBansPlayer player, QueryResultEntry entry) {
+        if(entry == null) return null;
+        return new DefaultPlayerSession(entry.getInt("Id"),
+                player,
+                entry.getString("PlayerSessionName"),
+                entry.getObject("IpAddress", InetAddress.class),
+                entry.getString("Country"),
+                entry.getString("Region"),
+                entry.getString("ProxyName"),
+                entry.getUniqueId("ProxyId"),
+                entry.getString("LastServerName"),
+                entry.getUniqueId("LastServerId"),
+                entry.getString("ClientEdition"),
+                entry.getInt("ClientProtocolVersion"),
+                entry.getLong("ConnectTime"),
+                entry.getLong("DisconnectTime"));
+    }
 
     private DatabaseCollection createPlayerSessionsCollection() {
         return database.createCollection("dkbans_player_sessions")
                 .field("Id", DataType.INTEGER, FieldOption.PRIMARY_KEY, FieldOption.AUTO_INCREMENT)
                 .field("PlayerId", DataType.UUID, FieldOption.NOT_NULL)
-                .field("SessionName", DataType.STRING, FieldOption.NOT_NULL)
+                .field("PlayerSessionName", DataType.STRING, FieldOption.NOT_NULL)
                 .field("IpAddress", DataType.STRING, FieldOption.NOT_NULL)
                 .field("Country", DataType.STRING, FieldOption.NOT_NULL)
                 .field("Region", DataType.STRING, FieldOption.NOT_NULL)
-                .field("LastServerName", DataType.STRING, FieldOption.NOT_NULL)
-                .field("LastServerId", DataType.UUID, FieldOption.NOT_NULL)
-                .field("ProxyName", DataType.STRING, FieldOption.NOT_NULL)
+                .field("LastServerId", DataType.UUID)
+                .field("LastServerName", DataType.STRING)
                 .field("ProxyId", DataType.UUID, FieldOption.NOT_NULL)
+                .field("ProxyName", DataType.STRING, FieldOption.NOT_NULL)
+                .field("ClientEdition", DataType.STRING, FieldOption.NOT_NULL)
                 .field("ClientProtocolVersion", DataType.INTEGER, FieldOption.NOT_NULL)
                 .field("ClientLanguage", DataType.STRING, FieldOption.NOT_NULL)
                 .field("ConnectTime", DataType.LONG, FieldOption.NOT_NULL)

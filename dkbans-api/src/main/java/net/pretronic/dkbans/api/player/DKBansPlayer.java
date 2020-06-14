@@ -31,12 +31,15 @@ import net.pretronic.dkbans.api.player.note.PlayerNoteList;
 import net.pretronic.dkbans.api.player.note.PlayerNoteType;
 import net.pretronic.dkbans.api.player.report.PlayerReport;
 import net.pretronic.dkbans.api.player.report.PlayerReportEntry;
+import net.pretronic.dkbans.api.player.session.PlayerSession;
+import net.pretronic.dkbans.api.player.session.PlayerSessionList;
 import net.pretronic.dkbans.api.template.Template;
 import net.pretronic.dkbans.api.template.punishment.PunishmentTemplate;
 import net.pretronic.dkbans.api.template.unpunishment.UnPunishmentTemplate;
 import net.pretronic.libraries.utility.annonations.Nullable;
 
 import java.net.InetAddress;
+import java.util.UUID;
 
 public interface DKBansPlayer extends DKBansExecutor {
 
@@ -48,6 +51,9 @@ public interface DKBansPlayer extends DKBansExecutor {
 
     @Nullable
     PlayerSession getLastSession();
+
+    PlayerSessionList getSessions();
+
 
     long getOnlineTime();
 
@@ -103,9 +109,8 @@ public interface DKBansPlayer extends DKBansExecutor {
     PlayerReportEntry report(DKBansExecutor player,String reason, DKBansScope scope);
 
 
-    void startSession(String currentName, InetAddress address);
+    void startSession(String currentName, InetAddress address, String country, String region,
+                      String proxyName, UUID proxyId, String clientEdition, int clientProtocolVersion);
 
-    void finishSession();
-
-
+    void finishSession(String lastServerName, UUID lastServerId);
 }
