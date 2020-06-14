@@ -440,6 +440,32 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 .execute());
     }
 
+    @Override
+    public Collection<Filter> loadFilters() {
+        Collection<Filter> result = new ArrayList<>();
+        for (QueryResultEntry entry : filter.find().execute()) {
+            result.add(new DefaultFilter(entry.getInt("Id")
+                    ,entry.getString("AffiliationArea")
+                    ,entry.getString("Operation")
+                    ,entry.getString("Value")));
+        }
+        return result;
+    }
+
+    @Override
+    public int createFilter(String area, String operation, String value) {
+        return filter.insert()
+                .set("AffiliationArea",area)
+                .set("Operation",operation)
+                .set("Value",value)
+                .executeAndGetGeneratedKeyAsInt("Id");
+    }
+
+    @Override
+    public void deleteFilter(int id) {
+        filter.delete().where("Id",id).execute();
+    }
+
     private List<PlayerSession> getPlayerSessionsByResult(DKBansPlayer player, QueryResult result) {
         List<PlayerSession> sessions = new ArrayList<>();
         result.loadIn(sessions, entry -> getPlayerSessionByResultEntry(player, entry));
