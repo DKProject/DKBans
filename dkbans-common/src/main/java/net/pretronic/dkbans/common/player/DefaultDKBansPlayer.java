@@ -23,7 +23,7 @@ import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.DKBansScope;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
-import net.pretronic.dkbans.api.player.PlayerSession;
+import net.pretronic.dkbans.api.player.session.PlayerSession;
 import net.pretronic.dkbans.api.player.chatlog.PlayerChatLog;
 import net.pretronic.dkbans.api.player.history.*;
 import net.pretronic.dkbans.api.player.note.PlayerNote;
@@ -31,31 +31,35 @@ import net.pretronic.dkbans.api.player.note.PlayerNoteList;
 import net.pretronic.dkbans.api.player.note.PlayerNoteType;
 import net.pretronic.dkbans.api.player.report.PlayerReport;
 import net.pretronic.dkbans.api.player.report.PlayerReportEntry;
+import net.pretronic.dkbans.api.player.session.PlayerSessionList;
 import net.pretronic.dkbans.api.template.Template;
 import net.pretronic.dkbans.api.template.punishment.PunishmentTemplate;
 import net.pretronic.dkbans.api.template.unpunishment.UnPunishmentTemplate;
 import net.pretronic.dkbans.common.player.history.DefaultPlayerHistory;
 import net.pretronic.dkbans.common.player.history.DefaultPlayerHistoryEntrySnapshotBuilder;
 import net.pretronic.dkbans.common.player.note.DefaultPlayerNote;
+import net.pretronic.dkbans.common.player.session.DefaultPlayerSession;
+import net.pretronic.dkbans.common.player.session.DefaultPlayerSessionList;
 import net.pretronic.libraries.utility.Validate;
 
 import java.net.InetAddress;
 import java.util.UUID;
 
-public abstract class DefaultDKBansPlayer implements DKBansPlayer {
+public  class DefaultDKBansPlayer implements DKBansPlayer {
 
     private final UUID uniqueId;
+
     private final String name;
-    protected PlayerSession lastSession;
 
     private final PlayerHistory history;
+    private final DefaultPlayerSessionList sessionList;
 
     public DefaultDKBansPlayer(UUID uniqueId, String name) {
         this.uniqueId = uniqueId;
         this.name = name;
         this.history = new DefaultPlayerHistory(this);
 
-        this.lastSession = null;
+        this.sessionList = new DefaultPlayerSessionList();
     }
 
     @Override
@@ -64,13 +68,18 @@ public abstract class DefaultDKBansPlayer implements DKBansPlayer {
     }
 
     @Override
+    public PlayerSessionList getSessions() {
+        return this.sessionList;
+    }
+
+    @Override
     public PlayerSession getActiveSession() {
-         return lastSession != null && lastSession.isActive() ? lastSession : null;
+         return getSessions().getActive();
     }
 
     @Override
     public PlayerSession getLastSession() {
-         return lastSession;
+         return getSessions().getLast();
     }
 
     @Override
@@ -174,12 +183,30 @@ public abstract class DefaultDKBansPlayer implements DKBansPlayer {
     }
 
     @Override
-    public void finishSession() {
-        PlayerSession session = getActiveSession();
+    public void startSession(String currentName, InetAddress address, String country, String region, String proxyName, UUID proxyId, String clientEdition, int clientProtocolVersion) {
+        DefaultPlayerSession session = new DefaultPlayerSession(-1,
+                this, currentName, address, country,
+                region, proxyName, UUID.randomUUID(),
+                null, null,
+                clientEdition, clientProtocolVersion,
+                System.currentTimeMillis(), -1);
+        int sessionId = DKBans.getInstance().getStorage().startPlayerSession(session);
+        session.setId(sessionId);
+        this.sessionList.setActive(session);
+    }
+
+    @Override
+    public void finishSession(String lastServerName, UUID lastServerId) {
+        DefaultPlayerSession session = (DefaultPlayerSession) getActiveSession();
         if(session == null) throw new IllegalArgumentException("No active session found");
 
+        session.setDisconnectTime();
+        session.setLastServerName(lastServerName);
+        session.setLastServerId(lastServerId);
+
         DKBans.getInstance().getStorage().completePlayerSession(session);
-        this.lastSession = null;
+
+        this.sessionList.setActive(null);
     }
 
     @Override

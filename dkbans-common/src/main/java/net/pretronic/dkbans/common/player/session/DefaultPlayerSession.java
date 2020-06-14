@@ -17,10 +17,10 @@
  * under the License.
  */
 
-package net.pretronic.dkbans.common.player;
+package net.pretronic.dkbans.common.player.session;
 
 import net.pretronic.dkbans.api.player.DKBansPlayer;
-import net.pretronic.dkbans.api.player.PlayerSession;
+import net.pretronic.dkbans.api.player.session.PlayerSession;
 import net.pretronic.libraries.utility.annonations.Internal;
 
 import java.net.InetAddress;
@@ -38,14 +38,15 @@ public class DefaultPlayerSession implements PlayerSession {
 
     private final String proxyName;
     private final UUID proxyId;
-    private final String lastServerName;
-    private final UUID lastServerId;
+
+    private String lastServerName;
+    private UUID lastServerId;
 
     private final String edition;
     private final int protocolVersion;
 
     private final long connectTime;
-    private final long disconnectTime;
+    private long disconnectTime;
 
     public DefaultPlayerSession(int id, DKBansPlayer player, String sessionName, InetAddress address, String country
             , String region, String proxyName, UUID proxyId, String lastServerName, UUID lastServerId
@@ -144,5 +145,20 @@ public class DefaultPlayerSession implements PlayerSession {
     @Internal
     public void setId(int id) {
         this.id = id;
+    }
+
+    @Internal
+    public void setDisconnectTime() {
+        this.disconnectTime = System.currentTimeMillis();
+    }
+
+    @Internal
+    public void setLastServerName(String lastServerName) {
+        this.lastServerName = lastServerName;
+    }
+
+    @Internal
+    public void setLastServerId(UUID lastServerId) {
+        this.lastServerId = lastServerId;
     }
 }
