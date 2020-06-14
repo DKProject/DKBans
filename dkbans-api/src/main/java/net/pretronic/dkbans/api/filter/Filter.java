@@ -19,29 +19,22 @@
 
 package net.pretronic.dkbans.api.filter;
 
+import net.pretronic.dkbans.api.filter.operation.FilterOperation;
+
 public interface Filter {
 
     int getId();
 
-    String getName();
 
-    void setName(String name);
-
-
-    FilterAffiliationArea getAffiliationArea();
-
-    void setAffiliationArea(FilterAffiliationArea affiliationArea);
+    String getAffiliationArea();
 
 
-    FilterOperation getFilterOperation();
+    String getOperationName();
 
-    void setFilterOperation(FilterOperation operation);
+    FilterOperation getOperation();
 
 
     String getValue();
-
-
-    void delete();
 
     boolean check(String input);
 

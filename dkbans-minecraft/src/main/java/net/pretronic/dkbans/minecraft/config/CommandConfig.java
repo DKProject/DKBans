@@ -60,6 +60,11 @@ public class CommandConfig {
             .permission("dkbans.command.help")
             .create();
 
+    public static CommandConfiguration COMMAND_FILTER = CommandConfiguration.newBuilder()
+            .name("filter")
+            .permission("dkbans.command.filter")
+            .create();
+
 
     public static CommandConfiguration COMMAND_KICK = CommandConfiguration.newBuilder()
             .name("kick")

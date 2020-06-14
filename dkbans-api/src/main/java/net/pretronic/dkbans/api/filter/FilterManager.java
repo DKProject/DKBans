@@ -19,22 +19,54 @@
 
 package net.pretronic.dkbans.api.filter;
 
+import net.pretronic.dkbans.api.filter.operation.FilterOperation;
+import net.pretronic.dkbans.api.filter.operation.FilterOperationFactory;
+
 import java.util.Collection;
 
 public interface FilterManager {
 
     Collection<Filter> getFilters();
 
-    Collection<Filter> getFilters(FilterAffiliationArea area);
+    Collection<Filter> getFilters(String area);
 
     Filter getFilter(int id);
 
-    Filter getName(String name);
+    Filter createFilter(String area, String operation, String value);
 
-    Filter createFilter(String name,FilterAffiliationArea area,FilterOperation operation, String value);
+    Filter createFilter(String area, FilterOperation operation, String value);
 
     void deleteFilter(int id);
 
-    boolean checkFilter(FilterAffiliationArea area,String input);
+    void deleteFilter(Filter filter);
+
+    boolean checkFilter(String area,String input);
+
+
+    Collection<String> getAffiliationAreas();
+
+    default boolean hasAffiliationArea(String area){
+        for (String affiliationArea : getAffiliationAreas()) {
+            if(affiliationArea.equalsIgnoreCase(area)) return true;
+        }
+        return false;
+    }
+
+    void registerAffiliationArea(String area);
+
+    void unregisterAffiliationArea(String area);
+
+
+    FilterOperationFactory getOperationFactory(String name);
+
+    default boolean hasOperationFactory(String name){
+        return getOperationFactory(name) != null;
+    }
+
+    Collection<FilterOperationFactory> getOperationFactories();
+
+    void registerOperationFactory(FilterOperationFactory operation);
+
+    void unregisterOperationFactory(FilterOperationFactory operation);
 
 }

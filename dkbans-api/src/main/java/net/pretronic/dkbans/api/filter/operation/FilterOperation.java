@@ -2,7 +2,7 @@
  * (C) Copyright 2020 The DKBans Project (Davide Wietlisbach & Philipp Elvin Friedhoff)
  *
  * @author Davide Wietlisbach
- * @since 13.06.20, 17:19
+ * @since 14.06.20, 09:25
  *
  * The DKBans Project is under the Apache License, version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,13 +17,14 @@
  * under the License.
  */
 
-package net.pretronic.dkbans.api.filter;
+package net.pretronic.dkbans.api.filter.operation;
 
-public class FilterAffiliationArea {
+import net.pretronic.libraries.utility.annonations.Internal;
 
-    public static String CHAT = "CHAT";
-    public static String COMMAND = "COMMAND";
-    public static String COMMAND_MUTE = "COMMAND_MUTE";
-    public static String PLAYER_NAME = "PLAYER_NAME";
+public interface FilterOperation {
+
+    String getName();
+
+    boolean matches(String input);
 
 }

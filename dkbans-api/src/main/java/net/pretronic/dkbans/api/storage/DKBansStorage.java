@@ -19,6 +19,8 @@
 
 package net.pretronic.dkbans.api.storage;
 
+import net.pretronic.dkbans.api.filter.Filter;
+import net.pretronic.dkbans.api.filter.operation.FilterOperation;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.session.PlayerSession;
 import net.pretronic.dkbans.api.player.history.*;
@@ -107,6 +109,15 @@ public interface DKBansStorage {
     List<PlayerNote> getUntilPlayerNotes(DKBansPlayer player, long time);
 
     List<PlayerNote> getBetweenPlayerNotes(DKBansPlayer player, long startTime, long endTime);
+
+
+    //Filter
+
+    Collection<Filter> loadFilters();
+
+    int createFilter(String area, String operation, String value);
+
+    void deleteFilter(int id);
 
       /*
     private final PlayerHistoryEntry entry;

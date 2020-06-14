@@ -50,12 +50,12 @@ public class PlayerListener {
         //@Todo online mode check
         if(event.isCancelled()) return;
 
-        /*if(!DKBans.getInstance().getFilterManager().checkFilter(FilterAffiliationArea.PLAYER_NAME,event.getPlayer().getName())){
+        if(!DKBans.getInstance().getFilterManager().checkFilter(FilterAffiliationArea.PLAYER_NAME,event.getPlayer().getName())){
             event.setCancelled(true);
             event.setCancelReason(Messages.FILTER_BLOCKED_NAME,VariableSet.create()
                     .add("name",event.getPlayer().getName()));
             return;
-        }*/
+        }
 
         DKBansPlayer player = event.getPlayer().getAs(DKBansPlayer.class);
 
@@ -70,9 +70,7 @@ public class PlayerListener {
                     .addDescribed("player",event.getPlayer()));
             return;
         }
-
         //@Todo check for new players because of alt manager
-
     }
 
     @Listener(priority = EventPriority.LOWEST)
@@ -125,13 +123,7 @@ public class PlayerListener {
         PlayerHistoryEntry mute = player.getHistory().getActiveEntry(PunishmentType.MUTE);
         if(mute != null){
             event.setCancelled(true);
-            MessageComponent<?> message = mute.getCurrent().isPermanently()
-                    ? Messages.PUNISH_MUTE_MESSAGE_PERMANENTLY : Messages.PUNISH_MUTE_MESSAGE_TEMPORARY;
-            event.getOnlinePlayer().sendMessage(message,VariableSet.create()
-                    .addDescribed("mute",mute)
-                    .addDescribed("punish",mute)
-                    .addDescribed("player",event.getPlayer()));
-            return;
+            sendMutedMessage(event.getOnlinePlayer(), mute);
         }
     }
 
@@ -141,20 +133,30 @@ public class PlayerListener {
         FilterManager filterManager = DKBans.getInstance().getFilterManager();
 
         if(filterManager.checkFilter(FilterAffiliationArea.COMMAND,event.getCommand())){
-            //@Todo send block/help message
+            event.getOnlinePlayer().sendMessage(Messages.FILTER_BLOCKED_COMMAND,VariableSet.create()
+                    .add("baseCommand",event.getBaseCommand())
+                    .add("command",event.getCommand()));
             event.setCancelled(true);
             return;
         }
 
         DKBansPlayer player = event.getPlayer().getAs(DKBansPlayer.class);
 
-        if(player.hasActivePunish(PunishmentType.MUTE)){
+        PlayerHistoryEntry mute = player.getHistory().getActiveEntry(PunishmentType.MUTE);
+        if(mute != null){
             if(filterManager.checkFilter(FilterAffiliationArea.COMMAND_MUTE,event.getCommand())){
-                //@Todo send mute message
+                sendMutedMessage(event.getOnlinePlayer(),mute);
                 event.setCancelled(true);
-                return;
             }
         }
     }
 
+    private void sendMutedMessage(OnlineMinecraftPlayer player, PlayerHistoryEntry mute) {
+        MessageComponent<?> message = mute.getCurrent().isPermanently()
+                ? Messages.PUNISH_MUTE_MESSAGE_PERMANENTLY : Messages.PUNISH_MUTE_MESSAGE_TEMPORARY;
+        player.sendMessage(message, VariableSet.create()
+                .addDescribed("mute",mute)
+                .addDescribed("punish",mute)
+                .addDescribed("player",player));
+    }
 }

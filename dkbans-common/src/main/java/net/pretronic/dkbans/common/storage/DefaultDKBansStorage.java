@@ -30,6 +30,7 @@ import net.pretronic.databasequery.api.query.result.QueryResultEntry;
 import net.pretronic.databasequery.api.query.type.FindQuery;
 import net.pretronic.databasequery.api.query.type.InsertQuery;
 import net.pretronic.dkbans.api.DKBans;
+import net.pretronic.dkbans.api.filter.Filter;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.session.PlayerSession;
 import net.pretronic.dkbans.api.player.history.*;
@@ -38,6 +39,7 @@ import net.pretronic.dkbans.api.player.note.PlayerNoteType;
 import net.pretronic.dkbans.api.storage.DKBansStorage;
 import net.pretronic.dkbans.api.template.*;
 import net.pretronic.dkbans.common.DefaultDKBansScope;
+import net.pretronic.dkbans.common.filter.DefaultFilter;
 import net.pretronic.dkbans.common.player.history.DefaultPlayerHistoryEntry;
 import net.pretronic.dkbans.common.player.history.DefaultPlayerHistoryEntrySnapshot;
 import net.pretronic.dkbans.common.player.history.DefaultPlayerHistoryType;
@@ -73,8 +75,10 @@ public class DefaultDKBansStorage implements DKBansStorage {
     private final DatabaseCollection templateCategories;
     private final DatabaseCollection templateGroups;
     private final DatabaseCollection template;
-    /*private final DatabaseCollection filter;
-    private final DatabaseCollection broadcast;
+
+    private final DatabaseCollection filter;
+
+    /*private final DatabaseCollection broadcast;
     private final DatabaseCollection broadcastGroupAssignment;
     private final DatabaseCollection broadcastGroup;
     private final DatabaseCollection supportTicket;
@@ -99,6 +103,8 @@ public class DefaultDKBansStorage implements DKBansStorage {
         this.templateGroups = createTemplateGroupsCollection();
 
         this.template = createTemplateCollection();
+
+        this.filter = createFilterCollection();
 
     }
 
@@ -435,6 +441,32 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 .execute());
     }
 
+    @Override
+    public Collection<Filter> loadFilters() {
+        Collection<Filter> result = new ArrayList<>();
+        for (QueryResultEntry entry : filter.find().execute()) {
+            result.add(new DefaultFilter(entry.getInt("Id")
+                    ,entry.getString("AffiliationArea")
+                    ,entry.getString("Operation")
+                    ,entry.getString("Value")));
+        }
+        return result;
+    }
+
+    @Override
+    public int createFilter(String area, String operation, String value) {
+        return filter.insert()
+                .set("AffiliationArea",area)
+                .set("Operation",operation)
+                .set("Value",value)
+                .executeAndGetGeneratedKeyAsInt("Id");
+    }
+
+    @Override
+    public void deleteFilter(int id) {
+        filter.delete().where("Id",id).execute();
+    }
+
     private List<PlayerSession> getPlayerSessionsByResult(DKBansPlayer player, QueryResult result) {
         List<PlayerSession> sessions = new ArrayList<>();
         result.loadIn(sessions, entry -> getPlayerSessionByResultEntry(player, entry));
@@ -558,6 +590,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 .field("ProxyName", DataType.STRING, FieldOption.NOT_NULL)
                 .field("ClientEdition", DataType.STRING, FieldOption.NOT_NULL)
                 .field("ClientProtocolVersion", DataType.INTEGER, FieldOption.NOT_NULL)
+                .field("ClientLanguage", DataType.STRING, FieldOption.NOT_NULL)
                 .field("ConnectTime", DataType.LONG, FieldOption.NOT_NULL)
                 .field("DisconnectTime", DataType.LONG)
                 .create();
@@ -712,6 +745,14 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 .field("CategoryId", DataType.INTEGER, ForeignKey.of(this.templateCategories, "Id"), FieldOption.NOT_NULL)
                 .field("GroupId", DataType.INTEGER, ForeignKey.of(this.templateGroups, "id"), FieldOption.NOT_NULL)
                 .field("Data", DataType.LONG_TEXT, -1, "{}", FieldOption.NOT_NULL)
+                .create();
+    }
+    private DatabaseCollection createFilterCollection(){
+        return database.createCollection("dkbans_filter")
+                .field("Id", DataType.INTEGER, FieldOption.PRIMARY_KEY, FieldOption.AUTO_INCREMENT)
+                .field("AffiliationArea", DataType.STRING,32, FieldOption.NOT_NULL)
+                .field("Operation", DataType.STRING,32, FieldOption.NOT_NULL)
+                .field("Value", DataType.STRING,512, FieldOption.NOT_NULL)
                 .create();
     }
 }
