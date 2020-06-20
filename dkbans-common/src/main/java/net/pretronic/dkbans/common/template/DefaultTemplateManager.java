@@ -57,6 +57,10 @@ public class DefaultTemplateManager implements TemplateManager {
 
     @Override
     public TemplateGroup getTemplateGroup(String name) {
+        System.out.println("getTemplateGroup:" + name);
+        System.out.println(templateGroups.size());
+        System.out.println(Iterators.map(templateGroups, TemplateGroup::getName));
+        System.out.println("---");
         return Iterators.findOne(templateGroups, templateGroup -> templateGroup.getName().equalsIgnoreCase(name));
     }
 
