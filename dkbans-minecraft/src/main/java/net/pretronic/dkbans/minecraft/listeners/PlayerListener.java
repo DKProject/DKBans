@@ -52,7 +52,6 @@ public class PlayerListener {
         if(event.isCancelled()) return;
 
         if(DKBans.getInstance().getFilterManager().checkFilter(FilterAffiliationArea.PLAYER_NAME,event.getPlayer().getName())){
-            System.out.println("filter");
             event.setCancelled(true);
             event.setCancelReason(Messages.FILTER_BLOCKED_NAME,VariableSet.create()
                     .add("name",event.getPlayer().getName()));
@@ -62,7 +61,6 @@ public class PlayerListener {
         DKBansPlayer player = event.getPlayer().getAs(DKBansPlayer.class);
 
         if(player.hasActivePunish(PunishmentType.BAN)){
-            System.out.println("punish");
             PlayerHistoryEntry ban = player.getHistory().getActiveEntry(PunishmentType.BAN);
             event.setCancelled(true);
             MessageComponent<?> message = ban.getCurrent().isPermanently()
@@ -73,7 +71,6 @@ public class PlayerListener {
                     .addDescribed("player",event.getPlayer()));
             return;
         }
-        System.out.println("outer");
         //@Todo check for new players because of alt manager
     }
 
