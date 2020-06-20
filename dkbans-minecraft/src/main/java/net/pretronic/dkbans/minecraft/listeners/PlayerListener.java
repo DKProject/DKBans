@@ -51,7 +51,7 @@ public class PlayerListener {
         //@Todo online mode check
         if(event.isCancelled()) return;
 
-        if(!DKBans.getInstance().getFilterManager().checkFilter(FilterAffiliationArea.PLAYER_NAME,event.getPlayer().getName())){
+        if(DKBans.getInstance().getFilterManager().checkFilter(FilterAffiliationArea.PLAYER_NAME,event.getPlayer().getName())){
             System.out.println("filter");
             event.setCancelled(true);
             event.setCancelReason(Messages.FILTER_BLOCKED_NAME,VariableSet.create()
