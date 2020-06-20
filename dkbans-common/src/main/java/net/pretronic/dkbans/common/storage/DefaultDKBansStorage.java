@@ -586,7 +586,6 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 .field("ProxyName", DataType.STRING, FieldOption.NOT_NULL)
                 .field("ClientEdition", DataType.STRING, FieldOption.NOT_NULL)
                 .field("ClientProtocolVersion", DataType.INTEGER, FieldOption.NOT_NULL)
-                .field("ClientLanguage", DataType.STRING, FieldOption.NOT_NULL)
                 .field("ConnectTime", DataType.LONG, FieldOption.NOT_NULL)
                 .field("DisconnectTime", DataType.LONG)
                 .create();
