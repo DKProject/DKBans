@@ -1,4 +1,4 @@
-type: PUNISHMENT
+type: REPORT
 calculation: AMOUNT
 name: ban
 templates:
