@@ -118,6 +118,9 @@ public class DefaultUnPunishmentTemplate extends DefaultTemplate implements UnPu
     }
 
     private Collection<? extends DKBansScope> loadScopes(Document data) {
+        System.out.println("loadScopes");
+        System.out.println(DocumentFileType.JSON.getWriter().write(data, true));
+        System.out.println("---");
         return data.getAsObject(new TypeReference<Collection<DefaultDKBansScope>>(){});
     }
 
