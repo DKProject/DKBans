@@ -144,6 +144,11 @@ public class DefaultUnPunishmentTemplate extends DefaultTemplate implements UnPu
 
             Document data = Document.newDocument();
 
+            System.out.println("create unpunish data");
+            System.out.println(template.getScopes());
+            System.out.println(DocumentFileType.JSON.getWriter().write(Document.newDocument(template.getScopes()), false));
+            System.out.println("---");
+
             data.add("scopes", DocumentFileType.JSON.getWriter().write(Document.newDocument(template.getScopes()), false));
             data.add("durations", entryToDocument(template));
             data.add("points", Document.newDocument()
