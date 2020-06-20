@@ -11,9 +11,6 @@ import net.pretronic.dkbans.api.template.report.ReportTemplate;
 import net.pretronic.dkbans.common.template.DefaultTemplate;
 import net.pretronic.libraries.document.Document;
 import net.pretronic.libraries.document.entry.DocumentEntry;
-import net.pretronic.libraries.utility.Iterators;
-import net.pretronic.libraries.utility.Validate;
-import net.pretronic.libraries.utility.map.Pair;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -21,20 +18,32 @@ import java.util.Map;
 
 public class DefaultReportTemplate extends DefaultTemplate implements ReportTemplate {
 
-    private final PunishmentTemplate targetTemplate;
+    private PunishmentTemplate targetTemplate;
     private final Map<String, Object> properties;
+
+    private String targetTemplateGroupName;
+    private String targetTemplateName;
 
     public DefaultReportTemplate(int id, String name, TemplateGroup group, String displayName, String permission, Collection<String> aliases,
                                  PlayerHistoryType historyType, boolean enabled, boolean hidden, TemplateCategory category, Document data) {
         super(id, name, group, displayName, permission, aliases, historyType, enabled, hidden, category, data);
 
-        Pair<PunishmentTemplate, Map<String, Object>> loaded = load(data);
-        this.targetTemplate = loaded.getKey();
-        this.properties = loaded.getValue();
+        this.properties = load(data);
     }
 
     @Override
     public PunishmentTemplate getTargetTemplate() {
+        if(targetTemplate == null && targetTemplateGroupName != null && targetTemplateName != null) {
+            TemplateGroup templateGroup = DKBans.getInstance().getTemplateManager().getTemplateGroup(targetTemplateGroupName);
+            if(templateGroup == null) {
+                return null;//@Todo maybe fallback punishment template
+            }
+            Template template = templateGroup.getTemplate(targetTemplateName);
+            if(!(template instanceof PunishmentTemplate)) {
+                return null;//@Todo maybe fallback punishment template
+            }
+            this.targetTemplate = (PunishmentTemplate) template;
+        }
         return this.targetTemplate;
     }
 
@@ -43,24 +52,16 @@ public class DefaultReportTemplate extends DefaultTemplate implements ReportTemp
         return this.properties;
     }
 
-    private Pair<PunishmentTemplate, Map<String, Object>> load(Document data) {
+    private Map<String, Object> load(Document data) {
         String targetTemplate = data.getString("targetPunishment");
 
         String[] splitted = targetTemplate.split("@");
 
         if(splitted.length != 2) throw new IllegalArgumentException("Wrong targetPunishment length. Invalid format. Use TemplateGroup@TemplateName");
 
-        String templateGroup0 = splitted[0];
-        String templateName0 = splitted[1];
+        this.targetTemplateGroupName = splitted[0];
+        this.targetTemplateName = splitted[1];
 
-        TemplateGroup templateGroup = DKBans.getInstance().getTemplateManager().getTemplateGroup(templateGroup0);
-        Validate.notNull(templateGroup, "Template group %s is null", templateGroup0);
-
-        Template template0 = templateGroup.getTemplate(templateName0);
-        Validate.notNull(template0, "Template %s is null", templateName0);
-        Validate.isTrue(template0 instanceof PunishmentTemplate, "Target punishment template is not a punishment template");
-
-        PunishmentTemplate template = (PunishmentTemplate)template0;
 
         Map<String, Object> properties = new HashMap<>();
         for (DocumentEntry entry : data) {
@@ -68,7 +69,7 @@ public class DefaultReportTemplate extends DefaultTemplate implements ReportTemp
                 properties.put(entry.getKey(), entry.toPrimitive().getAsObject());
             }
         }
-        return new Pair<>(template, properties);
+        return properties;
     }
 
     public static class Factory extends TemplateFactory {
