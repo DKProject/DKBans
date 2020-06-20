@@ -2,7 +2,6 @@ package net.pretronic.dkbans.common.template.unpunishment;
 
 import net.pretronic.dkbans.api.DKBansScope;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryType;
-import net.pretronic.dkbans.api.player.history.PunishmentType;
 import net.pretronic.dkbans.api.template.Template;
 import net.pretronic.dkbans.api.template.TemplateCategory;
 import net.pretronic.dkbans.api.template.TemplateFactory;
@@ -19,7 +18,6 @@ import net.pretronic.libraries.document.type.DocumentFileType;
 import net.pretronic.libraries.utility.Convert;
 import net.pretronic.libraries.utility.map.Pair;
 import net.pretronic.libraries.utility.map.Triple;
-import net.pretronic.libraries.utility.reflect.TypeReference;
 
 import java.util.*;
 
@@ -121,7 +119,15 @@ public class DefaultUnPunishmentTemplate extends DefaultTemplate implements UnPu
         System.out.println("loadScopes");
         System.out.println(DocumentFileType.JSON.getWriter().write(data, true));
         System.out.println("---");
-        return data.getAsObject(new TypeReference<Collection<DefaultDKBansScope>>(){});
+        Collection<DefaultDKBansScope> scopes = new ArrayList<>();
+        for (DocumentEntry scope : data) {
+            if(scope.isPrimitive()) {
+                scopes.add(new DefaultDKBansScope(scope.toPrimitive().getKey(), scope.toPrimitive().getAsString(), null));
+            } else {
+                scopes.add(scope.toDocument().getAsObject(DefaultDKBansScope.class));
+            }
+        }
+        return scopes;
     }
 
     private static Document entryToDocument(DefaultUnPunishmentTemplate template) {
