@@ -67,6 +67,7 @@ public class DefaultDKBansScope implements DKBansScope {
     }
 
     public static DefaultDKBansScope fromData(Document data) {
+        if(data == null || (!data.contains("scopeType") && !data.contains("scopeName"))) return null;
         return new DefaultDKBansScope(data.getString("scopeType"), data.getString("scopeName"), ZERO_UUID);
     }
 }
