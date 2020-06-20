@@ -46,7 +46,7 @@ public interface Template {
 
     boolean isHidden();
 
-    Collection<? extends DKBansScope> getScopes();
+    //Collection<? extends DKBansScope> getScopes();
 
     TemplateCategory getCategory();
 

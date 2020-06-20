@@ -154,7 +154,6 @@ public class DefaultDKBansStorage implements DKBansStorage {
 
                 Collection<String> aliases = loadAliases(subResultEntry.getString("Aliases"));
                 TemplateCategory category = dkBans.getTemplateManager().getTemplateCategory(subResultEntry.getInt("CategoryId"));
-                Collection<DefaultDKBansScope> scopes = DocumentFileType.JSON.getReader().read(subResultEntry.getString("Scopes")).getAsObject(new TypeReference<Collection<DefaultDKBansScope>>(){});
                 templateGroup.addTemplateInternal(TemplateFactory.create(templateType,
                         subResultEntry.getInt("Id"),
                         name,
@@ -165,7 +164,6 @@ public class DefaultDKBansStorage implements DKBansStorage {
                         dkBans.getHistoryManager().getHistoryType(subResultEntry.getInt("HistoryTypeId")),
                         subResultEntry.getBoolean("Enabled"),
                         subResultEntry.getBoolean("Hidden"),
-                        scopes,
                         category,
                         DocumentFileType.JSON.getReader().read(subResultEntry.getString("Data"))));
             }
@@ -199,7 +197,6 @@ public class DefaultDKBansStorage implements DKBansStorage {
                         .set("HistoryTypeId", template.getHistoryType().getId())
                         .set("Enabled", template.isEnabled())
                         .set("Hidden", template.isHidden())
-                        .set("Scopes", DocumentFileType.JSON.getWriter().write(Document.newDocument(template.getScopes()), false))
                         .set("CategoryId", template.getCategory().getId())
                         .set("Data", DocumentFileType.JSON.getWriter().write(TemplateFactory.toData(template), false))
                         .where("Id", template.getId())
@@ -213,7 +210,6 @@ public class DefaultDKBansStorage implements DKBansStorage {
                         .set("HistoryTypeId", template.getHistoryType().getId())
                         .set("Enabled", template.isEnabled())
                         .set("Hidden", template.isHidden())
-                        .set("Scopes", DocumentFileType.JSON.getWriter().write(Document.newDocument(template.getScopes()), false))
                         .set("CategoryId", template.getCategory().getId())
                         .set("Data", DocumentFileType.JSON.getWriter().write(TemplateFactory.toData(template), false))
                         .set("GroupId", templateGroup.getId())
@@ -741,7 +737,6 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 .field("HistoryTypeId", DataType.INTEGER, ForeignKey.of(this.historyType, "Id"), FieldOption.NOT_NULL)
                 .field("Enabled", DataType.BOOLEAN, FieldOption.NOT_NULL)
                 .field("Hidden", DataType.BOOLEAN, FieldOption.NOT_NULL)
-                .field("Scopes", DataType.STRING, FieldOption.NOT_NULL)
                 .field("CategoryId", DataType.INTEGER, ForeignKey.of(this.templateCategories, "Id"), FieldOption.NOT_NULL)
                 .field("GroupId", DataType.INTEGER, ForeignKey.of(this.templateGroups, "id"), FieldOption.NOT_NULL)
                 .field("Data", DataType.LONG_TEXT, -1, "{}", FieldOption.NOT_NULL)

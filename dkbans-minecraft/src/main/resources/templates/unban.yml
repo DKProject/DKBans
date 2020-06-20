@@ -1,0 +1,35 @@
+type: UNPUNISHMENT
+calculation: AMOUNT
+name: unban
+templates:
+  1:
+    name: falseban
+    display: False ban
+    permission: dkbans.unban.reason.falsban
+    aliases:
+      - false
+    hidden: false
+    historyType: CHAT
+    category: TEST
+    scopes:
+      - SERVER_GROUP:TTT
+    blacklisted: []
+    durations:
+      1:
+        BAN:
+          removeTime: 1m
+          divider: 2
+        MUTE:
+          removeTime: 1m
+          divider: 2
+    points:
+      removedPoints: 100
+      pointsDivider: 2
+      durations:
+        1:
+          BAN:
+            removeTime: 1m
+            divider: 2
+          MUTE:
+            removeTime: 1m
+            divider: 2

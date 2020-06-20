@@ -25,8 +25,6 @@ import java.util.Map;
 
 public interface UnPunishmentTemplateEntryOption {
 
-    PunishmentType getType();
-
     long getRemoveTime();
 
     double getDivider();

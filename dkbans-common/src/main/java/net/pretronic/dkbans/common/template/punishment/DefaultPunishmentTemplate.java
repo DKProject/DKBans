@@ -51,9 +51,8 @@ public class DefaultPunishmentTemplate extends DefaultTemplate implements Punish
     private final double pointsDivider;
 
     public DefaultPunishmentTemplate(int id, String name, TemplateGroup group, String displayName, String permission, Collection<String> aliases,
-                                     PlayerHistoryType historyType, boolean enabled, boolean hidden,
-                                     Collection<? extends DKBansScope> scopes, TemplateCategory category, Document data) {
-        super(id, name, group, displayName, permission, aliases, historyType, enabled, hidden, scopes, category, data);
+                                     PlayerHistoryType historyType, boolean enabled, boolean hidden, TemplateCategory category, Document data) {
+        super(id, name, group, displayName, permission, aliases, historyType, enabled, hidden, category, data);
 
         this.durations = loadDurations(data.getDocument("durations"));
 
@@ -169,7 +168,7 @@ public class DefaultPunishmentTemplate extends DefaultTemplate implements Punish
                                PlayerHistoryType historyType, boolean enabled, boolean hidden,
                                Collection<? extends DKBansScope> scopes, TemplateCategory category, Document data) {
             return new DefaultPunishmentTemplate(id, name, group, displayName, permission, aliases, historyType, enabled,
-                    hidden, scopes, category, data);
+                    hidden, category, data);
         }
 
         @Override

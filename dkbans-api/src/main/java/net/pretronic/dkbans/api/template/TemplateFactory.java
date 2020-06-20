@@ -34,8 +34,7 @@ public abstract class TemplateFactory {
 
 
     public abstract Template create(int id, String name, TemplateGroup group, String displayName, String permission, Collection<String> aliases,
-                                    PlayerHistoryType historyType, boolean enabled, boolean hidden,
-                                    Collection<? extends DKBansScope> scopes, TemplateCategory category, Document data);
+                                    PlayerHistoryType historyType, boolean enabled, boolean hidden, TemplateCategory category, Document data);
 
     public abstract Document createData(Template template);
 
@@ -46,14 +45,13 @@ public abstract class TemplateFactory {
 
     public static Template create(TemplateType templateType, int id, String name, TemplateGroup group, String displayName,
                                   String permission, Collection<String> aliases, PlayerHistoryType historyType,
-                                  boolean enabled, boolean hidden,
-                                  Collection<? extends DKBansScope> scopes, TemplateCategory category, Document data) {
+                                  boolean enabled, boolean hidden, TemplateCategory category, Document data) {
 
         Validate.notNull(templateType, name, category);
         TemplateFactory factory = FACTORY.get(templateType);
         if(factory == null) throw new IllegalArgumentException("No template factory for template type " + templateType.getName() + " found");
 
-        return factory.create(id, name, group, displayName, permission, aliases, historyType, enabled, hidden, scopes, category, data);
+        return factory.create(id, name, group, displayName, permission, aliases, historyType, enabled, hidden, category, data);
     }
 
     public static Document toData(Template template) {

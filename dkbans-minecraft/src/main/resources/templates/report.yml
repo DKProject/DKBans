@@ -1,0 +1,14 @@
+type: PUNISHMENT
+calculation: AMOUNT
+name: ban
+templates:
+  1:
+    name: Provocation
+    display: Provocation
+    permission: dkbans.ban.reason.provocation
+    aliases:
+      - provocation
+      - provo
+    hidden: false
+    category: TEST
+    targetPunishment: ban@1

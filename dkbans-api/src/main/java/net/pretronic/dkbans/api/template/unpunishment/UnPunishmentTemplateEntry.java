@@ -19,9 +19,11 @@
 
 package net.pretronic.dkbans.api.template.unpunishment;
 
+import net.pretronic.dkbans.api.player.history.PunishmentType;
+
 import java.util.Map;
 
 public interface UnPunishmentTemplateEntry {
 
-    Map<Integer, UnPunishmentTemplateEntryOption> getOptions();
+    Map<PunishmentType, UnPunishmentTemplateEntryOption> getOptions();
 }

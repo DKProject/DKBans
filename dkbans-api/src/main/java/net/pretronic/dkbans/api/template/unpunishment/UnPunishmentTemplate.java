@@ -19,6 +19,7 @@
 
 package net.pretronic.dkbans.api.template.unpunishment;
 
+import net.pretronic.dkbans.api.DKBansScope;
 import net.pretronic.dkbans.api.template.Template;
 import net.pretronic.dkbans.api.template.punishment.PunishmentTemplate;
 
@@ -28,6 +29,8 @@ import java.util.Map;
 public interface UnPunishmentTemplate extends Template {
 
     Collection<PunishmentTemplate> getBlacklistedTemplates();
+
+    Collection<? extends DKBansScope> getScopes();
 
     Map<Integer, UnPunishmentTemplateEntry> getDurations();
 

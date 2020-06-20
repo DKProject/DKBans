@@ -40,13 +40,11 @@ public class DefaultTemplate implements Template {
     private final PlayerHistoryType historyType;
     private final boolean enabled;
     private final boolean hidden;
-    private final Collection<? extends DKBansScope> scopes;
     private final TemplateCategory category;
     private final Document data;
 
     public DefaultTemplate(int id, String name, TemplateGroup group, String displayName, String permission, Collection<String> aliases, PlayerHistoryType historyType,
-                           boolean enabled, boolean hidden, Collection<? extends DKBansScope> scopes,
-                           TemplateCategory category, Document data) {
+                           boolean enabled, boolean hidden, TemplateCategory category, Document data) {
         this.id = id;
         this.name = name;
         this.group = group;
@@ -56,7 +54,6 @@ public class DefaultTemplate implements Template {
         this.historyType = historyType;
         this.enabled = enabled;
         this.hidden = hidden;
-        this.scopes = scopes;
         this.category = category;
         this.data = data;
     }
@@ -104,11 +101,6 @@ public class DefaultTemplate implements Template {
     @Override
     public boolean isHidden() {
         return this.hidden;
-    }
-
-    @Override
-    public Collection<? extends DKBansScope> getScopes() {
-        return this.scopes;
     }
 
     @Override

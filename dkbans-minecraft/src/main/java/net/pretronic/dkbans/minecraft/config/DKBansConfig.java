@@ -62,8 +62,8 @@ public class DKBansConfig {
         if(files != null && files.length == 0) {
             try {
                 Files.copy(DKBansConfig.class.getResourceAsStream("/templates/ban.yml"), Paths.get(templates.getPath()+"/ban.yml"));
-                //Files.copy(DKBansConfig.class.getResourceAsStream("/templates/unban.yml"), Paths.get(templates.getPath()+"/unban.yml"));
-                //Files.copy(DKBansConfig.class.getResourceAsStream("/templates/report.yml"), Paths.get(templates.getPath()+"/report.yml"));
+                Files.copy(DKBansConfig.class.getResourceAsStream("/templates/unban.yml"), Paths.get(templates.getPath()+"/unban.yml"));
+                Files.copy(DKBansConfig.class.getResourceAsStream("/templates/report.yml"), Paths.get(templates.getPath()+"/report.yml"));
             } catch (IOException exception) {
                 exception.printStackTrace();
             }
@@ -114,14 +114,7 @@ public class DKBansConfig {
             String name = entry.getString("name");
             int id = Convert.toInteger(entry.getKey());
 
-            Collection<DKBansScope> scopes = new ArrayList<>();
-
-            Document scopes0 = entry.getDocument("scopes");
-            if(scopes0 != null) scopes0.forEach(dummyScope -> {
-                for (DocumentEntry documentEntry : dummyScope.toDocument()) {
-                    scopes.add(new DefaultDKBansScope(documentEntry.getKey(), documentEntry.toPrimitive().getAsString(), null));
-                }
-            });
+            Document scopes = entry.contains("scopes") ? entry.getDocument("scopes") : Document.newDocument();
 
             TemplateCategory category = dkBans.getTemplateManager().getTemplateCategory(entry.getString("category"));
 
@@ -141,7 +134,7 @@ public class DKBansConfig {
                 historyType = dkBans.getHistoryManager().createHistoryType(historyType0);
             }
 
-            Template template = TemplateFactory.create(templateType, //@Todo remove because defined in template group
+            Template template = TemplateFactory.create(templateType,
                     id,
                     name,
                     templateGroup,
@@ -151,9 +144,8 @@ public class DKBansConfig {
                     historyType,
                     entry.getBoolean("enabled"),
                     entry.getBoolean("hidden"),
-                    scopes,
                     category,
-                    Document.newDocument().add("durations", entry.getDocument("durations")).add("points", entry.getDocument("points")));
+                    Document.newDocument().add("scopes", scopes).add("durations", entry.getDocument("durations")).add("points", entry.getDocument("points")));
             templates.add(template);
         }
         ((DefaultTemplateGroup)templateGroup).addTemplatesInternal(templates);

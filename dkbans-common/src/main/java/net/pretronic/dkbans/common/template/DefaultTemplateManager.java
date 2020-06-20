@@ -24,11 +24,14 @@ import net.pretronic.dkbans.api.player.history.CalculationType;
 import net.pretronic.dkbans.api.player.history.PunishmentType;
 import net.pretronic.dkbans.api.template.*;
 import net.pretronic.dkbans.api.template.punishment.PunishmentTemplateEntryFactory;
+import net.pretronic.dkbans.api.template.unpunishment.UnPunishmentTemplateEntryFactory;
 import net.pretronic.dkbans.common.template.punishment.DefaultPunishmentTemplate;
 import net.pretronic.dkbans.common.template.punishment.types.DefaultBanPunishmentTemplateEntry;
 import net.pretronic.dkbans.common.template.punishment.types.DefaultKickPunishmentTemplateEntry;
 import net.pretronic.dkbans.common.template.punishment.types.DefaultMutePunishmentTemplateEntry;
 import net.pretronic.dkbans.common.template.punishment.types.DefaultWarnPunishmentTemplateEntry;
+import net.pretronic.dkbans.common.template.unpunishment.DefaultUnPunishmentTemplate;
+import net.pretronic.dkbans.common.template.unpunishment.DefaultUnPunishmentTemplateEntry;
 import net.pretronic.libraries.utility.Iterators;
 
 import java.util.ArrayList;
@@ -116,6 +119,10 @@ public class DefaultTemplateManager implements TemplateManager {
         PunishmentTemplateEntryFactory.register(PunishmentType.KICK, new DefaultKickPunishmentTemplateEntry.Factory());
         PunishmentTemplateEntryFactory.register(PunishmentType.MUTE, new DefaultMutePunishmentTemplateEntry.Factory());
         PunishmentTemplateEntryFactory.register(PunishmentType.WARN, new DefaultWarnPunishmentTemplateEntry.Factory());
+
+
+        TemplateFactory.register(TemplateType.UNPUNISHMENT, new DefaultUnPunishmentTemplate.Factory());
+        UnPunishmentTemplateEntryFactory.setFactory(new DefaultUnPunishmentTemplateEntry.Factory());
     }
 
     public void initialize(DKBans dkBans) {

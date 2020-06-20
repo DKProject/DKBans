@@ -12,8 +12,7 @@ templates:
     hidden: false
     historyType: CHAT
     category: TEST
-    scopes:
-      - SERVER_GROUP:TTT
+
     durations:
       1:
         type: WARN
