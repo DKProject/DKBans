@@ -39,9 +39,9 @@ public class DefaultUnPunishmentTemplate extends DefaultTemplate implements UnPu
                                        TemplateCategory category, Document data) {
         super(id, name, group, displayName, permission, aliases, historyType, enabled, hidden, category, data);
 
-        this.blacklistedTemplates = loadBlacklistedTemplates(data);
-        this.scopes = loadScopes(data);
-        this.durations = loadDurations(data);
+        this.blacklistedTemplates = loadBlacklistedTemplates(data.getDocument("blacklisted"));
+        this.scopes = loadScopes(data.getDocument("scopes"));
+        this.durations = loadDurations(data.getDocument("durations"));
 
         Triple<Map<Integer, UnPunishmentTemplateEntry>, Integer, Double> points = loadPoints(data.getDocument("points"));
         this.points = points.getFirst();
