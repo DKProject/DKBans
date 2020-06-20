@@ -129,8 +129,8 @@ public class DefaultTemplateManager implements TemplateManager {
         TemplateFactory.register(TemplateType.REPORT, new DefaultReportTemplate.Factory());
     }
 
-    public void initialize(DKBans dkBans) {
-        this.templateGroups.addAll(dkBans.getStorage().loadTemplateGroups());
-        this.templateCategories.addAll(dkBans.getStorage().loadTemplateCategories());
+    public void initialize() {
+        this.templateGroups.addAll(DKBans.getInstance().getStorage().loadTemplateGroups());
+        this.templateCategories.addAll(DKBans.getInstance().getStorage().loadTemplateCategories());
     }
 }

@@ -41,7 +41,7 @@ public class DefaultDKBans extends DKBans {
     private final ReportManager reportManager;
     private final SupportTicketManager ticketManager;
     private final BroadcastManager broadcastManager;
-    private final FilterManager filterManager;
+    private final DefaultFilterManager filterManager;
     private final DefaultTemplateManager templateManager;
 
     public DefaultDKBans(PretronicLogger logger, Database database) {
@@ -86,7 +86,7 @@ public class DefaultDKBans extends DKBans {
     }
 
     @Override
-    public FilterManager getFilterManager() {
+    public DefaultFilterManager getFilterManager() {
         return this.filterManager;
     }
 

@@ -42,7 +42,6 @@ public class DefaultFilterManager implements FilterManager {
         this.filters = new ArrayList<>();
         this.factories = new ArrayList<>();
         this.affiliationArea = new ArrayList<>();
-        initialize();
     }
 
     @Override
