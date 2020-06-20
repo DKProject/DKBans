@@ -161,7 +161,7 @@ public class DefaultUnPunishmentTemplate extends DefaultTemplate implements UnPu
             System.out.println(DocumentFileType.JSON.getWriter().write(Document.newDocument(template.getScopes()), false));
             System.out.println("---");
 
-            data.add("scopes", DocumentFileType.JSON.getWriter().write(Document.newDocument(template.getScopes()), false));
+            data.add("scopes", template.getScopes());
             data.add("durations", entryToDocument(template));
             data.add("points", Document.newDocument()
                     .add("durations", entryToDocument(template))
