@@ -35,7 +35,7 @@ public class DefaultDKBansScope implements DKBansScope {
     public DefaultDKBansScope(String type, String name, UUID id) {
         this.type = type;
         this.name = name;
-        this.id = id;
+        this.id = id == null ? ZERO_UUID : id;
     }
 
     @Override
@@ -60,7 +60,7 @@ public class DefaultDKBansScope implements DKBansScope {
 
     @Override
     public String toString() {
-        return "DefaultDKBansScope("+"type:"+this.type+", name:"+this.name+",id:"+this.id.toString()+")";
+        return "DefaultDKBansScope("+"type:"+this.type+", name:"+this.name+",id:"+this.id+")";
     }
 
     public static DefaultDKBansScope fromData(Document data) {
