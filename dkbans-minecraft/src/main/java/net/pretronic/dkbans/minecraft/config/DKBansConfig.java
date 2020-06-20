@@ -119,7 +119,6 @@ public class DKBansConfig {
             boolean enabled = true;
             boolean hidden = false;
 
-            Document scopes = null;
             TemplateCategory category = null;
             Collection<String> aliases = new ArrayList<>();
             PlayerHistoryType historyType = null;

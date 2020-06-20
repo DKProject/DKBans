@@ -11,6 +11,7 @@ import net.pretronic.dkbans.api.template.report.ReportTemplate;
 import net.pretronic.dkbans.common.template.DefaultTemplate;
 import net.pretronic.libraries.document.Document;
 import net.pretronic.libraries.document.entry.DocumentEntry;
+import net.pretronic.libraries.utility.Iterators;
 import net.pretronic.libraries.utility.Validate;
 import net.pretronic.libraries.utility.map.Pair;
 
@@ -53,6 +54,8 @@ public class DefaultReportTemplate extends DefaultTemplate implements ReportTemp
         String templateName0 = splitted[1];
 
         TemplateGroup templateGroup = DKBans.getInstance().getTemplateManager().getTemplateGroup(templateName0);
+        System.out.println(DKBans.getInstance().getTemplateManager().getTemplateGroups().size());
+        System.out.println(Iterators.map(DKBans.getInstance().getTemplateManager().getTemplateGroups(), TemplateGroup::getName));
         Validate.notNull(templateGroup, "Template group %s is null", templateGroup0);
 
         Template template0 = templateGroup.getTemplate(templateName0);

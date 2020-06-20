@@ -1,6 +1,6 @@
 type: REPORT
 calculation: AMOUNT
-name: ban
+name: report
 templates:
   1:
     name: Provocation
