@@ -21,6 +21,7 @@ package net.pretronic.dkbans.common;
 
 import net.pretronic.dkbans.api.DKBansScope;
 import net.pretronic.libraries.document.Document;
+import net.pretronic.libraries.utility.Validate;
 
 import java.util.UUID;
 
@@ -33,6 +34,8 @@ public class DefaultDKBansScope implements DKBansScope {
     private final UUID id;
 
     public DefaultDKBansScope(String type, String name, UUID id) {
+        Validate.notNull(type, "Scope type can't be null");
+        Validate.notNull(name, "Scope name can't be null");
         this.type = type;
         this.name = name;
         this.id = id == null ? ZERO_UUID : id;
