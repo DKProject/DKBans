@@ -122,7 +122,7 @@ public class DefaultUnPunishmentTemplate extends DefaultTemplate implements UnPu
         System.out.println("---");
         Collection<DefaultDKBansScope> scopes = new ArrayList<>();
         for (DocumentEntry scope0 : data) {
-            Document scope = Document.newDocument();
+            Document scope = scope0.toDocument();
             if(scope.size() == 1) {
                 PrimitiveEntry firstEntry = scope.getEntry(0).toPrimitive();
                 scopes.add(new DefaultDKBansScope(firstEntry.getKey(), firstEntry.getAsString(), null));
