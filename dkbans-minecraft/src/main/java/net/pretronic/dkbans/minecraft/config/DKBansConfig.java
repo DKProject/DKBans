@@ -130,7 +130,7 @@ public class DKBansConfig {
             String historyType0 = entry.getString("historyType");
 
             PlayerHistoryType historyType = dkBans.getHistoryManager().getHistoryType(historyType0);
-            if(historyType == null) {
+            if(historyType0 != null && historyType == null) {
                 historyType = dkBans.getHistoryManager().createHistoryType(historyType0);
             }
 

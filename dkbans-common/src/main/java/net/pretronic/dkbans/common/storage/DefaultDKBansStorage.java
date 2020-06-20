@@ -734,7 +734,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 .field("DisplayName", DataType.STRING, FieldOption.NOT_NULL)
                 .field("Permission", DataType.STRING, FieldOption.NOT_NULL)
                 .field("Aliases", DataType.STRING, FieldOption.NOT_NULL)
-                .field("HistoryTypeId", DataType.INTEGER, ForeignKey.of(this.historyType, "Id"), FieldOption.NOT_NULL)
+                .field("HistoryTypeId", DataType.INTEGER, ForeignKey.of(this.historyType, "Id"))
                 .field("Enabled", DataType.BOOLEAN, FieldOption.NOT_NULL)
                 .field("Hidden", DataType.BOOLEAN, FieldOption.NOT_NULL)
                 .field("CategoryId", DataType.INTEGER, ForeignKey.of(this.templateCategories, "Id"), FieldOption.NOT_NULL)
