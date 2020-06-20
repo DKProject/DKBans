@@ -14,6 +14,7 @@ import net.pretronic.dkbans.common.DefaultDKBansScope;
 import net.pretronic.dkbans.common.template.DefaultTemplate;
 import net.pretronic.libraries.document.Document;
 import net.pretronic.libraries.document.entry.DocumentEntry;
+import net.pretronic.libraries.document.entry.PrimitiveEntry;
 import net.pretronic.libraries.document.type.DocumentFileType;
 import net.pretronic.libraries.utility.Convert;
 import net.pretronic.libraries.utility.map.Pair;
@@ -120,11 +121,13 @@ public class DefaultUnPunishmentTemplate extends DefaultTemplate implements UnPu
         System.out.println(DocumentFileType.JSON.getWriter().write(data, true));
         System.out.println("---");
         Collection<DefaultDKBansScope> scopes = new ArrayList<>();
-        for (DocumentEntry scope : data) {
-            if(scope.isPrimitive()) {
-                scopes.add(new DefaultDKBansScope(scope.toPrimitive().getKey(), scope.toPrimitive().getAsString(), null));
+        for (DocumentEntry scope0 : data) {
+            Document scope = Document.newDocument();
+            if(scope.size() == 1) {
+                PrimitiveEntry firstEntry = scope.getEntry(0).toPrimitive();
+                scopes.add(new DefaultDKBansScope(firstEntry.getKey(), firstEntry.getAsString(), null));
             } else {
-                scopes.add(scope.toDocument().getAsObject(DefaultDKBansScope.class));
+                scopes.add(scope.getAsObject(DefaultDKBansScope.class));
             }
         }
         return scopes;
