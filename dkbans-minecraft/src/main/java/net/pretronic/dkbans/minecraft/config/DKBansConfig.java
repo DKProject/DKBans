@@ -108,45 +108,78 @@ public class DKBansConfig {
         }
 
         for (DocumentEntry entry0 : document.getDocument("templates")) {
-            Document entry = entry0.toDocument();
+            Document documentEntry = entry0.toDocument();
+
+            int id = Convert.toInteger(documentEntry.getKey());
 
 
-            String name = entry.getString("name");
-            int id = Convert.toInteger(entry.getKey());
+            String name = null;
+            String display = null;
+            String permission = null;
+            boolean enabled = true;
+            boolean hidden = false;
 
-            Document scopes = entry.contains("scopes") ? entry.getDocument("scopes") : Document.newDocument();
-
-            TemplateCategory category = dkBans.getTemplateManager().getTemplateCategory(entry.getString("category"));
-
-            if(category == null) {
-                category = dkBans.getTemplateManager().createTemplateCategory(name, name);
-            }
-
+            Document scopes = null;
+            TemplateCategory category = null;
             Collection<String> aliases = new ArrayList<>();
-            for (DocumentEntry alias : entry.getDocument("aliases")) {
-                aliases.add(alias.toPrimitive().getAsString());
+            PlayerHistoryType historyType = null;
+
+            Document data = Document.newDocument();
+
+            for (DocumentEntry entry : documentEntry) {
+                switch (entry.getKey().toLowerCase()) {
+                    case "name": {
+                        name = entry.toPrimitive().getAsString();
+                        break;
+                    }
+                    case "display": {
+                        display = entry.toPrimitive().getAsString();
+                        break;
+                    }
+                    case "permission": {
+                        permission = entry.toPrimitive().getAsString();
+                        break;
+                    }
+                    case "enabled": {
+                        enabled = entry.toPrimitive().getAsBoolean();
+                        break;
+                    }
+                    case "hidden": {
+                        hidden = entry.toPrimitive().getAsBoolean();
+                        break;
+                    }
+                    case "category": {
+                        category = dkBans.getTemplateManager().getTemplateCategory(entry.toPrimitive().getAsString());
+                        if(category == null) {
+                            category = dkBans.getTemplateManager().createTemplateCategory(name, name);
+                        }
+                        break;
+                    }
+                    case "aliases": {
+                        for (DocumentEntry alias : entry.toDocument()) {
+                            aliases.add(alias.toPrimitive().getAsString());
+                        }
+                        break;
+                    }
+                    case "historytype": {
+                        String historyType0 = entry.toPrimitive().getAsString();
+
+                        historyType = dkBans.getHistoryManager().getHistoryType(historyType0);
+                        if(historyType0 != null && historyType == null) {
+                            historyType = dkBans.getHistoryManager().createHistoryType(historyType0);
+                        }
+                        break;
+                    }
+                    default: {
+                        data.add(entry.getKey(), entry);
+                        break;
+                    }
+                }
             }
-
-            String historyType0 = entry.getString("historyType");
-
-            PlayerHistoryType historyType = dkBans.getHistoryManager().getHistoryType(historyType0);
-            if(historyType0 != null && historyType == null) {
-                historyType = dkBans.getHistoryManager().createHistoryType(historyType0);
-            }
-
-            Template template = TemplateFactory.create(templateType,
-                    id,
-                    name,
-                    templateGroup,
-                    entry.getString("display"),
-                    entry.getString("permission"),
-                    aliases,
-                    historyType,
-                    entry.getBoolean("enabled"),
-                    entry.getBoolean("hidden"),
-                    category,
-                    Document.newDocument().add("scopes", scopes).add("durations", entry.getDocument("durations")).add("points", entry.getDocument("points")));
+            Template template = TemplateFactory.create(templateType, id, name, templateGroup, display, permission, aliases,
+                    historyType, enabled, hidden, category, data);
             templates.add(template);
+
         }
         ((DefaultTemplateGroup)templateGroup).addTemplatesInternal(templates);
 
