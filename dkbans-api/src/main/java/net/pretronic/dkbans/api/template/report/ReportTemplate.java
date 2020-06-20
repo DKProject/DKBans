@@ -22,7 +22,11 @@ package net.pretronic.dkbans.api.template.report;
 import net.pretronic.dkbans.api.template.Template;
 import net.pretronic.dkbans.api.template.punishment.PunishmentTemplate;
 
+import java.util.Map;
+
 public interface ReportTemplate extends Template {
 
     PunishmentTemplate getTargetTemplate();
+
+    Map<String, Object> getProperties();
 }

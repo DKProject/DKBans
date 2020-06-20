@@ -30,6 +30,7 @@ import net.pretronic.dkbans.common.template.punishment.types.DefaultBanPunishmen
 import net.pretronic.dkbans.common.template.punishment.types.DefaultKickPunishmentTemplateEntry;
 import net.pretronic.dkbans.common.template.punishment.types.DefaultMutePunishmentTemplateEntry;
 import net.pretronic.dkbans.common.template.punishment.types.DefaultWarnPunishmentTemplateEntry;
+import net.pretronic.dkbans.common.template.report.DefaultReportTemplate;
 import net.pretronic.dkbans.common.template.unpunishment.DefaultUnPunishmentTemplate;
 import net.pretronic.dkbans.common.template.unpunishment.DefaultUnPunishmentTemplateEntry;
 import net.pretronic.libraries.utility.Iterators;
@@ -123,6 +124,9 @@ public class DefaultTemplateManager implements TemplateManager {
 
         TemplateFactory.register(TemplateType.UNPUNISHMENT, new DefaultUnPunishmentTemplate.Factory());
         UnPunishmentTemplateEntryFactory.setFactory(new DefaultUnPunishmentTemplateEntry.Factory());
+
+
+        TemplateFactory.register(TemplateType.REPORT, new DefaultReportTemplate.Factory());
     }
 
     public void initialize(DKBans dkBans) {

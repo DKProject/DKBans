@@ -11,4 +11,4 @@ templates:
       - provo
     hidden: false
     category: TEST
-    targetPunishment: ban@1
+    targetPunishment: ban@Provocation

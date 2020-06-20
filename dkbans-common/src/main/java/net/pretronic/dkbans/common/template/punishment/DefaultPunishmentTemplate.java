@@ -165,8 +165,7 @@ public class DefaultPunishmentTemplate extends DefaultTemplate implements Punish
 
         @Override
         public Template create(int id, String name, TemplateGroup group, String displayName, String permission, Collection<String> aliases,
-                               PlayerHistoryType historyType, boolean enabled, boolean hidden,
-                               Collection<? extends DKBansScope> scopes, TemplateCategory category, Document data) {
+                               PlayerHistoryType historyType, boolean enabled, boolean hidden, TemplateCategory category, Document data) {
             return new DefaultPunishmentTemplate(id, name, group, displayName, permission, aliases, historyType, enabled,
                     hidden, category, data);
         }
