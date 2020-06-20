@@ -53,7 +53,7 @@ public class DefaultReportTemplate extends DefaultTemplate implements ReportTemp
         String templateGroup0 = splitted[0];
         String templateName0 = splitted[1];
 
-        TemplateGroup templateGroup = DKBans.getInstance().getTemplateManager().getTemplateGroup(templateName0);
+        TemplateGroup templateGroup = DKBans.getInstance().getTemplateManager().getTemplateGroup(templateGroup0);
         System.out.println(DKBans.getInstance().getTemplateManager().getTemplateGroups().size());
         System.out.println(Iterators.map(DKBans.getInstance().getTemplateManager().getTemplateGroups(), TemplateGroup::getName));
         Validate.notNull(templateGroup, "Template group %s is null", templateGroup0);
