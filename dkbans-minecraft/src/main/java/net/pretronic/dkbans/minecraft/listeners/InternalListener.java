@@ -1,8 +1,9 @@
 /*
  * (C) Copyright 2020 The DKBans Project (Davide Wietlisbach & Philipp Elvin Friedhoff)
  *
- * @author Davide Wietlisbach
- * @since 13.06.20, 17:19
+ * @author Philipp Elvin Friedhoff
+ * @since 21.06.20, 17:26
+ * @web %web%
  *
  * The DKBans Project is under the Apache License, version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +20,7 @@
 
 package net.pretronic.dkbans.minecraft.listeners;
 
-import net.pretronic.dkbans.api.event.PlayerPunishEvent;
+import net.pretronic.dkbans.api.event.DKBansPlayerPunishEvent;
 import net.pretronic.dkbans.api.player.history.PunishmentType;
 import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
@@ -31,7 +32,7 @@ import org.mcnative.common.text.components.MessageComponent;
 public class InternalListener {
 
     @NetworkListener
-    public void onPlayerPunish(PlayerPunishEvent event){
+    public void onPlayerPunish(DKBansPlayerPunishEvent event){
         OnlineMinecraftPlayer player = McNative.getInstance().getLocal().getConnectedPlayer(event.getPlayer().getUniqueId());
         if(event.getSnapshot().getPunishmentType() == PunishmentType.BAN){
             if(player != null){

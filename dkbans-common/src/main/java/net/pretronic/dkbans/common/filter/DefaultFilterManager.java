@@ -1,8 +1,9 @@
 /*
  * (C) Copyright 2020 The DKBans Project (Davide Wietlisbach & Philipp Elvin Friedhoff)
  *
- * @author Davide Wietlisbach
- * @since 14.06.20, 09:30
+ * @author Philipp Elvin Friedhoff
+ * @since 21.06.20, 17:26
+ * @web %web%
  *
  * The DKBans Project is under the Apache License, version 2.0 (the "License");
  * you may not use this file except in compliance with the License.

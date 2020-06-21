@@ -18,13 +18,16 @@
  * under the License.
  */
 
-package net.pretronic.dkbans.api.broadcast;
+package net.pretronic.dkbans.api.event;
 
-public enum  BroadcastVisibility {
+import net.pretronic.dkbans.api.DKBansScope;
 
-    CHAT(),
-    TITLE(),
-    BOSSBAR(),
-    ACTIONBAR()
+public interface DKBansScopeCheckEvent extends DKBansEvent {
+
+    DKBansScope getScope();
+
+    boolean isValid();
+
+    void setValid(boolean valid);
 
 }

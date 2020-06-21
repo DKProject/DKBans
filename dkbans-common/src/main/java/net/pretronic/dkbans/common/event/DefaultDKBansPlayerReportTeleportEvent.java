@@ -2,7 +2,7 @@
  * (C) Copyright 2020 The DKBans Project (Davide Wietlisbach & Philipp Elvin Friedhoff)
  *
  * @author Philipp Elvin Friedhoff
- * @since 21.06.20, 17:26
+ * @since 21.06.20, 17:28
  * @web %web%
  *
  * The DKBans Project is under the Apache License, version 2.0 (the "License");
@@ -18,13 +18,23 @@
  * under the License.
  */
 
-package net.pretronic.dkbans.api.broadcast;
+package net.pretronic.dkbans.common.event;
 
-public enum  BroadcastVisibility {
+import net.pretronic.dkbans.api.event.DKBansPlayerReportTeleportEvent;
+import net.pretronic.dkbans.api.player.DKBansPlayer;
+import net.pretronic.dkbans.api.player.report.PlayerReport;
 
-    CHAT(),
-    TITLE(),
-    BOSSBAR(),
-    ACTIONBAR()
+public class DefaultDKBansPlayerReportTeleportEvent extends DefaultDKBansPlayerEvent implements DKBansPlayerReportTeleportEvent {
 
+   private final PlayerReport report;
+
+    public DefaultDKBansPlayerReportTeleportEvent(DKBansPlayer player, PlayerReport report) {
+        super(player);
+        this.report = report;
+    }
+
+    @Override
+    public PlayerReport getReport() {
+        return this.report;
+    }
 }

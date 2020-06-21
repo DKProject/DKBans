@@ -18,13 +18,12 @@
  * under the License.
  */
 
-package net.pretronic.dkbans.api.broadcast;
+package net.pretronic.dkbans.api.event;
 
-public enum  BroadcastVisibility {
+import net.pretronic.dkbans.api.player.report.PlayerReport;
 
-    CHAT(),
-    TITLE(),
-    BOSSBAR(),
-    ACTIONBAR()
+public interface DKBansPlayerReportTeleportEvent extends DKBansPlayerEvent {
 
+
+    PlayerReport getReport();
 }

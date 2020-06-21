@@ -1,8 +1,9 @@
 /*
  * (C) Copyright 2020 The DKBans Project (Davide Wietlisbach & Philipp Elvin Friedhoff)
  *
- * @author Davide Wietlisbach
- * @since 13.06.20, 17:19
+ * @author Philipp Elvin Friedhoff
+ * @since 21.06.20, 17:26
+ * @web %web%
  *
  * The DKBans Project is under the Apache License, version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +27,7 @@ import net.pretronic.dkbans.api.player.report.ReportManager;
 import net.pretronic.dkbans.api.storage.DKBansStorage;
 import net.pretronic.dkbans.api.support.SupportTicketManager;
 import net.pretronic.dkbans.api.template.TemplateManager;
+import net.pretronic.libraries.event.EventBus;
 import net.pretronic.libraries.logging.PretronicLogger;
 
 /*
@@ -38,6 +40,8 @@ public abstract class DKBans {
     private static DKBans INSTANCE;
 
     public abstract PretronicLogger getLogger();
+
+    public abstract EventBus getEventBus();
 
     public abstract DKBansStorage getStorage();
 

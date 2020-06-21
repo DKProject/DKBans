@@ -1,8 +1,9 @@
 /*
  * (C) Copyright 2020 The DKBans Project (Davide Wietlisbach & Philipp Elvin Friedhoff)
  *
- * @author Davide Wietlisbach
- * @since 13.06.20, 17:19
+ * @author Philipp Elvin Friedhoff
+ * @since 21.06.20, 17:26
+ * @web %web%
  *
  * The DKBans Project is under the Apache License, version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,13 +20,18 @@
 
 package net.pretronic.dkbans.api.event;
 
-import net.pretronic.dkbans.api.DKBansExecutor;
+import net.pretronic.dkbans.api.player.DKBansPlayer;
+import net.pretronic.dkbans.api.player.history.PlayerHistoryEntry;
+import net.pretronic.dkbans.api.player.history.PlayerHistoryEntrySnapshot;
 
-public interface ChannelBroadcastMessageReceiveEvent extends DKBansEvent {
+public interface DKBansPlayerPunishUpdateEvent extends DKBansEvent{
 
-    String getChannel();
+    DKBansPlayer getPlayer();
 
-    DKBansExecutor getExecutor();
+    PlayerHistoryEntry getEntry();
 
+    PlayerHistoryEntrySnapshot getNewSnapshot();
+
+    PlayerHistoryEntrySnapshot getOldSnapshot();
 
 }

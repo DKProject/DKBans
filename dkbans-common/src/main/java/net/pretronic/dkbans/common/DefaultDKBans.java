@@ -1,8 +1,9 @@
 /*
  * (C) Copyright 2020 The DKBans Project (Davide Wietlisbach & Philipp Elvin Friedhoff)
  *
- * @author Davide Wietlisbach
- * @since 13.06.20, 17:19
+ * @author Philipp Elvin Friedhoff
+ * @since 21.06.20, 17:26
+ * @web %web%
  *
  * The DKBans Project is under the Apache License, version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,11 +32,13 @@ import net.pretronic.dkbans.common.player.history.DefaultPlayerHistoryManager;
 import net.pretronic.dkbans.common.player.report.DefaultReportManager;
 import net.pretronic.dkbans.common.storage.DefaultDKBansStorage;
 import net.pretronic.dkbans.common.template.DefaultTemplateManager;
+import net.pretronic.libraries.event.EventBus;
 import net.pretronic.libraries.logging.PretronicLogger;
 
 public class DefaultDKBans extends DKBans {
 
     private final PretronicLogger logger;
+    private final EventBus eventBus;
     private final DKBansStorage storage;
     private final PlayerHistoryManager historyManager;
     private final ReportManager reportManager;
@@ -44,8 +47,9 @@ public class DefaultDKBans extends DKBans {
     private final DefaultFilterManager filterManager;
     private final DefaultTemplateManager templateManager;
 
-    public DefaultDKBans(PretronicLogger logger, Database database) {
+    public DefaultDKBans(PretronicLogger logger, EventBus eventBus, Database database) {
         this.logger = logger;
+        this.eventBus = eventBus;
         this.storage = new DefaultDKBansStorage(this, database);
         this.historyManager = new DefaultPlayerHistoryManager(this);
         this.reportManager = new DefaultReportManager();
@@ -58,6 +62,11 @@ public class DefaultDKBans extends DKBans {
     @Override
     public PretronicLogger getLogger() {
         return this.logger;
+    }
+
+    @Override
+    public EventBus getEventBus() {
+        return this.eventBus;
     }
 
     @Override

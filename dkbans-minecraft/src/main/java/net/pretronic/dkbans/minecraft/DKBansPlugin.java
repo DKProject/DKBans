@@ -1,8 +1,9 @@
 /*
  * (C) Copyright 2020 The DKBans Project (Davide Wietlisbach & Philipp Elvin Friedhoff)
  *
- * @author Davide Wietlisbach
- * @since 13.06.20, 17:19
+ * @author Philipp Elvin Friedhoff
+ * @since 21.06.20, 17:26
+ * @web %web%
  *
  * The DKBans Project is under the Apache License, version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,6 +37,7 @@ import net.pretronic.dkbans.minecraft.player.MinecraftPlayerManager;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
 import net.pretronic.libraries.plugin.lifecycle.Lifecycle;
 import net.pretronic.libraries.plugin.lifecycle.LifecycleState;
+import org.mcnative.common.McNative;
 import org.mcnative.common.plugin.MinecraftPlugin;
 import org.mcnative.common.plugin.configuration.ConfigurationProvider;
 
@@ -49,8 +51,11 @@ public class DKBansPlugin extends MinecraftPlugin {
     public void onLoad(LifecycleState state){
         getLogger().info("DKBans is starting, please wait..");
 
-        this.dkBans = new DefaultDKBans(getLogger(), getRuntime().getRegistry().getService(ConfigurationProvider.class).getDatabase(this, true));
+        this.dkBans = new DefaultDKBans(getLogger(), McNative.getInstance().getLocal().getEventBus(),
+                getRuntime().getRegistry().getService(ConfigurationProvider.class).getDatabase(this, true));
+
         DKBans.setInstance(dkBans);
+
         dkBans.getTemplateManager().initialize();
 
         getConfiguration().load(DKBansConfig.class);

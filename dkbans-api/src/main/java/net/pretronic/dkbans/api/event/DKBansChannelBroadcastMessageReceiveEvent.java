@@ -18,13 +18,15 @@
  * under the License.
  */
 
-package net.pretronic.dkbans.api.broadcast;
+package net.pretronic.dkbans.api.event;
 
-public enum  BroadcastVisibility {
+import net.pretronic.dkbans.api.DKBansExecutor;
 
-    CHAT(),
-    TITLE(),
-    BOSSBAR(),
-    ACTIONBAR()
+public interface DKBansChannelBroadcastMessageReceiveEvent extends DKBansEvent {
+
+    String getChannel();
+
+    DKBansExecutor getExecutor();
+
 
 }

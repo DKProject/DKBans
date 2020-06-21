@@ -1,8 +1,9 @@
 /*
  * (C) Copyright 2020 The DKBans Project (Davide Wietlisbach & Philipp Elvin Friedhoff)
  *
- * @author Davide Wietlisbach
- * @since 13.06.20, 17:19
+ * @author Philipp Elvin Friedhoff
+ * @since 21.06.20, 17:26
+ * @web %web%
  *
  * The DKBans Project is under the Apache License, version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,14 +24,12 @@ import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryEntry;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryEntrySnapshot;
 
-public interface PlayerPunishUpdateEvent extends DKBansEvent{
+public interface DKBansPlayerPunishEvent extends DKBansEvent{
 
     DKBansPlayer getPlayer();
 
     PlayerHistoryEntry getEntry();
 
-    PlayerHistoryEntrySnapshot getNewSnapshot();
-
-    PlayerHistoryEntrySnapshot getOldSnapshot();
+    PlayerHistoryEntrySnapshot getSnapshot();
 
 }
