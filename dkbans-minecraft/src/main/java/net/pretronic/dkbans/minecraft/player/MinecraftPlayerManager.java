@@ -19,11 +19,13 @@
 
 package net.pretronic.dkbans.minecraft.player;
 
+import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.DKBansPlayerManager;
 import net.pretronic.dkbans.common.player.DefaultDKBansPlayer;
 import net.pretronic.libraries.caching.ArrayCache;
 import net.pretronic.libraries.caching.Cache;
+import net.pretronic.libraries.utility.Iterators;
 import org.mcnative.common.McNative;
 import org.mcnative.common.player.MinecraftPlayer;
 
@@ -52,6 +54,9 @@ public class MinecraftPlayerManager implements DKBansPlayerManager {
 
     public DKBansPlayer getPlayer(MinecraftPlayer player){//@Todo temporary
         if(player == null) return null;
+        System.out.println("getPlayer:"+player.getUniqueId());
+        System.out.println(Iterators.map(players.getCachedObjects(), DKBansPlayer::getUniqueId));
+        System.out.println("---");
         DKBansPlayer player1 = players.get(player0 -> player0.getUniqueId().equals(player.getUniqueId()));
         if(player1 == null) {
             player1 = new DefaultDKBansPlayer(player.getUniqueId(), player.getName());
