@@ -25,7 +25,9 @@ import net.pretronic.dkbans.api.player.DKBansPlayerManager;
 import net.pretronic.dkbans.common.player.DefaultDKBansPlayer;
 import net.pretronic.libraries.caching.ArrayCache;
 import net.pretronic.libraries.caching.Cache;
+import net.pretronic.libraries.caching.CacheQuery;
 import net.pretronic.libraries.utility.Iterators;
+import net.pretronic.libraries.utility.Validate;
 import org.mcnative.common.McNative;
 import org.mcnative.common.player.MinecraftPlayer;
 
@@ -40,28 +42,48 @@ public class MinecraftPlayerManager implements DKBansPlayerManager {
         this.players = new ArrayCache<>();
         this.players.setMaxSize(1024);
         this.players.setExpireAfterAccess(10, TimeUnit.MINUTES);
+        this.players.registerQuery("get", new PlayerGetter());
     }
 
     @Override
     public DKBansPlayer getPlayer(UUID uniqueId) {
-        return getPlayer(McNative.getInstance().getPlayerManager().getPlayer(uniqueId));
+        Validate.notNull(uniqueId);
+        System.out.println("getPlayer:"+uniqueId);
+        System.out.println(Iterators.map(players.getCachedObjects(), DKBansPlayer::getUniqueId));
+        System.out.println("---");
+        return this.players.get("get", uniqueId);
     }
 
     @Override
     public DKBansPlayer getPlayer(String name) {
-        return getPlayer(McNative.getInstance().getPlayerManager().getPlayer(name));
-    }
-
-    public DKBansPlayer getPlayer(MinecraftPlayer player){//@Todo temporary
-        if(player == null) return null;
-        System.out.println("getPlayer:"+player.getUniqueId());
+        Validate.notNull(name);
+        System.out.println("getPlayer:"+name);
         System.out.println(Iterators.map(players.getCachedObjects(), DKBansPlayer::getUniqueId));
         System.out.println("---");
-        DKBansPlayer player1 = players.get(player0 -> player0.getUniqueId().equals(player.getUniqueId()));
-        if(player1 == null) {
-            player1 = new DefaultDKBansPlayer(player.getUniqueId(), player.getName());
-            this.players.insert(player1);
+        return this.players.get("get", name);
+    }
+
+    private static class PlayerGetter implements CacheQuery<DKBansPlayer> {
+
+        @Override
+        public boolean check(DKBansPlayer player, Object[] objects) {
+            Object identifier = objects[0];
+            if(identifier instanceof String) return player.getName().equalsIgnoreCase((String) identifier);
+            return player.getUniqueId().equals(identifier);
         }
-        return player1;
+
+        @Override
+        public void validate(Object[] identifiers) {
+            Validate.isTrue(identifiers.length == 1 && (identifiers[0] instanceof UUID || identifiers[0] instanceof String));
+        }
+
+        @Override
+        public DKBansPlayer load(Object[] identifiers) {
+            Object identifier = identifiers[0];
+            MinecraftPlayer player;
+            if(identifier instanceof String) player = McNative.getInstance().getPlayerManager().getPlayer((String) identifier);
+            else player = McNative.getInstance().getPlayerManager().getPlayer((UUID) identifier);
+            return new DefaultDKBansPlayer(player.getUniqueId(), player.getName());
+        }
     }
 }
