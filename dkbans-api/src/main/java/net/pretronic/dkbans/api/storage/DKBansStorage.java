@@ -129,9 +129,9 @@ public interface DKBansStorage {
 
     PlayerReport createPlayerReport(DKBansPlayer player, ReportState state);
 
-    PlayerReportEntry createPlayerReportEntry(PlayerReport report, DKBansExecutor reporter, ReportTemplate template, DKBansScope scope);
+    PlayerReportEntry createPlayerReportEntry(PlayerReport report, DKBansExecutor reporter, ReportTemplate template, String serverName, UUID serverId);
 
-    PlayerReportEntry createPlayerReportEntry(PlayerReport report, DKBansExecutor reporter, String reason, DKBansScope scope);
+    PlayerReportEntry createPlayerReportEntry(PlayerReport report, DKBansExecutor reporter, String reason, String serverName, UUID serverId);
 
       /*
     private final PlayerHistoryEntry entry;

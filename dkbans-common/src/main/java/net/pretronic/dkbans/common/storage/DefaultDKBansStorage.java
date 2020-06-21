@@ -486,29 +486,33 @@ public class DefaultDKBansStorage implements DKBansStorage {
     }
 
     @Override//@Todo scope or what?
-    public PlayerReportEntry createPlayerReportEntry(PlayerReport report, DKBansExecutor reporter, ReportTemplate template, DKBansScope scope) {
-        Validate.notNull(report, reporter, template, scope);
+    public PlayerReportEntry createPlayerReportEntry(PlayerReport report, DKBansExecutor reporter, ReportTemplate template, String serverName, UUID serverId) {
+        Validate.notNull(report, reporter, template, serverName, serverId);
         long time = System.currentTimeMillis();
         int id = this.reportEntries.insert()
                 .set("ReportId", report.getId())
                 .set("ReporterId", reporter.getUniqueId())
                 .set("TemplateId", template.getId())
                 .set("Time", time)
+                .set("ServerName", serverName)
+                .set("ServerId", serverId)
                 .executeAndGetGeneratedKeyAsInt("Id");
-        return new DefaultPlayerReportEntry(id, report, reporter, template, null , scope, time, Document.newDocument());
+        return new DefaultPlayerReportEntry(id, report, reporter, template, null , serverName, serverId, time, Document.newDocument());
     }
 
     @Override//@Todo scope or what?
-    public PlayerReportEntry createPlayerReportEntry(PlayerReport report, DKBansExecutor reporter, String reason, DKBansScope scope) {
-        Validate.notNull(report, reporter, scope);
+    public PlayerReportEntry createPlayerReportEntry(PlayerReport report, DKBansExecutor reporter, String reason, String serverName, UUID serverId) {
+        Validate.notNull(report, reporter, serverName, serverId);
         long time = System.currentTimeMillis();
         int id = this.reportEntries.insert()
                 .set("ReportId", report.getId())
                 .set("ReporterId", reporter.getUniqueId())
                 .set("Reason", reason)
                 .set("Time", time)
+                .set("ServerName", serverName)
+                .set("ServerId", serverId)
                 .executeAndGetGeneratedKeyAsInt("Id");
-        return new DefaultPlayerReportEntry(id, report, reporter, null, reason , scope, time, Document.newDocument());
+        return new DefaultPlayerReportEntry(id, report, reporter, null, reason , serverName, serverId, time, Document.newDocument());
     }
 
     private List<PlayerSession> getPlayerSessionsByResult(DKBansPlayer player, QueryResult result) {

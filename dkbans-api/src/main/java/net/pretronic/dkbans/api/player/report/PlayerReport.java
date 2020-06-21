@@ -43,9 +43,9 @@ public interface PlayerReport {
 
     boolean isWatched();
 
-    Collection<DKBansPlayer> getWatchers();
+    DKBansPlayer getWatcher();
 
-    void watch(DKBansPlayer player);
+    void setWatcher(DKBansPlayer player);
 
 
     PlayerHistoryEntry accept(DKBansExecutor executor);

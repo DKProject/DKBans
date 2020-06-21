@@ -13,6 +13,7 @@ import net.pretronic.libraries.utility.Validate;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.UUID;
 
 public class DefaultReportManager implements ReportManager {
 
@@ -28,19 +29,21 @@ public class DefaultReportManager implements ReportManager {
     }
 
     @Override
-    public PlayerReportEntry report(DKBansPlayer executor, DKBansPlayer target, ReportTemplate template, DKBansScope scope) {
+    public PlayerReportEntry report(DKBansPlayer executor, DKBansPlayer target, ReportTemplate template, String serverName, UUID serverId) {
         Validate.notNull(executor, target, template);
         DefaultPlayerReport report = getReport(target);
-        DefaultPlayerReportEntry entry = (DefaultPlayerReportEntry) DKBans.getInstance().getStorage().createPlayerReportEntry(report, executor, template, scope);
+        DefaultPlayerReportEntry entry = (DefaultPlayerReportEntry) DKBans.getInstance().getStorage()
+                .createPlayerReportEntry(report, executor, template, serverName, serverId);
         report.addEntry(entry);
         return entry;
     }
 
     @Override
-    public PlayerReportEntry report(DKBansPlayer executor, DKBansPlayer target, String reason, DKBansScope scope) {
+    public PlayerReportEntry report(DKBansPlayer executor, DKBansPlayer target, String reason, String serverName, UUID serverId) {
         Validate.notNull(executor, target);
         DefaultPlayerReport report = getReport(target);
-        DefaultPlayerReportEntry entry = (DefaultPlayerReportEntry) DKBans.getInstance().getStorage().createPlayerReportEntry(report, executor, reason, scope);
+        DefaultPlayerReportEntry entry = (DefaultPlayerReportEntry) DKBans.getInstance().getStorage()
+                .createPlayerReportEntry(report, executor, reason, serverName, serverId);
         report.addEntry(entry);
         return entry;
     }

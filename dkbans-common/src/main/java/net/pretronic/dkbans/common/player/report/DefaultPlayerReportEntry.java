@@ -8,6 +8,8 @@ import net.pretronic.dkbans.api.template.report.ReportTemplate;
 import net.pretronic.libraries.document.Document;
 import net.pretronic.libraries.utility.Validate;
 
+import java.util.UUID;
+
 public class DefaultPlayerReportEntry implements PlayerReportEntry {
 
     private final int id;
@@ -15,19 +17,21 @@ public class DefaultPlayerReportEntry implements PlayerReportEntry {
     private final DKBansExecutor reporter;
     private final ReportTemplate template;
     private final String reason;
-    private final DKBansScope scope;
+    private final String serverName;
+    private final UUID serverId;
     private final long time;
     private final Document properties;
 
     public DefaultPlayerReportEntry(int id, PlayerReport report, DKBansExecutor reporter, ReportTemplate template, String reason,
-                                    DKBansScope scope, long time, Document properties) {
+                                    String serverName, UUID serverId, long time, Document properties) {
         Validate.notNull(report, reporter);
         this.id = id;
         this.report = report;
         this.reporter = reporter;
         this.template = template;
         this.reason = reason;
-        this.scope = scope;
+        this.serverName = serverName;
+        this.serverId = serverId;
         this.time = time;
         this.properties = properties;
     }
@@ -58,8 +62,13 @@ public class DefaultPlayerReportEntry implements PlayerReportEntry {
     }
 
     @Override
-    public DKBansScope getScope() {
-        return this.scope;
+    public String getServerName() {
+        return this.serverName;
+    }
+
+    @Override
+    public UUID getServerId() {
+        return this.serverId;
     }
 
     @Override

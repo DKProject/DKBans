@@ -173,13 +173,13 @@ public  class DefaultDKBansPlayer implements DKBansPlayer {
     }
 
     @Override
-    public PlayerReportEntry report(DKBansPlayer player, ReportTemplate template, DKBansScope scope) {
-        return DKBans.getInstance().getReportManager().report(this, player, template, scope);
+    public PlayerReportEntry report(DKBansPlayer player, ReportTemplate template) {
+        return DKBans.getInstance().getReportManager().report(this, player, template, "none", UUID.randomUUID());//@Todo set current server/id
     }
 
     @Override
-    public PlayerReportEntry report(DKBansPlayer player, String reason, DKBansScope scope) {
-        return DKBans.getInstance().getReportManager().report(this, player, reason, scope);
+    public PlayerReportEntry report(DKBansPlayer player, String reason) {
+        return DKBans.getInstance().getReportManager().report(this, player, reason, "none", UUID.randomUUID());//@Todo set current server/id
     }
 
     @Override

@@ -10,7 +10,6 @@ import net.pretronic.libraries.utility.Validate;
 import net.pretronic.libraries.utility.annonations.Internal;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 public class DefaultPlayerReport implements PlayerReport {
@@ -19,18 +18,18 @@ public class DefaultPlayerReport implements PlayerReport {
     private final DKBansPlayer player;
     private ReportState state;
     private final List<PlayerReportEntry> entries;
-    private final Collection<DKBansPlayer> watchers;
+    private DKBansPlayer watcher;
 
-    public DefaultPlayerReport(int id, DKBansPlayer player, ReportState state, List<PlayerReportEntry> entries, Collection<DKBansPlayer> watchers) {
+    public DefaultPlayerReport(int id, DKBansPlayer player, ReportState state, List<PlayerReportEntry> entries, DKBansPlayer watcher) {
         this.id = id;
         this.player = player;
         this.state = state;
         this.entries = entries;
-        this.watchers = watchers;
+        this.watcher = watcher;
     }
 
     public DefaultPlayerReport(int id, DKBansPlayer player, ReportState state) {
-        this(id, player, state, new ArrayList<>(), new ArrayList<>());
+        this(id, player, state, new ArrayList<>(), null);
     }
 
     @Override
@@ -61,17 +60,17 @@ public class DefaultPlayerReport implements PlayerReport {
 
     @Override
     public boolean isWatched() {
-        return !this.watchers.isEmpty();
+        return this.watcher != null;
     }
 
     @Override
-    public Collection<DKBansPlayer> getWatchers() {
-        return this.watchers;
+    public DKBansPlayer getWatcher() {
+        return this.watcher;
     }
 
     @Override
-    public void watch(DKBansPlayer player) {
-        this.watchers.add(player);
+    public void setWatcher(DKBansPlayer player) {
+        this.watcher = player;
         //@Todo teleport player
     }
 

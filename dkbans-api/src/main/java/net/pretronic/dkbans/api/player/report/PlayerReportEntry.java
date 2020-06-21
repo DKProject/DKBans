@@ -24,6 +24,8 @@ import net.pretronic.dkbans.api.DKBansScope;
 import net.pretronic.dkbans.api.template.report.ReportTemplate;
 import net.pretronic.libraries.document.Document;
 
+import java.util.UUID;
+
 public interface PlayerReportEntry {
 
     int getId();
@@ -36,7 +38,9 @@ public interface PlayerReportEntry {
 
     String getReason();
 
-    DKBansScope getScope();
+    String getServerName();
+
+    UUID getServerId();
 
     long getTime();
 

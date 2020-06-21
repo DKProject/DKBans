@@ -96,17 +96,11 @@ public interface DKBansPlayer extends DKBansExecutor {
     PlayerReport getReport();
 
 
-    default PlayerReportEntry report(DKBansPlayer player, ReportTemplate template){
-        return report(player,template,getCurrentScope());
-    }
 
-    PlayerReportEntry report(DKBansPlayer player, ReportTemplate template, DKBansScope scope);
+    PlayerReportEntry report(DKBansPlayer player, ReportTemplate template);
 
-    default PlayerReportEntry report(DKBansPlayer player,String reason){
-        return report(player,reason,getCurrentScope());
-    }
 
-    PlayerReportEntry report(DKBansPlayer player,String reason, DKBansScope scope);
+    PlayerReportEntry report(DKBansPlayer player,String reason);
 
 
     void startSession(String currentName, InetAddress address, String country, String region,
