@@ -35,6 +35,7 @@ import net.pretronic.dkbans.api.player.session.PlayerSession;
 import net.pretronic.dkbans.api.player.session.PlayerSessionList;
 import net.pretronic.dkbans.api.template.Template;
 import net.pretronic.dkbans.api.template.punishment.PunishmentTemplate;
+import net.pretronic.dkbans.api.template.report.ReportTemplate;
 import net.pretronic.dkbans.api.template.unpunishment.UnPunishmentTemplate;
 import net.pretronic.libraries.utility.annonations.Nullable;
 
@@ -96,17 +97,17 @@ public interface DKBansPlayer extends DKBansExecutor {
     PlayerReport getReport();
 
 
-    default PlayerReportEntry report(DKBansExecutor player, Template template){
+    default PlayerReportEntry report(DKBansPlayer player, ReportTemplate template){
         return report(player,template,getCurrentScope());
     }
 
-    PlayerReportEntry report(DKBansExecutor player, Template template, DKBansScope scope);
+    PlayerReportEntry report(DKBansPlayer player, ReportTemplate template, DKBansScope scope);
 
-    default PlayerReportEntry report(DKBansExecutor player,String reason){
+    default PlayerReportEntry report(DKBansPlayer player,String reason){
         return report(player,reason,getCurrentScope());
     }
 
-    PlayerReportEntry report(DKBansExecutor player,String reason, DKBansScope scope);
+    PlayerReportEntry report(DKBansPlayer player,String reason, DKBansScope scope);
 
 
     void startSession(String currentName, InetAddress address, String country, String region,

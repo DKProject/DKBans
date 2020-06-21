@@ -20,9 +20,12 @@
 package net.pretronic.dkbans.common.player.note;
 
 import net.pretronic.dkbans.api.DKBans;
+import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.note.PlayerNote;
 import net.pretronic.dkbans.api.player.note.PlayerNoteList;
+import net.pretronic.dkbans.api.player.note.PlayerNoteType;
+import net.pretronic.libraries.utility.Validate;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -82,5 +85,14 @@ public class DefaultPlayerNoteList implements PlayerNoteList {
     @Override
     public List<PlayerNote> getBetween(long startTime, long endTime) {
         return DKBans.getInstance().getStorage().getBetweenPlayerNotes(player, startTime, endTime);
+    }
+
+
+    @Override
+    public PlayerNote createNote(DKBansExecutor creator, String message, PlayerNoteType type) {
+        Validate.notNull(creator,message,type);
+
+        int id = DKBans.getInstance().getStorage().createPlayerNote(this.player.getUniqueId(), creator.getUniqueId(), type, message);
+        return new DefaultPlayerNote(id,type,System.currentTimeMillis(),message,creator);
     }
 }

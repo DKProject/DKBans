@@ -17,7 +17,7 @@ templates:
       1:
         type: WARN
         kick: true
-        banId: 10
+        targetPunishment: ban@Proocation
       2:
         type: MUTE
         scopeType: SERVER_GROUP

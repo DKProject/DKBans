@@ -36,11 +36,11 @@ public class DefaultReportTemplate extends DefaultTemplate implements ReportTemp
         if(targetTemplate == null && targetTemplateGroupName != null && targetTemplateName != null) {
             TemplateGroup templateGroup = DKBans.getInstance().getTemplateManager().getTemplateGroup(targetTemplateGroupName);
             if(templateGroup == null) {
-                return null;//@Todo maybe fallback punishment template
+                return null;
             }
             Template template = templateGroup.getTemplate(targetTemplateName);
             if(!(template instanceof PunishmentTemplate)) {
-                return null;//@Todo maybe fallback punishment template
+                return null;
             }
             this.targetTemplate = (PunishmentTemplate) template;
         }

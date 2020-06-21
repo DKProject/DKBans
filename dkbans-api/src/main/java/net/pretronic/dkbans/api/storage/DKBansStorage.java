@@ -19,9 +19,14 @@
 
 package net.pretronic.dkbans.api.storage;
 
+import net.pretronic.dkbans.api.DKBansExecutor;
+import net.pretronic.dkbans.api.DKBansScope;
 import net.pretronic.dkbans.api.filter.Filter;
 import net.pretronic.dkbans.api.filter.operation.FilterOperation;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
+import net.pretronic.dkbans.api.player.report.PlayerReport;
+import net.pretronic.dkbans.api.player.report.PlayerReportEntry;
+import net.pretronic.dkbans.api.player.report.ReportState;
 import net.pretronic.dkbans.api.player.session.PlayerSession;
 import net.pretronic.dkbans.api.player.history.*;
 import net.pretronic.dkbans.api.player.note.PlayerNote;
@@ -29,6 +34,7 @@ import net.pretronic.dkbans.api.player.note.PlayerNoteType;
 import net.pretronic.dkbans.api.template.TemplateCategory;
 import net.pretronic.dkbans.api.template.TemplateGroup;
 import net.pretronic.dkbans.api.template.TemplateType;
+import net.pretronic.dkbans.api.template.report.ReportTemplate;
 import net.pretronic.libraries.utility.map.Pair;
 
 import java.util.Collection;
@@ -118,6 +124,15 @@ public interface DKBansStorage {
     int createFilter(String area, String operation, String value);
 
     void deleteFilter(int id);
+
+
+    //Report
+
+    PlayerReport createPlayerReport(DKBansPlayer player, ReportState state);
+
+    PlayerReportEntry createPlayerReportEntry(PlayerReport report, DKBansExecutor reporter, ReportTemplate template, DKBansScope scope);
+
+    PlayerReportEntry createPlayerReportEntry(PlayerReport report, DKBansExecutor reporter, String reason, DKBansScope scope);
 
       /*
     private final PlayerHistoryEntry entry;

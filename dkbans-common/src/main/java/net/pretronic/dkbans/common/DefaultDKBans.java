@@ -29,6 +29,7 @@ import net.pretronic.dkbans.api.storage.DKBansStorage;
 import net.pretronic.dkbans.api.support.SupportTicketManager;
 import net.pretronic.dkbans.common.filter.DefaultFilterManager;
 import net.pretronic.dkbans.common.player.history.DefaultPlayerHistoryManager;
+import net.pretronic.dkbans.common.player.report.DefaultReportManager;
 import net.pretronic.dkbans.common.storage.DefaultDKBansStorage;
 import net.pretronic.dkbans.common.template.DefaultTemplateManager;
 import net.pretronic.libraries.logging.PretronicLogger;
@@ -48,7 +49,7 @@ public class DefaultDKBans extends DKBans {
         this.logger = logger;
         this.storage = new DefaultDKBansStorage(this, database);
         this.historyManager = new DefaultPlayerHistoryManager(this);
-        this.reportManager = null;
+        this.reportManager = new DefaultReportManager();
         this.ticketManager = null;
         this.broadcastManager = null;
         this.filterManager = new DefaultFilterManager();

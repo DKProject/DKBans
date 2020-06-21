@@ -112,9 +112,8 @@ public class PlayerListener {
 
     @Listener//@Todo async
     public void onPlayerDisconnect(MinecraftPlayerLogoutEvent event) {
-        System.out.println("onDisconnect");
         event.getPlayer().getAs(DKBansPlayer.class).finishSession(event.getOnlinePlayer().getServer().getName(),
-                event.getOnlinePlayer().getServer().getIdentifier().getUniqueId());
+                UUID.randomUUID());//event.getOnlinePlayer().getServer().getIdentifier().getUniqueId() @Todo change if method is implemented
     }
 
     @Listener(priority = EventPriority.HIGHEST)//@Todo async

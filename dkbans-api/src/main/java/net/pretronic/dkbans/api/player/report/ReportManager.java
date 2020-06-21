@@ -19,10 +19,17 @@
 
 package net.pretronic.dkbans.api.player.report;
 
+import net.pretronic.dkbans.api.DKBansScope;
+import net.pretronic.dkbans.api.player.DKBansPlayer;
+import net.pretronic.dkbans.api.template.report.ReportTemplate;
+
 import java.util.Collection;
 
 public interface ReportManager {
 
     Collection<PlayerReport> getOpenReports();
 
+    PlayerReportEntry report(DKBansPlayer executor, DKBansPlayer target, ReportTemplate template, DKBansScope scope);
+
+    PlayerReportEntry report(DKBansPlayer executor, DKBansPlayer target, String reason, DKBansScope scope);
 }

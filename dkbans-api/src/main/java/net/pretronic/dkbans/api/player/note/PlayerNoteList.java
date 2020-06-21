@@ -19,9 +19,11 @@
 
 package net.pretronic.dkbans.api.player.note;
 
+import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.Pagination;
 
 public interface PlayerNoteList extends Pagination<PlayerNote> {
 
+    PlayerNote createNote(DKBansExecutor creator, String message, PlayerNoteType type);
 
 }

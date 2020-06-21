@@ -55,6 +55,16 @@ public class DefaultWarnPunishmentTemplateEntry extends DefaultPunishmentTemplat
         @Override
         public PunishmentTemplateEntry create(Document data) {
             //@Todo link to ban template
+            PunishmentTemplate template = null;
+            if(data.contains("targetPunishment")) {
+                String targetPunishment = data.getString("targetPunishment");
+
+                String templateGroup = null;
+                String templateName = null;
+                if(targetPunishment.contains("@")) {
+                    String[] splitted = targetPunishment.split("@");
+                }
+            }
             return new DefaultWarnPunishmentTemplateEntry(DefaultDKBansScope.fromData(data), data.getBoolean("kick"), null);
         }
 

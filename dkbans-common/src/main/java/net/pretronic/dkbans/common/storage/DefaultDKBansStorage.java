@@ -30,26 +30,35 @@ import net.pretronic.databasequery.api.query.result.QueryResultEntry;
 import net.pretronic.databasequery.api.query.type.FindQuery;
 import net.pretronic.databasequery.api.query.type.InsertQuery;
 import net.pretronic.dkbans.api.DKBans;
+import net.pretronic.dkbans.api.DKBansExecutor;
+import net.pretronic.dkbans.api.DKBansScope;
 import net.pretronic.dkbans.api.filter.Filter;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
+import net.pretronic.dkbans.api.player.report.PlayerReport;
+import net.pretronic.dkbans.api.player.report.PlayerReportEntry;
+import net.pretronic.dkbans.api.player.report.ReportState;
 import net.pretronic.dkbans.api.player.session.PlayerSession;
 import net.pretronic.dkbans.api.player.history.*;
 import net.pretronic.dkbans.api.player.note.PlayerNote;
 import net.pretronic.dkbans.api.player.note.PlayerNoteType;
 import net.pretronic.dkbans.api.storage.DKBansStorage;
 import net.pretronic.dkbans.api.template.*;
+import net.pretronic.dkbans.api.template.report.ReportTemplate;
 import net.pretronic.dkbans.common.DefaultDKBansScope;
 import net.pretronic.dkbans.common.filter.DefaultFilter;
 import net.pretronic.dkbans.common.player.history.DefaultPlayerHistoryEntry;
 import net.pretronic.dkbans.common.player.history.DefaultPlayerHistoryEntrySnapshot;
 import net.pretronic.dkbans.common.player.history.DefaultPlayerHistoryType;
 import net.pretronic.dkbans.common.player.note.DefaultPlayerNote;
+import net.pretronic.dkbans.common.player.report.DefaultPlayerReport;
+import net.pretronic.dkbans.common.player.report.DefaultPlayerReportEntry;
 import net.pretronic.dkbans.common.player.session.DefaultPlayerSession;
 import net.pretronic.dkbans.common.template.DefaultTemplate;
 import net.pretronic.dkbans.common.template.DefaultTemplateCategory;
 import net.pretronic.dkbans.common.template.DefaultTemplateGroup;
 import net.pretronic.libraries.document.Document;
 import net.pretronic.libraries.document.type.DocumentFileType;
+import net.pretronic.libraries.utility.Validate;
 import net.pretronic.libraries.utility.map.Pair;
 import net.pretronic.libraries.utility.reflect.TypeReference;
 
@@ -89,22 +98,26 @@ public class DefaultDKBansStorage implements DKBansStorage {
         this.dkBans = dkBans;
         this.database = database;
         this.playerSessions = createPlayerSessionsCollection();
-        this.playerChatLog = createPlayerChatLogCollection();
         this.playerSettings = createPlayerSettingsCollection();
         this.playerNotes = createPlayerNotesCollection();
+
         this.historyType = createHistoryTypeCollection();
+
+        this.templateCategories = createTemplateCategoriesCollection();
+        this.templateGroups = createTemplateGroupsCollection();
+        this.template = createTemplateCollection();
+
+
         this.history = createHistoryCollection();
         this.historyVersion = createHistoryVersionCollection();
         this.historyNotes = createHistoryNotesCollection();
         this.reports = createReportsCollection();
         this.reportEntries = createReportEntriesCollection();
         this.ipAddressBlacklist = createIpAddressBlacklistCollection();
-        this.templateCategories = createTemplateCategoriesCollection();
-        this.templateGroups = createTemplateGroupsCollection();
 
-        this.template = createTemplateCollection();
 
         this.filter = createFilterCollection();
+        this.playerChatLog = createPlayerChatLogCollection();
 
     }
 
@@ -463,6 +476,42 @@ public class DefaultDKBansStorage implements DKBansStorage {
         filter.delete().where("Id",id).execute();
     }
 
+    @Override
+    public PlayerReport createPlayerReport(DKBansPlayer player, ReportState state) {
+        Validate.notNull(player, state);
+        int id = this.reports.insert()
+                .set("PlayerId", player.getUniqueId())
+                .set("State", state.toString())
+                .executeAndGetGeneratedKeyAsInt("Id");
+        return new DefaultPlayerReport(id, player, state);
+    }
+
+    @Override//@Todo scope or what?
+    public PlayerReportEntry createPlayerReportEntry(PlayerReport report, DKBansExecutor reporter, ReportTemplate template, DKBansScope scope) {
+        Validate.notNull(report, reporter, template, scope);
+        long time = System.currentTimeMillis();
+        int id = this.reportEntries.insert()
+                .set("ReportId", report.getId())
+                .set("ReporterId", reporter.getUniqueId())
+                .set("TemplateId", template.getId())
+                .set("Time", time)
+                .executeAndGetGeneratedKeyAsInt("Id");
+        return new DefaultPlayerReportEntry(id, report, reporter, template, null , scope, time, Document.newDocument());
+    }
+
+    @Override//@Todo scope or what?
+    public PlayerReportEntry createPlayerReportEntry(PlayerReport report, DKBansExecutor reporter, String reason, DKBansScope scope) {
+        Validate.notNull(report, reporter, scope);
+        long time = System.currentTimeMillis();
+        int id = this.reportEntries.insert()
+                .set("ReportId", report.getId())
+                .set("ReporterId", reporter.getUniqueId())
+                .set("Reason", reason)
+                .set("Time", time)
+                .executeAndGetGeneratedKeyAsInt("Id");
+        return new DefaultPlayerReportEntry(id, report, reporter, null, reason , scope, time, Document.newDocument());
+    }
+
     private List<PlayerSession> getPlayerSessionsByResult(DKBansPlayer player, QueryResult result) {
         List<PlayerSession> sessions = new ArrayList<>();
         result.loadIn(sessions, entry -> getPlayerSessionByResultEntry(player, entry));
@@ -599,7 +648,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 .field("Time", DataType.LONG, FieldOption.NOT_NULL)
                 .field("ServerName", DataType.STRING, FieldOption.NOT_NULL)
                 .field("ServerId", DataType.UUID, FieldOption.NOT_NULL)
-                .field("FilterId", DataType.INTEGER)//@Todo foreign key filter collection
+                .field("FilterId", DataType.INTEGER, ForeignKey.of(this.filter, "Id"))
                 .create();
     }
 
@@ -619,7 +668,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 .field("SenderId", DataType.UUID, FieldOption.NOT_NULL)
                 .field("Time", DataType.LONG, FieldOption.NOT_NULL)
                 .field("Message", DataType.STRING, FieldOption.NOT_NULL)
-                .field("TypeId", DataType.INTEGER, FieldOption.NOT_NULL)//@Todo maybe id
+                .field("TypeId", DataType.INTEGER, FieldOption.NOT_NULL)
                 .create();
     }
 
@@ -653,9 +702,9 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 .field("Active", DataType.BOOLEAN, FieldOption.NOT_NULL)
                 .field("Properties", DataType.LONG_TEXT, -1, "{}", FieldOption.NOT_NULL)
                 .field("HistoryTypeId", DataType.INTEGER, ForeignKey.of(this.historyType, "Id"))
-                .field("PunishmentType", DataType.STRING, FieldOption.NOT_NULL)//@Todo foreign key maybe / save as string
-                .field("TemplateId", DataType.INTEGER)//@Todo add foreign key
-                .field("RevokeTemplateId", DataType.INTEGER)//@Todo add foreign key
+                .field("PunishmentType", DataType.STRING, FieldOption.NOT_NULL)
+                .field("TemplateId", DataType.INTEGER, ForeignKey.of(this.template, "Id"))
+                .field("RevokeTemplateId", DataType.INTEGER, ForeignKey.of(this.template, "Id"))
                 .field("RevokeReason", DataType.STRING)
                 .field("ModifiedTime", DataType.LONG)//@Todo nullAble ?
                 .field("ModifiedBy", DataType.UUID)//@Todo nullAble ?
@@ -670,7 +719,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 .field("SenderId", DataType.UUID, FieldOption.NOT_NULL)
                 .field("Time", DataType.LONG, FieldOption.NOT_NULL)
                 .field("Message", DataType.STRING, FieldOption.NOT_NULL)
-                .field("Type", DataType.STRING, FieldOption.NOT_NULL)//@Todo maybe id
+                .field("Type", DataType.STRING, FieldOption.NOT_NULL)
                 .create();
     }
 
@@ -678,8 +727,8 @@ public class DefaultDKBansStorage implements DKBansStorage {
         return database.createCollection("dkbans_reports")
                 .field("Id", DataType.INTEGER, FieldOption.PRIMARY_KEY, FieldOption.AUTO_INCREMENT)
                 .field("PlayerId", DataType.UUID, FieldOption.NOT_NULL)
-                .field("WatcherId", DataType.UUID, FieldOption.NOT_NULL)
-                .field("State", DataType.STRING, FieldOption.NOT_NULL)//@Todo maybe id
+                .field("WatcherId", DataType.UUID)
+                .field("State", DataType.STRING, FieldOption.NOT_NULL)
                 .create();
     }
 
@@ -688,8 +737,8 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 .field("Id", DataType.INTEGER, FieldOption.PRIMARY_KEY, FieldOption.AUTO_INCREMENT)
                 .field("ReportId", DataType.INTEGER, ForeignKey.of(this.reports, "Id"))
                 .field("ReporterId", DataType.UUID, FieldOption.NOT_NULL)
-                .field("TemplateId", DataType.INTEGER)//@Todo add foreign key
-                .field("Reason", DataType.STRING, FieldOption.NOT_NULL)
+                .field("TemplateId", DataType.INTEGER, ForeignKey.of(this.template, "Id"))
+                .field("Reason", DataType.STRING)
                 .field("ServerName", DataType.STRING, FieldOption.NOT_NULL)
                 .field("ServerId", DataType.UUID, FieldOption.NOT_NULL)
                 .field("Time", DataType.LONG, FieldOption.NOT_NULL)
@@ -704,8 +753,8 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 .field("Reason", DataType.STRING, FieldOption.NOT_NULL)
                 .field("Timeout", DataType.LONG, FieldOption.NOT_NULL)
                 .field("ExecutorId", DataType.UUID, FieldOption.NOT_NULL)
-                .field("TemplateId", DataType.INTEGER)//@Todo add foreign key
-                .field("Type", DataType.STRING, FieldOption.NOT_NULL)//@Todo maybe id
+                .field("TemplateId", DataType.INTEGER, ForeignKey.of(this.template, "Id"))
+                .field("Type", DataType.STRING, FieldOption.NOT_NULL)
                 .create();
     }
 

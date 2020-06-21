@@ -21,6 +21,7 @@ package net.pretronic.dkbans.api.player.report;
 
 import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.DKBansScope;
+import net.pretronic.dkbans.api.template.report.ReportTemplate;
 import net.pretronic.libraries.document.Document;
 
 public interface PlayerReportEntry {
@@ -31,7 +32,7 @@ public interface PlayerReportEntry {
 
     DKBansExecutor getReporter();
 
-    //template
+    ReportTemplate getTemplate();
 
     String getReason();
 

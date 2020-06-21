@@ -34,6 +34,7 @@ import net.pretronic.dkbans.api.player.report.PlayerReportEntry;
 import net.pretronic.dkbans.api.player.session.PlayerSessionList;
 import net.pretronic.dkbans.api.template.Template;
 import net.pretronic.dkbans.api.template.punishment.PunishmentTemplate;
+import net.pretronic.dkbans.api.template.report.ReportTemplate;
 import net.pretronic.dkbans.api.template.unpunishment.UnPunishmentTemplate;
 import net.pretronic.dkbans.common.player.history.DefaultPlayerHistory;
 import net.pretronic.dkbans.common.player.history.DefaultPlayerHistoryEntrySnapshotBuilder;
@@ -41,6 +42,7 @@ import net.pretronic.dkbans.common.player.note.DefaultPlayerNote;
 import net.pretronic.dkbans.common.player.note.DefaultPlayerNoteList;
 import net.pretronic.dkbans.common.player.session.DefaultPlayerSession;
 import net.pretronic.dkbans.common.player.session.DefaultPlayerSessionList;
+import net.pretronic.libraries.utility.Iterators;
 import net.pretronic.libraries.utility.Validate;
 
 import java.net.InetAddress;
@@ -55,7 +57,7 @@ public  class DefaultDKBansPlayer implements DKBansPlayer {
     private final PlayerHistory history;
     private final DefaultPlayerSessionList sessionList;
 
-    private final PlayerNoteList noteList;
+    private final DefaultPlayerNoteList noteList;
 
     public DefaultDKBansPlayer(UUID uniqueId, String name) {
         this.uniqueId = uniqueId;
@@ -113,11 +115,7 @@ public  class DefaultDKBansPlayer implements DKBansPlayer {
 
     @Override
     public PlayerNote createNote(DKBansExecutor creator, String message, PlayerNoteType type) {
-        Validate.notNull(creator,message,type);
-        //@Todo create to storage
-        int id = -1;
-        PlayerNote note = new DefaultPlayerNote(id,type,System.currentTimeMillis(),message,creator);
-        throw new UnsupportedOperationException();
+        return this.noteList.createNote(creator, message, type);
     }
 
     @Override
@@ -168,22 +166,22 @@ public  class DefaultDKBansPlayer implements DKBansPlayer {
 
     @Override
     public boolean hasReport() {
-        return false;
+        return getReport() != null;
     }
 
     @Override
     public PlayerReport getReport() {
-         throw new UnsupportedOperationException();
+        return Iterators.findOne(DKBans.getInstance().getReportManager().getOpenReports(), report -> report.getPlayer().getUniqueId().equals(getUniqueId()));
     }
 
     @Override
-    public PlayerReportEntry report(DKBansExecutor player, Template template, DKBansScope scope) {
-         throw new UnsupportedOperationException();
+    public PlayerReportEntry report(DKBansPlayer player, ReportTemplate template, DKBansScope scope) {
+        return DKBans.getInstance().getReportManager().report(this, player, template, scope);
     }
 
     @Override
-    public PlayerReportEntry report(DKBansExecutor player, String reason, DKBansScope scope) {
-         throw new UnsupportedOperationException();
+    public PlayerReportEntry report(DKBansPlayer player, String reason, DKBansScope scope) {
+        return DKBans.getInstance().getReportManager().report(this, player, reason, scope);
     }
 
     @Override
@@ -226,5 +224,10 @@ public  class DefaultDKBansPlayer implements DKBansPlayer {
     @Override
     public DKBansPlayer getPlayer() {
          return this;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return o instanceof DKBansPlayer && ((DKBansPlayer)o).getUniqueId().equals(getUniqueId());
     }
 }
