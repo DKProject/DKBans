@@ -41,7 +41,7 @@ public class MinecraftPlayerManager implements DKBansPlayerManager {
     public MinecraftPlayerManager() {
         this.players = new ArrayCache<>();
         this.players.setMaxSize(1024);
-        this.players.setExpireAfterAccess(10, TimeUnit.MINUTES);
+        //this.players.setExpireAfterAccess(10, TimeUnit.MINUTES);
         this.players.registerQuery("get", new PlayerGetter());
     }
 
