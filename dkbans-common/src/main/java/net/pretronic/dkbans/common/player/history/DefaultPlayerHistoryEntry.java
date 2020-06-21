@@ -20,7 +20,6 @@
 package net.pretronic.dkbans.common.player.history;
 
 import net.pretronic.dkbans.api.DKBansExecutor;
-import net.pretronic.dkbans.api.player.session.PlayerSession;
 import net.pretronic.dkbans.api.player.history.PlayerHistory;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryEntry;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryEntrySnapshot;
@@ -28,6 +27,7 @@ import net.pretronic.dkbans.api.player.history.PlayerHistoryEntrySnapshotBuilder
 import net.pretronic.dkbans.api.player.note.PlayerNote;
 import net.pretronic.dkbans.api.player.note.PlayerNoteList;
 import net.pretronic.dkbans.api.player.note.PlayerNoteType;
+import net.pretronic.dkbans.api.player.session.PlayerSession;
 import net.pretronic.libraries.utility.annonations.Internal;
 
 import java.util.Iterator;

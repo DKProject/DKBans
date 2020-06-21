@@ -19,7 +19,6 @@
 
 package net.pretronic.dkbans.api.template;
 
-import net.pretronic.dkbans.api.DKBansScope;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryType;
 import net.pretronic.libraries.document.Document;
 import net.pretronic.libraries.utility.Validate;

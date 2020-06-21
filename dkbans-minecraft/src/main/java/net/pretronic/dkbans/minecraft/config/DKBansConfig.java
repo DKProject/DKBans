@@ -20,11 +20,9 @@
 package net.pretronic.dkbans.minecraft.config;
 
 import net.pretronic.dkbans.api.DKBans;
-import net.pretronic.dkbans.api.DKBansScope;
 import net.pretronic.dkbans.api.player.history.CalculationType;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryType;
 import net.pretronic.dkbans.api.template.*;
-import net.pretronic.dkbans.common.DefaultDKBansScope;
 import net.pretronic.dkbans.common.template.DefaultTemplateGroup;
 import net.pretronic.libraries.document.Document;
 import net.pretronic.libraries.document.annotations.DocumentKey;

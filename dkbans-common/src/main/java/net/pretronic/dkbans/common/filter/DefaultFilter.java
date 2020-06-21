@@ -23,7 +23,6 @@ import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.filter.Filter;
 import net.pretronic.dkbans.api.filter.operation.FilterOperation;
 import net.pretronic.dkbans.api.filter.operation.FilterOperationFactory;
-import net.pretronic.libraries.utility.Validate;
 
 public class DefaultFilter implements Filter {
 

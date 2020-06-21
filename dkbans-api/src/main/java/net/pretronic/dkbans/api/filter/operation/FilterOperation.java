@@ -19,8 +19,6 @@
 
 package net.pretronic.dkbans.api.filter.operation;
 
-import net.pretronic.libraries.utility.annonations.Internal;
-
 public interface FilterOperation {
 
     String getName();

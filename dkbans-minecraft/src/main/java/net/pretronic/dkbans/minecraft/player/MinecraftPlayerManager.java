@@ -19,7 +19,6 @@
 
 package net.pretronic.dkbans.minecraft.player;
 
-import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.DKBansPlayerManager;
 import net.pretronic.dkbans.common.player.DefaultDKBansPlayer;
@@ -32,7 +31,6 @@ import org.mcnative.common.McNative;
 import org.mcnative.common.player.MinecraftPlayer;
 
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 public class MinecraftPlayerManager implements DKBansPlayerManager {
 

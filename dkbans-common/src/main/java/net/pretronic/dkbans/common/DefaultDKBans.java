@@ -22,7 +22,6 @@ package net.pretronic.dkbans.common;
 import net.pretronic.databasequery.api.Database;
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.broadcast.BroadcastManager;
-import net.pretronic.dkbans.api.filter.FilterManager;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryManager;
 import net.pretronic.dkbans.api.player.report.ReportManager;
 import net.pretronic.dkbans.api.storage.DKBansStorage;

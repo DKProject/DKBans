@@ -20,7 +20,6 @@
 package net.pretronic.dkbans.common.template.punishment;
 
 import net.pretronic.dkbans.api.DKBansExecutor;
-import net.pretronic.dkbans.api.DKBansScope;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.history.CalculationType;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryEntrySnapshotBuilder;
