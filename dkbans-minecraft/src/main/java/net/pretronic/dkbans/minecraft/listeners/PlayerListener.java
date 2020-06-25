@@ -26,6 +26,7 @@ import net.pretronic.dkbans.api.filter.FilterManager;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryEntry;
 import net.pretronic.dkbans.api.player.history.PunishmentType;
+import net.pretronic.dkbans.minecraft.PlayerSettingsKey;
 import net.pretronic.dkbans.minecraft.config.DKBansConfig;
 import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.libraries.event.EventPriority;
@@ -88,14 +89,14 @@ public class PlayerListener {
         DKBansPlayer dkBansPlayer = player.getAs(DKBansPlayer.class);
 
         if(DKBansConfig.PLAYER_ON_JOIN_INFO_TEAMCHAT){
-            boolean teamChat = event.getPlayer().hasSetting("DKBans","TeamChatLogin",true);
+            boolean teamChat = event.getPlayer().hasSetting("DKBans",PlayerSettingsKey.TEAM_CHAT_LOGIN,true);
             player.sendMessage(Messages.STAFF_STATUS_NOW,VariableSet.create()
                     .add("status",teamChat)
                     .add("statusFormatted", teamChat ? Messages.STAFF_STATUS_LOGIN :  Messages.STAFF_STATUS_LOGOUT));
         }
 
         if(DKBansConfig.PLAYER_ON_JOIN_INFO_REPORT){
-            boolean report = event.getPlayer().hasSetting("DKBans","ReportLogin",true);
+            boolean report = event.getPlayer().hasSetting("DKBans", PlayerSettingsKey.REPORT_CHAT_LOGIN,true);
             player.sendMessage(Messages.STAFF_STATUS_NOW,VariableSet.create()
                     .add("status",report)
                     .add("statusFormatted", report ? Messages.STAFF_STATUS_LOGIN :  Messages.STAFF_STATUS_LOGOUT));

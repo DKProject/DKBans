@@ -98,10 +98,10 @@ public interface DKBansPlayer extends DKBansExecutor {
 
 
 
-    PlayerReportEntry report(DKBansPlayer player, ReportTemplate template);
+    PlayerReportEntry report(DKBansPlayer executor, ReportTemplate template);
 
 
-    PlayerReportEntry report(DKBansPlayer player,String reason);
+    PlayerReportEntry report(DKBansPlayer executor,String reason);
 
 
     void startSession(String currentName, InetAddress address, String country, String region,

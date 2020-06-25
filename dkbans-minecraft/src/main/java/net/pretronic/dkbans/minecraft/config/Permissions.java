@@ -35,4 +35,6 @@ public class Permissions {
     public static final String COMMAND_TEMPLATE = "dkbans.command.template";
 
     public static final String COMMAND_TEAMCHAT_SEND = "dkbans.teamchat.send";
+
+    public static final String COMMAND_REPORT_STUFF = "dkbans.report.stuff";
 }

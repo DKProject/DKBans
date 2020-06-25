@@ -30,6 +30,7 @@ import net.pretronic.dkbans.minecraft.commands.punish.KickCommand;
 import net.pretronic.dkbans.minecraft.commands.punish.PermaPunishCommand;
 import net.pretronic.dkbans.minecraft.commands.punish.TempPunishCommand;
 import net.pretronic.dkbans.minecraft.commands.punish.TemplatePunishCommand;
+import net.pretronic.dkbans.minecraft.commands.report.ReportCommand;
 import net.pretronic.dkbans.minecraft.config.CommandConfig;
 import net.pretronic.dkbans.minecraft.config.DKBansConfig;
 import net.pretronic.dkbans.minecraft.listeners.PlayerListener;
@@ -99,6 +100,14 @@ public class DKBansPlugin extends MinecraftPlugin {
                 getLogger().warn("Configured template group "+entry.getKey()+" does not exist");
             }else{
                 getRuntime().getLocal().getCommandManager().registerCommand(new TemplatePunishCommand(this,entry.getValue(),group));
+            }
+        }
+        for (Map.Entry<String, CommandConfiguration> entry : CommandConfig.COMMAND_TEMPLATE_REPORT.entrySet()) {
+            TemplateGroup group = dkBans.getTemplateManager().getTemplateGroup(entry.getKey());
+            if(group == null){
+                getLogger().warn("Configured template group "+entry.getKey()+" does not exist");
+            }else{
+                getRuntime().getLocal().getCommandManager().registerCommand(new ReportCommand(this,entry.getValue(),group));
             }
         }
     }

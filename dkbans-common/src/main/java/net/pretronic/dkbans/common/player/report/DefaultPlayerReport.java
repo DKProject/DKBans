@@ -106,6 +106,11 @@ public class DefaultPlayerReport implements PlayerReport {
     }
 
     @Override
+    public PlayerHistoryEntry accept(DKBansExecutor executor, String reason) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public PlayerHistoryEntry accept(DKBansExecutor executor) {
         throw new UnsupportedOperationException();
     }

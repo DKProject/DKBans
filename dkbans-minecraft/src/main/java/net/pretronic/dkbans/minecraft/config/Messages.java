@@ -92,6 +92,22 @@ public class Messages {
 
     public static MessageComponent<?> COMMAND_TEMPLATE_IMPORT = Text.ofMessageKey("dkbans.command.template.import");
 
+    public static MessageComponent<?> COMMAND_REPORT_LOGIN_ALREADY = Text.ofMessageKey("dkbans.command.report.login.already");
+    public static MessageComponent<?> COMMAND_REPORT_LOGIN_SUCCESS = Text.ofMessageKey("dkbans.command.report.login.success");
+
+    public static MessageComponent<?> COMMAND_REPORT_LOGOUT_ALREADY = Text.ofMessageKey("dkbans.command.report.logout.already");
+    public static MessageComponent<?> COMMAND_REPORT_LOGOUT_SUCCESS = Text.ofMessageKey("dkbans.command.report.logout.success");
+
+    public static MessageComponent<?> COMMAND_REPORT_TOGGLE_LOGIN = Text.ofMessageKey("dkbans.command.report.toggle.login");
+    public static MessageComponent<?> COMMAND_REPORT_TOGGLE_LOGOUT = Text.ofMessageKey("dkbans.command.report.toggle.logout");
+
+    public static MessageComponent<?> COMMAND_REPORT_TEMPLATE_NOT_EXIST = Text.ofMessageKey("dkbans.command.report.template.notExist");
+    public static MessageComponent<?> COMMAND_REPORT_ALREADY_REPORTED = Text.ofMessageKey("dkbans.command.report.already.reported");
+    public static MessageComponent<?> COMMAND_REPORT_REPORTED = Text.ofMessageKey("dkbans.command.report.reported");
+    public static MessageComponent<?> COMMAND_REPORT_NO_REASON = Text.ofMessageKey("dkbans.command.report.noReason");
+    public static MessageComponent<?> COMMAND_REPORT_LIST_TEMPLATE = Text.ofMessageKey("dkbans.command.report.listTemplates");
+
+
 
     public static MessageComponent<?> getPunishmentMessage(PlayerHistoryEntrySnapshot snapshot){
         if(snapshot.getPunishmentType() == PunishmentType.BAN){

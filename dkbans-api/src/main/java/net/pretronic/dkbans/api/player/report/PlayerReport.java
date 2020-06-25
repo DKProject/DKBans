@@ -51,6 +51,8 @@ public interface PlayerReport {
     void setWatcher(DKBansPlayer player);
 
 
+    PlayerHistoryEntry accept(DKBansExecutor executor, String reason);
+
     PlayerHistoryEntry accept(DKBansExecutor executor);
 
     void decline(DKBansExecutor executor);

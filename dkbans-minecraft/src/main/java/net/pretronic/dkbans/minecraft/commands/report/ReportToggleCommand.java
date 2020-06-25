@@ -2,7 +2,7 @@
  * (C) Copyright 2020 The DKBans Project (Davide Wietlisbach & Philipp Elvin Friedhoff)
  *
  * @author Philipp Elvin Friedhoff
- * @since 21.06.20, 17:26
+ * @since 21.06.20, 18:52
  * @web %web%
  *
  * The DKBans Project is under the Apache License, version 2.0 (the "License");
@@ -20,8 +20,7 @@
 
 package net.pretronic.dkbans.minecraft.commands.report;
 
-import net.pretronic.dkbans.api.DKBans;
-import net.pretronic.dkbans.api.player.report.PlayerReport;
+import net.pretronic.dkbans.minecraft.PlayerSettingsKey;
 import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.dkbans.minecraft.config.Permissions;
 import net.pretronic.libraries.command.command.BasicCommand;
@@ -29,13 +28,12 @@ import net.pretronic.libraries.command.command.configuration.CommandConfiguratio
 import net.pretronic.libraries.command.sender.CommandSender;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
 import org.mcnative.common.player.MinecraftPlayer;
+import org.mcnative.common.player.PlayerSetting;
 
-import java.util.List;
+public class ReportToggleCommand extends BasicCommand {
 
-public class ReportListCommand extends BasicCommand {
-
-    public ReportListCommand(ObjectOwner owner) {
-        super(owner, CommandConfiguration.newBuilder().name("list").permission(Permissions.COMMAND_REPORT_STUFF).create());
+    public ReportToggleCommand(ObjectOwner owner) {
+        super(owner, CommandConfiguration.newBuilder().name("login").permission(Permissions.COMMAND_REPORT_STUFF).create());
     }
 
     @Override
@@ -44,6 +42,14 @@ public class ReportListCommand extends BasicCommand {
             sender.sendMessage(Messages.ERROR_ONLY_PLAYER);
             return;
         }
-        List<PlayerReport> reports = DKBans.getInstance().getReportManager().getOpenReports();
+        MinecraftPlayer player = (MinecraftPlayer) sender;
+
+        PlayerSetting setting = player.getSetting("DKBans", PlayerSettingsKey.TEAM_CHAT_LOGIN);
+        if(setting.getBooleanValue()) {
+            sender.sendMessage(Messages.COMMAND_REPORT_LOGIN_ALREADY);
+        } else {
+            setting.setValue(true);
+            sender.sendMessage(Messages.COMMAND_REPORT_LOGIN_SUCCESS);
+        }
     }
 }

@@ -107,12 +107,18 @@ public class CommandConfig {
             .create();
 
     public static Map<String,CommandConfiguration> COMMAND_TEMPLATE_PUNISHMENT = new HashMap<>();
+    public static Map<String,CommandConfiguration> COMMAND_TEMPLATE_REPORT = new HashMap<>();
+
 
     static {
         COMMAND_TEMPLATE_PUNISHMENT.put("ban",CommandConfiguration.newBuilder()
                 .name("ban")
                 .aliases("mute")
                 .permission("dkbans.ban")
+                .create());
+        COMMAND_TEMPLATE_REPORT.put("report", CommandConfiguration.newBuilder()
+                .name("report")
+                .permission("dkbans.report")
                 .create());
     }
 }

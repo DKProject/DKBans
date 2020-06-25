@@ -25,11 +25,12 @@ import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.template.report.ReportTemplate;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 public interface ReportManager {
 
-    Collection<PlayerReport> getOpenReports();
+    List<PlayerReport> getOpenReports();
 
     PlayerReportEntry report(DKBansPlayer executor, DKBansPlayer target, ReportTemplate template, String serverName, UUID serverId);
 

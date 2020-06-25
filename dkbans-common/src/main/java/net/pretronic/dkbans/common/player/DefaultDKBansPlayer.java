@@ -174,13 +174,13 @@ public  class DefaultDKBansPlayer implements DKBansPlayer {
     }
 
     @Override
-    public PlayerReportEntry report(DKBansPlayer player, ReportTemplate template) {
-        return DKBans.getInstance().getReportManager().report(this, player, template, "none", UUID.randomUUID());//@Todo set current server/id
+    public PlayerReportEntry report(DKBansPlayer executor, ReportTemplate template) {
+        return DKBans.getInstance().getReportManager().report(executor, this, template, "none", UUID.randomUUID());//@Todo set current server/id
     }
 
     @Override
-    public PlayerReportEntry report(DKBansPlayer player, String reason) {
-        return DKBans.getInstance().getReportManager().report(this, player, reason, "none", UUID.randomUUID());//@Todo set current server/id
+    public PlayerReportEntry report(DKBansPlayer executor, String reason) {
+        return DKBans.getInstance().getReportManager().report(executor, this, reason, "none", UUID.randomUUID());//@Todo set current server/id
     }
 
     @Override

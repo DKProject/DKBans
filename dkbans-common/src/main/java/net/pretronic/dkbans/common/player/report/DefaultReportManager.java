@@ -31,26 +31,27 @@ import net.pretronic.libraries.utility.Iterators;
 import net.pretronic.libraries.utility.Validate;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 public class DefaultReportManager implements ReportManager {
 
-    private final Collection<PlayerReport> openReports;
+    private final List<PlayerReport> openReports;
 
     public DefaultReportManager() {
         this.openReports = new ArrayList<>();
     }
 
     @Override
-    public Collection<PlayerReport> getOpenReports() {
+    public List<PlayerReport> getOpenReports() {
         return this.openReports;
     }
 
     @Override
     public PlayerReportEntry report(DKBansPlayer executor, DKBansPlayer target, ReportTemplate template, String serverName, UUID serverId) {
         Validate.notNull(executor, target, template);
-        DefaultPlayerReport report = getReport(target);
+        DefaultPlayerReport report = getReportOrCreate(target);
+        if(report.getEntry(executor) != null) return null;
         DefaultPlayerReportEntry entry = (DefaultPlayerReportEntry) DKBans.getInstance().getStorage()
                 .createPlayerReportEntry(report, executor, template, serverName, serverId);
         report.addEntry(entry);
@@ -60,14 +61,15 @@ public class DefaultReportManager implements ReportManager {
     @Override
     public PlayerReportEntry report(DKBansPlayer executor, DKBansPlayer target, String reason, String serverName, UUID serverId) {
         Validate.notNull(executor, target);
-        DefaultPlayerReport report = getReport(target);
+        DefaultPlayerReport report = getReportOrCreate(target);
+        if(report.getEntry(executor) != null) return null;
         DefaultPlayerReportEntry entry = (DefaultPlayerReportEntry) DKBans.getInstance().getStorage()
                 .createPlayerReportEntry(report, executor, reason, serverName, serverId);
         report.addEntry(entry);
         return entry;
     }
 
-    private DefaultPlayerReport getReport(DKBansPlayer target) {
+    private DefaultPlayerReport getReportOrCreate(DKBansPlayer target) {
         PlayerReport report0 = Iterators.findOne(this.openReports, target0 -> target0.getPlayer().equals(target));
         if(report0 == null) {
             report0 = DKBans.getInstance().getStorage().createPlayerReport(target, ReportState.OPEN);

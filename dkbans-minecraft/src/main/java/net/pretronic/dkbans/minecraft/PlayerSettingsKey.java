@@ -2,7 +2,7 @@
  * (C) Copyright 2020 The DKBans Project (Davide Wietlisbach & Philipp Elvin Friedhoff)
  *
  * @author Philipp Elvin Friedhoff
- * @since 21.06.20, 17:26
+ * @since 25.06.20, 19:20
  * @web %web%
  *
  * The DKBans Project is under the Apache License, version 2.0 (the "License");
@@ -18,32 +18,10 @@
  * under the License.
  */
 
-package net.pretronic.dkbans.api.player;
+package net.pretronic.dkbans.minecraft;
 
-import net.pretronic.libraries.document.Document;
+public class PlayerSettingsKey {
 
-public interface PlayerSetting {
-
-    String getKey();
-
-    String getValue();
-
-    byte getByteValue();
-
-    int getIntValue();
-
-    long getLongValue();
-
-    double getDoubleValue();
-
-    float getFloatValue();
-
-    boolean getBooleanValue();
-
-    Document getDocumentValue();
-
-    void setValue(Object value);
-
-    boolean equalsValue(Object value);
-
+    public static final String TEAM_CHAT_LOGIN = "TeamChatLogin";
+    public static final String REPORT_CHAT_LOGIN = "ReportLogin";
 }
