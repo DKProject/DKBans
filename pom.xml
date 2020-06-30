@@ -68,7 +68,8 @@
         <dependency.pretronic.databasequery>1.2.21.47-SNAPSHOT</dependency.pretronic.databasequery>
 
         <!-- Maven plugins -->
-        <plugin.compiler>3.8.1</plugin.compiler>
+        <plugin.maven.compiler>3.8.1</plugin.maven.compiler>
+        <plugin.maven.source>3.2.1</plugin.maven.source>
         <plugin.maven.shade>3.2.2</plugin.maven.shade>
         <plugin.maven.deploy>3.0.0-M1</plugin.maven.deploy>
     </properties>
