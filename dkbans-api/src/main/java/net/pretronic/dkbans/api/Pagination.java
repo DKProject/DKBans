@@ -41,4 +41,6 @@ public interface Pagination<T> {
     List<T> getUntil(long time);
 
     List<T> getBetween(long startTime, long endTime);
+
+    List<T> getPage(int page, int sizePerPage);
 }

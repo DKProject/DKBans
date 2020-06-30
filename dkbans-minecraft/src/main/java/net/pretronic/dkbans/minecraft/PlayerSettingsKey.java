@@ -23,5 +23,8 @@ package net.pretronic.dkbans.minecraft;
 public class PlayerSettingsKey {
 
     public static final String TEAM_CHAT_LOGIN = "TeamChatLogin";
+
     public static final String REPORT_CHAT_LOGIN = "ReportLogin";
+
+    public static final String PUNISH_NOTIFY_LOGIN = "PunishNotifyLogin";
 }

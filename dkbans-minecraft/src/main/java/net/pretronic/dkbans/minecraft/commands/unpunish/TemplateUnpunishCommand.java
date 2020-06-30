@@ -1,9 +1,8 @@
 /*
  * (C) Copyright 2020 The DKBans Project (Davide Wietlisbach & Philipp Elvin Friedhoff)
  *
- * @author Philipp Elvin Friedhoff
- * @since 21.06.20, 17:26
- * @web %web%
+ * @author Davide Wietlisbach
+ * @since 30.06.20, 17:45
  *
  * The DKBans Project is under the Apache License, version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,21 +17,7 @@
  * under the License.
  */
 
-package net.pretronic.dkbans.minecraft.commands.punish;
+package net.pretronic.dkbans.minecraft.commands.unpunish;
 
-import net.pretronic.libraries.command.command.BasicCommand;
-import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
-import net.pretronic.libraries.command.sender.CommandSender;
-import net.pretronic.libraries.utility.interfaces.ObjectOwner;
-
-public class UnpunishCommand extends BasicCommand {
-
-    public UnpunishCommand(ObjectOwner owner, CommandConfiguration configuration) {
-        super(owner, configuration);
-    }
-
-    @Override
-    public void execute(CommandSender sender, String[] arguments) {
-
-    }
+public class TemplateUnpunishCommand {
 }

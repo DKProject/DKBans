@@ -29,6 +29,9 @@ public interface PlayerHistoryManager {
 
     PlayerHistoryEntry getHistoryEntry(int id);
 
+
+    Collection<PlayerHistoryType> getHistoryTypes();
+
     PlayerHistoryType getHistoryType(int id);
 
     PlayerHistoryType getHistoryType(String name);

@@ -23,9 +23,13 @@ package net.pretronic.dkbans.common.player.history;
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.DKBansScope;
+import net.pretronic.dkbans.api.event.DKBansPlayerPunishEvent;
+import net.pretronic.dkbans.api.event.DKBansPlayerPunishUpdateEvent;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.history.*;
 import net.pretronic.dkbans.api.template.Template;
+import net.pretronic.dkbans.common.event.DefaultDKBansPlayerPunishEvent;
+import net.pretronic.dkbans.common.event.DefaultDKBansPlayerPunishUpdateEvent;
 import net.pretronic.libraries.document.Document;
 import net.pretronic.libraries.utility.map.Pair;
 
@@ -148,6 +152,7 @@ public class DefaultPlayerHistoryEntrySnapshotBuilder implements PlayerHistoryEn
     @Override
     public PlayerHistoryEntrySnapshot execute() {
         //@Todo validate settings
+        //@Todo add to cache
         if(modifier == null) modifier = stuff;
 
         DefaultPlayerHistoryEntrySnapshot snapshot;
@@ -158,12 +163,15 @@ public class DefaultPlayerHistoryEntrySnapshotBuilder implements PlayerHistoryEn
 
             Pair<PlayerHistoryEntry, Integer> result = DKBans.getInstance().getStorage().createHistoryEntry(player, snapshot);
             snapshot.setInsertResult(result);
+            DKBans.getInstance().getEventBus().callEvent(DKBansPlayerPunishEvent.class,new DefaultDKBansPlayerPunishEvent(player,snapshot));
         }else{
+            PlayerHistoryEntrySnapshot old =
             snapshot = new DefaultPlayerHistoryEntrySnapshot(entry, -1, historyType,
                     punishmentType, reason, timeout, template, stuff, scope, points, active, properties, revokeReason,
                     revokeTemplate, true, System.currentTimeMillis(), modifier);
             int id = DKBans.getInstance().getStorage().insertHistoryEntrySnapshot(snapshot);
             snapshot.setId(id);
+            DKBans.getInstance().getEventBus().callEvent(DKBansPlayerPunishUpdateEvent.class,new DefaultDKBansPlayerPunishUpdateEvent(player,old,snapshot));
         }
         return snapshot;
     }

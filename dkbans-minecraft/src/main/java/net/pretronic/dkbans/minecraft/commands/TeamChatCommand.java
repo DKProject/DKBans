@@ -20,12 +20,14 @@
 
 package net.pretronic.dkbans.minecraft.commands;
 
+import net.pretronic.dkbans.api.DKBans;
+import net.pretronic.dkbans.minecraft.BroadcastMessageChannels;
+import net.pretronic.dkbans.minecraft.PlayerSettingsKey;
 import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.dkbans.minecraft.config.Permissions;
 import net.pretronic.libraries.command.command.BasicCommand;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
 import net.pretronic.libraries.command.sender.CommandSender;
-import net.pretronic.libraries.message.bml.variable.VariableSet;
 import net.pretronic.libraries.utility.StringUtil;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
 import org.mcnative.common.player.OnlineMinecraftPlayer;
@@ -39,36 +41,31 @@ public class TeamChatCommand extends BasicCommand {
     @Override
     public void execute(CommandSender sender, String[] arguments) {
         if(arguments.length < 1){
-            //@Todo send help
+            sender.sendMessage(Messages.COMMAND_TEAM_CHAT_HELP);
             return;
         }
         if(sender instanceof OnlineMinecraftPlayer){
             OnlineMinecraftPlayer player = (OnlineMinecraftPlayer) sender;
             String action = arguments[0];
-            boolean current = player.hasSetting("DKBans","TeamChatLogin",true);
+            boolean current = player.hasSetting("DKBans", PlayerSettingsKey.TEAM_CHAT_LOGIN,true);
 
             if(StringUtil.equalsOne(action,"logout","out")) changeLogin(player,current,false);
             else if(StringUtil.equalsOne(action,"login","in")) changeLogin(player,current,true);
-            else if(StringUtil.equalsOne(action,"toggle","tog"))changeLogin(player,current,!current);
+            else if(StringUtil.equalsOne(action,"toggle","tog")) changeLogin(player,current,!current);
             else if(sender.hasPermission(Permissions.COMMAND_TEAMCHAT_SEND)){
-                //@Todo send message for player
+                String message = CommandUtil.readStringFromArguments(arguments,0);
+                DKBans.getInstance().broadcastMessage(BroadcastMessageChannels.TEAM_CHAT,CommandUtil.getExecutor(sender),message);
             }else{
-                //@Todo no permissions
+                sender.sendMessage(Messages.ERROR_NO_PERMISSIONS);
             }
         }else{
-            //@Todo send message for console
+            String message = CommandUtil.readStringFromArguments(arguments,0);
+            DKBans.getInstance().broadcastMessage(BroadcastMessageChannels.TEAM_CHAT,CommandUtil.getExecutor(sender),message);
         }
     }
+
     private void changeLogin(OnlineMinecraftPlayer player, boolean current, boolean action){
-        if(current == action){
-            player.sendMessage(Messages.STAFF_STATUS_ALREADY, VariableSet.create()
-                    .add("status",action)
-                    .add("statusFormatted", action ? Messages.STAFF_STATUS_LOGIN :  Messages.STAFF_STATUS_LOGOUT));
-        }else{
-            player.sendMessage(Messages.STAFF_STATUS_CHANGE, VariableSet.create()
-                    .add("status",action)
-                    .add("statusFormatted", action ? Messages.STAFF_STATUS_LOGIN :  Messages.STAFF_STATUS_LOGOUT));
-            player.setSetting("DKBans","TeamChatLogin",action);
-        }
+        CommandUtil.changeLogin(Messages.PREFIX_TEAMCHAT,PlayerSettingsKey.TEAM_CHAT_LOGIN,player,current,action);
     }
+
 }

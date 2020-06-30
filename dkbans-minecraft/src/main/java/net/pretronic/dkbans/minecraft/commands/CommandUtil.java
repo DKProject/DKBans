@@ -31,6 +31,8 @@ import net.pretronic.libraries.message.bml.variable.VariableSet;
 import net.pretronic.libraries.utility.duration.DurationProcessor;
 import org.mcnative.common.McNative;
 import org.mcnative.common.player.MinecraftPlayer;
+import org.mcnative.common.player.OnlineMinecraftPlayer;
+import org.mcnative.common.text.components.MessageComponent;
 
 import java.time.Duration;
 
@@ -108,8 +110,35 @@ public class CommandUtil {
         }
     }
 
+    public static void sendNotPunished(CommandSender sender,DKBansPlayer player, PunishmentType type){
+        if(type == PunishmentType.BAN){
+            sender.sendMessage(Messages.PUNISH_NOT_BANNED,VariableSet.create().addDescribed("player",player));
+        }else{
+            sender.sendMessage(Messages.PUNISH_NOT_MUTED,VariableSet.create().addDescribed("player",player));
+        }
+    }
+
     public static void sendPunishResultMessage(CommandSender sender,PlayerHistoryEntrySnapshot snapshot){
 
+    }
+
+    public static void sendUnpunishResultMessage(CommandSender sender,PlayerHistoryEntrySnapshot snapshot){
+
+    }
+
+    public static void changeLogin(MessageComponent<?> prefix,String settingKey,OnlineMinecraftPlayer player, boolean current, boolean action){
+        if(current == action){
+            player.sendMessage(Messages.STAFF_STATUS_ALREADY, VariableSet.create()
+                    .add("prefix",prefix)
+                    .add("status",action)
+                    .add("statusFormatted", action ? Messages.STAFF_STATUS_LOGIN :  Messages.STAFF_STATUS_LOGOUT));
+        }else{
+            player.sendMessage(Messages.STAFF_STATUS_CHANGE, VariableSet.create()
+                    .add("prefix",prefix)
+                    .add("status",action)
+                    .add("statusFormatted", action ? Messages.STAFF_STATUS_LOGIN :  Messages.STAFF_STATUS_LOGOUT));
+            player.setSetting("DKBans",settingKey,action);
+        }
     }
 
 }

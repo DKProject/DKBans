@@ -60,6 +60,10 @@ public abstract class DKBans {
     public abstract TemplateManager getTemplateManager();
 
 
+    public void broadcastMessage(String channel,DKBansExecutor executor,String message){
+
+
+    }
 
 
 

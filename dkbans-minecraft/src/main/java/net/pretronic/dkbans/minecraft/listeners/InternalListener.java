@@ -20,10 +20,14 @@
 
 package net.pretronic.dkbans.minecraft.listeners;
 
+import net.pretronic.dkbans.api.event.DKBansChannelBroadcastMessageReceiveEvent;
 import net.pretronic.dkbans.api.event.DKBansPlayerPunishEvent;
 import net.pretronic.dkbans.api.event.DKBansPlayerReportTeleportEvent;
 import net.pretronic.dkbans.api.player.history.PunishmentType;
+import net.pretronic.dkbans.minecraft.BroadcastMessageChannels;
+import net.pretronic.dkbans.minecraft.PlayerSettingsKey;
 import net.pretronic.dkbans.minecraft.config.Messages;
+import net.pretronic.dkbans.minecraft.config.Permissions;
 import net.pretronic.libraries.event.Listener;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
 import org.mcnative.common.McNative;
@@ -34,24 +38,55 @@ import org.mcnative.common.text.components.MessageComponent;
 public class InternalListener {
 
     @NetworkListener
+    public void onChannelBroadcastMessageReceive(DKBansChannelBroadcastMessageReceiveEvent event) {
+        if(event.getChannel().equals(BroadcastMessageChannels.TEAM_CHAT)){
+            String message = event.getMessage();
+
+        }
+    }
+
+    @NetworkListener
     public void onPlayerPunish(DKBansPlayerPunishEvent event){
         OnlineMinecraftPlayer player = McNative.getInstance().getLocal().getConnectedPlayer(event.getPlayer().getUniqueId());
-        if(event.getSnapshot().getPunishmentType() == PunishmentType.BAN){
-            if(player != null){
-                MessageComponent<?> message = event.getSnapshot().isPermanently()
-                        ? Messages.PUNISH_BAN_MESSAGE_PERMANENTLY : Messages.PUNISH_BAN_MESSAGE_TEMPORARY;
-                player.kick(message,VariableSet.create()
-                        .addDescribed("ban",event.getEntry())
-                        .addDescribed("punish",event.getEntry())
-                        .addDescribed("player",event.getPlayer()));
-            }
-        }else if(event.getSnapshot().getPunishmentType() == PunishmentType.MUTE){
+        if(event.getSnapshot().getPunishmentType() == PunishmentType.BAN) handleBan(event, player);
+        else if(event.getSnapshot().getPunishmentType() == PunishmentType.MUTE) handleMute(event, player);
+    }
+
+    private void handleMute(DKBansPlayerPunishEvent event, OnlineMinecraftPlayer player) {
+        if(player != null){
             MessageComponent<?> message = event.getSnapshot().isPermanently()
                     ? Messages.PUNISH_MUTE_MESSAGE_PERMANENTLY : Messages.PUNISH_MUTE_MESSAGE_TEMPORARY;
             player.sendMessage(message,VariableSet.create()
                     .addDescribed("mute",event.getEntry())
                     .addDescribed("punish",event.getEntry())
                     .addDescribed("player",event.getPlayer()));
+        }
+
+        for (OnlineMinecraftPlayer staff : McNative.getInstance().getLocal().getOnlinePlayers()) {
+            if(staff.hasPermission(Permissions.PUNISH_NOTIFY)
+                    && staff.hasSetting("DKBans", PlayerSettingsKey.PUNISH_NOTIFY_LOGIN,true)){
+                staff.sendMessage(Messages.PUNISH_MUTE_NOTIFY,VariableSet.create()
+                        .addDescribed("mute",event.getEntry()));
+            }
+        }
+    }
+
+    private void handleBan(DKBansPlayerPunishEvent event, OnlineMinecraftPlayer player) {
+        if (player != null) {
+            MessageComponent<?> message = event.getSnapshot().isPermanently()
+                    ? Messages.PUNISH_BAN_MESSAGE_PERMANENTLY : Messages.PUNISH_BAN_MESSAGE_TEMPORARY;
+            player.kick(message, VariableSet.create()
+                    .addDescribed("ban", event.getEntry())
+                    .addDescribed("punish", event.getEntry())
+                    .addDescribed("player", event.getPlayer()));
+
+            for (OnlineMinecraftPlayer staff : McNative.getInstance().getLocal().getOnlinePlayers()) {
+                if(staff.hasPermission(Permissions.PUNISH_NOTIFY)
+                        && staff.hasSetting("DKBans", PlayerSettingsKey.PUNISH_NOTIFY_LOGIN,true)){
+                    staff.sendMessage(Messages.PUNISH_BAN_NOTIFY,VariableSet.create()
+                            .addDescribed("ban",event.getEntry()));
+                }
+            }
         }
     }
 

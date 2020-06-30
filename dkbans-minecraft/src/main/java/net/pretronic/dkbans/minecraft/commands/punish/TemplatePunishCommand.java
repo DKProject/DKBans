@@ -95,7 +95,7 @@ public class TemplatePunishCommand extends BasicCommand {
     }
 
     private void sendTemplates(CommandSender sender){
-        sender.sendMessage(Messages.COMMAND_HELP_PUNISH,VariableSet.create()
+        sender.sendMessage(Messages.PUNISH_TEMPLATE_LIST,VariableSet.create()
                 .add("templates",templates.getTemplates())
                 .add("command",getConfiguration().getName()));
     }

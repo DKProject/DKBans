@@ -1,9 +1,8 @@
 /*
  * (C) Copyright 2020 The DKBans Project (Davide Wietlisbach & Philipp Elvin Friedhoff)
  *
- * @author Philipp Elvin Friedhoff
- * @since 21.06.20, 17:26
- * @web %web%
+ * @author Davide Wietlisbach
+ * @since 30.06.20, 17:45
  *
  * The DKBans Project is under the Apache License, version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,20 +17,10 @@
  * under the License.
  */
 
-package net.pretronic.dkbans.api.event;
+package net.pretronic.dkbans.minecraft;
 
-import net.pretronic.dkbans.api.DKBansExecutor;
-import net.pretronic.libraries.document.Document;
+public class BroadcastMessageChannels {
 
-public interface DKBansChannelBroadcastMessageReceiveEvent extends DKBansEvent {
-
-    String getChannel();
-
-    String getMessage();
-
-    Document getProperties();
-
-    DKBansExecutor getExecutor();
-
+    public static final String TEAM_CHAT = "TEAM_CHAT";
 
 }

@@ -26,11 +26,11 @@ public class Permissions {
 
     public static final String BYPASS_IGNORE = "dkbans.bypass.ignore";
 
-
     public static final String PUNISH_OVERRIDE_OWN = "dkbans.punish.override";
 
     public static final String PUNISH_OVERRIDE_ALL = "dkbans.bypass.override.all";
 
+    public static final String PUNISH_NOTIFY = "dkbans.punish.notify";
 
     public static final String COMMAND_TEMPLATE = "dkbans.command.template";
 

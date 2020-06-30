@@ -72,6 +72,23 @@ public class CommandConfig {
             .permission("dkbans.command.kick")
             .create();
 
+    public static CommandConfiguration COMMAND_PLAYER_NOTES = CommandConfiguration.newBuilder()
+            .name("playerNotes")
+            .aliases("playerNote","notes","note")
+            .permission("dkbans.command.playerNotes")
+            .create();
+
+    public static CommandConfiguration COMMAND_PUNISH_NOTIFY  = CommandConfiguration.newBuilder()
+            .name("punishNotify")
+            .aliases("banNotify","pn")
+            .permission("dkbans.command.punishNotify")
+            .create();
+
+    public static CommandConfiguration COMMAND_NOTIFY  = CommandConfiguration.newBuilder()
+            .name("notify")
+            .permission("dkbans.command.notify")
+            .create();
+
     //Punishment Commands
 
     public static CommandConfiguration COMMAND_PUNISH_KICK = CommandConfiguration.newBuilder()

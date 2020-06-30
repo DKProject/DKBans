@@ -39,10 +39,6 @@ public class PunishmentType {
 
     public static final PunishmentType WARN = registerPunishmentType("WARN");
 
-    public static final PunishmentType REPORT = registerPunishmentType("REPORT");
-
-    public static final PunishmentType UNBAN = registerPunishmentType("UNBAN");
-
     public static final PunishmentType KICK = registerPunishmentType("KICK");
 
 

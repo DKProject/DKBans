@@ -84,9 +84,9 @@ public interface DKBansPlayer extends DKBansExecutor {
     PlayerHistoryEntrySnapshotBuilder punish();
 
 
-    void unpunish(DKBansExecutor executor, UnPunishmentTemplate template);
+    PlayerHistoryEntrySnapshot unpunish(DKBansExecutor executor, UnPunishmentTemplate template);
 
-    void unpunish(DKBansExecutor executor,PunishmentType type,String reason);
+    PlayerHistoryEntrySnapshot unpunish(DKBansExecutor executor,PunishmentType type,String reason);
 
 
     PlayerHistoryEntrySnapshot kick(DKBansExecutor executor,String reason);

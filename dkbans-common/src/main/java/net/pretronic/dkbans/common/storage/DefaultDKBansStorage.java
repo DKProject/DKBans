@@ -30,6 +30,7 @@ import net.pretronic.databasequery.api.query.result.QueryResult;
 import net.pretronic.databasequery.api.query.result.QueryResultEntry;
 import net.pretronic.databasequery.api.query.type.FindQuery;
 import net.pretronic.databasequery.api.query.type.InsertQuery;
+import net.pretronic.databasequery.api.query.type.SearchQuery;
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.DKBansScope;
@@ -291,36 +292,56 @@ public class DefaultDKBansStorage implements DKBansStorage {
     @Override
     public List<PlayerHistoryEntry> loadActiveEntries(PlayerHistory playerHistory) {
         List<PlayerHistoryEntry> result = new ArrayList<>();
-        QueryResult result0 = history.find()
-                .getAs(this.history, "Id", "HistoryId")
-                .getAs(this.historyVersion, "Id", "SnapshotId")
-                .get("Created", "Reason", "Timeout", "StaffId", "ScopeType", "ScopeName", "ScopeId", "Points", "Active", "Properties",
-                        "HistoryTypeId", "PunishmentType", "TemplateId", "RevokeTemplateId", "RevokeReason", "ModifiedTime", "ModifiedBy", "ModifiedActive")
-                .join(historyVersion).on(historyVersion,"HistoryId",history,"Id")
+        QueryResult result0 = createBaseQuery()
                 .where("ModifiedActive",true).where("Active",true)
                 .or(query -> query.where("Timeout",-1).whereLower("Timeout",System.currentTimeMillis()))
                 .orderBy("ModifiedTime", SearchOrder.DESC)
                 .execute();
 
+        readEntries(playerHistory, result, result0);
+        return result;
+    }
+
+    @Override
+    public List<PlayerHistoryEntry> loadEntries(PlayerHistory playerHistory, boolean skipActive) {
+        List<PlayerHistoryEntry> result = new ArrayList<>();
+
+        FindQuery query = createBaseQuery();
+
+        if(skipActive){
+            query.not(q -> q.where("ModifiedActive",true).where("Active",true)
+                    .or(q1 -> q1.where("Timeout",-1).whereLower("Timeout",System.currentTimeMillis()))
+                    .orderBy("ModifiedTime", SearchOrder.DESC)
+                    .execute());
+        }
+
+        QueryResult result0 = query.execute();
+
+        readEntries(playerHistory, result, result0);
+        return result;
+    }
+
+    @Override
+    public List<PlayerHistoryEntrySnapshot> loadSnapshots(PlayerHistoryEntry historyEntry) {
+        List<PlayerHistoryEntrySnapshot> snapshots = new ArrayList<>();
+        QueryResult result = this.historyVersion.find().where("HistoryId",historyEntry.getId()).execute();
+        for (QueryResultEntry entry : result) snapshots.add(createSnapshot(entry));
+        return snapshots;
+    }
+
+    private FindQuery createBaseQuery() {
+        return history.find()
+                .getAs(this.history, "Id", "HistoryId")
+                .getAs(this.historyVersion, "Id", "SnapshotId")
+                .get("Created", "Reason", "Timeout", "StaffId", "ScopeType", "ScopeName", "ScopeId", "Points", "Active", "Properties",
+                        "HistoryTypeId", "PunishmentType", "TemplateId", "RevokeTemplateId", "RevokeReason", "ModifiedTime", "ModifiedBy", "ModifiedActive")
+                .join(historyVersion).on(historyVersion,"HistoryId",history,"Id");
+    }
+
+    private void readEntries(PlayerHistory playerHistory, List<PlayerHistoryEntry> result, QueryResult result0) {
         if(!result0.isEmpty()){
             for (QueryResultEntry resultEntry : result0) {
-                DefaultPlayerHistoryEntrySnapshot snapshot = new DefaultPlayerHistoryEntrySnapshot(null,
-                        resultEntry.getInt("SnapshotId"),
-                        dkBans.getHistoryManager().getHistoryType(resultEntry.getInt("HistoryTypeId")),
-                        PunishmentType.getPunishmentType(resultEntry.getString("PunishmentType")),
-                        resultEntry.getString("Reason"),
-                        resultEntry.getLong("Timeout"),
-                        dkBans.getTemplateManager().getTemplate(resultEntry.getInt("TemplateId")),
-                        null/*@Todo add stuff*/,
-                        new DefaultDKBansScope(resultEntry.getString("ScopeType"), resultEntry.getString("ScopeName"), resultEntry.getUniqueId("ScopeId")),
-                        resultEntry.getInt("Points"),
-                        resultEntry.getBoolean("Active"),
-                        null/*@Todo add properties*/,
-                        resultEntry.getString("RevokeReason"),
-                        dkBans.getTemplateManager().getTemplate(resultEntry.getInt("RevokeTemplateId")),
-                        resultEntry.getBoolean("ModifiedActive"),
-                        resultEntry.getLong("ModifiedTime"),
-                        null/*@Todo add modified by*/);
+                DefaultPlayerHistoryEntrySnapshot snapshot = createSnapshot(resultEntry);
                 DefaultPlayerHistoryEntry entry = new DefaultPlayerHistoryEntry(playerHistory,
                         resultEntry.getInt("HistoryId"),
                         snapshot,
@@ -329,7 +350,26 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 result.add(entry);
             }
         }
-        return result;
+    }
+
+    private DefaultPlayerHistoryEntrySnapshot createSnapshot(QueryResultEntry resultEntry) {
+        return new DefaultPlayerHistoryEntrySnapshot(null,
+                resultEntry.getInt("SnapshotId"),
+                dkBans.getHistoryManager().getHistoryType(resultEntry.getInt("HistoryTypeId")),
+                PunishmentType.getPunishmentType(resultEntry.getString("PunishmentType")),
+                resultEntry.getString("Reason"),
+                resultEntry.getLong("Timeout"),
+                dkBans.getTemplateManager().getTemplate(resultEntry.getInt("TemplateId")),
+                null/*@Todo add stuff*/,
+                new DefaultDKBansScope(resultEntry.getString("ScopeType"), resultEntry.getString("ScopeName"), resultEntry.getUniqueId("ScopeId")),
+                resultEntry.getInt("Points"),
+                resultEntry.getBoolean("Active"),
+                null/*@Todo add properties*/,
+                resultEntry.getString("RevokeReason"),
+                dkBans.getTemplateManager().getTemplate(resultEntry.getInt("RevokeTemplateId")),
+                resultEntry.getBoolean("ModifiedActive"),
+                resultEntry.getLong("ModifiedTime"),
+                null/*@Todo add modified by*/);
     }
 
     @Override

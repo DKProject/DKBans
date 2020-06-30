@@ -27,16 +27,16 @@ import net.pretronic.libraries.utility.Iterators;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class DefaultPlayerHistory implements PlayerHistory {
 
     private final DKBansPlayer player;
 
-    private List<PlayerHistoryEntry> entries;
+    private final List<PlayerHistoryEntry> entries;
 
     private boolean loadedActive;
     private boolean loadedAll;
-
 
     public DefaultPlayerHistory(DKBansPlayer player) {
         this.player = player;
@@ -59,23 +59,22 @@ public class DefaultPlayerHistory implements PlayerHistory {
     }
 
     @Override
-    public PlayerHistoryEntry getLastEntry(PunishmentType type) {
-        return null;
-    }
-
-    @Override
     public List<PlayerHistoryEntry> getEntries() {
-        return getActiveEntries();//@Todo load all
+        if(!loadedAll){
+            this.entries.addAll(DKBans.getInstance().getStorage().loadEntries(this,loadedActive));
+            this.loadedAll = true;
+        }
+        return entries;
     }
 
     @Override
     public List<PlayerHistoryEntry> getEntries(PunishmentType punishmentType) {
-        return null;
+        return Iterators.filter(getEntries(), entry -> entry.getCurrent().getPunishmentType() == punishmentType);
     }
 
     @Override
     public List<PlayerHistoryEntry> getEntries(PlayerHistoryType historyType) {
-        return null;
+        return Iterators.filter(getEntries(), entry -> entry.getCurrent().getHistoryType().equals(historyType));
     }
 
     @Override
@@ -136,5 +135,15 @@ public class DefaultPlayerHistory implements PlayerHistory {
             return result;
         }
         throw new IllegalArgumentException("Invalid calculation type");
+    }
+
+    @Override
+    public void clear() {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public void delete(int id) {
+        throw new UnsupportedOperationException();
     }
 }

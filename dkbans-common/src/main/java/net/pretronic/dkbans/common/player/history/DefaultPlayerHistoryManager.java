@@ -47,6 +47,11 @@ public class DefaultPlayerHistoryManager implements PlayerHistoryManager {
     }
 
     @Override
+    public Collection<PlayerHistoryType> getHistoryTypes() {
+        return historyTypes;
+    }
+
+    @Override
     public PlayerHistoryType getHistoryType(int id) {
         return Iterators.findOne(this.historyTypes, historyType -> historyType.getId() == id);
     }

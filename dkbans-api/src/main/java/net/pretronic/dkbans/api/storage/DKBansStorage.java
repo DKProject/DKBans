@@ -69,6 +69,11 @@ public interface DKBansStorage {
 
     List<PlayerHistoryEntry> loadActiveEntries(PlayerHistory history);
 
+    List<PlayerHistoryEntry> loadEntries(PlayerHistory history,boolean skipActive);
+
+
+    List<PlayerHistoryEntrySnapshot> loadSnapshots(PlayerHistoryEntry entry);
+
 
     PlayerHistoryType createPlayerHistoryType(String name);
 

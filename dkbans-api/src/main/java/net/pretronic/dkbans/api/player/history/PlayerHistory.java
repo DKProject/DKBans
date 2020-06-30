@@ -30,8 +30,6 @@ public interface PlayerHistory {
 
     PlayerHistoryEntry getActiveEntry(PunishmentType type);
 
-    PlayerHistoryEntry getLastEntry(PunishmentType type);
-
     List<PlayerHistoryEntry> getEntries();
 
     List<PlayerHistoryEntry> getEntries(int page, int size);
@@ -52,5 +50,8 @@ public interface PlayerHistory {
 
     int calculate(CalculationType calculationType, PunishmentType type);
 
+    void clear();
+
+    void delete(int id);
 
 }

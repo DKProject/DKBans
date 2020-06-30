@@ -137,20 +137,21 @@ public  class DefaultDKBansPlayer implements DKBansPlayer {
     }
 
     @Override
-    public void unpunish(DKBansExecutor executor, UnPunishmentTemplate template) {
+    public PlayerHistoryEntrySnapshot unpunish(DKBansExecutor executor, UnPunishmentTemplate template) {
         Validate.notNull(executor,template);
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void unpunish(DKBansExecutor executor, PunishmentType type, String reason) {
+    public PlayerHistoryEntrySnapshot unpunish(DKBansExecutor executor, PunishmentType type, String reason) {
         Validate.notNull(executor,type,reason);
         PlayerHistoryEntry entry = getHistory().getActiveEntry(type);
         if(entry != null){
-            entry.newSnapshot(executor)
+            return entry.newSnapshot(executor)
                     .active(false)
-                    .revokeReason(reason);
+                    .revokeReason(reason).execute();
         }
+        throw new IllegalArgumentException("No active ban found");
     }
 
     @Override
