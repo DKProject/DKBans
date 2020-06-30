@@ -42,7 +42,7 @@ import java.util.List;
 
 /*
 report <login, logout, toggle> -
-report take <name>
+report take <name> -
 
 report <name> <reason> -
 report accept <name>
@@ -59,6 +59,10 @@ public class ReportCommand extends MainCommand implements NotFindable {
         registerCommand(new ReportLoginCommand(owner));
         registerCommand(new ReportLogoutCommand(owner));
         registerCommand(new ReportToggleCommand(owner));
+        registerCommand(new ReportTakeCommand(owner));
+        registerCommand(new ReportAcceptCommand(owner));
+        registerCommand(new ReportDeclineCommand(owner));
+        registerCommand(new ReportOtherCommand(owner));
     }
 
     @Override

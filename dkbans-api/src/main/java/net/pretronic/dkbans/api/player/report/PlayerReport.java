@@ -23,6 +23,7 @@ package net.pretronic.dkbans.api.player.report;
 import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryEntry;
+import net.pretronic.dkbans.api.template.report.ReportTemplate;
 
 import java.util.Collection;
 import java.util.List;
@@ -48,7 +49,7 @@ public interface PlayerReport {
 
     DKBansPlayer getWatcher();
 
-    void setWatcher(DKBansPlayer player);
+    void setWatcher(DKBansPlayer player, PlayerReportEntry reportEntry);
 
 
     PlayerHistoryEntry accept(DKBansExecutor executor, String reason);
@@ -56,8 +57,6 @@ public interface PlayerReport {
     PlayerHistoryEntry accept(DKBansExecutor executor);
 
     void decline(DKBansExecutor executor);
-
-
 
 
     default int getCount(){

@@ -43,6 +43,7 @@ public class DefaultPlayerReport implements PlayerReport {
     private ReportState state;
     private final List<PlayerReportEntry> entries;
     private DKBansPlayer watcher;
+    private PlayerReportEntry watcherReportEntry;
 
     public DefaultPlayerReport(int id, DKBansPlayer player, ReportState state, List<PlayerReportEntry> entries, DKBansPlayer watcher) {
         this.id = id;
@@ -98,8 +99,9 @@ public class DefaultPlayerReport implements PlayerReport {
     }
 
     @Override
-    public void setWatcher(DKBansPlayer player) {
+    public void setWatcher(DKBansPlayer player, PlayerReportEntry reportEntry) {
         this.watcher = player;
+        this.watcherReportEntry = reportEntry;
 
         DKBansPlayerReportTeleportEvent event = new DefaultDKBansPlayerReportTeleportEvent(player, this);
         DKBans.getInstance().getEventBus().callEvent(DKBansPlayerReportTeleportEvent.class, event);

@@ -65,3 +65,9 @@ messages:
   dkbans.command.report.listTemplates: '${dkbans.prefix.report} &6Available report templates
   @for("template" in {templates}, ${dkbans.command.report.listTemplates.loop},"\n")'
   dkbans.command.report.listTemplates.loop: '&8» &e{template.displayName}'
+  dkbans.command.report.take.usage: '${dkbans.prefix.report} &cUse /report take <name>'
+  dkbans.report.notFound: '${dkbans.prefix.report} &cA report for &e{player.name} &cwas not found'
+  dkbans.command.report.take: '${dkbans.prefix.report} &aYou have took the report of &e{target.name}'
+  dkbans.command.report.take.already: '${dkbans.prefix.report} &aThe report of &e{target.name} has been already taken'
+  dkbans.command.report.accept.usage: '${dkbans.prefix.report} &cUse /report accept <name>'
+  dkbans.command.report.accept.notWatching: '${dkbans.prefix.report} &cYou are not watching this player'

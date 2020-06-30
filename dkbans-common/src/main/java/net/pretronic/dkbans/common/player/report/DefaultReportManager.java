@@ -48,6 +48,11 @@ public class DefaultReportManager implements ReportManager {
     }
 
     @Override
+    public PlayerReport getReport(DKBansPlayer player) {
+        return Iterators.findOne(this.openReports, report -> report.getPlayer().equals(player));
+    }
+
+    @Override
     public PlayerReportEntry report(DKBansPlayer executor, DKBansPlayer target, ReportTemplate template, String serverName, UUID serverId) {
         Validate.notNull(executor, target, template);
         DefaultPlayerReport report = getReportOrCreate(target);

@@ -21,8 +21,10 @@
 package net.pretronic.dkbans.minecraft.listeners;
 
 import net.pretronic.dkbans.api.event.DKBansPlayerPunishEvent;
+import net.pretronic.dkbans.api.event.DKBansPlayerReportTeleportEvent;
 import net.pretronic.dkbans.api.player.history.PunishmentType;
 import net.pretronic.dkbans.minecraft.config.Messages;
+import net.pretronic.libraries.event.Listener;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
 import org.mcnative.common.McNative;
 import org.mcnative.common.network.event.NetworkListener;
@@ -53,5 +55,10 @@ public class InternalListener {
         }
     }
 
-
+    @Listener
+    public void onPlayerReport(DKBansPlayerReportTeleportEvent event) {
+        OnlineMinecraftPlayer player = McNative.getInstance().getLocal().getOnlinePlayer(event.getPlayer().getUniqueId());
+        OnlineMinecraftPlayer target = McNative.getInstance().getLocal().getOnlinePlayer(event.getReport().getPlayer().getUniqueId());
+        player.connect(target.getServer());
+    }
 }

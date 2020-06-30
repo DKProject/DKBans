@@ -32,6 +32,8 @@ public interface ReportManager {
 
     List<PlayerReport> getOpenReports();
 
+    PlayerReport getReport(DKBansPlayer player);
+
     PlayerReportEntry report(DKBansPlayer executor, DKBansPlayer target, ReportTemplate template, String serverName, UUID serverId);
 
     PlayerReportEntry report(DKBansPlayer executor, DKBansPlayer target, String reason, String serverName, UUID serverId);
