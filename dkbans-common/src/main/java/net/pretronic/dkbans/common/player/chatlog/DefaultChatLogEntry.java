@@ -20,7 +20,9 @@
 
 package net.pretronic.dkbans.common.player.chatlog;
 
+import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.filter.Filter;
+import net.pretronic.dkbans.api.filter.FilterAffiliationArea;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.chatlog.ChatLogEntry;
 
@@ -34,16 +36,16 @@ public class DefaultChatLogEntry implements ChatLogEntry {
     private final long time;
     private final String serverName;
     private final UUID serverId;
-    private final Filter filter;
+    private final String filterAffiliationArea;
 
-    public DefaultChatLogEntry(int id, UUID playerId, String message, long time, String serverName, UUID serverId, Filter filter) {
+    public DefaultChatLogEntry(int id, UUID playerId, String message, long time, String serverName, UUID serverId, String filterAffiliationArea) {
         this.id = id;
         this.playerId = playerId;
         this.message = message;
         this.time = time;
         this.serverName = serverName;
         this.serverId = serverId;
-        this.filter = filter;
+        this.filterAffiliationArea = filterAffiliationArea;
     }
 
     @Override
@@ -53,7 +55,7 @@ public class DefaultChatLogEntry implements ChatLogEntry {
 
     @Override
     public DKBansPlayer getPlayer() {
-        throw new UnsupportedOperationException();//@Todo get player
+        return DKBans.getInstance().getPlayerManager().getPlayer(playerId);
     }
 
     @Override
@@ -77,7 +79,7 @@ public class DefaultChatLogEntry implements ChatLogEntry {
     }
 
     @Override
-    public Filter getFilter() {
-        return this.filter;
+    public String getBlockedByFilterAffiliation() {
+        return this.filterAffiliationArea;
     }
 }

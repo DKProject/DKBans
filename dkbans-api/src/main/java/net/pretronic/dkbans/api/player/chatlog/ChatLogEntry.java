@@ -20,8 +20,6 @@
 
 package net.pretronic.dkbans.api.player.chatlog;
 
-import net.pretronic.dkbans.api.filter.Filter;
-import net.pretronic.dkbans.api.filter.FilterAffiliationArea;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.libraries.utility.annonations.Nullable;
 
@@ -37,6 +35,7 @@ public interface ChatLogEntry {
 
     long getTime();
 
+    String getTimeFormatted();
 
     String getServerName();
 

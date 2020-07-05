@@ -146,6 +146,10 @@ public class Messages {
 
     public static MessageComponent<?> COMMAND_MY_HISTORY_POINTS = Text.ofMessageKey("dkbans.command.myHistoryPoints");
 
+
+    public static MessageComponent<?> COMMAND_CHATLOG_USAGE = Text.ofMessageKey("dkbans.command.chatLog.usage");
+    public static MessageComponent<?> COMMAND_CHATLOG_LIST = Text.ofMessageKey("dkbans.command.chatLog.list");
+
     public static MessageComponent<?> getPunishmentMessage(PlayerHistoryEntrySnapshot snapshot){
         if(snapshot.getPunishmentType() == PunishmentType.BAN){
             return snapshot.isPermanently() ? PUNISH_BAN_MESSAGE_PERMANENTLY : PUNISH_BAN_MESSAGE_TEMPORARY;

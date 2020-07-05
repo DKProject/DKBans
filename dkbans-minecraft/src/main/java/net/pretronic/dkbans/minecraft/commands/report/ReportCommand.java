@@ -46,7 +46,7 @@ report take <name>
 report list
 
 report <name> <reason> -
-report accept <name>
+report accept <name> <reason>
 report other <name>
 report deny <name>
  */

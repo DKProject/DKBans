@@ -89,6 +89,11 @@ public class CommandConfig {
             .permission("dkbans.command.notify")
             .create();
 
+    public static CommandConfiguration COMMAND_CHATLOG = CommandConfiguration.newBuilder()
+            .name("chatlog")
+            .permission("dkbans.command.chatlog")
+            .create();
+
     //Punishment Commands
 
     public static CommandConfiguration COMMAND_PUNISH_KICK = CommandConfiguration.newBuilder()

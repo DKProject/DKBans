@@ -128,3 +128,9 @@ messages:
   &8> &7{note.message}'
   dkbans.command.playerNotes.added: '&8» &a+ &e{note.formattedTime} &8- {note.creator.displayName}&8:
   &8> &7{note.message}'
+  dkbans.command.chatLog.usage: '${dkbans.prefix.chat} &cInvalid usage of chatLog command&8:
+  &7/chatlog player <name> [page]
+  &7/chatlog server <name, id> [page]'
+  dkbans.command.chatLog.list: '${dkbans.prefix.chat} &6ChatLog page {page}
+  @for("entry" in {entries}, ${dkbans.command.chatLog.list.loop},"\n")'
+  dkbans.command.chatLog.list.loop: '&8» {entry.player.displayName} &7on &e{entry.timeFormatted}&8: &f{entry.message}'

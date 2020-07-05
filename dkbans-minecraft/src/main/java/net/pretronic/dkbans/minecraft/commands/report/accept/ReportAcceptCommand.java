@@ -20,11 +20,16 @@
 
 package net.pretronic.dkbans.minecraft.commands.report.accept;
 
+import net.pretronic.dkbans.api.player.DKBansPlayer;
+import net.pretronic.dkbans.api.player.report.PlayerReport;
+import net.pretronic.dkbans.minecraft.commands.CommandUtil;
 import net.pretronic.dkbans.minecraft.config.Permissions;
 import net.pretronic.libraries.command.command.BasicCommand;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
 import net.pretronic.libraries.command.sender.CommandSender;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
+import net.pretronic.libraries.utility.map.Pair;
+import org.mcnative.common.player.OnlineMinecraftPlayer;
 
 public class ReportAcceptCommand extends BasicCommand {
 
@@ -33,7 +38,15 @@ public class ReportAcceptCommand extends BasicCommand {
     }
 
     @Override
-    public void execute(CommandSender commandSender, String[] strings) {
-
+    public void execute(CommandSender sender, String[] args) {
+        Pair<OnlineMinecraftPlayer, PlayerReport> data = CommandUtil.checkAndGetTargetReport(sender, args[0]);
+        if(data != null) {
+            StringBuilder reasonBuilder = new StringBuilder();
+            for (String arg : args) {
+                reasonBuilder.append(arg);
+            }
+            DKBansPlayer player = data.getKey().getAs(DKBansPlayer.class);
+            //@Todo how long?
+        }
     }
 }

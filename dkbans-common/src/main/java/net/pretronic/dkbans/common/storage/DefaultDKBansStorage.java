@@ -567,16 +567,16 @@ public class DefaultDKBansStorage implements DKBansStorage {
     }
 
     @Override
-    public ChatLogEntry createChatLogEntry(UUID playerId, String message, long time, String serverName, UUID serverId, Filter filter) {
+    public ChatLogEntry createChatLogEntry(UUID playerId, String message, long time, String serverName, UUID serverId, String filterAffiliationArea) {
         int id = this.playerChatLog.insert()
                 .set("PlayerId", playerId)
                 .set("Message", message)
                 .set("Time", time)
                 .set("ServerName", serverName)
                 .set("ServerId", serverId)
-                .set("FilterId", filter != null ? filter.getId() : null)
+                .set("FilterAffiliationArea", filterAffiliationArea)
                 .executeAndGetGeneratedKeyAsInt("Id");
-        return new DefaultChatLogEntry(id, playerId, message, time, serverName, serverId, filter);
+        return new DefaultChatLogEntry(id, playerId, message, time, serverName, serverId, filterAffiliationArea);
     }
 
     private List<PlayerSession> getPlayerSessionsByResult(DKBansPlayer player, QueryResult result) {

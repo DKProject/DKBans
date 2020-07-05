@@ -144,7 +144,7 @@ public interface DKBansStorage {
 
     //Chat log
 
-    ChatLogEntry createChatLogEntry(UUID playerId, String message, long time, String serverName, UUID serverId, Filter filter);
+    ChatLogEntry createChatLogEntry(UUID playerId, String message, long time, String serverName, UUID serverId, String filterAffiliationArea);
 
       /*
     private final PlayerHistoryEntry entry;

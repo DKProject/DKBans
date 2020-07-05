@@ -20,9 +20,68 @@
 
 package net.pretronic.dkbans.minecraft.commands;
 
+import net.pretronic.dkbans.api.DKBans;
+import net.pretronic.dkbans.api.player.chatlog.ChatLog;
+import net.pretronic.dkbans.api.player.chatlog.ChatLogEntry;
+import net.pretronic.dkbans.minecraft.config.Messages;
+import net.pretronic.libraries.command.command.BasicCommand;
+import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
+import net.pretronic.libraries.command.sender.CommandSender;
+import net.pretronic.libraries.message.bml.variable.VariableSet;
+import net.pretronic.libraries.utility.Convert;
+import net.pretronic.libraries.utility.interfaces.ObjectOwner;
+import org.mcnative.common.McNative;
+import org.mcnative.common.player.MinecraftPlayer;
+
+import java.util.List;
+import java.util.UUID;
+
 /*
-- chatlog player <name>
+- chatlog player <name> 1,2
 - chatlog server <name, id>
  */
-public class ChatLogCommand {
+public class ChatLogCommand extends BasicCommand {
+
+    public ChatLogCommand(ObjectOwner owner, CommandConfiguration configuration) {
+        super(owner, configuration);
+    }
+
+    @Override
+    public void execute(CommandSender sender, String[] args) {
+        if(args.length < 2) {
+            sender.sendMessage(Messages.COMMAND_CHATLOG_USAGE);
+            return;
+        }
+        if(args[0].equalsIgnoreCase("player")) {
+            String playerName = args[1];
+            MinecraftPlayer player = McNative.getInstance().getPlayerManager().getPlayer(playerName);
+            if(player == null) {
+                sender.sendMessage(Messages.PLAYER_NOT_FOUND, VariableSet.create().add("name", playerName));
+                return;
+            }
+            ChatLog chatLog = DKBans.getInstance().getChatLogManager().getPlayerChatLog(player.getUniqueId());
+            printChatLog(sender, chatLog, args);
+        } else if(args[0].equalsIgnoreCase("server")) {
+            ChatLog chatLog;
+            String server0 = args[1];
+            try {
+                UUID serverId = Convert.toUUID(server0);
+                chatLog = DKBans.getInstance().getChatLogManager().getServerChatLog(serverId);
+            } catch (IllegalArgumentException ignored) {
+                chatLog = DKBans.getInstance().getChatLogManager().getServerChatLog(server0);
+            }
+            printChatLog(sender, chatLog, args);
+        } else {
+            sender.sendMessage(Messages.COMMAND_CHATLOG_USAGE);
+        }
+    }
+
+    private void printChatLog(CommandSender sender, ChatLog chatLog, String[] args) {
+        int page = 1;
+        if(args.length == 3) {
+            page = Convert.toInteger(args[2]);
+        }
+        List<ChatLogEntry> entries = chatLog.getPage(page, 10);
+        sender.sendMessage(Messages.COMMAND_CHATLOG_LIST, VariableSet.create().addDescribed("entries", entries));
+    }
 }
