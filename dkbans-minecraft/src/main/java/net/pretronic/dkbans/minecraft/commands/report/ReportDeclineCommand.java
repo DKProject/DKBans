@@ -20,11 +20,18 @@
 
 package net.pretronic.dkbans.minecraft.commands.report;
 
+import net.pretronic.dkbans.api.DKBans;
+import net.pretronic.dkbans.api.player.DKBansPlayer;
+import net.pretronic.dkbans.api.player.report.PlayerReport;
+import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.dkbans.minecraft.config.Permissions;
 import net.pretronic.libraries.command.command.BasicCommand;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
 import net.pretronic.libraries.command.sender.CommandSender;
+import net.pretronic.libraries.message.bml.variable.VariableSet;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
+import org.mcnative.common.McNative;
+import org.mcnative.common.player.OnlineMinecraftPlayer;
 
 public class ReportDeclineCommand extends BasicCommand {
 
@@ -36,7 +43,25 @@ public class ReportDeclineCommand extends BasicCommand {
     }
 
     @Override
-    public void execute(CommandSender commandSender, String[] args) {
-
+    public void execute(CommandSender sender, String[] args) {
+        if(!(sender instanceof OnlineMinecraftPlayer)) {
+            sender.sendMessage(Messages.ERROR_ONLY_PLAYER);
+            return;
+        }
+        if(args.length == 0) {
+            sender.sendMessage(Messages.COMMAND_REPORT_ACCEPT_USAGE);
+            return;
+        }
+        OnlineMinecraftPlayer target = McNative.getInstance().getLocal().getOnlinePlayer(args[0]);
+        if(target == null) {
+            sender.sendMessage(Messages.PLAYER_NOT_FOUND);
+            return;
+        }
+        PlayerReport report = DKBans.getInstance().getReportManager().getReport(target.getAs(DKBansPlayer.class));
+        if(report == null) {
+            sender.sendMessage(Messages.REPORT_NOT_FOUND, VariableSet.create().addDescribed("player", target));
+            return;
+        }
+        //report.decline(); @Todo get dkbans player in common
     }
 }

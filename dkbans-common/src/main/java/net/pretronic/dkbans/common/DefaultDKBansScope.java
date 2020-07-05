@@ -58,11 +58,6 @@ public class DefaultDKBansScope implements DKBansScope {
     }
 
     @Override
-    public boolean isCurrent() {
-        return true;//@Todo implement current scope check
-    }
-
-    @Override
     public String toString() {
         return "DefaultDKBansScope("+"type:"+this.type+", name:"+this.name+",id:"+this.id+")";
     }

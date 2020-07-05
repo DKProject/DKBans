@@ -56,7 +56,7 @@
             <groupId>net.pretronic.databasequery</groupId>
             <artifactId>pretronicdatabasequery-api</artifactId>
             <version>${dependency.pretronic.databasequery}</version>
-            <scope>compile</scope>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>net.pretronic.libraries</groupId>
@@ -73,6 +73,12 @@
         <dependency>
             <groupId>net.pretronic.libraries</groupId>
             <artifactId>pretroniclibraries-event</artifactId>
+            <version>${dependency.pretronic.libraries}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.pretronic.libraries</groupId>
+            <artifactId>pretroniclibraries-caching</artifactId>
             <version>${dependency.pretronic.libraries}</version>
             <scope>provided</scope>
         </dependency>

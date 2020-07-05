@@ -49,7 +49,7 @@ public interface PlayerReport {
 
     DKBansPlayer getWatcher();
 
-    void setWatcher(DKBansPlayer player, PlayerReportEntry reportEntry);
+    void setWatcher(DKBansPlayer player);
 
 
     PlayerHistoryEntry accept(DKBansExecutor executor, String reason);

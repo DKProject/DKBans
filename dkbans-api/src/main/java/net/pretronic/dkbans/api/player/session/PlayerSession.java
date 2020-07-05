@@ -57,7 +57,7 @@ public interface PlayerSession {
 
     String getClientEdition();
 
-    int getClientProtocolVersion();//@Todo maybe use from McNative
+    int getClientProtocolVersion();
 
     long getConnectTime();
 

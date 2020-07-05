@@ -94,6 +94,9 @@ messages:
   dkbans.command.report.take.already: '${dkbans.prefix.report} &aThe report of &e{target.name} has been already taken'
   dkbans.command.report.accept.usage: '${dkbans.prefix.report} &cUse /report accept <name>'
   dkbans.command.report.accept.notWatching: '${dkbans.prefix.report} &cYou are not watching this player'
+  dkbans.command.report.accept.listEntries: '${dkbans.prefix.report} &6Available report entries&8:
+  @for("entry" in {entries}, ${dkbans.command.report.listTemplates.loop},"\n")'
+  dkbans.command.report.accept.listEntries.loop: '&8» ![{entry.template.displayName](run://)'
 
   dkbans.command.filter.affiliationArea.notFound: '${dkbans.prefix.chat} &cThe affiliation area &c{area} &cwas not found'
   dkbans.command.filter.operation.notFound: '${dkbans.prefix.chat} &cThe filter operation &c{operation} &cwas not found'

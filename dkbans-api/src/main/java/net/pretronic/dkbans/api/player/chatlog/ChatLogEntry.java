@@ -20,7 +20,10 @@
 
 package net.pretronic.dkbans.api.player.chatlog;
 
+import net.pretronic.dkbans.api.filter.Filter;
+import net.pretronic.dkbans.api.filter.FilterAffiliationArea;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
+import net.pretronic.libraries.utility.annonations.Nullable;
 
 import java.util.UUID;
 
@@ -39,6 +42,11 @@ public interface ChatLogEntry {
 
     UUID getServerId();
 
-    //@Todo getFilter if rejected
+    default boolean isBlocked() {
+        return getBlockedByFilterAffiliation() != null;
+    }
+
+    @Nullable
+    String getBlockedByFilterAffiliation();
 
 }

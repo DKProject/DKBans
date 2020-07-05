@@ -24,6 +24,7 @@ import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.DKBansScope;
 import net.pretronic.dkbans.api.filter.Filter;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
+import net.pretronic.dkbans.api.player.chatlog.ChatLogEntry;
 import net.pretronic.dkbans.api.player.history.*;
 import net.pretronic.dkbans.api.player.note.PlayerNote;
 import net.pretronic.dkbans.api.player.note.PlayerNoteType;
@@ -138,6 +139,12 @@ public interface DKBansStorage {
     PlayerReportEntry createPlayerReportEntry(PlayerReport report, DKBansExecutor reporter, ReportTemplate template, String serverName, UUID serverId);
 
     PlayerReportEntry createPlayerReportEntry(PlayerReport report, DKBansExecutor reporter, String reason, String serverName, UUID serverId);
+
+
+
+    //Chat log
+
+    ChatLogEntry createChatLogEntry(UUID playerId, String message, long time, String serverName, UUID serverId, Filter filter);
 
       /*
     private final PlayerHistoryEntry entry;

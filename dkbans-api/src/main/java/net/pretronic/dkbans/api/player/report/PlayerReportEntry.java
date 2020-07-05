@@ -45,6 +45,8 @@ public interface PlayerReportEntry {
 
     long getTime();
 
+    String buildPunishmentCommand();
+
     Document getProperties();
 
 }

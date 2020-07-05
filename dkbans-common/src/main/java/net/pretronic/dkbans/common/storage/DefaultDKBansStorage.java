@@ -36,6 +36,7 @@ import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.DKBansScope;
 import net.pretronic.dkbans.api.filter.Filter;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
+import net.pretronic.dkbans.api.player.chatlog.ChatLogEntry;
 import net.pretronic.dkbans.api.player.history.*;
 import net.pretronic.dkbans.api.player.note.PlayerNote;
 import net.pretronic.dkbans.api.player.note.PlayerNoteType;
@@ -48,6 +49,7 @@ import net.pretronic.dkbans.api.template.*;
 import net.pretronic.dkbans.api.template.report.ReportTemplate;
 import net.pretronic.dkbans.common.DefaultDKBansScope;
 import net.pretronic.dkbans.common.filter.DefaultFilter;
+import net.pretronic.dkbans.common.player.chatlog.DefaultChatLogEntry;
 import net.pretronic.dkbans.common.player.history.DefaultPlayerHistoryEntry;
 import net.pretronic.dkbans.common.player.history.DefaultPlayerHistoryEntrySnapshot;
 import net.pretronic.dkbans.common.player.history.DefaultPlayerHistoryType;
@@ -534,7 +536,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
         return new DefaultPlayerReport(id, player, state);
     }
 
-    @Override//@Todo scope or what?
+    @Override
     public PlayerReportEntry createPlayerReportEntry(PlayerReport report, DKBansExecutor reporter, ReportTemplate template, String serverName, UUID serverId) {
         Validate.notNull(report, reporter, template, serverName, serverId);
         long time = System.currentTimeMillis();
@@ -549,7 +551,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
         return new DefaultPlayerReportEntry(id, report, reporter, template, null , serverName, serverId, time, Document.newDocument());
     }
 
-    @Override//@Todo scope or what?
+    @Override
     public PlayerReportEntry createPlayerReportEntry(PlayerReport report, DKBansExecutor reporter, String reason, String serverName, UUID serverId) {
         Validate.notNull(report, reporter, serverName, serverId);
         long time = System.currentTimeMillis();
@@ -562,6 +564,19 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 .set("ServerId", serverId)
                 .executeAndGetGeneratedKeyAsInt("Id");
         return new DefaultPlayerReportEntry(id, report, reporter, null, reason , serverName, serverId, time, Document.newDocument());
+    }
+
+    @Override
+    public ChatLogEntry createChatLogEntry(UUID playerId, String message, long time, String serverName, UUID serverId, Filter filter) {
+        int id = this.playerChatLog.insert()
+                .set("PlayerId", playerId)
+                .set("Message", message)
+                .set("Time", time)
+                .set("ServerName", serverName)
+                .set("ServerId", serverId)
+                .set("FilterId", filter != null ? filter.getId() : null)
+                .executeAndGetGeneratedKeyAsInt("Id");
+        return new DefaultChatLogEntry(id, playerId, message, time, serverName, serverId, filter);
     }
 
     private List<PlayerSession> getPlayerSessionsByResult(DKBansPlayer player, QueryResult result) {
@@ -673,6 +688,66 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 player);
     }
 
+    public DatabaseCollection getPlayerSessions() {
+        return playerSessions;
+    }
+
+    public DatabaseCollection getPlayerChatLog() {
+        return playerChatLog;
+    }
+
+    public DatabaseCollection getPlayerSettings() {
+        return playerSettings;
+    }
+
+    public DatabaseCollection getPlayerNotes() {
+        return playerNotes;
+    }
+
+    public DatabaseCollection getHistoryType() {
+        return historyType;
+    }
+
+    public DatabaseCollection getHistory() {
+        return history;
+    }
+
+    public DatabaseCollection getHistoryVersion() {
+        return historyVersion;
+    }
+
+    public DatabaseCollection getHistoryNotes() {
+        return historyNotes;
+    }
+
+    public DatabaseCollection getReports() {
+        return reports;
+    }
+
+    public DatabaseCollection getReportEntries() {
+        return reportEntries;
+    }
+
+    public DatabaseCollection getIpAddressBlacklist() {
+        return ipAddressBlacklist;
+    }
+
+    public DatabaseCollection getTemplateCategories() {
+        return templateCategories;
+    }
+
+    public DatabaseCollection getTemplateGroups() {
+        return templateGroups;
+    }
+
+    public DatabaseCollection getTemplate() {
+        return template;
+    }
+
+    public DatabaseCollection getFilter() {
+        return filter;
+    }
+
     private DatabaseCollection createPlayerSessionsCollection() {
         return database.createCollection("dkbans_player_sessions")
                 .field("Id", DataType.INTEGER, FieldOption.PRIMARY_KEY, FieldOption.AUTO_INCREMENT)
@@ -700,7 +775,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 .field("Time", DataType.LONG, FieldOption.NOT_NULL)
                 .field("ServerName", DataType.STRING, FieldOption.NOT_NULL)
                 .field("ServerId", DataType.UUID, FieldOption.NOT_NULL)
-                .field("FilterId", DataType.INTEGER, ForeignKey.of(this.filter, "Id"))
+                .field("FilterAffiliationArea", DataType.STRING)
                 .create();
     }
 
@@ -758,8 +833,8 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 .field("TemplateId", DataType.INTEGER, ForeignKey.of(this.template, "Id"))
                 .field("RevokeTemplateId", DataType.INTEGER, ForeignKey.of(this.template, "Id"))
                 .field("RevokeReason", DataType.STRING)
-                .field("ModifiedTime", DataType.LONG)//@Todo nullAble ?
-                .field("ModifiedBy", DataType.UUID)//@Todo nullAble ?
+                .field("ModifiedTime", DataType.LONG, FieldOption.NOT_NULL)
+                .field("ModifiedBy", DataType.UUID, FieldOption.NOT_NULL)
                 .field("ModifiedActive", DataType.BOOLEAN)
                 .create();
     }

@@ -135,6 +135,13 @@ public class PlayerListener {
         if(mute != null){
             event.setCancelled(true);
             sendMutedMessage(event.getOnlinePlayer(), mute);
+        } else {
+            DKBans.getInstance().getStorage().createChatLogEntry(event.getPlayer().getUniqueId(),
+                    event.getMessage(),
+                    System.currentTimeMillis(),
+                    event.getOnlinePlayer().getServer().getIdentifier().getName(),
+                    event.getOnlinePlayer().getServer().getIdentifier().getUniqueId(),
+                    null);//@Todo apply filter if matched
         }
     }
 

@@ -22,6 +22,7 @@ package net.pretronic.dkbans.api;
 
 import net.pretronic.dkbans.api.broadcast.BroadcastManager;
 import net.pretronic.dkbans.api.filter.FilterManager;
+import net.pretronic.dkbans.api.player.chatlog.ChatLogManager;
 import net.pretronic.dkbans.api.player.DKBansPlayerManager;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryManager;
 import net.pretronic.dkbans.api.player.report.ReportManager;
@@ -60,8 +61,9 @@ public abstract class DKBans {
 
     public abstract TemplateManager getTemplateManager();
 
-    public abstract DKBansPlayerManager getPlayerManager();
+    public abstract ChatLogManager getChatLogManager();
 
+    public abstract DKBansPlayerManager getPlayerManager();
 
     public abstract void broadcastMessage(String channel,DKBansExecutor executor,String message);
 

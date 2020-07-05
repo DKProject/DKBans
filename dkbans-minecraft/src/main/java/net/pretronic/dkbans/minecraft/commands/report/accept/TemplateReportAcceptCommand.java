@@ -2,7 +2,7 @@
  * (C) Copyright 2020 The DKBans Project (Davide Wietlisbach & Philipp Elvin Friedhoff)
  *
  * @author Philipp Elvin Friedhoff
- * @since 30.06.20, 16:32
+ * @since 30.06.20, 19:51
  * @web %web%
  *
  * The DKBans Project is under the Apache License, version 2.0 (the "License");
@@ -18,55 +18,44 @@
  * under the License.
  */
 
-package net.pretronic.dkbans.minecraft.commands.report;
+package net.pretronic.dkbans.minecraft.commands.report.accept;
 
-import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.report.PlayerReport;
+import net.pretronic.dkbans.minecraft.commands.CommandUtil;
 import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.dkbans.minecraft.config.Permissions;
 import net.pretronic.libraries.command.command.BasicCommand;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
 import net.pretronic.libraries.command.sender.CommandSender;
-import net.pretronic.libraries.message.bml.variable.VariableSet;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
-import org.mcnative.common.McNative;
+import net.pretronic.libraries.utility.map.Pair;
 import org.mcnative.common.player.OnlineMinecraftPlayer;
 
-public class ReportAcceptCommand extends BasicCommand {
+public class TemplateReportAcceptCommand extends BasicCommand {
 
-    public ReportAcceptCommand(ObjectOwner owner) {
+    public TemplateReportAcceptCommand(ObjectOwner owner) {
         super(owner, CommandConfiguration.newBuilder().name("accept").permission(Permissions.COMMAND_REPORT_STUFF).create());
     }
 
     @Override
     public void execute(CommandSender sender, String[] args) {
-        if(!(sender instanceof OnlineMinecraftPlayer)) {
-            sender.sendMessage(Messages.ERROR_ONLY_PLAYER);
-            return;
-        }
+
         if(args.length == 0) {
             sender.sendMessage(Messages.COMMAND_REPORT_ACCEPT_USAGE);
             return;
         }
-        OnlineMinecraftPlayer target = McNative.getInstance().getLocal().getOnlinePlayer(args[0]);
-        if(target == null) {
-            sender.sendMessage(Messages.PLAYER_NOT_FOUND);
-            return;
-        }
 
-        PlayerReport report = DKBans.getInstance().getReportManager().getReport(target.getAs(DKBansPlayer.class));
-        if(report == null) {
-            sender.sendMessage(Messages.REPORT_NOT_FOUND, VariableSet.create().addDescribed("player", target));
-            return;
-        }
-        DKBansPlayer player = ((OnlineMinecraftPlayer)sender).getAs(DKBansPlayer.class);
+        Pair<OnlineMinecraftPlayer, PlayerReport> data = CommandUtil.checkAndGetTargetReport(sender, args[0]);
+        if(data != null) {
+            PlayerReport report = data.getValue();
+            DKBansPlayer player = ((OnlineMinecraftPlayer)sender).getAs(DKBansPlayer.class);
 
-        if(!player.equals(report.getWatcher())) {
-            sender.sendMessage(Messages.COMMAND_REPORT_ACCEPT_NOT_WATCHING);
-            return;
+            if(!player.equals(report.getWatcher())) {
+                sender.sendMessage(Messages.COMMAND_REPORT_ACCEPT_NOT_WATCHING);
+                return;
+            }
+            //@Todo finish command
         }
-        report.accept(player);
-        //@Todo message ...
     }
 }

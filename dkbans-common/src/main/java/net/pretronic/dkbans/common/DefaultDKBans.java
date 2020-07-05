@@ -24,6 +24,7 @@ import net.pretronic.databasequery.api.Database;
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.broadcast.BroadcastManager;
+import net.pretronic.dkbans.api.player.chatlog.ChatLogManager;
 import net.pretronic.dkbans.api.event.DKBansChannelBroadcastMessageReceiveEvent;
 import net.pretronic.dkbans.api.player.DKBansPlayerManager;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryManager;
@@ -32,6 +33,7 @@ import net.pretronic.dkbans.api.storage.DKBansStorage;
 import net.pretronic.dkbans.api.support.SupportTicketManager;
 import net.pretronic.dkbans.common.event.DefaultDKBansChannelBroadcastMessageReceiveEvent;
 import net.pretronic.dkbans.common.filter.DefaultFilterManager;
+import net.pretronic.dkbans.common.player.chatlog.DefaultChatLogManager;
 import net.pretronic.dkbans.common.player.history.DefaultPlayerHistoryManager;
 import net.pretronic.dkbans.common.player.report.DefaultReportManager;
 import net.pretronic.dkbans.common.storage.DefaultDKBansStorage;
@@ -43,13 +45,14 @@ public class DefaultDKBans extends DKBans {
 
     private final PretronicLogger logger;
     private final EventBus eventBus;
-    private final DKBansStorage storage;
+    private final DefaultDKBansStorage storage;
     private final PlayerHistoryManager historyManager;
     private final ReportManager reportManager;
     private final SupportTicketManager ticketManager;
     private final BroadcastManager broadcastManager;
     private final DefaultFilterManager filterManager;
     private final DefaultTemplateManager templateManager;
+    private final ChatLogManager chatLogManager;
     private final DKBansPlayerManager playerManager;
 
     public DefaultDKBans(PretronicLogger logger, EventBus eventBus, Database database,DKBansPlayerManager playerManager) {
@@ -62,6 +65,7 @@ public class DefaultDKBans extends DKBans {
         this.broadcastManager = null;
         this.filterManager = new DefaultFilterManager();
         this.templateManager = new DefaultTemplateManager(this);
+        this.chatLogManager = new DefaultChatLogManager();
         this.playerManager = playerManager;
     }
 
@@ -76,7 +80,7 @@ public class DefaultDKBans extends DKBans {
     }
 
     @Override
-    public DKBansStorage getStorage() {
+    public DefaultDKBansStorage getStorage() {
         return this.storage;
     }
 
@@ -108,6 +112,11 @@ public class DefaultDKBans extends DKBans {
     @Override
     public DefaultTemplateManager getTemplateManager() {
         return this.templateManager;
+    }
+
+    @Override
+    public ChatLogManager getChatLogManager() {
+        return this.chatLogManager;
     }
 
     @Override

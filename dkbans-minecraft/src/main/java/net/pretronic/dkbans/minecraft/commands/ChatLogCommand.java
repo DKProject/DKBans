@@ -2,7 +2,7 @@
  * (C) Copyright 2020 The DKBans Project (Davide Wietlisbach & Philipp Elvin Friedhoff)
  *
  * @author Philipp Elvin Friedhoff
- * @since 21.06.20, 17:26
+ * @since 05.07.20, 15:48
  * @web %web%
  *
  * The DKBans Project is under the Apache License, version 2.0 (the "License");
@@ -18,18 +18,11 @@
  * under the License.
  */
 
-package net.pretronic.dkbans.api.player.chatlog;
+package net.pretronic.dkbans.minecraft.commands;
 
-import java.util.UUID;
-
-public interface ChatLogManager {
-
-    ServerChatLog getServerChatLog(String serverName, UUID serverId);
-
-    ServerChatLog getServerChatLog(String serverName);
-
-    ServerChatLog getServerChatLog(UUID serverId);
-
-    PlayerChatLog getPlayerChatLog(UUID playerId);
-
+/*
+- chatlog player <name>
+- chatlog server <name, id>
+ */
+public class ChatLogCommand {
 }

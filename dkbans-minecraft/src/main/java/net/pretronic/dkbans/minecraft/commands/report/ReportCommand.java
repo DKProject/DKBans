@@ -20,12 +20,13 @@
 
 package net.pretronic.dkbans.minecraft.commands.report;
 
-import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.report.PlayerReportEntry;
 import net.pretronic.dkbans.api.template.Template;
 import net.pretronic.dkbans.api.template.TemplateGroup;
 import net.pretronic.dkbans.api.template.report.ReportTemplate;
+import net.pretronic.dkbans.minecraft.commands.report.accept.ReportAcceptCommand;
+import net.pretronic.dkbans.minecraft.commands.report.accept.TemplateReportAcceptCommand;
 import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.libraries.command.NotFindable;
 import net.pretronic.libraries.command.command.MainCommand;
@@ -35,14 +36,14 @@ import net.pretronic.libraries.message.bml.variable.VariableSet;
 import net.pretronic.libraries.utility.Iterators;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
 import org.mcnative.common.McNative;
-import org.mcnative.common.player.MinecraftPlayer;
 import org.mcnative.common.player.OnlineMinecraftPlayer;
 
 import java.util.List;
 
 /*
 report <login, logout, toggle> -
-report take <name> -
+report take <name>
+report list
 
 report <name> <reason> -
 report accept <name>
@@ -60,9 +61,11 @@ public class ReportCommand extends MainCommand implements NotFindable {
         registerCommand(new ReportLogoutCommand(owner));
         registerCommand(new ReportToggleCommand(owner));
         registerCommand(new ReportTakeCommand(owner));
-        registerCommand(new ReportAcceptCommand(owner));
+        if(templateGroup != null) registerCommand(new TemplateReportAcceptCommand(owner));
+        else registerCommand(new ReportAcceptCommand(owner));
         registerCommand(new ReportDeclineCommand(owner));
         registerCommand(new ReportOtherCommand(owner));
+        registerCommand(new ReportListCommand(owner));
     }
 
     @Override

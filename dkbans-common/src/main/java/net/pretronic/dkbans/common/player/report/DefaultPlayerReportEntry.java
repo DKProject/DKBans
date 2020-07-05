@@ -97,6 +97,11 @@ public class DefaultPlayerReportEntry implements PlayerReportEntry {
     }
 
     @Override
+    public String buildPunishmentCommand() {
+        return String.format("/%s %s %s", template.getGroup());//@Todo build command
+    }
+
+    @Override
     public Document getProperties() {
         return this.properties;
     }
