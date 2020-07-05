@@ -94,6 +94,11 @@ public class CommandConfig {
             .permission("dkbans.command.chatlog")
             .create();
 
+    public static CommandConfiguration COMMAND_TEMPLATE = CommandConfiguration.newBuilder()
+            .name("template")
+            .permission("dkbans.command.template")
+            .create();
+
     //Punishment Commands
 
     public static CommandConfiguration COMMAND_PUNISH_KICK = CommandConfiguration.newBuilder()

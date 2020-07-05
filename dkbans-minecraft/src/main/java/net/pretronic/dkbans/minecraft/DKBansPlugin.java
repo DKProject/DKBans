@@ -38,8 +38,10 @@ import net.pretronic.dkbans.minecraft.commands.punish.PermaPunishCommand;
 import net.pretronic.dkbans.minecraft.commands.punish.TempPunishCommand;
 import net.pretronic.dkbans.minecraft.commands.punish.TemplatePunishCommand;
 import net.pretronic.dkbans.minecraft.commands.report.ReportCommand;
+import net.pretronic.dkbans.minecraft.commands.template.TemplateCommand;
 import net.pretronic.dkbans.minecraft.config.CommandConfig;
 import net.pretronic.dkbans.minecraft.config.DKBansConfig;
+import net.pretronic.dkbans.minecraft.listeners.InternalListener;
 import net.pretronic.dkbans.minecraft.listeners.PlayerListener;
 import net.pretronic.dkbans.minecraft.player.MinecraftPlayerManager;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
@@ -99,6 +101,7 @@ public class DKBansPlugin extends MinecraftPlugin {
         getRuntime().getLocal().getCommandManager().registerCommand(new PunishNotifyCommand(this, CommandConfig.COMMAND_PUNISH_NOTIFY));
         getRuntime().getLocal().getCommandManager().registerCommand(new NotifyCommand(this, CommandConfig.COMMAND_NOTIFY));
         getRuntime().getLocal().getCommandManager().registerCommand(new ChatLogCommand(this, CommandConfig.COMMAND_CHATLOG));
+        getRuntime().getLocal().getCommandManager().registerCommand(new TemplateCommand(this, CommandConfig.COMMAND_TEMPLATE));
 
         getRuntime().getLocal().getCommandManager().registerCommand(new HelpCommand(this, CommandConfig.COMMAND_HELP));
         getRuntime().getLocal().getCommandManager().registerCommand(new FilterCommand(this, CommandConfig.COMMAND_FILTER));
