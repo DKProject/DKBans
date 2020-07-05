@@ -21,6 +21,7 @@
 package net.pretronic.dkbans.minecraft.commands.report;
 
 import net.pretronic.dkbans.minecraft.PlayerSettingsKey;
+import net.pretronic.dkbans.minecraft.commands.CommandUtil;
 import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.dkbans.minecraft.config.Permissions;
 import net.pretronic.libraries.command.command.BasicCommand;
@@ -28,6 +29,7 @@ import net.pretronic.libraries.command.command.configuration.CommandConfiguratio
 import net.pretronic.libraries.command.sender.CommandSender;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
 import org.mcnative.common.player.MinecraftPlayer;
+import org.mcnative.common.player.OnlineMinecraftPlayer;
 import org.mcnative.common.player.PlayerSetting;
 
 public class ReportLogoutCommand extends BasicCommand {
@@ -38,18 +40,17 @@ public class ReportLogoutCommand extends BasicCommand {
 
     @Override
     public void execute(CommandSender sender, String[] args) {
-        if(!(sender instanceof MinecraftPlayer)) {
+        if(!(sender instanceof OnlineMinecraftPlayer)) {
             sender.sendMessage(Messages.ERROR_ONLY_PLAYER);
             return;
         }
-        MinecraftPlayer player = (MinecraftPlayer) sender;
+        OnlineMinecraftPlayer player = (OnlineMinecraftPlayer) sender;
 
-        PlayerSetting setting = player.getSetting("DKBans", PlayerSettingsKey.TEAM_CHAT_LOGIN);
-        if(setting.getBooleanValue()) {
-            setting.setValue(false);
-            sender.sendMessage(Messages.COMMAND_REPORT_LOGOUT_SUCCESS);
-        } else {
-            sender.sendMessage(Messages.COMMAND_REPORT_LOGOUT_ALREADY);
-        }
+        PlayerSetting setting = player.getSetting("DKBans", PlayerSettingsKey.REPORT_CHAT_LOGIN);
+        changeLogin(player, setting.getBooleanValue(), false);
+    }
+
+    private void changeLogin(OnlineMinecraftPlayer player, boolean current, boolean action){
+        CommandUtil.changeLogin(Messages.PREFIX_REPORT,PlayerSettingsKey.REPORT_CHAT_LOGIN,player,current,action);
     }
 }
