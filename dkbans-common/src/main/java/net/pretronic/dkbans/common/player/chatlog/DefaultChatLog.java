@@ -111,8 +111,8 @@ public abstract class DefaultChatLog implements ChatLog {
                 entry.getString("Message"),
                 entry.getLong("Time"),
                 entry.getString("ServerName"),
-                entry.getUniqueId("ServeId"),
-                DKBans.getInstance().getFilterManager().getFilter(entry.getInt("FilterId")));
+                entry.getUniqueId("ServerId"),
+                entry.getString("FilterAffiliationArea"));
     }
 
     public abstract FindQuery getBaseQuery();

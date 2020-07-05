@@ -21,11 +21,11 @@
 package net.pretronic.dkbans.common.player.chatlog;
 
 import net.pretronic.dkbans.api.DKBans;
-import net.pretronic.dkbans.api.filter.Filter;
-import net.pretronic.dkbans.api.filter.FilterAffiliationArea;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.chatlog.ChatLogEntry;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.UUID;
 
 public class DefaultChatLogEntry implements ChatLogEntry {
@@ -66,6 +66,11 @@ public class DefaultChatLogEntry implements ChatLogEntry {
     @Override
     public long getTime() {
         return this.time;
+    }
+
+    @Override
+    public String getTimeFormatted() {
+        return new SimpleDateFormat("dd-MM-yyyy hh:mm").format(new Date(getTime()));//@Todo configurable date format
     }
 
     @Override
