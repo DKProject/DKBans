@@ -20,6 +20,8 @@
 
 package net.pretronic.dkbans.common.player.chatlog;
 
+import net.pretronic.dkbans.api.DKBans;
+import net.pretronic.dkbans.api.player.chatlog.ChatLogEntry;
 import net.pretronic.dkbans.api.player.chatlog.ChatLogManager;
 import net.pretronic.dkbans.api.player.chatlog.PlayerChatLog;
 import net.pretronic.dkbans.api.player.chatlog.ServerChatLog;
@@ -46,5 +48,10 @@ public class DefaultChatLogManager implements ChatLogManager {
     @Override
     public PlayerChatLog getPlayerChatLog(UUID playerId) {
         return new DefaultPlayerChatLog(playerId);
+    }
+
+    @Override
+    public ChatLogEntry createChatLogEntry(UUID playerId, String message, long time, String serverName, UUID serverId, String filterAffiliationArea) {
+        return DKBans.getInstance().getStorage().createChatLogEntry(playerId, message, time, serverName, serverId, filterAffiliationArea);
     }
 }

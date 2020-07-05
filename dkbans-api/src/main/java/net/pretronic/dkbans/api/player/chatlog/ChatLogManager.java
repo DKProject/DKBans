@@ -32,4 +32,5 @@ public interface ChatLogManager {
 
     PlayerChatLog getPlayerChatLog(UUID playerId);
 
+    ChatLogEntry createChatLogEntry(UUID playerId, String message, long time, String serverName, UUID serverId, String filterAffiliationArea);
 }
