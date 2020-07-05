@@ -137,6 +137,13 @@ public class Messages {
 
     public static MessageComponent<?> COMMAND_REPORT_ACCEPT_USAGE = Text.ofMessageKey("dkbans.command.report.accept.usage");
     public static MessageComponent<?> COMMAND_REPORT_ACCEPT_NOT_WATCHING = Text.ofMessageKey("dkbans.command.report.accept.notWatching");
+    public static MessageComponent<?> COMMAND_REPORT_ACCEPT_LIST_ENTRIES = Text.ofMessageKey("dkbans.command.report.accept.listEntries");
+
+    public static MessageComponent<?> COMMAND_REPORT_DECLINE_USAGE = Text.ofMessageKey("dkbans.command.report.decline.usage");
+    public static MessageComponent<?> COMMAND_REPORT_DECLINE = Text.ofMessageKey("dkbans.command.report.decline");
+
+    public static MessageComponent<?> COMMAND_REPORT_LIST = Text.ofMessageKey("dkbans.command.report.list");
+
 
 
     public static MessageComponent<?> COMMAND_PLAYER_NOTES_HELP = Text.ofMessageKey("dkbans.command.playerNotes.help");

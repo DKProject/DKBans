@@ -2,7 +2,7 @@
  * (C) Copyright 2020 The DKBans Project (Davide Wietlisbach & Philipp Elvin Friedhoff)
  *
  * @author Philipp Elvin Friedhoff
- * @since 05.07.20, 15:48
+ * @since 05.07.20, 17:34
  * @web %web%
  *
  * The DKBans Project is under the Apache License, version 2.0 (the "License");
@@ -18,15 +18,17 @@
  * under the License.
  */
 
-package net.pretronic.dkbans.minecraft.commands.report.accept;
+package net.pretronic.dkbans.minecraft.commands.report;
 
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.report.PlayerReport;
 import net.pretronic.dkbans.minecraft.commands.CommandUtil;
+import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.dkbans.minecraft.config.Permissions;
 import net.pretronic.libraries.command.command.BasicCommand;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
 import net.pretronic.libraries.command.sender.CommandSender;
+import net.pretronic.libraries.message.bml.variable.VariableSet;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
 import net.pretronic.libraries.utility.map.Pair;
 import org.mcnative.common.player.OnlineMinecraftPlayer;
@@ -39,14 +41,23 @@ public class ReportAcceptCommand extends BasicCommand {
 
     @Override
     public void execute(CommandSender sender, String[] args) {
+
+        if(args.length == 0) {
+            sender.sendMessage(Messages.COMMAND_REPORT_ACCEPT_USAGE);
+            return;
+        }
+
         Pair<OnlineMinecraftPlayer, PlayerReport> data = CommandUtil.checkAndGetTargetReport(sender, args[0]);
         if(data != null) {
-            StringBuilder reasonBuilder = new StringBuilder();
-            for (String arg : args) {
-                reasonBuilder.append(arg);
+            PlayerReport report = data.getValue();
+            DKBansPlayer player = ((OnlineMinecraftPlayer)sender).getAs(DKBansPlayer.class);
+
+            if(!player.equals(report.getWatcher())) {
+                sender.sendMessage(Messages.COMMAND_REPORT_ACCEPT_NOT_WATCHING);
+                return;
             }
-            DKBansPlayer player = data.getKey().getAs(DKBansPlayer.class);
-            //@Todo how long?
+            sender.sendMessage(Messages.COMMAND_REPORT_ACCEPT_LIST_ENTRIES, VariableSet.create()
+                    .addDescribed("entries", report.getEntries()));
         }
     }
 }

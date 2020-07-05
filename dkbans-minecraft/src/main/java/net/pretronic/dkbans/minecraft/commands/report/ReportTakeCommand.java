@@ -23,6 +23,7 @@ package net.pretronic.dkbans.minecraft.commands.report;
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.report.PlayerReport;
+import net.pretronic.dkbans.minecraft.commands.CommandUtil;
 import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.dkbans.minecraft.config.Permissions;
 import net.pretronic.libraries.command.command.BasicCommand;
@@ -30,6 +31,7 @@ import net.pretronic.libraries.command.command.configuration.CommandConfiguratio
 import net.pretronic.libraries.command.sender.CommandSender;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
+import net.pretronic.libraries.utility.map.Pair;
 import org.mcnative.common.McNative;
 import org.mcnative.common.player.OnlineMinecraftPlayer;
 
@@ -49,22 +51,18 @@ public class ReportTakeCommand extends BasicCommand {
             sender.sendMessage(Messages.COMMAND_REPORT_TAKE_USAGE);
             return;
         }
-        OnlineMinecraftPlayer target = McNative.getInstance().getLocal().getOnlinePlayer(args[0]);
-        if(target == null) {
-            sender.sendMessage(Messages.PLAYER_NOT_FOUND);
-            return;
+        Pair<OnlineMinecraftPlayer, PlayerReport> data = CommandUtil.checkAndGetTargetReport(sender, args[0]);
+        if(data != null) {
+            PlayerReport report = data.getValue();
+            OnlineMinecraftPlayer target = data.getKey();
+            DKBansPlayer player = ((OnlineMinecraftPlayer)sender).getAs(DKBansPlayer.class);
+            if(report.isWatched()) {
+                sender.sendMessage(Messages.COMMAND_REPORT_TAKE_ALREADY, VariableSet.create().addDescribed("target", target));
+            } else {
+                report.setWatcher(player);
+                sender.sendMessage(Messages.COMMAND_REPORT_TAKE, VariableSet.create().addDescribed("target", target));
+            }
         }
-        PlayerReport report = DKBans.getInstance().getReportManager().getReport(target.getAs(DKBansPlayer.class));
-        if(report == null) {
-            sender.sendMessage(Messages.REPORT_NOT_FOUND, VariableSet.create().addDescribed("player", target));
-            return;
-        }
-        DKBansPlayer player = ((OnlineMinecraftPlayer)sender).getAs(DKBansPlayer.class);
-        if(report.isWatched()) {
-            sender.sendMessage(Messages.COMMAND_REPORT_TAKE_ALREADY, VariableSet.create().addDescribed("target", target));
-        } else {
-            report.setWatcher(player);
-            sender.sendMessage(Messages.COMMAND_REPORT_TAKE, VariableSet.create().addDescribed("target", target));
-        }
+
     }
 }

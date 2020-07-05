@@ -27,9 +27,14 @@ import net.pretronic.dkbans.minecraft.config.Permissions;
 import net.pretronic.libraries.command.command.BasicCommand;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
 import net.pretronic.libraries.command.sender.CommandSender;
+import net.pretronic.libraries.message.bml.variable.VariableSet;
+import net.pretronic.libraries.utility.Convert;
+import net.pretronic.libraries.utility.GeneralUtil;
+import net.pretronic.libraries.utility.Iterators;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
 import org.mcnative.common.player.MinecraftPlayer;
 
+import java.util.Comparator;
 import java.util.List;
 
 public class ReportListCommand extends BasicCommand {
@@ -47,5 +52,14 @@ public class ReportListCommand extends BasicCommand {
             return;
         }
         List<PlayerReport> reports = DKBans.getInstance().getReportManager().getOpenReports();
+        reports.sort(Comparator.comparingInt(PlayerReport::getCount));
+
+        int page = 1;
+        try {
+            if(args.length == 1) page = Convert.toInteger(args[0]);
+        } catch (IllegalArgumentException ignored) {}
+
+        List<PlayerReport> shownReports = GeneralUtil.getItemsOnPage(reports, page, 15);
+        sender.sendMessage(Messages.COMMAND_REPORT_LIST, VariableSet.create().addDescribed("reports", shownReports));
     }
 }

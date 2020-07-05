@@ -25,8 +25,6 @@ import net.pretronic.dkbans.api.player.report.PlayerReportEntry;
 import net.pretronic.dkbans.api.template.Template;
 import net.pretronic.dkbans.api.template.TemplateGroup;
 import net.pretronic.dkbans.api.template.report.ReportTemplate;
-import net.pretronic.dkbans.minecraft.commands.report.accept.ReportAcceptCommand;
-import net.pretronic.dkbans.minecraft.commands.report.accept.TemplateReportAcceptCommand;
 import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.libraries.command.NotFindable;
 import net.pretronic.libraries.command.command.MainCommand;
@@ -46,7 +44,7 @@ report take <name>
 report list
 
 report <name> <reason> -
-report accept <name> <reason>
+report accept <name> <duration> <reason>
 report other <name>
 report deny <name>
  */
@@ -61,10 +59,10 @@ public class ReportCommand extends MainCommand implements NotFindable {
         registerCommand(new ReportLogoutCommand(owner));
         registerCommand(new ReportToggleCommand(owner));
         registerCommand(new ReportTakeCommand(owner));
-        if(templateGroup != null) registerCommand(new TemplateReportAcceptCommand(owner));
-        else registerCommand(new ReportAcceptCommand(owner));
-        registerCommand(new ReportDeclineCommand(owner));
-        registerCommand(new ReportOtherCommand(owner));
+        if(templateGroup != null) {
+            registerCommand(new ReportAcceptCommand(owner));
+            registerCommand(new ReportDeclineCommand(owner));
+        }
         registerCommand(new ReportListCommand(owner));
     }
 

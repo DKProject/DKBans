@@ -20,9 +20,9 @@
 
 package net.pretronic.dkbans.minecraft.commands.report;
 
-import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.report.PlayerReport;
+import net.pretronic.dkbans.minecraft.commands.CommandUtil;
 import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.dkbans.minecraft.config.Permissions;
 import net.pretronic.libraries.command.command.BasicCommand;
@@ -30,7 +30,8 @@ import net.pretronic.libraries.command.command.configuration.CommandConfiguratio
 import net.pretronic.libraries.command.sender.CommandSender;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
-import org.mcnative.common.McNative;
+import net.pretronic.libraries.utility.map.Pair;
+import org.mcnative.common.player.MinecraftPlayer;
 import org.mcnative.common.player.OnlineMinecraftPlayer;
 
 public class ReportDeclineCommand extends BasicCommand {
@@ -49,19 +50,14 @@ public class ReportDeclineCommand extends BasicCommand {
             return;
         }
         if(args.length == 0) {
-            sender.sendMessage(Messages.COMMAND_REPORT_ACCEPT_USAGE);
+            sender.sendMessage(Messages.COMMAND_REPORT_DECLINE_USAGE);
             return;
         }
-        OnlineMinecraftPlayer target = McNative.getInstance().getLocal().getOnlinePlayer(args[0]);
-        if(target == null) {
-            sender.sendMessage(Messages.PLAYER_NOT_FOUND);
-            return;
+        Pair<OnlineMinecraftPlayer, PlayerReport> data = CommandUtil.checkAndGetTargetReport(sender, args[0]);
+
+        if(data != null) {
+            data.getValue().decline(((MinecraftPlayer)sender).getAs(DKBansPlayer.class));
+            sender.sendMessage(Messages.COMMAND_REPORT_DECLINE, VariableSet.create().addDescribed("target", data.getKey()));
         }
-        PlayerReport report = DKBans.getInstance().getReportManager().getReport(target.getAs(DKBansPlayer.class));
-        if(report == null) {
-            sender.sendMessage(Messages.REPORT_NOT_FOUND, VariableSet.create().addDescribed("player", target));
-            return;
-        }
-        //report.decline(); @Todo get dkbans player in common
     }
 }
