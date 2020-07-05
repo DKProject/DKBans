@@ -40,7 +40,7 @@ public class TempPunishCommand extends BasicCommand {
         super(owner, configuration);
         this.type = type;
     }
-
+    
     @Override
     public void execute(CommandSender sender, String[] arguments) {
         if(arguments.length <= 2){

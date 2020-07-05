@@ -22,11 +22,15 @@ package net.pretronic.dkbans.common;
 
 import net.pretronic.databasequery.api.Database;
 import net.pretronic.dkbans.api.DKBans;
+import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.broadcast.BroadcastManager;
+import net.pretronic.dkbans.api.event.DKBansChannelBroadcastMessageReceiveEvent;
+import net.pretronic.dkbans.api.player.DKBansPlayerManager;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryManager;
 import net.pretronic.dkbans.api.player.report.ReportManager;
 import net.pretronic.dkbans.api.storage.DKBansStorage;
 import net.pretronic.dkbans.api.support.SupportTicketManager;
+import net.pretronic.dkbans.common.event.DefaultDKBansChannelBroadcastMessageReceiveEvent;
 import net.pretronic.dkbans.common.filter.DefaultFilterManager;
 import net.pretronic.dkbans.common.player.history.DefaultPlayerHistoryManager;
 import net.pretronic.dkbans.common.player.report.DefaultReportManager;
@@ -46,8 +50,9 @@ public class DefaultDKBans extends DKBans {
     private final BroadcastManager broadcastManager;
     private final DefaultFilterManager filterManager;
     private final DefaultTemplateManager templateManager;
+    private final DKBansPlayerManager playerManager;
 
-    public DefaultDKBans(PretronicLogger logger, EventBus eventBus, Database database) {
+    public DefaultDKBans(PretronicLogger logger, EventBus eventBus, Database database,DKBansPlayerManager playerManager) {
         this.logger = logger;
         this.eventBus = eventBus;
         this.storage = new DefaultDKBansStorage(this, database);
@@ -57,6 +62,7 @@ public class DefaultDKBans extends DKBans {
         this.broadcastManager = null;
         this.filterManager = new DefaultFilterManager();
         this.templateManager = new DefaultTemplateManager(this);
+        this.playerManager = playerManager;
     }
 
     @Override
@@ -102,5 +108,16 @@ public class DefaultDKBans extends DKBans {
     @Override
     public DefaultTemplateManager getTemplateManager() {
         return this.templateManager;
+    }
+
+    @Override
+    public DKBansPlayerManager getPlayerManager() {
+        return playerManager;
+    }
+
+    @Override
+    public void broadcastMessage(String channel, DKBansExecutor executor, String message) {
+        getEventBus().callEvent(DKBansChannelBroadcastMessageReceiveEvent.class
+                ,new DefaultDKBansChannelBroadcastMessageReceiveEvent(channel, message, executor));
     }
 }

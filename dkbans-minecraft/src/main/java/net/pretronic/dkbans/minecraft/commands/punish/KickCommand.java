@@ -31,6 +31,7 @@ import net.pretronic.libraries.message.bml.variable.VariableSet;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
 import org.mcnative.common.player.MinecraftPlayer;
 
+//OneTimePunish
 public class KickCommand extends BasicCommand {
 
     public KickCommand(ObjectOwner owner, CommandConfiguration configuration) {
@@ -40,7 +41,7 @@ public class KickCommand extends BasicCommand {
     @Override
     public void execute(CommandSender sender, String[] arguments) {
         if(arguments.length <= 1){
-            sender.sendMessage(Messages.COMMAND_HELP_KICK);
+            sender.sendMessage(Messages.COMMAND_KICK_HELP);
             return;
         }
         MinecraftPlayer player = CommandUtil.getPlayer(sender,arguments[0],true);

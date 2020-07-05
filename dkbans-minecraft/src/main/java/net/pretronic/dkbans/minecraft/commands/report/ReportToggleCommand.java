@@ -33,7 +33,9 @@ import org.mcnative.common.player.PlayerSetting;
 public class ReportToggleCommand extends BasicCommand {
 
     public ReportToggleCommand(ObjectOwner owner) {
-        super(owner, CommandConfiguration.newBuilder().name("login").permission(Permissions.COMMAND_REPORT_STUFF).create());
+        super(owner, CommandConfiguration.newBuilder()
+                .name("toggle")
+                .permission(Permissions.COMMAND_REPORT_STUFF).create());
     }
 
     @Override

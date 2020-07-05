@@ -52,7 +52,6 @@ public class PermaPunishCommand extends BasicCommand {
         DKBansPlayer dkBansPlayer = player.getAs(DKBansPlayer.class);
         if(CommandUtil.checkBypass(sender,dkBansPlayer)) return;
 
-
         boolean override = arguments[1].equalsIgnoreCase("--override");
         String reason = CommandUtil.readStringFromArguments(arguments,override ? 2 : 1);
 

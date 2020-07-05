@@ -72,6 +72,16 @@ public class Messages {
 
     public static MessageComponent<?> PUNISH_OVERRIDE = Text.ofMessageKey("dkbans.punish.override");
 
+    public static MessageComponent<?> TEAMCHAT_MESSAGE_FORMAT = Text.ofMessageKey("dkbans.teamchat.messageFormat");
+
+    public static MessageComponent<?> CHAT_FILTER_SPAM_TOFAST = Text.ofMessageKey("dkbans.chat.filter.toFast");
+    public static MessageComponent<?> CHAT_FILTER_SPAM_REPEAT = Text.ofMessageKey("dkbans.chat.filter.repeat");
+
+    public static MessageComponent<?> FILTER_BLOCKED_NAME = Text.ofMessageKey("dkbans.filter.blocked.name");
+    public static MessageComponent<?> FILTER_BLOCKED_COMMAND = Text.ofMessageKey("dkbans.filter.blocked.command");
+    public static MessageComponent<?> FILTER_BLOCKED_INSULTING = Text.ofMessageKey("dkbans.filter.blocked.insulting");
+    public static MessageComponent<?> FILTER_BLOCKED_ADVERTISING = Text.ofMessageKey("dkbans.filter.blocked.advertising");
+
     public static MessageComponent<?> PUNISH_BAN_MESSAGE_PERMANENTLY = Text.ofMessageKey("dkbans.punish.ban.message.permanently");
     public static MessageComponent<?> PUNISH_BAN_MESSAGE_TEMPORARY = Text.ofMessageKey("dkbans.punish.ban.message.temporary");
     public static MessageComponent<?> PUNISH_BAN_NOTIFY = Text.ofMessageKey("dkbans.punish.ban.notify");
@@ -86,8 +96,11 @@ public class Messages {
 
     public static MessageComponent<?> COMMAND_HELP = Text.ofMessageKey("dkbans.command.help");
 
-    public static MessageComponent<?> COMMAND_HELP_JUMPTO = Text.ofMessageKey("dkbans.command.help.jumpto");
-    public static MessageComponent<?> COMMAND_HELP_KICK = Text.ofMessageKey("dkbans.command.help.kick");
+    public static MessageComponent<?> COMMAND_JUMPTO_HELP = Text.ofMessageKey("dkbans.command.jumpto.help");
+    public static MessageComponent<?> COMMAND_KICK_HELP = Text.ofMessageKey("dkbans.command.kick.help");
+    public static MessageComponent<?> COMMAND_NOTIFY_HELP = Text.ofMessageKey("dkbans.command.notify.help");
+    public static MessageComponent<?> COMMAND_TEAM_CHAT_HELP = Text.ofMessageKey("dkbans.command.teamChat.help");
+
 
     public static MessageComponent<?> COMMAND_PUNISH_HELP = Text.ofMessageKey("dkbans.command.punish.help");
 
@@ -100,9 +113,6 @@ public class Messages {
     public static MessageComponent<?> COMMAND_FILTER_LIST = Text.ofMessageKey("dkbans.command.filter.list");
     public static MessageComponent<?> COMMAND_FILTER_DELETED = Text.ofMessageKey("dkbans.command.filter.deleted");
     public static MessageComponent<?> COMMAND_FILTER_CREATED = Text.ofMessageKey("dkbans.command.filter.created");
-
-    public static MessageComponent<?> FILTER_BLOCKED_NAME = Text.ofMessageKey("dkbans.filter.blocked.name");
-    public static MessageComponent<?> FILTER_BLOCKED_COMMAND = Text.ofMessageKey("dkbans.filter.blocked.command");
 
     public static MessageComponent<?> COMMAND_TEMPLATE_IMPORT = Text.ofMessageKey("dkbans.command.template.import");
 
@@ -129,14 +139,10 @@ public class Messages {
     public static MessageComponent<?> COMMAND_REPORT_ACCEPT_NOT_WATCHING = Text.ofMessageKey("dkbans.command.report.accept.notWatching");
 
 
-
-    public static MessageComponent<?> COMMAND_PLAYER_HELP = Text.ofMessageKey("dkbans.command.playerNotes.help");
+    public static MessageComponent<?> COMMAND_PLAYER_NOTES_HELP = Text.ofMessageKey("dkbans.command.playerNotes.help");
     public static MessageComponent<?> COMMAND_PLAYER_NOTES_LIST = Text.ofMessageKey("dkbans.command.playerNotes.list");
     public static MessageComponent<?> COMMAND_PLAYER_NOTES_ADDED = Text.ofMessageKey("dkbans.command.playerNotes.added");
 
-    public static MessageComponent<?> COMMAND_NOTIFY_HELP = Text.ofMessageKey("dkbans.command.notify.help");
-
-    public static MessageComponent<?> COMMAND_TEAM_CHAT_HELP = Text.ofMessageKey("dkbans.command.teamChat.help");
 
     public static MessageComponent<?> COMMAND_MY_HISTORY_POINTS = Text.ofMessageKey("dkbans.command.myHistoryPoints");
 

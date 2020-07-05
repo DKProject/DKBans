@@ -119,7 +119,6 @@ public class DefaultPunishmentTemplate extends DefaultTemplate implements Punish
     }
 
     private Map<Integer, PunishmentTemplateEntry> loadDurations(Document data) {
-        System.out.println(DocumentFileType.JSON.getWriter().write(data, true));
         Map<Integer, PunishmentTemplateEntry> durations = new TreeMap<>(Integer::compare);
 
         for (DocumentEntry entry0 : data) {
@@ -130,7 +129,6 @@ public class DefaultPunishmentTemplate extends DefaultTemplate implements Punish
     }
 
     private Triple<Map<Integer, PunishmentTemplateEntry>, Integer, Double> loadPoints(Document data) {
-        System.out.println(DocumentFileType.JSON.getWriter().write(data, true));
         int addedPoints = data.getInt("addedPoints");
         double pointsDivider = data.getDouble("pointsDivider");
         Map<Integer, PunishmentTemplateEntry> points = new HashMap<>();

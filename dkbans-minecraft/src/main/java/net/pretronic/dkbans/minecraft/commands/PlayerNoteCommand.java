@@ -42,7 +42,7 @@ public class PlayerNoteCommand extends BasicCommand {
     @Override
     public void execute(CommandSender sender, String[] arguments) {
         if(arguments.length < 1){
-            sender.sendMessage(Messages.COMMAND_PLAYER_HELP);
+            sender.sendMessage(Messages.COMMAND_PLAYER_NOTES_HELP);
             return;
         }
 
@@ -70,7 +70,7 @@ public class PlayerNoteCommand extends BasicCommand {
             sender.sendMessage(Messages.COMMAND_PLAYER_NOTES_ADDED, VariableSet.create()
                     .addDescribed("note",note));
         }else {
-            sender.sendMessage(Messages.COMMAND_PLAYER_HELP);
+            sender.sendMessage(Messages.COMMAND_PLAYER_NOTES_HELP);
         }
     }
 }

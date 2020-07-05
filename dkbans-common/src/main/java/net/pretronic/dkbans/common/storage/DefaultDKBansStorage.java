@@ -292,7 +292,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
     @Override
     public List<PlayerHistoryEntry> loadActiveEntries(PlayerHistory playerHistory) {
         List<PlayerHistoryEntry> result = new ArrayList<>();
-        QueryResult result0 = createBaseQuery()
+        QueryResult result0 = createBaseQuery(playerHistory)
                 .where("ModifiedActive",true).where("Active",true)
                 .or(query -> query.where("Timeout",-1).whereLower("Timeout",System.currentTimeMillis()))
                 .orderBy("ModifiedTime", SearchOrder.DESC)
@@ -306,7 +306,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
     public List<PlayerHistoryEntry> loadEntries(PlayerHistory playerHistory, boolean skipActive) {
         List<PlayerHistoryEntry> result = new ArrayList<>();
 
-        FindQuery query = createBaseQuery();
+        FindQuery query = createBaseQuery(playerHistory);
 
         if(skipActive){
             query.not(q -> q.where("ModifiedActive",true).where("Active",true)
@@ -329,13 +329,14 @@ public class DefaultDKBansStorage implements DKBansStorage {
         return snapshots;
     }
 
-    private FindQuery createBaseQuery() {
+    private FindQuery createBaseQuery(PlayerHistory playerHistory) {
         return history.find()
                 .getAs(this.history, "Id", "HistoryId")
                 .getAs(this.historyVersion, "Id", "SnapshotId")
                 .get("Created", "Reason", "Timeout", "StaffId", "ScopeType", "ScopeName", "ScopeId", "Points", "Active", "Properties",
                         "HistoryTypeId", "PunishmentType", "TemplateId", "RevokeTemplateId", "RevokeReason", "ModifiedTime", "ModifiedBy", "ModifiedActive")
-                .join(historyVersion).on(historyVersion,"HistoryId",history,"Id");
+                .join(historyVersion).on(historyVersion,"HistoryId",history,"Id")
+                .where("PlayerId",playerHistory.getPlayer().getUniqueId());
     }
 
     private void readEntries(PlayerHistory playerHistory, List<PlayerHistoryEntry> result, QueryResult result0) {
@@ -353,6 +354,13 @@ public class DefaultDKBansStorage implements DKBansStorage {
     }
 
     private DefaultPlayerHistoryEntrySnapshot createSnapshot(QueryResultEntry resultEntry) {
+        DKBansScope scope = null;
+        if(resultEntry.getString("ScopeType") != null){
+            scope = new DefaultDKBansScope(resultEntry.getString("ScopeType")
+                    ,resultEntry.getString("ScopeName")
+                    ,resultEntry.getUniqueId("ScopeId"));
+        }
+
         return new DefaultPlayerHistoryEntrySnapshot(null,
                 resultEntry.getInt("SnapshotId"),
                 dkBans.getHistoryManager().getHistoryType(resultEntry.getInt("HistoryTypeId")),
@@ -361,7 +369,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 resultEntry.getLong("Timeout"),
                 dkBans.getTemplateManager().getTemplate(resultEntry.getInt("TemplateId")),
                 null/*@Todo add stuff*/,
-                new DefaultDKBansScope(resultEntry.getString("ScopeType"), resultEntry.getString("ScopeName"), resultEntry.getUniqueId("ScopeId")),
+                scope,
                 resultEntry.getInt("Points"),
                 resultEntry.getBoolean("Active"),
                 null/*@Todo add properties*/,
@@ -739,12 +747,12 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 .field("Reason", DataType.STRING, FieldOption.NOT_NULL)
                 .field("Timeout", DataType.LONG, FieldOption.NOT_NULL)
                 .field("StaffId", DataType.UUID, FieldOption.NOT_NULL)
-                .field("ScopeType", DataType.STRING, FieldOption.NOT_NULL)
-                .field("ScopeName", DataType.STRING, FieldOption.NOT_NULL)
-                .field("ScopeId", DataType.UUID, FieldOption.NOT_NULL)
+                .field("ScopeType", DataType.STRING)
+                .field("ScopeName", DataType.STRING)
+                .field("ScopeId", DataType.UUID)
                 .field("Points", DataType.INTEGER)
                 .field("Active", DataType.BOOLEAN, FieldOption.NOT_NULL)
-                .field("Properties", DataType.LONG_TEXT, -1, "{}", FieldOption.NOT_NULL)
+                .field("Properties", DataType.LONG_TEXT, -1, FieldOption.NOT_NULL)
                 .field("HistoryTypeId", DataType.INTEGER, ForeignKey.of(this.historyType, "Id"))
                 .field("PunishmentType", DataType.STRING, FieldOption.NOT_NULL)
                 .field("TemplateId", DataType.INTEGER, ForeignKey.of(this.template, "Id"))
@@ -786,7 +794,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 .field("ServerName", DataType.STRING, FieldOption.NOT_NULL)
                 .field("ServerId", DataType.UUID, FieldOption.NOT_NULL)
                 .field("Time", DataType.LONG, FieldOption.NOT_NULL)
-                .field("Properties", DataType.LONG_TEXT, -1, "{}", FieldOption.NOT_NULL)
+                .field("Properties", DataType.LONG_TEXT, -1, FieldOption.NOT_NULL)
                 .create();
     }
 
@@ -831,7 +839,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 .field("Hidden", DataType.BOOLEAN, FieldOption.NOT_NULL)
                 .field("CategoryId", DataType.INTEGER, ForeignKey.of(this.templateCategories, "Id"), FieldOption.NOT_NULL)
                 .field("GroupId", DataType.INTEGER, ForeignKey.of(this.templateGroups, "id"), FieldOption.NOT_NULL)
-                .field("Data", DataType.LONG_TEXT, -1, "{}", FieldOption.NOT_NULL)
+                .field("Data", DataType.LONG_TEXT, -1, FieldOption.NOT_NULL)
                 .create();
     }
     private DatabaseCollection createFilterCollection(){

@@ -40,6 +40,7 @@ import net.pretronic.dkbans.api.template.unpunishment.UnPunishmentTemplate;
 import net.pretronic.libraries.utility.annonations.Nullable;
 
 import java.net.InetAddress;
+import java.util.Collection;
 import java.util.UUID;
 
 public interface DKBansPlayer extends DKBansExecutor {
@@ -78,6 +79,11 @@ public interface DKBansPlayer extends DKBansExecutor {
 
 
     boolean hasActivePunish(PunishmentType type);
+
+    boolean hasActivePunish(PunishmentType type,DKBansScope scope);
+
+    boolean hasActivePunish(PunishmentType type, Collection<DKBansScope> scopes);
+
 
     PlayerHistoryEntrySnapshot punish(DKBansExecutor executor, PunishmentTemplate template);
 

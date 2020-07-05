@@ -29,7 +29,10 @@ import net.pretronic.libraries.utility.interfaces.ObjectOwner;
 public class ReportDeclineCommand extends BasicCommand {
 
     public ReportDeclineCommand(ObjectOwner owner) {
-        super(owner, CommandConfiguration.newBuilder().name("decline").aliases("deny").permission(Permissions.COMMAND_REPORT_STUFF).create());
+        super(owner, CommandConfiguration.newBuilder()
+                .name("decline")
+                .aliases("deny")
+                .permission(Permissions.COMMAND_REPORT_STUFF).create());
     }
 
     @Override

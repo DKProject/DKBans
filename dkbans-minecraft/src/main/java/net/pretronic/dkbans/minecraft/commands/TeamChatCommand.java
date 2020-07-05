@@ -28,6 +28,7 @@ import net.pretronic.dkbans.minecraft.config.Permissions;
 import net.pretronic.libraries.command.command.BasicCommand;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
 import net.pretronic.libraries.command.sender.CommandSender;
+import net.pretronic.libraries.message.bml.variable.VariableSet;
 import net.pretronic.libraries.utility.StringUtil;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
 import org.mcnative.common.player.OnlineMinecraftPlayer;
@@ -53,6 +54,14 @@ public class TeamChatCommand extends BasicCommand {
             else if(StringUtil.equalsOne(action,"login","in")) changeLogin(player,current,true);
             else if(StringUtil.equalsOne(action,"toggle","tog")) changeLogin(player,current,!current);
             else if(sender.hasPermission(Permissions.COMMAND_TEAMCHAT_SEND)){
+                if(!current){
+                    player.sendMessage(Messages.STAFF_STATUS_NOT, VariableSet.create()
+                            .add("prefix",Messages.PREFIX_TEAMCHAT)
+                            .add("status",action)
+                            .add("statusFormatted", Messages.STAFF_STATUS_LOGOUT));
+                    return;
+                }
+
                 String message = CommandUtil.readStringFromArguments(arguments,0);
                 DKBans.getInstance().broadcastMessage(BroadcastMessageChannels.TEAM_CHAT,CommandUtil.getExecutor(sender),message);
             }else{

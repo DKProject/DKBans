@@ -85,6 +85,11 @@ public class DefaultPlayerSessionList implements PlayerSessionList {
     }
 
     @Override
+    public List<PlayerSession> getPage(int page, int sizePerPage) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public PlayerSession getActive() {
         return this.active;
     }

@@ -38,14 +38,23 @@ import org.mcnative.common.text.components.MessageComponent;
 public class InternalListener {
 
     @NetworkListener
+    @Listener
     public void onChannelBroadcastMessageReceive(DKBansChannelBroadcastMessageReceiveEvent event) {
         if(event.getChannel().equals(BroadcastMessageChannels.TEAM_CHAT)){
-            String message = event.getMessage();
-
+            MessageComponent<?> result = Messages.TEAMCHAT_MESSAGE_FORMAT;
+            for (OnlineMinecraftPlayer staff : McNative.getInstance().getLocal().getOnlinePlayers()) {
+                if(staff.hasPermission(Permissions.TEAM)
+                        && staff.hasSetting("DKBans", PlayerSettingsKey.TEAM_CHAT_LOGIN,true)){
+                    staff.sendMessage(result,VariableSet.create()
+                            .add("message",event.getMessage())
+                            .addDescribed("sender",event.getExecutor()));
+                }
+            }
         }
     }
 
     @NetworkListener
+    @Listener
     public void onPlayerPunish(DKBansPlayerPunishEvent event){
         OnlineMinecraftPlayer player = McNative.getInstance().getLocal().getConnectedPlayer(event.getPlayer().getUniqueId());
         if(event.getSnapshot().getPunishmentType() == PunishmentType.BAN) handleBan(event, player);

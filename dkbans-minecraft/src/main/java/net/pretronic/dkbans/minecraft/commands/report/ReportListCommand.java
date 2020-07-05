@@ -35,7 +35,9 @@ import java.util.List;
 public class ReportListCommand extends BasicCommand {
 
     public ReportListCommand(ObjectOwner owner) {
-        super(owner, CommandConfiguration.newBuilder().name("list").permission(Permissions.COMMAND_REPORT_STUFF).create());
+        super(owner, CommandConfiguration.newBuilder()
+                .name("list")
+                .permission(Permissions.COMMAND_REPORT_STUFF).create());
     }
 
     @Override

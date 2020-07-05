@@ -43,7 +43,7 @@ public class JumptoCommand extends BasicCommand {
             return;
         }
         if(arguments.length < 1){
-            sender.sendMessage(Messages.COMMAND_HELP_JUMPTO);
+            sender.sendMessage(Messages.COMMAND_JUMPTO_HELP);
             return;
         }
         MinecraftPlayer player = CommandUtil.getPlayer(sender,arguments[0],true);

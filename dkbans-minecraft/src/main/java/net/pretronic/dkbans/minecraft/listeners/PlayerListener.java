@@ -43,13 +43,17 @@ import org.mcnative.common.player.OnlineMinecraftPlayer;
 import org.mcnative.common.text.Text;
 import org.mcnative.common.text.components.MessageComponent;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 public class PlayerListener {
 
+    private final Map<UUID,LastMessage> lastMessages = new HashMap<>();
+
     @Listener(priority = EventPriority.HIGH)
     public void onPlayerLogin(MinecraftPlayerLoginEvent event){
-        System.out.println("login");
         //@Todo online mode check
         if(event.isCancelled()) return;
 
@@ -91,6 +95,7 @@ public class PlayerListener {
         if(DKBansConfig.PLAYER_ON_JOIN_INFO_TEAMCHAT){
             boolean teamChat = event.getPlayer().hasSetting("DKBans",PlayerSettingsKey.TEAM_CHAT_LOGIN,true);
             player.sendMessage(Messages.STAFF_STATUS_NOW,VariableSet.create()
+                    .add("prefix",Messages.PREFIX_TEAMCHAT)
                     .add("status",teamChat)
                     .add("statusFormatted", teamChat ? Messages.STAFF_STATUS_LOGIN :  Messages.STAFF_STATUS_LOGOUT));
         }
@@ -98,6 +103,7 @@ public class PlayerListener {
         if(DKBansConfig.PLAYER_ON_JOIN_INFO_REPORT){
             boolean report = event.getPlayer().hasSetting("DKBans", PlayerSettingsKey.REPORT_CHAT_LOGIN,true);
             player.sendMessage(Messages.STAFF_STATUS_NOW,VariableSet.create()
+                    .add("prefix",Messages.PREFIX_REPORT)
                     .add("status",report)
                     .add("statusFormatted", report ? Messages.STAFF_STATUS_LOGIN :  Messages.STAFF_STATUS_LOGOUT));
             //@Todo send amount of open reports
@@ -123,11 +129,45 @@ public class PlayerListener {
         if(event.isCancelled()) return;
         DKBansPlayer player = event.getPlayer().getAs(DKBansPlayer.class);
 
+        if(DKBansConfig.CHAT_FILTER_ENABLED && checkMessageBlocked(event, player)) return;
+
         PlayerHistoryEntry mute = player.getHistory().getActiveEntry(PunishmentType.MUTE);
         if(mute != null){
             event.setCancelled(true);
             sendMutedMessage(event.getOnlinePlayer(), mute);
         }
+    }
+
+    private boolean checkMessageBlocked(MinecraftPlayerChatEvent event, DKBansPlayer player) {
+        LastMessage lastMessage = this.lastMessages.get(player.getUniqueId());
+        if(lastMessage != null){
+            if(lastMessage.time+ DKBansConfig.CHAT_FILTER_REPEAT_DELAY >= System.currentTimeMillis()){
+                event.setCancelled(true);
+                event.getOnlinePlayer().sendMessage(Messages.CHAT_FILTER_SPAM_TOFAST);
+                return true;
+            }else if(lastMessage.time < (System.currentTimeMillis()+ TimeUnit.MINUTES.toMillis(1))
+                    && event.getMessage().equalsIgnoreCase(lastMessage.message)){
+                event.setCancelled(true);
+                event.getOnlinePlayer().sendMessage(Messages.CHAT_FILTER_SPAM_REPEAT);
+                return true;
+            }
+        }else{
+            this.lastMessages.put(player.getUniqueId(),new LastMessage(event.getMessage(),System.currentTimeMillis()));
+        }
+
+        FilterManager filterManager = DKBans.getInstance().getFilterManager();
+        if(filterManager.checkFilter(FilterAffiliationArea.CHAT_INSULT,event.getMessage())){
+            event.getOnlinePlayer().sendMessage(Messages.FILTER_BLOCKED_INSULTING);
+            event.setCancelled(true);
+            return true;
+        }
+
+        if(filterManager.checkFilter(FilterAffiliationArea.CHAT_ADVERTISING,event.getMessage())){
+            event.getOnlinePlayer().sendMessage(Messages.FILTER_BLOCKED_ADVERTISING);
+            event.setCancelled(true);
+            return true;
+        }
+        return false;
     }
 
     @Listener(priority = EventPriority.HIGHEST)//@Todo async
@@ -161,5 +201,16 @@ public class PlayerListener {
                 .addDescribed("mute",mute)
                 .addDescribed("punish",mute)
                 .addDescribed("player",player));
+    }
+
+    private final static class LastMessage {
+
+        private final String message;
+        private final long time;
+
+        public LastMessage(String message, long time) {
+            this.message = message;
+            this.time = time;
+        }
     }
 }

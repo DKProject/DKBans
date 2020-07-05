@@ -74,7 +74,7 @@ public class CommandConfig {
 
     public static CommandConfiguration COMMAND_PLAYER_NOTES = CommandConfiguration.newBuilder()
             .name("playerNotes")
-            .aliases("playerNote","notes","note")
+            .aliases("playerNote","pnotes","pnote")
             .permission("dkbans.command.playerNotes")
             .create();
 

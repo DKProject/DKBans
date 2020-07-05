@@ -30,6 +30,8 @@ public interface PlayerNote {
 
     long getTime();
 
+    String getFormattedTime();
+
     String getMessage();
 
     DKBansExecutor getCreator();

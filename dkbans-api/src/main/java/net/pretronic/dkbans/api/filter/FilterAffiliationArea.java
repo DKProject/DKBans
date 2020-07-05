@@ -22,7 +22,8 @@ package net.pretronic.dkbans.api.filter;
 
 public class FilterAffiliationArea {
 
-    public static String CHAT = "CHAT";
+    public static String CHAT_ADVERTISING = "CHAT_ADVERTISING";
+    public static String CHAT_INSULT = "CHAT_INSULT";
     public static String COMMAND = "COMMAND";
     public static String COMMAND_MUTE = "COMMAND_MUTE";
     public static String PLAYER_NAME = "PLAYER_NAME";

@@ -24,6 +24,8 @@ public class Permissions {
 
     public static final String BYPASS = "dkbans.bypass";
 
+    public static final String TEAM = "dkbans.team";
+
     public static final String BYPASS_IGNORE = "dkbans.bypass.ignore";
 
     public static final String PUNISH_OVERRIDE_OWN = "dkbans.punish.override";

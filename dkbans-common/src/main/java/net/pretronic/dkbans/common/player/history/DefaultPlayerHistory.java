@@ -146,4 +146,10 @@ public class DefaultPlayerHistory implements PlayerHistory {
     public void delete(int id) {
         throw new UnsupportedOperationException();
     }
+
+    public void push(PlayerHistoryEntry entry){
+        if(loadedActive || loadedAll){
+            this.entries.add(entry);
+        }
+    }
 }

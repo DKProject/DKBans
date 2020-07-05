@@ -8,23 +8,25 @@ meta:
 messages:
   dkbans.prefix: '&8» &4DKBans &8|&f'
   dkbans.prefix.network: '&8» &4DKNetwork &8|&f'
-  dkbans.prefix.report: '&8» &6DKReport &8||&f'
+  dkbans.prefix.report: '&8» &6DKReport &8|&f'
   dkbans.prefix.teamchat: '&8» &eTeamChat &8|&f'
   dkbans.prefix.chat: '&8» &eChat &8|&f'
 
   dkbans.error.internal: '{prefix} &cAn internal server error occurred, please contact a network administrator"'
-  dkbans.error.invalidDurationFormat: '{prefix} &e{duration} &cis not a valid duration"'
-  dkbans.error.onlyPlayer: '{prefix} &cThis command can only be executed as a player"'
+  dkbans.error.invalid.DurationFormat: '{prefix} &e{duration} &cis not a valid duration'
+  dkbans.error.invalid.number: '{prefix} &e{number} &cis not a valid number'
+  dkbans.error.onlyPlayer: '{prefix} &cThis command can only be executed as a player'
+  dkbans.error.noPermissions: '{prefix} &cYou are not allowed to execute this command'
 
   dkbans.player.notFound: '{prefix} &cThe player &e{name} &cwas not found"'
   dkbans.player.notOnline: '{prefix} &cThe player &e{player.displayName} &cis not &aonline'
   dkbans.player.notSelf: '{prefix} &cYou can''t interact with your self'
   dkbans.player.hasBypass: '{prefix} &cYou are not allowed to punish this player'
 
-  dkbans.player.staff.status.now: '{prefix} &7You are {status}'
-  dkbans.player.staff.status.already: '{prefix} &7You are already {status}'
-  dkbans.player.staff.status.change: '{prefix} &7You have [status]'
-  dkbans.player.staff.status.not: '{prefix} &7You are not [status]'
+  dkbans.player.staff.status.now: '{prefix} &7You are {statusFormatted}'
+  dkbans.player.staff.status.already: '{prefix} &7You are already {statusFormatted}'
+  dkbans.player.staff.status.change: '{prefix} &7You have {statusFormatted}'
+  dkbans.player.staff.status.not: '{prefix} &7You are not {statusFormatted}'
   dkbans.player.staff.status.login: '&alogged in'
   dkbans.player.staff.status.logout: '&clogged out'
 
@@ -32,17 +34,36 @@ messages:
   dkbans.server.alreadyConnected: '${dkbans.prefix.network} &cYou are already connected to this server'
   dkbans.server.connecting: '${dkbans.prefix.network} &7Connecting to {server.name}...'
 
-  ping.self: '${dkbans.prefix.network} &7Your ping is &e{ping}&cms'
-  ping.other: '${dkbans.prefix.network} &7The ping of &e{player.displayName} &7is &a{ping}&cms'
+  dkbans.ping.self: '${dkbans.prefix.network} &7Your ping is &e{ping}&cms'
+  dkbans.ping.other: '${dkbans.prefix.network} &7The ping of &e{player.displayName} &7is &a{ping}&cms'
 
-  dkbans.punish.message.ban.permanently: '&e&lexample.net
+  dkbans.onlineTime.self: '${dkbans.prefix.network} &7Your online time is &e{online-time-formatted-short}&cms'
+  dkbans.onlineTime.other: '${dkbans.prefix.network} &7The ping of &e{player.displayName} &7is &e{online-time-formatted-short}&cms'
+
+  dkbans.chat.filter.toFast: '${dkbans.prefix.chat} &cYou are chatting to fast.'
+  dkbans.chat.filter.repeat: '${dkbans.prefix.chat} &cYou are repeating yourself.'
+
+  dkbans.filter.blocked.command: '${dkbans.prefix.chat} &fUnknown command. Type "/help" for help.'
+  dkbans.filter.blocked.insulting: '${dkbans.prefix.chat} &cPlease pay attention to your choice of words.'
+  dkbans.filter.blocked.advertising: '${dkbans.prefix.chat} &fUnknown command. Type "/help" for help.'
+  dkbans.filter.blocked.name: '&e&lexample.net
+  &7
+  &cYour nickname is not allowed on this server
+  &7
+  &aIf you change you name, you can join :D'
+
+  dkbans.punish.template.noPermission: '{prefix} &cYou are not allowed to use this reason'
+  dkbans.punish.template.list: '{prefix} &7Available reasons&8: '
+  dkbans.punish.template.list.loop: '&8- &c{template.id} &8| &4{template.displayName} &8» &4&l{template.defaultType}'
+
+  dkbans.punish.ban.message.permanently: '&e&lexample.net
   &e
   &cYou are &4&lpermanently banned &cfrom this network
   &3Reason&8: &4&l{ban.current.reason}
   &3BanID&8: &7{ban.id}
   &e
   &aYou can make a unban request at &eforum.example.net.'
-  dkbans.punish.message.ban.temporary: '&e&lexample.net
+  dkbans.punish.ban.message.temporary: '&e&lexample.net&r
   &e
   &cYou are &e&l{ban.current.durationFormatted} &cbanned from this network
   &3Reason&8: &4&l{ban.current.reason}
@@ -51,6 +72,8 @@ messages:
   &3Remaining time&8: &e{ban.current.remainingFormatted}
   &e
   &aYou can make a unban request at &eforum.example.net'
+
+  dkbans.teamchat.messageFormat: '${dkbans.prefix.teamchat}&8{sender.displayName} &8» &7{message}'
 
   dkbans.command.report.login.already: '${dkbans.prefix.report} &cYou are already logged in'
   dkbans.command.report.login.success: '${dkbans.prefix.report} &aYou are now logged in'
@@ -71,3 +94,34 @@ messages:
   dkbans.command.report.take.already: '${dkbans.prefix.report} &aThe report of &e{target.name} has been already taken'
   dkbans.command.report.accept.usage: '${dkbans.prefix.report} &cUse /report accept <name>'
   dkbans.command.report.accept.notWatching: '${dkbans.prefix.report} &cYou are not watching this player'
+
+  dkbans.command.filter.affiliationArea.notFound: '${dkbans.prefix.chat} &cThe affiliation area &c{area} &cwas not found'
+  dkbans.command.filter.operation.notFound: '${dkbans.prefix.chat} &cThe filter operation &c{operation} &cwas not found'
+  dkbans.command.filter.notFound: '${dkbans.prefix.chat} &cThe filter &c{id} &cwas not found'
+  dkbans.command.filter.list: '${dkbans.prefix.chat} &7Available filters&8:
+  @for("filter" in {filters},${dkbans.command.filter.list.loop},"\n")'
+  dkbans.command.filter.list.loop: ' &8- &7{filter.affiliationArea} &8| &7{filter.id} &8- &7{filter.value} &8(&7{filter.operationName}&8)'
+  dkbans.command.filter.created: '${dkbans.prefix.chat} &7The filter &e{filter.id} &8- &e{filter.value} &7for &e{filter.affiliationArea} &7was created'
+  dkbans.command.filter.deleted: '${dkbans.prefix.chat} &7The filter &e{filter.id} &8- &e{filter.value} &7for &e{filter.affiliationArea} &7was deleted'
+
+  dkbans.command.teamChat.help: '${dkbans.prefix.teamchat} &cUsage&8: &7/teamchat <login/logout/toggle/message>'
+  dkbans.command.notify.help: '${dkbans.prefix.teamchat} &cUsage&8: &7/notify <login/logout/toggle>'
+  dkbans.command.kick.help: '${dkbans.prefix.teamchat} &cUsage&8: &7/kick <player> <reason>'
+  dkbans.command.jumpto.help: '${dkbans.prefix.teamchat} &cUsage&8: &7/jumpto <player>'
+
+  dkbans.command.help: '${dkbans.prefix.network} &6Information
+  &8» &e/hub &8| &7Connect to the Hub-Server
+  &8» &e/report &8| &7Report a player
+  &8» &e/friends &8| &7Manage your friends
+  &7&8
+  &8» &eTeamSpeak&8: &bts.example.net
+  &8» &eForum&8: &bforum.example.net
+  &8» &eShop&8: &bshop.example.net'
+
+  dkbans.command.playerNotes.help: '${dkbans.prefix} &cUsage&8: &7/pnotes <list,add> '
+  dkbans.command.playerNotes.list: '${dkbans.prefix} &cUsage&8: &7/pnotes
+  @for("note" in {notes},{dkbans.command.playerNotes.list.loop},"\n","\n")'
+  dkbans.command.playerNotes.list.loop: '&8» &e{note.formattedTime} &8- {note.creator.displayName}&8:
+  &8> &7{note.message}'
+  dkbans.command.playerNotes.added: '&8» &a+ &e{note.formattedTime} &8- {note.creator.displayName}&8:
+  &8> &7{note.message}'

@@ -45,6 +45,7 @@ import net.pretronic.libraries.utility.Iterators;
 import net.pretronic.libraries.utility.Validate;
 
 import java.net.InetAddress;
+import java.util.Collection;
 import java.util.UUID;
 
 public  class DefaultDKBansPlayer implements DKBansPlayer {
@@ -121,6 +122,16 @@ public  class DefaultDKBansPlayer implements DKBansPlayer {
     public boolean hasActivePunish(PunishmentType type) {
         Validate.notNull(type);
         return history.hasActivePunish(type);
+    }
+
+    @Override
+    public boolean hasActivePunish(PunishmentType type, DKBansScope scope) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean hasActivePunish(PunishmentType type, Collection<DKBansScope> scopes) {
+        throw new UnsupportedOperationException();
     }
 
     @Override

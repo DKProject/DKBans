@@ -27,6 +27,9 @@ import java.util.UUID;
 
 public interface DKBansExecutor {
 
+    DKBansExecutor CONSOLE = new SpecialExecutor(new UUID(0,0),"Console");
+
+
     String getName();
 
     UUID getUniqueId();
@@ -37,5 +40,33 @@ public interface DKBansExecutor {
 
     @Nullable
     DKBansPlayer getPlayer();
+
+
+    class SpecialExecutor implements DKBansExecutor{
+
+        private final UUID uniqueId;
+        private final String name;
+
+        public SpecialExecutor(UUID uniqueId, String name) {
+            this.uniqueId = uniqueId;
+            this.name = name;
+        }
+
+        @Override
+        public UUID getUniqueId() {
+            return uniqueId;
+        }
+
+        @Override
+        public String getName() {
+            return name;
+        }
+
+        @Override
+        public DKBansPlayer getPlayer() {
+            return null;
+        }
+
+    }
 
 }

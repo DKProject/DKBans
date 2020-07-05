@@ -24,6 +24,9 @@ import java.util.UUID;
 
 public interface DKBansScope {
 
+    public static DKBansScope GLOBAL = null;
+
+
     String getType();
 
     String getName();

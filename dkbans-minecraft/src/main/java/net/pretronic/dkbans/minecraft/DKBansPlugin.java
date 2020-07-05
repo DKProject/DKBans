@@ -25,6 +25,13 @@ import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.history.PunishmentType;
 import net.pretronic.dkbans.api.template.TemplateGroup;
 import net.pretronic.dkbans.common.DefaultDKBans;
+import net.pretronic.dkbans.common.player.history.DefaultPlayerHistory;
+import net.pretronic.dkbans.common.player.history.DefaultPlayerHistoryEntry;
+import net.pretronic.dkbans.common.player.history.DefaultPlayerHistoryEntrySnapshot;
+import net.pretronic.dkbans.common.player.history.DefaultPlayerHistoryType;
+import net.pretronic.dkbans.common.template.DefaultTemplate;
+import net.pretronic.dkbans.common.template.DefaultTemplateCategory;
+import net.pretronic.dkbans.common.template.DefaultTemplateGroup;
 import net.pretronic.dkbans.minecraft.commands.*;
 import net.pretronic.dkbans.minecraft.commands.punish.KickCommand;
 import net.pretronic.dkbans.minecraft.commands.punish.PermaPunishCommand;
@@ -33,9 +40,11 @@ import net.pretronic.dkbans.minecraft.commands.punish.TemplatePunishCommand;
 import net.pretronic.dkbans.minecraft.commands.report.ReportCommand;
 import net.pretronic.dkbans.minecraft.config.CommandConfig;
 import net.pretronic.dkbans.minecraft.config.DKBansConfig;
+import net.pretronic.dkbans.minecraft.listeners.InternalListener;
 import net.pretronic.dkbans.minecraft.listeners.PlayerListener;
 import net.pretronic.dkbans.minecraft.player.MinecraftPlayerManager;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
+import net.pretronic.libraries.message.bml.variable.describer.VariableDescriberRegistry;
 import net.pretronic.libraries.plugin.lifecycle.Lifecycle;
 import net.pretronic.libraries.plugin.lifecycle.LifecycleState;
 import org.mcnative.common.McNative;
@@ -52,8 +61,11 @@ public class DKBansPlugin extends MinecraftPlugin {
     public void onLoad(LifecycleState state){
         getLogger().info("DKBans is starting, please wait..");
 
-        this.dkBans = new DefaultDKBans(getLogger(), McNative.getInstance().getLocal().getEventBus(),
-                getRuntime().getRegistry().getService(ConfigurationProvider.class).getDatabase(this, true));
+        MinecraftPlayerManager playerManager = new MinecraftPlayerManager();
+        this.dkBans = new DefaultDKBans(getLogger()
+                ,McNative.getInstance().getLocal().getEventBus()
+                ,getRuntime().getRegistry().getService(ConfigurationProvider.class).getDatabase(this, true)
+                ,playerManager);
 
         DKBans.setInstance(dkBans);
 
@@ -65,12 +77,13 @@ public class DKBansPlugin extends MinecraftPlugin {
         DKBansConfig.load(dkBans);
 
         registerCommands();
+        registerDescribers();
 
         dkBans.getFilterManager().initialize();
 
         getRuntime().getLocal().getEventBus().subscribe(this,new PlayerListener());
+        getRuntime().getLocal().getEventBus().subscribe(this,new InternalListener());
 
-        MinecraftPlayerManager playerManager = new MinecraftPlayerManager();
         getRuntime().getPlayerManager().registerPlayerAdapter(DKBansPlayer.class, player -> playerManager.getPlayer(player.getUniqueId()));
 
         getLogger().info("DKBans started successfully");
@@ -113,5 +126,17 @@ public class DKBansPlugin extends MinecraftPlugin {
                 getRuntime().getLocal().getCommandManager().registerCommand(new ReportCommand(this,entry.getValue(),group));
             }
         }
+    }
+
+    private void registerDescribers(){
+        VariableDescriberRegistry.registerDescriber(DKBansPlayer.class);
+        VariableDescriberRegistry.registerDescriber(DefaultPlayerHistory.class);
+        VariableDescriberRegistry.registerDescriber(DefaultPlayerHistoryEntrySnapshot.class);
+        VariableDescriberRegistry.registerDescriber(DefaultPlayerHistoryEntry.class);
+        VariableDescriberRegistry.registerDescriber(DefaultPlayerHistoryType.class);
+
+        VariableDescriberRegistry.registerDescriber(DefaultTemplate.class);
+        VariableDescriberRegistry.registerDescriber(DefaultTemplateCategory.class);
+        VariableDescriberRegistry.registerDescriber(DefaultTemplateGroup.class);
     }
 }

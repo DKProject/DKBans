@@ -103,7 +103,6 @@ public class DefaultUnPunishmentTemplate extends DefaultTemplate implements UnPu
     }
 
     private Map<Integer, UnPunishmentTemplateEntry> loadDurations(Document data) {
-        System.out.println(DocumentFileType.JSON.getWriter().write(data, true));
         Map<Integer, UnPunishmentTemplateEntry> durations = new TreeMap<>(Integer::compare);
 
         for (DocumentEntry entry0 : data) {
@@ -114,7 +113,6 @@ public class DefaultUnPunishmentTemplate extends DefaultTemplate implements UnPu
     }
 
     private Triple<Map<Integer, UnPunishmentTemplateEntry>, Integer, Double> loadPoints(Document data) {
-        System.out.println(DocumentFileType.JSON.getWriter().write(data, true));
         int addedPoints = data.getInt("removedPoints");
         double pointsDivider = data.getDouble("pointsDivider");
         Map<Integer, UnPunishmentTemplateEntry> points = new HashMap<>();
@@ -137,9 +135,6 @@ public class DefaultUnPunishmentTemplate extends DefaultTemplate implements UnPu
     }
 
     private Collection<? extends DKBansScope> loadScopes(Document data) {
-        System.out.println("loadScopes");
-        System.out.println(DocumentFileType.JSON.getWriter().write(data, true));
-        System.out.println("---");
         Collection<DefaultDKBansScope> scopes = new ArrayList<>();
         for (DocumentEntry scope0 : data) {
             Document scope = scope0.toDocument();
@@ -175,11 +170,6 @@ public class DefaultUnPunishmentTemplate extends DefaultTemplate implements UnPu
             DefaultUnPunishmentTemplate template = (DefaultUnPunishmentTemplate) template0;
 
             Document data = Document.newDocument();
-
-            System.out.println("create unpunish data");
-            System.out.println(template.getScopes());
-            System.out.println(DocumentFileType.JSON.getWriter().write(Document.newDocument(template.getScopes()), false));
-            System.out.println("---");
 
             data.add("scopes", template.getScopes());
             data.add("durations", entryToDocument(template));

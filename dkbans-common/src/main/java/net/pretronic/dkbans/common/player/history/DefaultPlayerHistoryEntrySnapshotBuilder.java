@@ -152,7 +152,6 @@ public class DefaultPlayerHistoryEntrySnapshotBuilder implements PlayerHistoryEn
     @Override
     public PlayerHistoryEntrySnapshot execute() {
         //@Todo validate settings
-        //@Todo add to cache
         if(modifier == null) modifier = stuff;
 
         DefaultPlayerHistoryEntrySnapshot snapshot;
@@ -164,6 +163,7 @@ public class DefaultPlayerHistoryEntrySnapshotBuilder implements PlayerHistoryEn
             Pair<PlayerHistoryEntry, Integer> result = DKBans.getInstance().getStorage().createHistoryEntry(player, snapshot);
             snapshot.setInsertResult(result);
             DKBans.getInstance().getEventBus().callEvent(DKBansPlayerPunishEvent.class,new DefaultDKBansPlayerPunishEvent(player,snapshot));
+            ((DefaultPlayerHistory)history).push(result.getKey());
         }else{
             PlayerHistoryEntrySnapshot old =
             snapshot = new DefaultPlayerHistoryEntrySnapshot(entry, -1, historyType,
@@ -171,8 +171,10 @@ public class DefaultPlayerHistoryEntrySnapshotBuilder implements PlayerHistoryEn
                     revokeTemplate, true, System.currentTimeMillis(), modifier);
             int id = DKBans.getInstance().getStorage().insertHistoryEntrySnapshot(snapshot);
             snapshot.setId(id);
+            ((DefaultPlayerHistoryEntry)entry).setCurrent(snapshot);
             DKBans.getInstance().getEventBus().callEvent(DKBansPlayerPunishUpdateEvent.class,new DefaultDKBansPlayerPunishUpdateEvent(player,old,snapshot));
         }
+
         return snapshot;
     }
 

@@ -29,7 +29,7 @@ public interface DKBansChannelBroadcastMessageReceiveEvent extends DKBansEvent {
 
     String getMessage();
 
-    Document getProperties();
+    //Document getProperties();
 
     DKBansExecutor getExecutor();
 

@@ -149,7 +149,8 @@ public class DefaultFilterManager implements FilterManager {
         registerOperationFactory(new EndsWithOperation.Factory());
         registerOperationFactory(new RegexOperation.Factory());
 
-        registerAffiliationArea(FilterAffiliationArea.CHAT);
+        registerAffiliationArea(FilterAffiliationArea.CHAT_ADVERTISING);
+        registerAffiliationArea(FilterAffiliationArea.CHAT_INSULT);
         registerAffiliationArea(FilterAffiliationArea.COMMAND);
         registerAffiliationArea(FilterAffiliationArea.COMMAND_MUTE);
         registerAffiliationArea(FilterAffiliationArea.PLAYER_NAME);

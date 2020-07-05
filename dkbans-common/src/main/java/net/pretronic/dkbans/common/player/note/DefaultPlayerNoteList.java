@@ -85,6 +85,11 @@ public class DefaultPlayerNoteList implements PlayerNoteList {
         return DKBans.getInstance().getStorage().getBetweenPlayerNotes(player, startTime, endTime);
     }
 
+    @Override
+    public List<PlayerNote> getPage(int page, int sizePerPage) {
+        throw new UnsupportedOperationException();
+    }
+
 
     @Override
     public PlayerNote createNote(DKBansExecutor creator, String message, PlayerNoteType type) {

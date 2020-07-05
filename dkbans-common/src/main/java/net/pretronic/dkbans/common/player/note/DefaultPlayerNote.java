@@ -56,6 +56,11 @@ public class DefaultPlayerNote implements PlayerNote {
     }
 
     @Override
+    public String getFormattedTime() {
+        return null;
+    }
+
+    @Override
     public String getMessage() {
         return message;
     }

@@ -83,9 +83,9 @@ public class FilterCommand extends BasicCommand {
                     return;
                 }
 
-                Filter filter = manager.createFilter(area,value,operation);
+                Filter filter = manager.createFilter(area,operation,value);
 
-                sender.sendMessage(Messages.COMMAND_FILTER_DELETED,VariableSet.create()
+                sender.sendMessage(Messages.COMMAND_FILTER_CREATED,VariableSet.create()
                         .addDescribed("filter",filter));
 
             }else if(StringUtil.equalsOne(argument,"remove","delete","r","d") && arguments.length >= 2){

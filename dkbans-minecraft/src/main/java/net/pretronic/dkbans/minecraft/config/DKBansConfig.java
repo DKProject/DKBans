@@ -53,6 +53,12 @@ public class DKBansConfig {
     public static boolean PLAYER_SESSION_LOGGING = true;
     public static long PLAYER_SESSION_RETENTION = TimeUnit.DAYS.toMillis(180);
 
+    public static boolean CHAT_FILTER_ENABLED = true;
+
+    @DocumentKey("chat.filter.repeatDelay")
+    public static long CHAT_FILTER_REPEAT_DELAY = 800;
+
+
     public static void load(DKBans dkBans) {
         File templates = new File("plugins/DKBans/templates/");
 
@@ -87,7 +93,6 @@ public class DKBansConfig {
     }
 
     private static TemplateGroup loadTemplateConfig(DKBans dkBans, Document document) {
-        System.out.println("load template config");
 
         String groupName = document.getString("name");
         TemplateType templateType = TemplateType.byNameOrNull(document.getString("type"));

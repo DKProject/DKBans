@@ -20,6 +20,7 @@
 
 package net.pretronic.dkbans.minecraft.player;
 
+import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.DKBansPlayerManager;
 import net.pretronic.dkbans.common.player.DefaultDKBansPlayer;
@@ -31,35 +32,61 @@ import net.pretronic.libraries.utility.Validate;
 import org.mcnative.common.McNative;
 import org.mcnative.common.player.MinecraftPlayer;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Predicate;
 
 public class MinecraftPlayerManager implements DKBansPlayerManager {
 
     private final Cache<DKBansPlayer> players;
+    private final Collection<DKBansExecutor> specialExecutors;
 
     public MinecraftPlayerManager() {
         this.players = new ArrayCache<>();
         this.players.setMaxSize(1024);
-        //this.players.setExpireAfterAccess(10, TimeUnit.MINUTES);
+        this.players.setExpireAfterAccess(10, TimeUnit.MINUTES);
         this.players.registerQuery("get", new PlayerGetter());
+
+        this.specialExecutors = new ArrayList<>();
+        this.specialExecutors.add(DKBansExecutor.CONSOLE);
     }
 
     @Override
     public DKBansPlayer getPlayer(UUID uniqueId) {
         Validate.notNull(uniqueId);
-        System.out.println("getPlayer:"+uniqueId);
-        System.out.println(Iterators.map(players.getCachedObjects(), DKBansPlayer::getUniqueId));
-        System.out.println("---");
         return this.players.get("get", uniqueId);
     }
 
     @Override
     public DKBansPlayer getPlayer(String name) {
         Validate.notNull(name);
-        System.out.println("getPlayer:"+name);
-        System.out.println(Iterators.map(players.getCachedObjects(), DKBansPlayer::getUniqueId));
-        System.out.println("---");
         return this.players.get("get", name);
+    }
+
+
+    @Override
+    public DKBansExecutor getExecutor(UUID uniqueId) {
+        DKBansExecutor executor = Iterators.findOne(this.specialExecutors, o -> o.getUniqueId().equals(uniqueId));
+        if(executor != null) return executor;
+        return getPlayer(uniqueId);
+    }
+
+    @Override
+    public DKBansExecutor getExecutor(String name) {
+        DKBansExecutor executor = Iterators.findOne(this.specialExecutors, o -> o.getName().equalsIgnoreCase(name));
+        if(executor != null) return executor;
+        return getPlayer(name);
+    }
+
+    @Override
+    public void registerSpecialExecutor(DKBansExecutor executor) {
+        Validate.notNull(executor);
+        if(Iterators.findOne(this.specialExecutors, o -> o.getUniqueId().equals(executor.getUniqueId())) != null){
+            throw new IllegalArgumentException("Special executor already registered");
+        }
+        this.specialExecutors.add(executor);
     }
 
     private static class PlayerGetter implements CacheQuery<DKBansPlayer> {

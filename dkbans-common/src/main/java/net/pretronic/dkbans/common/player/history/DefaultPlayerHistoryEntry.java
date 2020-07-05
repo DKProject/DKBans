@@ -115,5 +115,6 @@ public class DefaultPlayerHistoryEntry implements PlayerHistoryEntry {
     public void setCurrent(PlayerHistoryEntrySnapshot current){
         Validate.notNull(current);
         this.current = current;
+        if(snapshots != null) snapshots.add(current);
     }
 }
