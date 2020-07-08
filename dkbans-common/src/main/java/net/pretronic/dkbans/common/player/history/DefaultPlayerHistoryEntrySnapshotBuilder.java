@@ -31,6 +31,7 @@ import net.pretronic.dkbans.api.template.Template;
 import net.pretronic.dkbans.common.event.DefaultDKBansPlayerPunishEvent;
 import net.pretronic.dkbans.common.event.DefaultDKBansPlayerPunishUpdateEvent;
 import net.pretronic.libraries.document.Document;
+import net.pretronic.libraries.utility.Validate;
 import net.pretronic.libraries.utility.map.Pair;
 
 import java.time.Duration;
@@ -151,14 +152,15 @@ public class DefaultPlayerHistoryEntrySnapshotBuilder implements PlayerHistoryEn
 
     @Override
     public PlayerHistoryEntrySnapshot execute() {
-        //@Todo validate settings
+        Validate.notNull(stuff,player,historyType,reason);
+
         if(modifier == null) modifier = stuff;
 
         DefaultPlayerHistoryEntrySnapshot snapshot;
         if(entry == null){
             snapshot = new DefaultPlayerHistoryEntrySnapshot(null, -1, historyType, punishmentType,
-                    reason, timeout, template, stuff, scope, points, active, properties, revokeReason, revokeTemplate,
-                    true, System.currentTimeMillis(), modifier);
+                    reason, timeout, template, stuff.getUniqueId(), scope, points, active, properties, revokeReason, revokeTemplate,
+                    true, System.currentTimeMillis(), modifier.getUniqueId());
 
             Pair<PlayerHistoryEntry, Integer> result = DKBans.getInstance().getStorage().createHistoryEntry(player, snapshot);
             snapshot.setInsertResult(result);
@@ -167,8 +169,8 @@ public class DefaultPlayerHistoryEntrySnapshotBuilder implements PlayerHistoryEn
         }else{
             PlayerHistoryEntrySnapshot old =
             snapshot = new DefaultPlayerHistoryEntrySnapshot(entry, -1, historyType,
-                    punishmentType, reason, timeout, template, stuff, scope, points, active, properties, revokeReason,
-                    revokeTemplate, true, System.currentTimeMillis(), modifier);
+                    punishmentType, reason, timeout, template, stuff.getUniqueId(), scope, points, active, properties, revokeReason,
+                    revokeTemplate, true, System.currentTimeMillis(), modifier.getUniqueId());
             int id = DKBans.getInstance().getStorage().insertHistoryEntrySnapshot(snapshot);
             snapshot.setId(id);
             ((DefaultPlayerHistoryEntry)entry).setCurrent(snapshot);

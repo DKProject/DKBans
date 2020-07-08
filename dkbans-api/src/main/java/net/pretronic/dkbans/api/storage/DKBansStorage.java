@@ -41,6 +41,7 @@ import net.pretronic.libraries.utility.map.Pair;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 public interface DKBansStorage {
 
@@ -145,6 +146,8 @@ public interface DKBansStorage {
     //Chat log
 
     ChatLogEntry createChatLogEntry(UUID playerId, String message, long time, String serverName, UUID serverId, String filterAffiliationArea);
+
+    CompletableFuture<ChatLogEntry> createChatLogEntryAsync(UUID playerId, String message, long time, String serverName, UUID serverId, String filterAffiliationArea);
 
       /*
     private final PlayerHistoryEntry entry;

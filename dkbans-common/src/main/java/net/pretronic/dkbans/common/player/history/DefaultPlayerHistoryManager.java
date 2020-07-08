@@ -21,9 +21,8 @@
 package net.pretronic.dkbans.common.player.history;
 
 import net.pretronic.dkbans.api.DKBans;
-import net.pretronic.dkbans.api.player.history.PlayerHistoryEntry;
-import net.pretronic.dkbans.api.player.history.PlayerHistoryManager;
-import net.pretronic.dkbans.api.player.history.PlayerHistoryType;
+import net.pretronic.dkbans.api.DKBansScope;
+import net.pretronic.dkbans.api.player.history.*;
 import net.pretronic.libraries.utility.Iterators;
 
 import java.util.Collection;
@@ -37,7 +36,12 @@ public class DefaultPlayerHistoryManager implements PlayerHistoryManager {
     }
 
     @Override
-    public Collection<PlayerHistoryEntry> getActivePunishments(String type) {
+    public PunishmentList getActivePunishments() {
+        return null;
+    }
+
+    @Override
+    public PunishmentList getActivePunishments(PunishmentType type, DKBansScope scope) {
         return null;
     }
 

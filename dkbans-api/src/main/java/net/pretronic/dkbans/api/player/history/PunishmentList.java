@@ -1,9 +1,8 @@
 /*
  * (C) Copyright 2020 The DKBans Project (Davide Wietlisbach & Philipp Elvin Friedhoff)
  *
- * @author Philipp Elvin Friedhoff
- * @since 21.06.20, 17:26
- * @web %web%
+ * @author Davide Wietlisbach
+ * @since 06.07.20, 19:58
  *
  * The DKBans Project is under the Apache License, version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,25 +19,6 @@
 
 package net.pretronic.dkbans.api.player.history;
 
-import net.pretronic.dkbans.api.DKBansScope;
+import net.pretronic.dkbans.api.Pagination;
 
-import java.util.Collection;
-
-public interface PlayerHistoryManager {
-
-    PunishmentList getActivePunishments();
-
-    PunishmentList getActivePunishments(PunishmentType type, DKBansScope scope);
-
-
-    PlayerHistoryEntry getHistoryEntry(int id);
-
-
-    Collection<PlayerHistoryType> getHistoryTypes();
-
-    PlayerHistoryType getHistoryType(int id);
-
-    PlayerHistoryType getHistoryType(String name);
-
-    PlayerHistoryType createHistoryType(String name);
-}
+public interface PunishmentList extends Pagination<PlayerHistoryEntry> { }

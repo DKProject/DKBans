@@ -25,7 +25,6 @@ import net.pretronic.dkbans.api.player.history.PunishmentType;
 import net.pretronic.dkbans.api.template.punishment.PunishmentTemplateEntry;
 import net.pretronic.dkbans.api.template.punishment.PunishmentTemplateEntryFactory;
 import net.pretronic.dkbans.api.template.punishment.types.BanPunishmentTemplateEntry;
-import net.pretronic.dkbans.common.DefaultDKBansScope;
 import net.pretronic.dkbans.common.template.punishment.DefaultPunishmentTemplateEntry;
 import net.pretronic.libraries.document.Document;
 import net.pretronic.libraries.utility.duration.DurationProcessor;
@@ -50,7 +49,7 @@ public class DefaultBanPunishmentTemplateEntry extends DefaultPunishmentTemplate
 
         @Override
         public PunishmentTemplateEntry create(Document data) {
-            return new DefaultBanPunishmentTemplateEntry(DefaultDKBansScope.fromData(data), DurationProcessor.getStandard().parse(data.getString("duration")));
+            return new DefaultBanPunishmentTemplateEntry(DKBansScope.fromData(data), DurationProcessor.getStandard().parse(data.getString("duration")));
         }
 
         @Override

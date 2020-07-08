@@ -53,10 +53,10 @@ public class PlayerNoteCommand extends BasicCommand {
         String argument = arguments.length > 1 ? arguments[1] : "list";
         if(StringUtil.equalsOne(argument,"list","l")){
             int page = 1;
-            if(arguments.length > 2 && GeneralUtil.isNaturalNumber(arguments[3])){
-                page = Integer.parseInt(arguments[3]);
-            }else if(arguments.length > 1 && GeneralUtil.isNaturalNumber(arguments[2])){
+            if(arguments.length > 2 && GeneralUtil.isNaturalNumber(arguments[2])){
                 page = Integer.parseInt(arguments[2]);
+            }else if(arguments.length > 1 && GeneralUtil.isNaturalNumber(arguments[1])){
+                page = Integer.parseInt(arguments[1]);
             }
 
             List<PlayerNote> notes = dkBansPlayer.getNotes().getPage(page,15);
@@ -64,6 +64,7 @@ public class PlayerNoteCommand extends BasicCommand {
                     .addDescribed("nextPage",page+1)
                     .addDescribed("previousPage",page == 1 ? 1 : page-1)
                     .addDescribed("notes",notes));
+
         }else if(StringUtil.equalsOne(argument,"add","a","create","c")){
             PlayerNote note = dkBansPlayer.createNote(CommandUtil.getExecutor(sender)
                     ,CommandUtil.readStringFromArguments(arguments,1));

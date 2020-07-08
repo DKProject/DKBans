@@ -25,7 +25,6 @@ import net.pretronic.dkbans.api.player.history.PunishmentType;
 import net.pretronic.dkbans.api.template.punishment.PunishmentTemplateEntry;
 import net.pretronic.dkbans.api.template.punishment.PunishmentTemplateEntryFactory;
 import net.pretronic.dkbans.api.template.punishment.types.KickPunishmentTemplateEntry;
-import net.pretronic.dkbans.common.DefaultDKBansScope;
 import net.pretronic.dkbans.common.template.punishment.DefaultPunishmentTemplateEntry;
 import net.pretronic.libraries.document.Document;
 
@@ -39,7 +38,7 @@ public class DefaultKickPunishmentTemplateEntry extends DefaultPunishmentTemplat
 
         @Override
         public PunishmentTemplateEntry create(Document data) {
-            return new DefaultKickPunishmentTemplateEntry(DefaultDKBansScope.fromData(data));
+            return new DefaultKickPunishmentTemplateEntry(DKBansScope.fromData(data));
         }
 
         @Override

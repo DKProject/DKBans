@@ -2,7 +2,7 @@
  * (C) Copyright 2020 The DKBans Project (Davide Wietlisbach & Philipp Elvin Friedhoff)
  *
  * @author Davide Wietlisbach
- * @since 29.06.20, 17:08
+ * @since 06.07.20, 19:58
  *
  * The DKBans Project is under the Apache License, version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,28 +17,30 @@
  * under the License.
  */
 
-package net.pretronic.dkbans.minecraft.commands.unpunish;
+package net.pretronic.dkbans.minecraft.commands.punish;
 
+import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.DKBansScope;
-import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryEntry;
-import net.pretronic.dkbans.api.player.history.PlayerHistoryEntrySnapshot;
+import net.pretronic.dkbans.api.player.history.PunishmentList;
 import net.pretronic.dkbans.api.player.history.PunishmentType;
-import net.pretronic.dkbans.minecraft.commands.CommandUtil;
 import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.libraries.command.command.BasicCommand;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
 import net.pretronic.libraries.command.sender.CommandSender;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
+import net.pretronic.libraries.utility.GeneralUtil;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
-import org.mcnative.common.player.MinecraftPlayer;
+import org.mcnative.common.text.components.MessageComponent;
 
-public class UnpunishCommand extends BasicCommand {
+import java.util.List;
+
+public class PunishListCommand extends BasicCommand {
 
     private final PunishmentType type;
     private final DKBansScope scope;
 
-    public UnpunishCommand(ObjectOwner owner, CommandConfiguration configuration, PunishmentType type,DKBansScope scope) {
+    public PunishListCommand(ObjectOwner owner, CommandConfiguration configuration, PunishmentType type,DKBansScope scope) {
         super(owner, configuration);
         this.type = type;
         this.scope = scope;
@@ -46,28 +48,22 @@ public class UnpunishCommand extends BasicCommand {
 
     @Override
     public void execute(CommandSender sender, String[] arguments) {
-        if(arguments.length < 1){
-            sender.sendMessage(Messages.COMMAND_UNPUNISH_HELP, VariableSet.create()
-                    .add("command",getConfiguration().getName()));
-            return;
+        int page = 1;
+        if(arguments.length > 1 && GeneralUtil.isNaturalNumber(arguments[0])){
+            page = Integer.parseInt(arguments[0]);
         }
 
-        MinecraftPlayer player = CommandUtil.getPlayer(sender,arguments[0]);
-        if(player == null) return;
+        PunishmentList punishments = DKBans.getInstance().getHistoryManager().getActivePunishments(type,scope);
+        List<PlayerHistoryEntry> result = punishments.getPage(page,12);
 
-        DKBansPlayer dkBansPlayer = player.getAs(DKBansPlayer.class);
+        MessageComponent<?> list = null;
+        if(type == PunishmentType.BAN) list = Messages.PUNISH_LIST_BAN;
+        else if(type == PunishmentType.MUTE) list = Messages.PUNISH_LIST_MUTE;
 
-        PlayerHistoryEntry entry = dkBansPlayer.getHistory().getActiveEntry(type,scope);
-
-        if(entry == null){
-            CommandUtil.sendNotPunished(sender,dkBansPlayer,type);
-            return;
-        }
-
-        String reason = "Unknown";
-        if(arguments.length >= 2) reason = CommandUtil.readStringFromArguments(arguments,1);
-
-        PlayerHistoryEntrySnapshot result = entry.unpunish(CommandUtil.getExecutor(sender),reason);
-        CommandUtil.sendUnpunishResultMessage(sender,result);
+        sender.sendMessage(list, VariableSet.create()
+                .addDescribed("punishments",result)
+                .add("page",page)
+                .add("previousPage",page > 1 ? page-1 : 0)
+                .add("nextPage",page+1));
     }
 }

@@ -20,30 +20,41 @@
 
 package net.pretronic.dkbans.minecraft.commands.punish;
 
+import net.pretronic.dkbans.api.DKBansScope;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryEntrySnapshot;
+import net.pretronic.dkbans.api.player.history.PlayerHistoryType;
 import net.pretronic.dkbans.api.player.history.PunishmentType;
 import net.pretronic.dkbans.minecraft.commands.CommandUtil;
+import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.libraries.command.command.BasicCommand;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
 import net.pretronic.libraries.command.sender.CommandSender;
+import net.pretronic.libraries.message.bml.variable.VariableSet;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
 import org.mcnative.common.player.MinecraftPlayer;
 
 import java.time.Duration;
 
-public class TempPunishCommand extends BasicCommand {
+public class TemporaryPunishCommand extends BasicCommand {
 
-    private final PunishmentType type;
+    private final PunishmentType punishmentType;
+    private final PlayerHistoryType historyType;
+    private final DKBansScope scope;
 
-    public TempPunishCommand(ObjectOwner owner, CommandConfiguration configuration,PunishmentType type) {
+    public TemporaryPunishCommand(ObjectOwner owner, CommandConfiguration configuration
+            , PunishmentType punishmentType, PlayerHistoryType historyType, DKBansScope scope) {
         super(owner, configuration);
-        this.type = type;
+        this.punishmentType = punishmentType;
+        this.historyType = historyType;
+        this.scope = scope;
     }
-    
+
     @Override
     public void execute(CommandSender sender, String[] arguments) {
         if(arguments.length <= 2){
+            sender.sendMessage(Messages.COMMAND_PUNISH_HELP_TEMPORARY, VariableSet.create()
+                    .add("command",getConfiguration().getName()));
             return;
         }
 
@@ -57,12 +68,12 @@ public class TempPunishCommand extends BasicCommand {
         boolean override = arguments[2].equalsIgnoreCase("--override");
         String reason = CommandUtil.readStringFromArguments(arguments,override ? 3 : 2);
 
-        if(dkBansPlayer.hasActivePunish(type)){
-            if(override && CommandUtil.canOverridePunish(sender,dkBansPlayer,type)){
-                dkBansPlayer.unpunish(CommandUtil.getExecutor(sender),type,"Overriding punishment with a new one");
+        if(dkBansPlayer.hasActivePunish(punishmentType,scope)){
+            if(override && CommandUtil.canOverridePunish(sender,dkBansPlayer,punishmentType)){
+             //   dkBansPlayer.unpunish(CommandUtil.getExecutor(sender),"Overriding punishment with a new one");@Todo update override
             }else{
                 String command = getConfiguration().getName()+arguments[0]+" "+arguments[1]+" --override "+reason;
-                CommandUtil.sendAlreadyPunished(sender,dkBansPlayer,type,command);
+                CommandUtil.sendAlreadyPunished(sender,dkBansPlayer,punishmentType,command);
             }
             return;
         }
@@ -71,7 +82,9 @@ public class TempPunishCommand extends BasicCommand {
 
         PlayerHistoryEntrySnapshot result = dkBansPlayer.punish()//@Todo configurable default history type
                 .stuff(CommandUtil.getExecutor(sender))
-                .punishmentType(type)
+                .punishmentType(punishmentType)
+                .historyType(historyType)
+                .scope(scope)
                 .duration(duration)
                 .reason(reason)
                 .execute();

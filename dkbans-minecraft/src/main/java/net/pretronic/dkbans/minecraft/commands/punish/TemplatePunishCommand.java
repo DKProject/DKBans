@@ -80,7 +80,8 @@ public class TemplatePunishCommand extends BasicCommand {
 
         if(dkBansPlayer.hasActivePunish(entry.getType())){
             if(override && CommandUtil.canOverridePunish(sender,dkBansPlayer,entry.getType())){
-                dkBansPlayer.unpunish(CommandUtil.getExecutor(sender),entry.getType(),"Overriding punishment with a new one");
+                //@Todo override
+         //       dkBansPlayer.unpunish(CommandUtil.getExecutor(sender),entry.getType(),"Overriding punishment with a new one");
             }else{
                 String command = getConfiguration().getName()+arguments[0]+" "+arguments[1]+" --override "+message;
                 if(message != null) command += message;

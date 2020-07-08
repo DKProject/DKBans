@@ -25,6 +25,7 @@ import net.pretronic.dkbans.api.player.note.PlayerNote;
 import net.pretronic.dkbans.api.player.note.PlayerNoteList;
 import net.pretronic.dkbans.api.player.note.PlayerNoteType;
 import net.pretronic.dkbans.api.player.session.PlayerSession;
+import net.pretronic.dkbans.api.template.unpunishment.UnPunishmentTemplate;
 
 import java.util.List;
 
@@ -58,5 +59,10 @@ public interface PlayerHistoryEntry extends Iterable<PlayerHistoryEntrySnapshot>
     }
 
     PlayerNote createNote(DKBansExecutor creator, String message, PlayerNoteType type);
+
+
+    PlayerHistoryEntrySnapshot unpunish(DKBansExecutor executor, UnPunishmentTemplate template);
+
+    PlayerHistoryEntrySnapshot unpunish(DKBansExecutor executor,String reason);
 
 }
