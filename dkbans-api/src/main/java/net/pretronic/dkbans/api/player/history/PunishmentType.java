@@ -31,8 +31,6 @@ public class PunishmentType {
     private static final Collection<PunishmentType> REGISTRY = new ArrayList<>();
 
 
-    public static final PunishmentType ALL = registerPunishmentType("ALL");
-
     public static final PunishmentType BAN = registerPunishmentType("BAN");
 
     public static final PunishmentType MUTE = registerPunishmentType("MUTE");

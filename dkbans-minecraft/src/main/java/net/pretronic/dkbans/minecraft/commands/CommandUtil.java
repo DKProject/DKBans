@@ -45,7 +45,7 @@ public class CommandUtil {
         if(sender instanceof MinecraftPlayer){
             return ((MinecraftPlayer) sender).getAs(DKBansPlayer.class);
         }else{
-            throw new UnsupportedOperationException();//Todo implement console sender
+            return DKBansExecutor.CONSOLE;
         }
     }
 
@@ -122,11 +122,23 @@ public class CommandUtil {
     }
 
     public static void sendPunishResultMessage(CommandSender sender,PlayerHistoryEntrySnapshot snapshot){
-
+        if(snapshot.getPunishmentType() == PunishmentType.BAN){
+            sender.sendMessage(Messages.PUNISH_SUCCESS_BAN);
+        }else if(snapshot.getPunishmentType() == PunishmentType.MUTE){
+            sender.sendMessage(Messages.PUNISH_SUCCESS_MUTE);
+        }else if(snapshot.getPunishmentType() == PunishmentType.KICK){
+            sender.sendMessage(Messages.PUNISH_SUCCESS_KICK);
+        }else if(snapshot.getPunishmentType() == PunishmentType.WARN){
+            sender.sendMessage(Messages.PUNISH_SUCCESS_WARN);
+        }
     }
 
     public static void sendUnpunishResultMessage(CommandSender sender,PlayerHistoryEntrySnapshot snapshot){
-
+        if(snapshot.getPunishmentType() == PunishmentType.BAN){
+            sender.sendMessage(Messages.UNPUNISH_SUCCESS_BAN);
+        }else if(snapshot.getPunishmentType() == PunishmentType.MUTE){
+            sender.sendMessage(Messages.UNPUNISH_SUCCESS_MUTE);
+        }
     }
 
     public static void changeLogin(MessageComponent<?> prefix,String settingKey,OnlineMinecraftPlayer player, boolean current, boolean action){

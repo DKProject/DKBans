@@ -30,12 +30,10 @@ import net.pretronic.dkbans.api.template.punishment.PunishmentTemplate;
 import net.pretronic.dkbans.api.template.unpunishment.UnPunishmentTemplate;
 import net.pretronic.dkbans.api.template.unpunishment.UnPunishmentTemplateEntry;
 import net.pretronic.dkbans.api.template.unpunishment.UnPunishmentTemplateEntryFactory;
-import net.pretronic.dkbans.common.DefaultDKBansScope;
 import net.pretronic.dkbans.common.template.DefaultTemplate;
 import net.pretronic.libraries.document.Document;
 import net.pretronic.libraries.document.entry.DocumentEntry;
 import net.pretronic.libraries.document.entry.PrimitiveEntry;
-import net.pretronic.libraries.document.type.DocumentFileType;
 import net.pretronic.libraries.utility.Convert;
 import net.pretronic.libraries.utility.map.Pair;
 import net.pretronic.libraries.utility.map.Triple;
@@ -135,14 +133,14 @@ public class DefaultUnPunishmentTemplate extends DefaultTemplate implements UnPu
     }
 
     private Collection<? extends DKBansScope> loadScopes(Document data) {
-        Collection<DefaultDKBansScope> scopes = new ArrayList<>();
+        Collection<DKBansScope> scopes = new ArrayList<>();
         for (DocumentEntry scope0 : data) {
             Document scope = scope0.toDocument();
             if(scope.size() == 1) {
                 PrimitiveEntry firstEntry = scope.getEntry(0).toPrimitive();
-                scopes.add(new DefaultDKBansScope(firstEntry.getKey(), firstEntry.getAsString(), null));
+                scopes.add(new DKBansScope(firstEntry.getKey(), firstEntry.getAsString(), null));
             } else {
-                scopes.add(scope.getAsObject(DefaultDKBansScope.class));
+                scopes.add(scope.getAsObject(DKBansScope.class));
             }
         }
         return scopes;

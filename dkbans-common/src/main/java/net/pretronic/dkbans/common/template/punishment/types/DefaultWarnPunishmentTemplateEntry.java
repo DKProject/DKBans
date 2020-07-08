@@ -26,7 +26,6 @@ import net.pretronic.dkbans.api.template.punishment.PunishmentTemplate;
 import net.pretronic.dkbans.api.template.punishment.PunishmentTemplateEntry;
 import net.pretronic.dkbans.api.template.punishment.PunishmentTemplateEntryFactory;
 import net.pretronic.dkbans.api.template.punishment.types.WarnPunishmentTemplateEntry;
-import net.pretronic.dkbans.common.DefaultDKBansScope;
 import net.pretronic.dkbans.common.template.punishment.DefaultPunishmentTemplateEntry;
 import net.pretronic.libraries.document.Document;
 
@@ -66,7 +65,7 @@ public class DefaultWarnPunishmentTemplateEntry extends DefaultPunishmentTemplat
                     String[] splitted = targetPunishment.split("@");
                 }
             }
-            return new DefaultWarnPunishmentTemplateEntry(DefaultDKBansScope.fromData(data), data.getBoolean("kick"), null);
+            return new DefaultWarnPunishmentTemplateEntry(DKBansScope.fromData(data), data.getBoolean("kick"), null);
         }
 
         @Override

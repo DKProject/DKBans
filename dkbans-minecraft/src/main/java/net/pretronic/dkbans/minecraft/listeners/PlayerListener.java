@@ -29,6 +29,7 @@ import net.pretronic.dkbans.api.player.history.PunishmentType;
 import net.pretronic.dkbans.minecraft.PlayerSettingsKey;
 import net.pretronic.dkbans.minecraft.config.DKBansConfig;
 import net.pretronic.dkbans.minecraft.config.Messages;
+import net.pretronic.dkbans.minecraft.config.Permissions;
 import net.pretronic.libraries.event.EventPriority;
 import net.pretronic.libraries.event.Listener;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
@@ -92,7 +93,7 @@ public class PlayerListener {
         OnlineMinecraftPlayer player = event.getOnlinePlayer();
         DKBansPlayer dkBansPlayer = player.getAs(DKBansPlayer.class);
 
-        if(DKBansConfig.PLAYER_ON_JOIN_INFO_TEAMCHAT){
+        if(DKBansConfig.PLAYER_ON_JOIN_INFO_TEAMCHAT && player.hasPermission(Permissions.TEAM)){
             boolean teamChat = event.getPlayer().hasSetting("DKBans",PlayerSettingsKey.TEAM_CHAT_LOGIN,true);
             player.sendMessage(Messages.STAFF_STATUS_NOW,VariableSet.create()
                     .add("prefix",Messages.PREFIX_TEAMCHAT)
@@ -100,13 +101,17 @@ public class PlayerListener {
                     .add("statusFormatted", teamChat ? Messages.STAFF_STATUS_LOGIN :  Messages.STAFF_STATUS_LOGOUT));
         }
 
-        if(DKBansConfig.PLAYER_ON_JOIN_INFO_REPORT){
+        if(DKBansConfig.PLAYER_ON_JOIN_INFO_REPORT && player.hasPermission(Permissions.COMMAND_REPORT_STUFF)){
             boolean report = event.getPlayer().hasSetting("DKBans", PlayerSettingsKey.REPORT_CHAT_LOGIN,true);
             player.sendMessage(Messages.STAFF_STATUS_NOW,VariableSet.create()
                     .add("prefix",Messages.PREFIX_REPORT)
                     .add("status",report)
                     .add("statusFormatted", report ? Messages.STAFF_STATUS_LOGIN :  Messages.STAFF_STATUS_LOGOUT));
-            //@Todo send amount of open reports
+        }
+
+        if(DKBansConfig.PLAYER_ON_JOIN_LIST_REPORTS){
+            int openReports = DKBans.getInstance().getReportManager().getOpenReports().size();
+            player.sendMessage(Messages.REPORT_COUNT_INFO,VariableSet.create().add("openReports",openReports));
         }
 
         if(DKBansConfig.PLAYER_SESSION_LOGGING){
@@ -129,52 +134,55 @@ public class PlayerListener {
         if(event.isCancelled()) return;
         DKBansPlayer player = event.getPlayer().getAs(DKBansPlayer.class);
 
-        if(DKBansConfig.CHAT_FILTER_ENABLED && checkMessageBlocked(event, player)) return;
+        if(DKBansConfig.CHAT_FILTER_ENABLED && checkBasicFilters(event, player)) return;
 
         PlayerHistoryEntry mute = player.getHistory().getActiveEntry(PunishmentType.MUTE);
         if(mute != null){
             event.setCancelled(true);
             sendMutedMessage(event.getOnlinePlayer(), mute);
-        } else {
-            DKBans.getInstance().getStorage().createChatLogEntry(event.getPlayer().getUniqueId(),
+        }else{
+            String filterAffiliationArea = checkMessageBlocked(event,player);
+            DKBans.getInstance().getStorage().createChatLogEntryAsync(event.getPlayer().getUniqueId(),
                     event.getMessage(),
                     System.currentTimeMillis(),
                     event.getOnlinePlayer().getServer().getIdentifier().getName(),
                     event.getOnlinePlayer().getServer().getIdentifier().getUniqueId(),
-                    null);//@Todo apply filter if matched
+                    filterAffiliationArea);
         }
     }
 
-    private boolean checkMessageBlocked(MinecraftPlayerChatEvent event, DKBansPlayer player) {
+    private boolean checkBasicFilters(MinecraftPlayerChatEvent event, DKBansPlayer player){
         LastMessage lastMessage = this.lastMessages.get(player.getUniqueId());
         if(lastMessage != null){
-            if(lastMessage.time+ DKBansConfig.CHAT_FILTER_REPEAT_DELAY >= System.currentTimeMillis()){
+            if(lastMessage.time+DKBansConfig.CHAT_FILTER_REPEAT_DELAY >= System.currentTimeMillis()){
                 event.setCancelled(true);
                 event.getOnlinePlayer().sendMessage(Messages.CHAT_FILTER_SPAM_TOFAST);
                 return true;
-            }else if(lastMessage.time < (System.currentTimeMillis()+ TimeUnit.MINUTES.toMillis(1))
+            }else if(lastMessage.time < (System.currentTimeMillis()+TimeUnit.MINUTES.toMillis(1))
                     && event.getMessage().equalsIgnoreCase(lastMessage.message)){
                 event.setCancelled(true);
                 event.getOnlinePlayer().sendMessage(Messages.CHAT_FILTER_SPAM_REPEAT);
                 return true;
             }
-        }else{
-            this.lastMessages.put(player.getUniqueId(),new LastMessage(event.getMessage(),System.currentTimeMillis()));
         }
+        this.lastMessages.put(player.getUniqueId(),new LastMessage(event.getMessage(),System.currentTimeMillis()));
+        return false;
+    }
 
+    private String checkMessageBlocked(MinecraftPlayerChatEvent event, DKBansPlayer player) {
         FilterManager filterManager = DKBans.getInstance().getFilterManager();
         if(filterManager.checkFilter(FilterAffiliationArea.CHAT_INSULT,event.getMessage())){
             event.getOnlinePlayer().sendMessage(Messages.FILTER_BLOCKED_INSULTING);
             event.setCancelled(true);
-            return true;
+            return FilterAffiliationArea.CHAT_INSULT;
         }
 
         if(filterManager.checkFilter(FilterAffiliationArea.CHAT_ADVERTISING,event.getMessage())){
             event.getOnlinePlayer().sendMessage(Messages.FILTER_BLOCKED_ADVERTISING);
             event.setCancelled(true);
-            return true;
+            return FilterAffiliationArea.CHAT_ADVERTISING;
         }
-        return false;
+        return null;
     }
 
     @Listener(priority = EventPriority.HIGHEST)//@Todo async

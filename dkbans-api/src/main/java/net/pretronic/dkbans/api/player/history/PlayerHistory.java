@@ -20,8 +20,10 @@
 
 package net.pretronic.dkbans.api.player.history;
 
+import net.pretronic.dkbans.api.DKBansScope;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 
+import java.util.Collection;
 import java.util.List;
 
 public interface PlayerHistory {
@@ -29,6 +31,8 @@ public interface PlayerHistory {
     DKBansPlayer getPlayer();
 
     PlayerHistoryEntry getActiveEntry(PunishmentType type);
+
+    PlayerHistoryEntry getActiveEntry(PunishmentType type,DKBansScope scope);
 
     List<PlayerHistoryEntry> getEntries();
 
@@ -38,11 +42,38 @@ public interface PlayerHistory {
 
     List<PlayerHistoryEntry> getEntries(PlayerHistoryType historyType);
 
+
     List<PlayerHistoryEntry> getActiveEntries();
+
+    List<PlayerHistoryEntry> getActiveEntries(PunishmentType type);
+
+    List<PlayerHistoryEntry> getActiveEntries(PunishmentType type,DKBansScope scope);
+
+    List<PlayerHistoryEntry> getActiveEntries(PlayerHistoryType historyType);
+
+    List<PlayerHistoryEntry> getActiveEntries(PlayerHistoryType historyType,DKBansScope scope);
 
 
     default boolean hasActivePunish(PunishmentType type){
         return getActiveEntry(type) != null;
+    }
+
+    default boolean hasActivePunish(PunishmentType type, DKBansScope scope){
+        for (PlayerHistoryEntry activeEntry : getActiveEntries(type)) {
+            if(activeEntry.getCurrent().getScope().matches(scope)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    default boolean hasActivePunish(PunishmentType type, Collection<DKBansScope> scopes){
+        for (PlayerHistoryEntry activeEntry : getActiveEntries(type)) {
+            if(activeEntry.getCurrent().getScope().matches(scopes)){
+                return true;
+            }
+        }
+        return false;
     }
 
 

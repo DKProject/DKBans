@@ -20,8 +20,11 @@
 
 package net.pretronic.dkbans.minecraft.commands.punish;
 
+import net.pretronic.dkbans.api.DKBansScope;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryEntrySnapshot;
+import net.pretronic.dkbans.api.player.history.PlayerHistoryType;
+import net.pretronic.dkbans.api.player.history.PunishmentType;
 import net.pretronic.dkbans.minecraft.commands.CommandUtil;
 import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.libraries.command.command.BasicCommand;
@@ -31,17 +34,25 @@ import net.pretronic.libraries.message.bml.variable.VariableSet;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
 import org.mcnative.common.player.MinecraftPlayer;
 
-//OneTimePunish
-public class KickCommand extends BasicCommand {
+public class OneTimePunishCommand extends BasicCommand {
 
-    public KickCommand(ObjectOwner owner, CommandConfiguration configuration) {
+    private final PunishmentType punishmentType;
+    private final PlayerHistoryType historyType;
+    private final DKBansScope scope;
+
+    public OneTimePunishCommand(ObjectOwner owner, CommandConfiguration configuration
+            , PunishmentType punishmentType, PlayerHistoryType historyType, DKBansScope scope) {
         super(owner, configuration);
+        this.punishmentType = punishmentType;
+        this.historyType = historyType;
+        this.scope = scope;
     }
 
     @Override
     public void execute(CommandSender sender, String[] arguments) {
         if(arguments.length <= 1){
-            sender.sendMessage(Messages.COMMAND_KICK_HELP);
+            sender.sendMessage(Messages.COMMAND_PUNISH_HELP_ONE_TIME, VariableSet.create()
+                    .add("command",getConfiguration().getName()));
             return;
         }
         MinecraftPlayer player = CommandUtil.getPlayer(sender,arguments[0],true);
@@ -56,7 +67,13 @@ public class KickCommand extends BasicCommand {
         if(CommandUtil.checkBypass(sender,dkBansPlayer)) return;
 
         String reason = CommandUtil.readStringFromArguments(arguments,1);
-        PlayerHistoryEntrySnapshot snapshot = dkBansPlayer.kick(CommandUtil.getExecutor(sender),reason);
+        PlayerHistoryEntrySnapshot snapshot = dkBansPlayer.punish()
+                .scope(scope)
+                .stuff(CommandUtil.getExecutor(sender))
+                .punishmentType(punishmentType)
+                .historyType(historyType)
+                .reason(reason)
+                .execute();
         CommandUtil.sendPunishResultMessage(sender,snapshot);
     }
 }

@@ -37,6 +37,7 @@ public class PlayerInfoCommand extends BasicCommand {
     @Override
     public void execute(CommandSender sender, String[] arguments) {
         if(arguments.length < 1){
+            sender.sendMessage(Messages.COMMAND_PLAYER_INFO_HELP);
             return;
         }
 

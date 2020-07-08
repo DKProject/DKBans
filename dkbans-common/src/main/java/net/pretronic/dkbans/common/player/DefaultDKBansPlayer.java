@@ -126,12 +126,14 @@ public  class DefaultDKBansPlayer implements DKBansPlayer {
 
     @Override
     public boolean hasActivePunish(PunishmentType type, DKBansScope scope) {
-        throw new UnsupportedOperationException();
+        Validate.notNull(type,scope);
+        return history.hasActivePunish(type,scope);
     }
 
     @Override
     public boolean hasActivePunish(PunishmentType type, Collection<DKBansScope> scopes) {
-        throw new UnsupportedOperationException();
+        Validate.notNull(type,scopes);
+        return history.hasActivePunish(type,scopes);
     }
 
     @Override
@@ -145,34 +147,6 @@ public  class DefaultDKBansPlayer implements DKBansPlayer {
     @Override
     public PlayerHistoryEntrySnapshotBuilder punish() {
          return new DefaultPlayerHistoryEntrySnapshotBuilder(this,null);
-    }
-
-    @Override
-    public PlayerHistoryEntrySnapshot unpunish(DKBansExecutor executor, UnPunishmentTemplate template) {
-        Validate.notNull(executor,template);
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public PlayerHistoryEntrySnapshot unpunish(DKBansExecutor executor, PunishmentType type, String reason) {
-        Validate.notNull(executor,type,reason);
-        PlayerHistoryEntry entry = getHistory().getActiveEntry(type);
-        if(entry != null){
-            return entry.newSnapshot(executor)
-                    .active(false)
-                    .revokeReason(reason).execute();
-        }
-        throw new IllegalArgumentException("No active ban found");
-    }
-
-    @Override
-    public PlayerHistoryEntrySnapshot kick(DKBansExecutor executor, String reason) {
-        Validate.notNull(executor,reason);
-        return punish()
-                .stuff(executor)
-                .punishmentType(PunishmentType.KICK)
-                .reason(reason)
-                .execute();
     }
 
     @Override

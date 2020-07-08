@@ -49,7 +49,7 @@ public class PunishInfoCommand extends BasicCommand {
         }else{
             MinecraftPlayer player = CommandUtil.getPlayer(sender,arguments[0]);
             if(player == null) return;
-            //@Todo wie machen wir das?
+
         }
     }
 }

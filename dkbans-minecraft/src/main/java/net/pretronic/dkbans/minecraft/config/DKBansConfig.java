@@ -49,6 +49,8 @@ public class DKBansConfig {
     public static boolean PLAYER_ON_JOIN_INFO_TEAMCHAT = true;
     @DocumentKey("player.onJoin.info.report")
     public static boolean PLAYER_ON_JOIN_INFO_REPORT = true;
+    @DocumentKey("player.onJoin.listReports")
+    public static boolean PLAYER_ON_JOIN_LIST_REPORTS = true;
 
     public static boolean PLAYER_SESSION_LOGGING = true;
     public static long PLAYER_SESSION_RETENTION = TimeUnit.DAYS.toMillis(180);
@@ -56,7 +58,7 @@ public class DKBansConfig {
     public static boolean CHAT_FILTER_ENABLED = true;
 
     @DocumentKey("chat.filter.repeatDelay")
-    public static long CHAT_FILTER_REPEAT_DELAY = 800;
+    public static long CHAT_FILTER_REPEAT_DELAY = 1000;
 
 
     public static void load(DKBans dkBans) {

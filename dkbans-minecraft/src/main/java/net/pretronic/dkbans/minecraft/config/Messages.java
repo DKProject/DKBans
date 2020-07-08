@@ -43,6 +43,7 @@ public class Messages {
     public static MessageComponent<?> PLAYER_HAS_BYPASS = Text.ofMessageKey("dkbans.player.hasBypass");
 
     public static MessageComponent<?> REPORT_NOT_FOUND = Text.ofMessageKey("dkbans.report.notFound");
+    public static MessageComponent<?> REPORT_COUNT_INFO = Text.ofMessageKey("dkbans.report.countInfo");
 
     public static MessageComponent<?> STAFF_STATUS_NOW = Text.ofMessageKey("dkbans.player.staff.status.now");
     public static MessageComponent<?> STAFF_STATUS_ALREADY = Text.ofMessageKey("dkbans.player.staff.status.already");
@@ -72,6 +73,18 @@ public class Messages {
 
     public static MessageComponent<?> PUNISH_OVERRIDE = Text.ofMessageKey("dkbans.punish.override");
 
+    public static MessageComponent<?> PUNISH_SUCCESS_BAN = Text.ofMessageKey("dkbans.punish.success.ban");
+    public static MessageComponent<?> PUNISH_SUCCESS_MUTE = Text.ofMessageKey("dkbans.punish.success.mute");
+    public static MessageComponent<?> PUNISH_SUCCESS_KICK = Text.ofMessageKey("dkbans.punish.success.kick");
+    public static MessageComponent<?> PUNISH_SUCCESS_WARN = Text.ofMessageKey("dkbans.punish.success.warn");
+
+
+    public static MessageComponent<?> UNPUNISH_SUCCESS_BAN = Text.ofMessageKey("dkbans.unpunish.success.ban");
+    public static MessageComponent<?> UNPUNISH_SUCCESS_MUTE = Text.ofMessageKey("dkbans.unpunish.success.mute");
+    public static MessageComponent<?> UNPUNISH_SUCCESS_KICK = Text.ofMessageKey("dkbans.unpunish.success.kick");
+    public static MessageComponent<?> UNPUNISH_SUCCESS_WARN = Text.ofMessageKey("dkbans.unpunish.success.warn");
+
+
     public static MessageComponent<?> TEAMCHAT_MESSAGE_FORMAT = Text.ofMessageKey("dkbans.teamchat.messageFormat");
 
     public static MessageComponent<?> CHAT_FILTER_SPAM_TOFAST = Text.ofMessageKey("dkbans.chat.filter.toFast");
@@ -90,6 +103,10 @@ public class Messages {
     public static MessageComponent<?> PUNISH_MUTE_MESSAGE_TEMPORARY = Text.ofMessageKey("dkbans.punish..mute.message.temporary");
     public static MessageComponent<?> PUNISH_MUTE_NOTIFY = Text.ofMessageKey("dkbans.punish.mute.notify");
 
+    public static MessageComponent<?> PUNISH_LIST_BAN = Text.ofMessageKey("dkbans.punish.list.ban");
+    public static MessageComponent<?> PUNISH_LIST_MUTE = Text.ofMessageKey("dkbans.punish.list.mute");
+
+    public static MessageComponent<?> COMMAND_PLAYER_INFO_HELP = Text.ofMessageKey("dkbans.command.playerInfo.help");
     public static MessageComponent<?> COMMAND_PLAYER_INFO_OFFLINE = Text.ofMessageKey("dkbans.command.playerInfo.offline");
     public static MessageComponent<?> COMMAND_PLAYER_INFO_ONLINE = Text.ofMessageKey("dkbans.command.playerInfo.online");
     public static MessageComponent<?> COMMAND_PLAYER_INFO_SESSIONS = Text.ofMessageKey("dkbans.command.playerInfo.sessions");
@@ -102,7 +119,9 @@ public class Messages {
     public static MessageComponent<?> COMMAND_TEAM_CHAT_HELP = Text.ofMessageKey("dkbans.command.teamChat.help");
 
 
-    public static MessageComponent<?> COMMAND_PUNISH_HELP = Text.ofMessageKey("dkbans.command.punish.help");
+    public static MessageComponent<?> COMMAND_PUNISH_HELP_TEMPORARY = Text.ofMessageKey("dkbans.command.punish.help.temporary");
+    public static MessageComponent<?> COMMAND_PUNISH_HELP_PERMANENTLY = Text.ofMessageKey("dkbans.command.punish.help.permanently");
+    public static MessageComponent<?> COMMAND_PUNISH_HELP_ONE_TIME = Text.ofMessageKey("dkbans.command.punish.help.oneTime");
 
     public static MessageComponent<?> COMMAND_UNPUNISH_HELP = Text.ofMessageKey("dkbans.command.unpunish.help");
 

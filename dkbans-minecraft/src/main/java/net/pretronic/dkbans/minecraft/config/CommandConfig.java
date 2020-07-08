@@ -20,8 +20,16 @@
 
 package net.pretronic.dkbans.minecraft.config;
 
+import net.pretronic.dkbans.api.DKBans;
+import net.pretronic.dkbans.api.DKBansScope;
+import net.pretronic.dkbans.api.player.history.PlayerHistoryType;
+import net.pretronic.dkbans.api.player.history.PunishmentType;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
+import net.pretronic.libraries.command.command.configuration.DefaultCommandConfiguration;
+import net.pretronic.libraries.document.annotations.DocumentKey;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -66,18 +74,13 @@ public class CommandConfig {
             .permission("dkbans.command.filter")
             .create();
 
-
-    public static CommandConfiguration COMMAND_KICK = CommandConfiguration.newBuilder()
-            .name("kick")
-            .permission("dkbans.command.kick")
-            .create();
-
     public static CommandConfiguration COMMAND_PLAYER_NOTES = CommandConfiguration.newBuilder()
             .name("playerNotes")
             .aliases("playerNote","pnotes","pnote")
             .permission("dkbans.command.playerNotes")
             .create();
 
+    @DocumentKey("command.punishNotify")
     public static CommandConfiguration COMMAND_PUNISH_NOTIFY  = CommandConfiguration.newBuilder()
             .name("punishNotify")
             .aliases("banNotify","pn")
@@ -99,53 +102,116 @@ public class CommandConfig {
             .permission("dkbans.command.template")
             .create();
 
-    //Punishment Commands
-
-    public static CommandConfiguration COMMAND_PUNISH_KICK = CommandConfiguration.newBuilder()
-            .name("kick")
-            .aliases("tempmute","tmute")
-            .permission("dkbans.command.punish.tempmute")
+    public static CommandConfiguration COMMAND_MY_HISTORY_POINTS = CommandConfiguration.newBuilder()
+            .name("myhistorypoints")
+            .permission("dkbans.command.myhistorypoints")
             .create();
 
-
-    public static CommandConfiguration COMMAND_PUNISH_BAN_PERMANENT = CommandConfiguration.newBuilder()
-            .name("permanentban")
-            .aliases("permaban","pban")
-            .permission("dkbans.command.punish.permaban")
-            .create();
-
-    public static CommandConfiguration COMMAND_PUNISH_BAN_TEMPORARY = CommandConfiguration.newBuilder()
-            .name("temporaryban")
-            .aliases("tempban","tban")
-            .permission("dkbans.command.punish.tempban")
-            .create();
-
-
-    public static CommandConfiguration COMMAND_PUNISH_MUTE_PERMANENT = CommandConfiguration.newBuilder()
-            .name("permanentmute")
-            .aliases("permamute","pmute")
-            .permission("dkbans.command.punish.permamute")
-            .create();
-
-    public static CommandConfiguration COMMAND_PUNISH_MUTE_TEMPORARY = CommandConfiguration.newBuilder()
-            .name("temporarymute")
-            .aliases("tempmute","tmute")
-            .permission("dkbans.command.punish.tempmute")
-            .create();
-
-    public static Map<String,CommandConfiguration> COMMAND_TEMPLATE_PUNISHMENT = new HashMap<>();
-    public static Map<String,CommandConfiguration> COMMAND_TEMPLATE_REPORT = new HashMap<>();
+    public static Collection<PunishmentTypeConfiguration> COMMAND_PUNISH_DIRECT = new ArrayList<>();
+    public static Map<String,CommandConfiguration> COMMAND_PUNISH_TEMPLATE = new HashMap<>();
 
 
     static {
-        COMMAND_TEMPLATE_PUNISHMENT.put("ban",CommandConfiguration.newBuilder()
+
+        //Ban
+        COMMAND_PUNISH_DIRECT.add(new PunishmentTypeConfiguration(true,"permanentban"
+                ,"dkbans.command.punish.ban.permanently"
+                ,new String[]{"permaban","pban"}
+                ,"BAN","NETWORK","COMMAND_PERMANENTLY"));
+
+        COMMAND_PUNISH_DIRECT.add(new PunishmentTypeConfiguration(true,"temporaryban"
+                ,"dkbans.command.punish.ban.temporary"
+                ,new String[]{"tempban","tban"}
+                ,"BAN","NETWORK","COMMAND_TEMPORARY"));
+
+        COMMAND_PUNISH_DIRECT.add(new PunishmentTypeConfiguration(true,"unban"
+                ,"dkbans.command.punish.ban.unban"
+                ,new String[]{}
+                ,"BAN",null,"COMMAND_REVOKE"));
+
+        COMMAND_PUNISH_DIRECT.add(new PunishmentTypeConfiguration(true,"banlist"
+                ,"dkbans.command.punish.ban.list"
+                ,new String[]{"blist"}
+                ,"BAN",null,"COMMAND_LIST"));
+
+
+        //Mute
+        COMMAND_PUNISH_DIRECT.add(new PunishmentTypeConfiguration(true,"permanentmute"
+                ,"dkbans.command.punish.mute.permanently"
+                ,new String[]{"permamute","pmute"}
+                ,"MUTE","NETWORK","COMMAND_PERMANENTLY"));
+
+        COMMAND_PUNISH_DIRECT.add(new PunishmentTypeConfiguration(true,"temporarymute"
+                ,"dkbans.command.punish.mute.temporary"
+                ,new String[]{"tempmute","tmute"}
+                ,"MUTE","NETWORK","COMMAND_TEMPORARY"));
+
+        COMMAND_PUNISH_DIRECT.add(new PunishmentTypeConfiguration(true,"unmute"
+                ,"dkbans.command.punish.mute.unmute"
+                ,new String[]{}
+                ,"MUTE",null,"COMMAND_REVOKE"));
+
+        COMMAND_PUNISH_DIRECT.add(new PunishmentTypeConfiguration(true,"mutelist"
+                ,"dkbans.command.punish.mute.list"
+                ,new String[]{"mlist"}
+                ,"MUTE",null,"COMMAND_LIST"));
+
+
+        //Kick
+        COMMAND_PUNISH_DIRECT.add(new PunishmentTypeConfiguration(true,"kick"
+                ,"dkbans.command.punish.kick"
+                ,new String[]{}
+                ,"KICK","NETWORK","COMMAND_ONE_TIME"));
+
+        //Warn
+        COMMAND_PUNISH_DIRECT.add(new PunishmentTypeConfiguration(true,"warn"
+                ,"dkbans.command.punish.warn"
+                ,new String[]{}
+                ,"WARN","NETWORK","COMMAND_ONE_TIME"));
+
+        COMMAND_PUNISH_TEMPLATE.put("ban",CommandConfiguration.newBuilder()
                 .name("ban")
                 .aliases("mute")
                 .permission("dkbans.ban")
                 .create());
-        COMMAND_TEMPLATE_REPORT.put("report", CommandConfiguration.newBuilder()
-                .name("report")
-                .permission("dkbans.report")
-                .create());
+    }
+
+    public final static class PunishmentTypeConfiguration extends DefaultCommandConfiguration {
+
+        private String punishmentType;
+        private String historyType;
+        private String commandType;
+        private String scope;
+
+        public PunishmentTypeConfiguration(boolean enabled, String name, String permission
+                , String[] aliases, String punishmentType, String historyType, String commandType) {
+            super(enabled, name, permission, null, aliases);
+            this.punishmentType = punishmentType;
+            this.historyType = historyType;
+            this.commandType = commandType;
+            this.scope = "GLOBAL:GLOBAL";
+        }
+
+        public PunishmentType getPunishmentType() {
+            return PunishmentType.getPunishmentType(punishmentType);
+        }
+
+        public PlayerHistoryType getHistoryType() {
+            PlayerHistoryType type = DKBans.getInstance().getHistoryManager().getHistoryType(historyType);
+            if(type == null) return DKBans.getInstance().getHistoryManager().createHistoryType(historyType);
+            return type;
+        }
+
+        public String getCommandType() {
+            return commandType;
+        }
+
+        public DKBansScope getScope() {
+            String[] parts = scope.split(":");
+            if(parts.length == 2){
+                return new DKBansScope(parts[0],parts[1]);
+            }
+            throw new IllegalArgumentException("Invalid scope format (key:name)");
+        }
     }
 }

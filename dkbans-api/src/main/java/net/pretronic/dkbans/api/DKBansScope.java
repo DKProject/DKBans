@@ -20,16 +20,70 @@
 
 package net.pretronic.dkbans.api;
 
+import net.pretronic.libraries.document.Document;
+import net.pretronic.libraries.utility.Validate;
+
+import java.util.Collection;
 import java.util.UUID;
 
-public interface DKBansScope {
+public class DKBansScope {
 
-    public static DKBansScope GLOBAL = null;
+    private static final UUID ZERO_UUID = new UUID(0, 0);
 
+    public static final DKBansScope GLOBAL = new DKBansScope("GLOBAL","GLOBAL",ZERO_UUID);
 
-    String getType();
+    private final String type;
+    private final String name;
+    private final UUID id;
 
-    String getName();
+    public DKBansScope(String type, String name) {
+        this(type,name,null);
+    }
 
-    UUID getId();
+    public DKBansScope(String type, String name, UUID id) {
+        Validate.notNull(type, "Scope type can't be null");
+        Validate.notNull(name, "Scope name can't be null");
+        this.type = type;
+        this.name = name;
+        this.id = id == null ? ZERO_UUID : id;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public boolean matches(DKBansScope scope){
+        Validate.notNull(scope);
+        return getType().equalsIgnoreCase(scope.getType()) && getName().equalsIgnoreCase(scope.getName());
+    }
+
+    public boolean matches(Collection<DKBansScope> scopes){
+        Validate.notNull(scopes);
+        for (DKBansScope scope : scopes) if(matches(scope)) return true;
+        return false;
+    }
+
+    public boolean matchesExact(DKBansScope scope){
+        Validate.notNull(scope);
+        return matches(scope) && getId().equals(scope.getId());
+    }
+
+    public boolean matchesExact(Collection<DKBansScope> scopes){
+        Validate.notNull(scopes);
+        for (DKBansScope scope : scopes) if(matchesExact(scope)) return true;
+        return false;
+    }
+
+    public static DKBansScope fromData(Document data) {
+        if(data == null || (!data.contains("scopeType") && !data.contains("scopeName"))) return null;
+        return new DKBansScope(data.getString("scopeType"), data.getString("scopeName"), ZERO_UUID);
+    }
 }

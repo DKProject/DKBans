@@ -30,7 +30,6 @@ import net.pretronic.databasequery.api.query.result.QueryResult;
 import net.pretronic.databasequery.api.query.result.QueryResultEntry;
 import net.pretronic.databasequery.api.query.type.FindQuery;
 import net.pretronic.databasequery.api.query.type.InsertQuery;
-import net.pretronic.databasequery.api.query.type.SearchQuery;
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.DKBansScope;
@@ -47,7 +46,6 @@ import net.pretronic.dkbans.api.player.session.PlayerSession;
 import net.pretronic.dkbans.api.storage.DKBansStorage;
 import net.pretronic.dkbans.api.template.*;
 import net.pretronic.dkbans.api.template.report.ReportTemplate;
-import net.pretronic.dkbans.common.DefaultDKBansScope;
 import net.pretronic.dkbans.common.filter.DefaultFilter;
 import net.pretronic.dkbans.common.player.chatlog.DefaultChatLogEntry;
 import net.pretronic.dkbans.common.player.history.DefaultPlayerHistoryEntry;
@@ -67,6 +65,7 @@ import net.pretronic.libraries.utility.map.Pair;
 
 import java.net.InetAddress;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 
 public class DefaultDKBansStorage implements DKBansStorage {
 
@@ -358,7 +357,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
     private DefaultPlayerHistoryEntrySnapshot createSnapshot(QueryResultEntry resultEntry) {
         DKBansScope scope = null;
         if(resultEntry.getString("ScopeType") != null){
-            scope = new DefaultDKBansScope(resultEntry.getString("ScopeType")
+            scope = new DKBansScope(resultEntry.getString("ScopeType")
                     ,resultEntry.getString("ScopeName")
                     ,resultEntry.getUniqueId("ScopeId"));
         }
@@ -370,7 +369,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 resultEntry.getString("Reason"),
                 resultEntry.getLong("Timeout"),
                 dkBans.getTemplateManager().getTemplate(resultEntry.getInt("TemplateId")),
-                null/*@Todo add stuff*/,
+                resultEntry.getUniqueId("StaffId"),
                 scope,
                 resultEntry.getInt("Points"),
                 resultEntry.getBoolean("Active"),
@@ -379,7 +378,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 dkBans.getTemplateManager().getTemplate(resultEntry.getInt("RevokeTemplateId")),
                 resultEntry.getBoolean("ModifiedActive"),
                 resultEntry.getLong("ModifiedTime"),
-                null/*@Todo add modified by*/);
+                resultEntry.getUniqueId("StaffId")/*@Todo add modified by*/);
     }
 
     @Override
@@ -579,6 +578,11 @@ public class DefaultDKBansStorage implements DKBansStorage {
         return new DefaultChatLogEntry(id, playerId, message, time, serverName, serverId, filterAffiliationArea);
     }
 
+    @Override
+    public CompletableFuture<ChatLogEntry> createChatLogEntryAsync(UUID playerId, String message, long time, String serverName, UUID serverId, String filterAffiliationArea) {
+        throw new UnsupportedOperationException();
+    }
+
     private List<PlayerSession> getPlayerSessionsByResult(DKBansPlayer player, QueryResult result) {
         List<PlayerSession> sessions = new ArrayList<>();
         result.loadIn(sessions, entry -> getPlayerSessionByResultEntry(player, entry));
@@ -603,8 +607,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 entry.getLong("DisconnectTime"));
     }
 
-
-
+    
     @Override
     public List<PlayerNote> getPlayerNotes(DKBansPlayer player) {
         return getPlayerNotesByResult(player, this.playerNotes.find().where("PlayerId", player.getUniqueId()).execute());

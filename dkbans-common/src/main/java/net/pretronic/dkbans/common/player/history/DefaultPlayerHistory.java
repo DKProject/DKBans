@@ -21,6 +21,7 @@
 package net.pretronic.dkbans.common.player.history;
 
 import net.pretronic.dkbans.api.DKBans;
+import net.pretronic.dkbans.api.DKBansScope;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.history.*;
 import net.pretronic.libraries.utility.Iterators;
@@ -59,6 +60,12 @@ public class DefaultPlayerHistory implements PlayerHistory {
     }
 
     @Override
+    public PlayerHistoryEntry getActiveEntry(PunishmentType type, DKBansScope scope) {
+        return Iterators.findOne(getActiveEntries(), entry -> entry.getCurrent().getPunishmentType() == type
+                && entry.getCurrent().getScope().matches(scope));
+    }
+
+    @Override
     public List<PlayerHistoryEntry> getEntries() {
         if(!loadedAll){
             this.entries.addAll(DKBans.getInstance().getStorage().loadEntries(this,loadedActive));
@@ -88,6 +95,28 @@ public class DefaultPlayerHistory implements PlayerHistory {
             }
             return entries;
         }
+    }
+
+    @Override
+    public List<PlayerHistoryEntry> getActiveEntries(PunishmentType type) {
+        return Iterators.filter(getActiveEntries(), entry -> entry.getCurrent().getPunishmentType() == type);
+    }
+
+    @Override
+    public List<PlayerHistoryEntry> getActiveEntries(PunishmentType type, DKBansScope scope) {
+        return Iterators.filter(getActiveEntries(), entry -> entry.getCurrent().getPunishmentType() == type
+                && entry.getCurrent().getScope().matches(scope));
+    }
+
+    @Override
+    public List<PlayerHistoryEntry> getActiveEntries(PlayerHistoryType historyType) {
+        return Iterators.filter(getActiveEntries(), entry -> entry.getCurrent().getHistoryType() == historyType);
+    }
+
+    @Override
+    public List<PlayerHistoryEntry> getActiveEntries(PlayerHistoryType historyType, DKBansScope scope) {
+        return Iterators.filter(getActiveEntries(), entry -> entry.getCurrent().getHistoryType() == historyType
+                && entry.getCurrent().getScope().matches(scope));
     }
 
     @Override

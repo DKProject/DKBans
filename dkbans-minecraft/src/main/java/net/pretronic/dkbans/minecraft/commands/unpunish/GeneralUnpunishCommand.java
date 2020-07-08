@@ -19,5 +19,19 @@
 
 package net.pretronic.dkbans.minecraft.commands.unpunish;
 
-public class GeneralUnpunishCommand {
+import net.pretronic.libraries.command.command.BasicCommand;
+import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
+import net.pretronic.libraries.command.sender.CommandSender;
+import net.pretronic.libraries.utility.interfaces.ObjectOwner;
+
+public class GeneralUnpunishCommand extends BasicCommand {
+
+    public GeneralUnpunishCommand(ObjectOwner owner, CommandConfiguration configuration) {
+        super(owner, configuration);
+    }
+
+    @Override
+    public void execute(CommandSender sender, String[] arguments) {
+
+    }
 }

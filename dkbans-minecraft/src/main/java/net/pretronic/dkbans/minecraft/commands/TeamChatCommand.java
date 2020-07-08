@@ -58,7 +58,7 @@ public class TeamChatCommand extends BasicCommand {
                     player.sendMessage(Messages.STAFF_STATUS_NOT, VariableSet.create()
                             .add("prefix",Messages.PREFIX_TEAMCHAT)
                             .add("status",action)
-                            .add("statusFormatted", Messages.STAFF_STATUS_LOGOUT));
+                            .add("statusFormatted", Messages.STAFF_STATUS_LOGIN));
                     return;
                 }
 

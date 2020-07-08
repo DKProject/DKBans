@@ -20,6 +20,7 @@
 
 package net.pretronic.dkbans.common.player.history;
 
+import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.DKBansScope;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryEntry;
@@ -31,6 +32,8 @@ import net.pretronic.libraries.document.Document;
 import net.pretronic.libraries.utility.Validate;
 import net.pretronic.libraries.utility.annonations.Internal;
 import net.pretronic.libraries.utility.map.Pair;
+
+import java.util.UUID;
 
 public class DefaultPlayerHistoryEntrySnapshot implements PlayerHistoryEntrySnapshot {
 
@@ -44,7 +47,7 @@ public class DefaultPlayerHistoryEntrySnapshot implements PlayerHistoryEntrySnap
 
     private final Template template;
 
-    private final DKBansExecutor stuff;
+    private final UUID stuffId;
     private final DKBansScope scope;
 
     private final int points;
@@ -56,11 +59,11 @@ public class DefaultPlayerHistoryEntrySnapshot implements PlayerHistoryEntrySnap
 
     private final boolean modifiedActive;
     private final long modifiedTime;
-    private final DKBansExecutor modifier;
+    private final UUID modifierId;
 
     public DefaultPlayerHistoryEntrySnapshot(PlayerHistoryEntry entry, int id, PlayerHistoryType historyType, PunishmentType punishmentType
-            , String reason, long timeout, Template template, DKBansExecutor stuff, DKBansScope scope, int points
-            , boolean active, Document properties, String revokeMessage, Template revokeTemplate, boolean modifiedActive, long modifiedTime, DKBansExecutor modifier) {
+            , String reason, long timeout, Template template, UUID stuffId, DKBansScope scope, int points
+            , boolean active, Document properties, String revokeMessage, Template revokeTemplate, boolean modifiedActive, long modifiedTime, UUID modifierId) {
         this.entry = entry;
         this.id = id;
         this.historyType = historyType;
@@ -68,7 +71,7 @@ public class DefaultPlayerHistoryEntrySnapshot implements PlayerHistoryEntrySnap
         this.reason = reason;
         this.timeout = timeout;
         this.template = template;
-        this.stuff = stuff;
+        this.stuffId = stuffId;
         this.scope = scope;
         this.points = points;
         this.active = active;
@@ -77,7 +80,7 @@ public class DefaultPlayerHistoryEntrySnapshot implements PlayerHistoryEntrySnap
         this.revokeTemplate = revokeTemplate;
         this.modifiedActive = modifiedActive;
         this.modifiedTime = modifiedTime;
-        this.modifier = modifier;
+        this.modifierId = modifierId;
     }
 
     @Override
@@ -117,7 +120,7 @@ public class DefaultPlayerHistoryEntrySnapshot implements PlayerHistoryEntrySnap
 
     @Override
     public DKBansExecutor getStuff() {
-        return stuff;
+        return DKBans.getInstance().getPlayerManager().getExecutor(stuffId);
     }
 
     @Override
@@ -162,7 +165,7 @@ public class DefaultPlayerHistoryEntrySnapshot implements PlayerHistoryEntrySnap
 
     @Override
     public DKBansExecutor getModifiedBy() {
-        return modifier;
+        return DKBans.getInstance().getPlayerManager().getExecutor(modifierId);
     }
 
     @Internal
