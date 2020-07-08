@@ -41,9 +41,12 @@ import net.pretronic.dkbans.common.template.DefaultTemplateManager;
 import net.pretronic.libraries.event.EventBus;
 import net.pretronic.libraries.logging.PretronicLogger;
 
+import java.util.concurrent.ExecutorService;
+
 public class DefaultDKBans extends DKBans {
 
     private final PretronicLogger logger;
+    private final ExecutorService executorService;
     private final EventBus eventBus;
     private final DefaultDKBansStorage storage;
     private final PlayerHistoryManager historyManager;
@@ -55,8 +58,9 @@ public class DefaultDKBans extends DKBans {
     private final ChatLogManager chatLogManager;
     private final DKBansPlayerManager playerManager;
 
-    public DefaultDKBans(PretronicLogger logger, EventBus eventBus, Database database,DKBansPlayerManager playerManager) {
+    public DefaultDKBans(PretronicLogger logger, ExecutorService executorService, EventBus eventBus, Database database, DKBansPlayerManager playerManager) {
         this.logger = logger;
+        this.executorService = executorService;
         this.eventBus = eventBus;
         this.storage = new DefaultDKBansStorage(this, database);
         this.historyManager = new DefaultPlayerHistoryManager(this);
@@ -72,6 +76,11 @@ public class DefaultDKBans extends DKBans {
     @Override
     public PretronicLogger getLogger() {
         return this.logger;
+    }
+
+    @Override
+    public ExecutorService getExecutorService() {
+        return this.executorService;
     }
 
     @Override

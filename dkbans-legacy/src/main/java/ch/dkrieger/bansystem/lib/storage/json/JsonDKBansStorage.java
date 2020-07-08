@@ -95,6 +95,12 @@ public class JsonDKBansStorage implements DKBansStorage {
     public void disconnect() {
         save();
     }
+
+    @Override
+    public Collection<NetworkPlayer> getPlayers() {
+        return this.players;
+    }
+
     private void save(){
         new Document().append("nextPlayerID",nextPlayerID.get()).append("nextHistoryID",nextHistoryID.get()).append("players",players)
                 .saveData(new File(storageFolder,"players.json"));

@@ -37,6 +37,7 @@ import net.pretronic.dkbans.common.template.DefaultTemplateGroup;
 import net.pretronic.dkbans.minecraft.commands.*;
 import net.pretronic.dkbans.minecraft.commands.history.MyHistoryPointsCommand;
 import net.pretronic.dkbans.minecraft.commands.punish.*;
+import net.pretronic.dkbans.minecraft.commands.report.ReportCommand;
 import net.pretronic.dkbans.minecraft.commands.template.TemplateCommand;
 import net.pretronic.dkbans.minecraft.commands.unpunish.UnpunishCommand;
 import net.pretronic.dkbans.minecraft.config.CommandConfig;
@@ -67,6 +68,7 @@ public class DKBansPlugin extends MinecraftPlugin {
 
         MinecraftPlayerManager playerManager = new MinecraftPlayerManager();
         this.dkBans = new DefaultDKBans(getLogger()
+                , McNative.getInstance().getExecutorService()
                 ,McNative.getInstance().getLocal().getEventBus()
                 ,getRuntime().getRegistry().getService(ConfigurationProvider.class).getDatabase(this, true)
                 ,playerManager);
@@ -140,6 +142,13 @@ public class DKBansPlugin extends MinecraftPlugin {
             }else{
                 getRuntime().getLocal().getCommandManager().registerCommand(new TemplatePunishCommand(this,entry.getValue(),group));
             }
+        }
+
+        if(CommandConfig.COMMAND_REPORT_MODE.equalsIgnoreCase("template") && CommandConfig.COMMAND_REPORT_TEMPLATE_NAME != null) {
+            getRuntime().getLocal().getCommandManager().registerCommand(new ReportCommand(this, CommandConfig.COMMAND_REPORT_CONFIGURATION,
+                    CommandConfig.COMMAND_REPORT_TEMPLATE_NAME));
+        } else {
+            getRuntime().getLocal().getCommandManager().registerCommand(new ReportCommand(this, CommandConfig.COMMAND_REPORT_CONFIGURATION, null));
         }
     }
 

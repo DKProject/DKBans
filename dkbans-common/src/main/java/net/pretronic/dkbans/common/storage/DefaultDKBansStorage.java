@@ -405,7 +405,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
 
     @Override
     public int startPlayerSession(PlayerSession session) {
-        this.playerSessions.delete().where("DisconnectTime", null).execute();
+        this.playerSessions.delete().whereIsNull("DisconnectTime").execute();
 
         return this.playerSessions.insert()
                 .set("PlayerId", session.getPlayer().getUniqueId())
@@ -580,7 +580,9 @@ public class DefaultDKBansStorage implements DKBansStorage {
 
     @Override
     public CompletableFuture<ChatLogEntry> createChatLogEntryAsync(UUID playerId, String message, long time, String serverName, UUID serverId, String filterAffiliationArea) {
-        throw new UnsupportedOperationException();
+        CompletableFuture<ChatLogEntry> future = new CompletableFuture<>();
+        DKBans.getInstance().getExecutorService().execute(()-> future.complete(createChatLogEntry(playerId, message, time, serverName, serverId, filterAffiliationArea)));
+        return future;
     }
 
     private List<PlayerSession> getPlayerSessionsByResult(DKBansPlayer player, QueryResult result) {

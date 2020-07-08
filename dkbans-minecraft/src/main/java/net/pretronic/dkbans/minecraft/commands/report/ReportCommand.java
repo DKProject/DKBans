@@ -20,6 +20,7 @@
 
 package net.pretronic.dkbans.minecraft.commands.report;
 
+import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.report.PlayerReportEntry;
 import net.pretronic.dkbans.api.template.Template;
@@ -52,9 +53,17 @@ public class ReportCommand extends MainCommand implements NotFindable {
 
     private final TemplateGroup templateGroup;
 
-    public ReportCommand(ObjectOwner owner, CommandConfiguration configuration, TemplateGroup templateGroup) {
+    public ReportCommand(ObjectOwner owner, CommandConfiguration configuration, String templateGroupName) {
         super(owner, configuration);
-        this.templateGroup = templateGroup;
+        if(templateGroupName != null) {
+            TemplateGroup templateGroup0 = DKBans.getInstance().getTemplateManager().getTemplateGroup(templateGroupName);
+            if(templateGroup0 == null) {
+                throw new IllegalArgumentException("Can't register report template command. Template group does't exist");
+            }
+            this.templateGroup = templateGroup0;
+        } else {
+            this.templateGroup = null;
+        }
         registerCommand(new ReportLoginCommand(owner));
         registerCommand(new ReportLogoutCommand(owner));
         registerCommand(new ReportToggleCommand(owner));

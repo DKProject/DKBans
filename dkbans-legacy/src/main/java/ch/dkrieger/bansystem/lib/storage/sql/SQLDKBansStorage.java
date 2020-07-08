@@ -47,6 +47,7 @@ import ch.dkrieger.bansystem.lib.utils.Document;
 import ch.dkrieger.bansystem.lib.utils.GeneralUtil;
 import com.google.gson.reflect.TypeToken;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -201,6 +202,21 @@ public class SQLDKBansStorage implements DKBansStorage {
     }
 
     @Override
+    public Collection<NetworkPlayer> getPlayers() {
+        return this.players.selectAll().execute(result -> {
+            Collection<NetworkPlayer> players1 = new ArrayList<>();
+            try {
+                while (result.next()) {
+                    players1.add(loadPlayer(result));
+                }
+            } catch (SQLException exception) {
+                exception.printStackTrace();
+            }
+            return players1;
+        });
+    }
+
+    @Override
     public NetworkPlayer getPlayer(int id) throws Exception {
         return getPlayer("id",id);
     }
@@ -214,35 +230,38 @@ public class SQLDKBansStorage implements DKBansStorage {
     public NetworkPlayer getPlayer(UUID uuid) throws Exception {
         return getPlayer("uuid",uuid.toString());
     }
+
     public NetworkPlayer getPlayer(String key, Object value){
         NetworkPlayer player = players.select().where(key,value).execute(result -> {
             try{
                if(result.next()){
-                   UUID uuid = UUID.fromString(result.getString("uuid"));
-                   NetworkPlayer resultPlayer = new NetworkPlayer(result.getInt("id"),uuid
-                           ,result.getString("name"),result.getString("color"),result.getString("lastIp")
-                           ,result.getString("lastCountry"),result.getLong("lastLogin"),result.getLong("firstLogin")
-                           ,result.getLong("onlineTime"),result.getBoolean("bypass"),result.getBoolean("teamChatLogin")
-                           ,result.getBoolean("reportLogin"),null,Document.loadData(result.getString("properties"))
-                           ,new PlayerStats(result.getLong("statsLogins")
-                           ,result.getLong("statsReports"),result.getLong("statsReportsAccepted")
-                           ,result.getLong("statsMessages"),result.getLong("statsReportsReceived")
-                           ,result.getLong("statsStaffBans"),result.getLong("statsStaffMutes")
-                           ,result.getLong("statsStaffUnbans"),result.getLong("statsStaffKicks")
-                           ,result.getLong("statsStaffWarns")),new ArrayList<>(),null);
-                   return resultPlayer;
+                   return loadPlayer(result);
                }
             }catch (Exception exception){
                 exception.printStackTrace();
             }
             return null;
         });
-        if(player != null){
-            player.setHistory(getHistory(player.getUUID()));
-            player.setReports(getReports(player.getUUID()));
-            player.setOnlineSessions(getSessions(player.getUUID()));
-        }
         return player;
+    }
+
+    private NetworkPlayer loadPlayer(ResultSet result) throws SQLException {
+        UUID uuid = UUID.fromString(result.getString("uuid"));
+        NetworkPlayer resultPlayer = new NetworkPlayer(result.getInt("id"),uuid
+                ,result.getString("name"),result.getString("color"),result.getString("lastIp")
+                ,result.getString("lastCountry"),result.getLong("lastLogin"),result.getLong("firstLogin")
+                ,result.getLong("onlineTime"),result.getBoolean("bypass"),result.getBoolean("teamChatLogin")
+                ,result.getBoolean("reportLogin"),null,Document.loadData(result.getString("properties"))
+                ,new PlayerStats(result.getLong("statsLogins")
+                ,result.getLong("statsReports"),result.getLong("statsReportsAccepted")
+                ,result.getLong("statsMessages"),result.getLong("statsReportsReceived")
+                ,result.getLong("statsStaffBans"),result.getLong("statsStaffMutes")
+                ,result.getLong("statsStaffUnbans"),result.getLong("statsStaffKicks")
+                ,result.getLong("statsStaffWarns")),new ArrayList<>(),null);
+        resultPlayer.setHistory(getHistory(resultPlayer.getUUID()));
+        resultPlayer.setReports(getReports(resultPlayer.getUUID()));
+        resultPlayer.setOnlineSessions(getSessions(resultPlayer.getUUID()));
+        return resultPlayer;
     }
     public List<OnlineSession> getSessions(UUID uuid){
         return onlineSessions.select().where("uuid",uuid.toString()).execute(result -> {

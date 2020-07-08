@@ -32,6 +32,8 @@ import net.pretronic.dkbans.api.template.TemplateManager;
 import net.pretronic.libraries.event.EventBus;
 import net.pretronic.libraries.logging.PretronicLogger;
 
+import java.util.concurrent.ExecutorService;
+
 /*
 - PUNISH
 - UNPUNISH
@@ -42,6 +44,8 @@ public abstract class DKBans {
     private static DKBans INSTANCE;
 
     public abstract PretronicLogger getLogger();
+
+    public abstract ExecutorService getExecutorService();
 
     public abstract EventBus getEventBus();
 

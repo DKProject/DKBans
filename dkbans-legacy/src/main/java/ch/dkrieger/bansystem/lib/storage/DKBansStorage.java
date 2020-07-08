@@ -35,6 +35,7 @@ import ch.dkrieger.bansystem.lib.stats.NetworkStats;
 import ch.dkrieger.bansystem.lib.stats.PlayerStats;
 import ch.dkrieger.bansystem.lib.utils.Document;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -45,6 +46,8 @@ public interface DKBansStorage {
     public boolean isConnected();
 
     public void disconnect();
+
+    Collection<NetworkPlayer> getPlayers();
 
     public NetworkPlayer getPlayer(int id) throws Exception;
 

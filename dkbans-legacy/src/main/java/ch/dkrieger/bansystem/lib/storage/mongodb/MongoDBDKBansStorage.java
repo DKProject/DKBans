@@ -47,10 +47,7 @@ import com.mongodb.client.model.UpdateOptions;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import static com.mongodb.client.model.Filters.*;
 
@@ -113,6 +110,16 @@ public class MongoDBDKBansStorage implements DKBansStorage {
     public void disconnect() {
 
     }
+
+    @Override
+    public Collection<NetworkPlayer> getPlayers() {
+        Collection<NetworkPlayer> players = new ArrayList<>();
+        for (Document document : playerCollection.find()) {
+            players.add(getPlayer(document));
+        }
+        return players;
+    }
+
     @Override
     public boolean isConnected() {
         try{

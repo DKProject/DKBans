@@ -50,6 +50,7 @@ public class Ban extends HistoryEntry {
         this.versions = new ArrayList<>();
     }
     public long getTimeOut() {
+        /*
         final long[] time = new long[2];
         final boolean[] found = new boolean[1];
         if(getVersions().size() > 0){
@@ -60,6 +61,7 @@ public class Ban extends HistoryEntry {
             });
             if(found[0]) return time[1];
         }
+         */
         return timeOut;
     }
     public long getDuration(){
@@ -88,6 +90,7 @@ public class Ban extends HistoryEntry {
     public BanType getBanType() {
         return banType;
     }
+    /*
     @Override
     public String getReason() {
         final long[] lastTime = new long[1];
@@ -101,6 +104,8 @@ public class Ban extends HistoryEntry {
         }
         return super.getReason();
     }
+     */
+    /*
     @Override
     public String getMessage() {
         final long[] lastTime = new long[1];
@@ -114,6 +119,8 @@ public class Ban extends HistoryEntry {
         }
         return super.getMessage();
     }
+     */
+    /*
     @Override
     public HistoryPoints getPoints() {
         final long[] lastTime = new long[1];
@@ -127,6 +134,7 @@ public class Ban extends HistoryEntry {
         }
         return super.getPoints();
     }
+     */
 
     public String getFirstReason(){
         return this.reason;

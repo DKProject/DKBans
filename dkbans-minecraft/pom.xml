@@ -129,5 +129,11 @@
             <version>${dependency.pretronic.libraries}</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>net.pretronic.dkbans</groupId>
+            <artifactId>dkbans-legacy</artifactId>
+            <version>${project.version}</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 </project>
