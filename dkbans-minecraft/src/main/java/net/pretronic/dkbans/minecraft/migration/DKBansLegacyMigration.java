@@ -21,29 +21,34 @@
 package net.pretronic.dkbans.minecraft.migration;
 
 import ch.dkrieger.bansystem.lib.BanSystem;
+import ch.dkrieger.bansystem.lib.config.mode.BanMode;
+import ch.dkrieger.bansystem.lib.config.mode.ReasonMode;
 import ch.dkrieger.bansystem.lib.player.NetworkPlayer;
 import ch.dkrieger.bansystem.lib.player.history.BanType;
 import ch.dkrieger.bansystem.lib.player.history.entry.*;
+import ch.dkrieger.bansystem.lib.reason.*;
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.DKBansScope;
 import net.pretronic.dkbans.api.migration.Migration;
 import net.pretronic.dkbans.api.migration.MigrationResult;
+import net.pretronic.dkbans.api.migration.MigrationResultBuilder;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
-import net.pretronic.dkbans.api.player.history.PlayerHistoryEntry;
-import net.pretronic.dkbans.api.player.history.PlayerHistoryEntrySnapshotBuilder;
-import net.pretronic.dkbans.api.player.history.PlayerHistoryType;
-import net.pretronic.dkbans.api.player.history.PunishmentType;
-import net.pretronic.dkbans.common.player.history.DefaultPlayerHistoryEntry;
+import net.pretronic.dkbans.api.player.history.*;
+import net.pretronic.dkbans.api.template.*;
+import net.pretronic.dkbans.api.template.punishment.PunishmentTemplateEntry;
 import net.pretronic.dkbans.common.player.history.DefaultPlayerHistoryEntrySnapshotBuilder;
+import net.pretronic.dkbans.common.template.DefaultTemplateGroup;
+import net.pretronic.dkbans.common.template.punishment.DefaultPunishmentTemplate;
+import net.pretronic.dkbans.common.template.punishment.types.DefaultBanPunishmentTemplateEntry;
+import net.pretronic.dkbans.common.template.punishment.types.DefaultMutePunishmentTemplateEntry;
+import net.pretronic.libraries.document.Document;
 import net.pretronic.libraries.document.type.DocumentFileType;
 import org.mcnative.common.McNative;
 import org.mcnative.common.player.data.PlayerDataProvider;
 
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.time.Duration;
+import java.util.*;
 
 public class DKBansLegacyMigration extends Migration {
 
@@ -53,13 +58,142 @@ public class DKBansLegacyMigration extends Migration {
 
     @Override
     public MigrationResult migrate() {
+        long start = System.currentTimeMillis();
         if(BanSystem.getInstance() == null) {
             new BanSystem();
         }
+        MigrationResultBuilder resultBuilder = new MigrationResultBuilder();
+        migrateReasons(resultBuilder);
+        migratePlayers(resultBuilder);
 
+        long end = System.currentTimeMillis();
+        return resultBuilder.time(end-start).success(true).create();
+    }
+
+    @Override
+    public boolean isAvailable() {
+        return true;
+    }
+
+    private void migrateReasons(MigrationResultBuilder resultBuilder) {
+        migrateBanReasons(resultBuilder);
+        migrateKickReasons(resultBuilder);
+        migrateUnbanReasons(resultBuilder);
+        migrateReportReasons(resultBuilder);
+        migrateWarnReasons(resultBuilder);
+    }
+
+    private void migrateBanReasons(MigrationResultBuilder resultBuilder) {
+        int amount = 0;
+        BanMode banMode = BanSystem.getInstance().getConfig().banMode;
+        if(banMode !=  BanMode.SELF) {
+            TemplateGroup templateGroup = getOrCreateGroup("ban", convertCalculationType(banMode));
+            for (BanReason banReason : BanSystem.getInstance().getReasonProvider().getBanReasons()) {
+                DefaultPunishmentTemplate template = (DefaultPunishmentTemplate) TemplateFactory.create(TemplateType.PUNISHMENT,
+                        banReason.getID(),
+                        banReason.getName(),
+                        templateGroup,
+                        banReason.getDisplay(),
+                        banReason.getPermission(),
+                        banReason.getAliases(),
+                        migrateHistoryType(banReason.getHistoryType()),
+                        true,
+                        banReason.isHidden(),
+                        getCategory(),
+                        Document.newDocument());
+                template.setPointsDivider(banReason.getDivider());
+                for (Map.Entry<Integer, BanReasonEntry> entry : banReason.getTemplateDurations().entrySet()) {
+                    template.getDurations().put(entry.getKey(), migrateBanReasonEntry(entry.getValue()));
+                }
+                for (Map.Entry<Integer, BanReasonEntry> entry : banReason.getPointsDurations().entrySet()) {
+                    template.getDurations().put(entry.getKey(), migrateBanReasonEntry(entry.getValue()));
+                }
+                ((DefaultTemplateGroup)templateGroup).addTemplateInternal(template);
+
+                amount++;
+            }
+            DKBans.getInstance().getStorage().importTemplateGroup(templateGroup);
+        }
+        resultBuilder.addMigrated("BanReasons", amount);
+    }
+
+    private void migrateKickReasons(MigrationResultBuilder resultBuilder) {
+        int amount = 0;
+
+        ReasonMode mode = BanSystem.getInstance().getConfig().kickMode;
+        if(mode == ReasonMode.TEMPLATE) {
+            TemplateGroup templateGroup = getOrCreateGroup("kick", convertCalculationType(mode));
+            for (KickReason kickReason : BanSystem.getInstance().getReasonProvider().getKickReasons()) {
+
+                amount++;
+            }
+        }
+        resultBuilder.addMigrated("KickReasons", amount);
+    }
+
+    private void migrateUnbanReasons(MigrationResultBuilder resultBuilder) {
+        int amount = 0;
+
+        ReasonMode mode = BanSystem.getInstance().getConfig().unbanMode;
+        if(mode == ReasonMode.TEMPLATE) {
+            TemplateGroup templateGroup = getOrCreateGroup("unban", convertCalculationType(mode));
+            for (UnbanReason unbanReason : BanSystem.getInstance().getReasonProvider().getUnbanReasons()) {
+                //Template template = TemplateFactory.create()
+
+                amount++;
+            }
+        }
+        resultBuilder.addMigrated("UnbanReasons", amount);
+    }
+
+    private void migrateReportReasons(MigrationResultBuilder resultBuilder) {
+        int amount = 0;
+
+        ReasonMode mode = BanSystem.getInstance().getConfig().reportMode;
+        if(mode == ReasonMode.TEMPLATE) {
+            TemplateGroup templateGroup = getOrCreateGroup("report", convertCalculationType(mode));
+            for (ReportReason reportReason : BanSystem.getInstance().getReasonProvider().getReportReasons()) {
+
+                amount++;
+            }
+        }
+        resultBuilder.addMigrated("ReportReasons", amount);
+    }
+
+    private void migrateWarnReasons(MigrationResultBuilder resultBuilder) {
+        int amount = 0;
+
+        ReasonMode mode = BanSystem.getInstance().getConfig().warnMode;
+        if(mode == ReasonMode.TEMPLATE) {
+            TemplateGroup templateGroup = getOrCreateGroup("report", convertCalculationType(mode));
+            for (WarnReason warnReason : BanSystem.getInstance().getReasonProvider().getWarnReasons()) {
+
+                amount++;
+            }
+        }
+        resultBuilder.addMigrated("WarnReasons", amount);
+    }
+
+    private CalculationType convertCalculationType(BanMode banMode) {
+        switch (banMode) {
+            case POINT: return CalculationType.POINTS;
+            case TEMPLATE: return CalculationType.AMOUNT;
+        }
+        throw new IllegalArgumentException("Migration failed on ban mode " + banMode.name());
+    }
+
+    private CalculationType convertCalculationType(ReasonMode mode) {
+        if (mode == ReasonMode.TEMPLATE) {
+            return CalculationType.AMOUNT;
+        }
+        throw new IllegalArgumentException("Migration failed on reason mode " + mode.name());
+    }
+
+    private void migratePlayers(MigrationResultBuilder resultBuilder) {
         PlayerDataProvider playerDataProvider = McNative.getInstance().getRegistry().getService(PlayerDataProvider.class);
 
         int mcNativeCount = 0;
+        int players = 0;
         for (NetworkPlayer player : BanSystem.getInstance().getStorage().getPlayers()) {
             if(McNative.getInstance().getPlayerManager().getPlayer(player.getUUID()) == null
                     && McNative.getInstance().getPlayerManager().getPlayer(player.getName()) == null) {
@@ -67,43 +201,39 @@ public class DKBansLegacyMigration extends Migration {
                 playerDataProvider.createPlayerData(player.getName(), player.getUUID(), -1, player.getFirstLogin()
                         , player.getLastLogin(), null);
                 mcNativeCount++;
+            }
+            Map<BanType, PlayerHistoryEntry> tempHistory = new HashMap<>();
 
-                Map<BanType, PlayerHistoryEntry> tempHistory = new HashMap<>();
+            DKBansPlayer dkBansPlayer = DKBans.getInstance().getPlayerManager().getPlayer(player.getUUID());
 
-                DKBansPlayer dkBansPlayer = DKBans.getInstance().getPlayerManager().getPlayer(player.getUUID());
+            for (HistoryEntry entry : player.getHistory().getEntries()) {
+                PlayerHistoryEntrySnapshotBuilder builder = new DefaultPlayerHistoryEntrySnapshotBuilder(dkBansPlayer, null);
+                builder.stuff(getStuff(entry));
+                builder.reason(entry.getReason());
+                builder.points(entry.getPoints().getPoints());
+                PlayerHistoryType historyType = DKBans.getInstance().getHistoryManager().getHistoryType(entry.getPoints().getHistoryType().name());
+                if(historyType == null) historyType = DKBans.getInstance().getHistoryManager().createHistoryType(entry.getPoints().getHistoryType().name());
+                builder.historyType(historyType);
+                builder.properties(DocumentFileType.JSON.getReader().read(entry.getProperties().toJson()));
 
-                for (HistoryEntry entry : player.getHistory().getEntries()) {
-                    PlayerHistoryEntrySnapshotBuilder builder = new DefaultPlayerHistoryEntrySnapshotBuilder(dkBansPlayer, null);
-                    builder.stuff(getStuff(entry));
-                    builder.reason(entry.getReason());
-                    builder.points(entry.getPoints().getPoints());
-                    PlayerHistoryType historyType = DKBans.getInstance().getHistoryManager().getHistoryType(entry.getPoints().getHistoryType().name());
-                    if(historyType == null) historyType = DKBans.getInstance().getHistoryManager().createHistoryType(entry.getPoints().getHistoryType().name());
-                    builder.historyType(historyType);
-                    builder.properties(DocumentFileType.JSON.getReader().read(entry.getProperties().toJson()));
-
-                    if(entry instanceof Ban) {
-                        PlayerHistoryEntry historyEntry = migrateBanEntry(builder, ((Ban) entry));
-                        tempHistory.put(((Ban) entry).getBanType(), historyEntry);
-                    } else if(entry instanceof Kick) {
-                        migrateKickEntry(builder, ((Kick) entry));
-                    } else if(entry instanceof Unban) {
-                        Unban unban = ((Unban) entry);
-                        migrateUnbanEntry(builder, tempHistory, unban);
-                    } else if(entry instanceof Warn) {
-                        migrateWarnEntry(builder, ((Warn) entry));
-                    } else if(entry instanceof Unwarn) {
-                        //Not included in new dkbans
-                    }
+                if(entry instanceof Ban) {
+                    PlayerHistoryEntry historyEntry = migrateBanEntry(builder, ((Ban) entry));
+                    tempHistory.put(((Ban) entry).getBanType(), historyEntry);
+                } else if(entry instanceof Kick) {
+                    migrateKickEntry(builder, ((Kick) entry));
+                } else if(entry instanceof Unban) {
+                    Unban unban = ((Unban) entry);
+                    migrateUnbanEntry(builder, tempHistory, unban);
+                } else if(entry instanceof Warn) {
+                    migrateWarnEntry(builder, ((Warn) entry));
+                } else if(entry instanceof Unwarn) {
+                    //Not included in new dkbans
                 }
             }
+            players++;
         }
-        return null;
-    }
-
-    @Override
-    public boolean isAvailable() {
-        return true;
+        resultBuilder.addMigrated("McNativePlayers", mcNativeCount);
+        resultBuilder.addMigrated("Players", players);
     }
 
     private PlayerHistoryEntry migrateBanEntry(PlayerHistoryEntrySnapshotBuilder builder, Ban ban) {
@@ -169,5 +299,37 @@ public class DKBansLegacyMigration extends Migration {
             case CHAT: return PunishmentType.MUTE;
         }
         throw new UnsupportedOperationException("Migration failed on ban type " + banType);
+    }
+
+    private PlayerHistoryType migrateHistoryType(BanType type) {
+        PlayerHistoryType historyType = DKBans.getInstance().getHistoryManager().getHistoryType(type.name());
+        if(historyType == null) historyType = DKBans.getInstance().getHistoryManager().createHistoryType(type.name());
+        return historyType;
+    }
+
+    private Duration convertDuration(ch.dkrieger.bansystem.lib.utils.Duration duration) {
+        return Duration.ofMillis(duration.getMillisTime());
+    }
+
+    private PunishmentTemplateEntry migrateBanReasonEntry(BanReasonEntry entry) {
+        if(entry.getType() == BanType.NETWORK) {
+            return new DefaultBanPunishmentTemplateEntry(DKBansScope.GLOBAL, convertDuration(entry.getDuration()));
+        } else {
+            return new DefaultMutePunishmentTemplateEntry(DKBansScope.GLOBAL, convertDuration(entry.getDuration()));
+        }
+    }
+
+    private TemplateGroup getOrCreateGroup(String name, CalculationType type) {
+        TemplateGroup templateGroup = DKBans.getInstance().getTemplateManager().getTemplateGroup(name);
+        if(templateGroup == null) {
+            templateGroup = DKBans.getInstance().getTemplateManager().createTemplateGroup(name, TemplateType.PUNISHMENT, type);
+        }
+        return templateGroup;
+    }
+
+    private TemplateCategory getCategory() {
+        TemplateCategory category = DKBans.getInstance().getTemplateManager().getTemplateCategory("General");
+        if(category == null) category = DKBans.getInstance().getTemplateManager().createTemplateCategory("General", "General");
+        return category;
     }
 }

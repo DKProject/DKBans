@@ -2,7 +2,7 @@
  * (C) Copyright 2020 The DKBans Project (Davide Wietlisbach & Philipp Elvin Friedhoff)
  *
  * @author Philipp Elvin Friedhoff
- * @since 08.07.20, 17:45
+ * @since 09.07.20, 17:39
  * @web %web%
  *
  * The DKBans Project is under the Apache License, version 2.0 (the "License");
@@ -22,27 +22,37 @@ package net.pretronic.dkbans.api.migration;
 
 import java.util.Map;
 
-public class MigrationResult {
+public class MigrationResultBuilder {
 
-    private final boolean success;
-    private final long time;
-    private final Map<String, String> migrated;
+    private boolean success;
+    private long time;
+    private Map<String, String> migrated;
 
-    public MigrationResult(boolean success, long time, Map<String, String> migrated) {
+    public MigrationResultBuilder success(boolean success) {
         this.success = success;
+        return this;
+    }
+
+    public MigrationResultBuilder time(long time) {
         this.time = time;
+        return this;
+    }
+
+    public MigrationResultBuilder migrated(Map<String, String> migrated) {
         this.migrated = migrated;
+        return this;
     }
 
-    public boolean isSuccess() {
-        return success;
+    public MigrationResultBuilder addMigrated(String key, String value) {
+        this.migrated.put(key, value);
+        return this;
     }
 
-    public long getTime() {
-        return time;
+    public MigrationResultBuilder addMigrated(String key, int amount) {
+        return addMigrated(key, String.valueOf(amount));
     }
 
-    public Map<String, String> getMigrated() {
-        return migrated;
+    public MigrationResult create() {
+        return new MigrationResult(success, time, migrated);
     }
 }

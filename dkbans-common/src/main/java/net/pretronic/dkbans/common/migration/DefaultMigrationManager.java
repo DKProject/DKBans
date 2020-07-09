@@ -58,17 +58,4 @@ public class DefaultMigrationManager implements MigrationManager {
         Validate.isTrue(getMigration(migration.getName()) == null, "Migration with name %a already registered", migration.getName());
         this.migrations.add(migration);
     }
-
-    @Override
-    public MigrationResult startMigration(String name) {
-        Validate.notNull(name);
-        Migration migration = getMigration(name);
-        Validate.notNull(migration, "Migration with name %s does not exist", migration);
-
-        long start = System.currentTimeMillis();
-        MigrationResult result = migration.migrate();
-        long end = System.currentTimeMillis();
-        //Set time for result
-        return result;
-    }
 }

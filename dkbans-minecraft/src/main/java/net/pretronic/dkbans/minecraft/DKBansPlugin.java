@@ -35,6 +35,7 @@ import net.pretronic.dkbans.common.template.DefaultTemplate;
 import net.pretronic.dkbans.common.template.DefaultTemplateCategory;
 import net.pretronic.dkbans.common.template.DefaultTemplateGroup;
 import net.pretronic.dkbans.minecraft.commands.*;
+import net.pretronic.dkbans.minecraft.commands.dkbans.DKBansCommand;
 import net.pretronic.dkbans.minecraft.commands.history.MyHistoryPointsCommand;
 import net.pretronic.dkbans.minecraft.commands.punish.*;
 import net.pretronic.dkbans.minecraft.commands.report.ReportCommand;
@@ -44,6 +45,7 @@ import net.pretronic.dkbans.minecraft.config.CommandConfig;
 import net.pretronic.dkbans.minecraft.config.DKBansConfig;
 import net.pretronic.dkbans.minecraft.listeners.InternalListener;
 import net.pretronic.dkbans.minecraft.listeners.PlayerListener;
+import net.pretronic.dkbans.minecraft.migration.DKBansLegacyMigration;
 import net.pretronic.dkbans.minecraft.player.MinecraftPlayerManager;
 import net.pretronic.libraries.command.command.Command;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
@@ -67,7 +69,8 @@ public class DKBansPlugin extends MinecraftPlugin {
         getLogger().info("DKBans is starting, please wait..");
 
         MinecraftPlayerManager playerManager = new MinecraftPlayerManager();
-        this.dkBans = new DefaultDKBans(getLogger()
+        this.dkBans = new DefaultDKBans(getDescription().getVersion().getName()
+                , getLogger()
                 , McNative.getInstance().getExecutorService()
                 ,McNative.getInstance().getLocal().getEventBus()
                 ,getRuntime().getRegistry().getService(ConfigurationProvider.class).getDatabase(this, true)
@@ -92,6 +95,8 @@ public class DKBansPlugin extends MinecraftPlugin {
 
         getRuntime().getPlayerManager().registerPlayerAdapter(DKBansPlayer.class, player -> playerManager.getPlayer(player.getUniqueId()));
 
+        dkBans.getMigrationManager().registerMigration(new DKBansLegacyMigration());
+
         getLogger().info("DKBans started successfully");
     }
 
@@ -111,6 +116,7 @@ public class DKBansPlugin extends MinecraftPlugin {
 
         getRuntime().getLocal().getCommandManager().registerCommand(new HelpCommand(this, CommandConfig.COMMAND_HELP));
         getRuntime().getLocal().getCommandManager().registerCommand(new FilterCommand(this, CommandConfig.COMMAND_FILTER));
+        getRuntime().getLocal().getCommandManager().registerCommand(new DKBansCommand(this));
 
         for (CommandConfig.PunishmentTypeConfiguration configuration : CommandConfig.COMMAND_PUNISH_DIRECT) {
             Command command;

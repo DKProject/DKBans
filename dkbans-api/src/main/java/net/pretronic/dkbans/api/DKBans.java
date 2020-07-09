@@ -22,6 +22,7 @@ package net.pretronic.dkbans.api;
 
 import net.pretronic.dkbans.api.broadcast.BroadcastManager;
 import net.pretronic.dkbans.api.filter.FilterManager;
+import net.pretronic.dkbans.api.migration.MigrationManager;
 import net.pretronic.dkbans.api.player.chatlog.ChatLogManager;
 import net.pretronic.dkbans.api.player.DKBansPlayerManager;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryManager;
@@ -42,6 +43,8 @@ import java.util.concurrent.ExecutorService;
 public abstract class DKBans {
 
     private static DKBans INSTANCE;
+
+    public abstract String getVersion();
 
     public abstract PretronicLogger getLogger();
 
@@ -68,6 +71,8 @@ public abstract class DKBans {
     public abstract ChatLogManager getChatLogManager();
 
     public abstract DKBansPlayerManager getPlayerManager();
+
+    public abstract MigrationManager getMigrationManager();
 
     public abstract void broadcastMessage(String channel,DKBansExecutor executor,String message);
 

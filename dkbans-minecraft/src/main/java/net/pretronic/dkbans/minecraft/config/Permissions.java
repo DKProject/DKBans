@@ -22,6 +22,8 @@ package net.pretronic.dkbans.minecraft.config;
 
 public class Permissions {
 
+    public static final String ADMIN = "dkbans.admin";
+
     public static final String BYPASS = "dkbans.bypass";
 
     public static final String TEAM = "dkbans.team";

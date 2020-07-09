@@ -110,7 +110,7 @@ public class DKBansConfig {
 
         TemplateGroup templateGroup = dkBans.getTemplateManager().getTemplateGroup(groupName);
         if(templateGroup == null) {
-            templateGroup = dkBans.getTemplateManager().createTemplateGroup(groupName, templateType, calculationType, new ArrayList<>());
+            templateGroup = dkBans.getTemplateManager().createTemplateGroup(groupName, templateType, calculationType);
         }
 
         for (DocumentEntry entry0 : document.getDocument("templates")) {

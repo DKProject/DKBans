@@ -31,6 +31,4 @@ public interface MigrationManager {
     Migration getMigration(String name);
 
     void registerMigration(Migration migration);
-
-    MigrationResult startMigration(String name);
 }

@@ -24,15 +24,16 @@ import net.pretronic.databasequery.api.Database;
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.broadcast.BroadcastManager;
+import net.pretronic.dkbans.api.migration.MigrationManager;
 import net.pretronic.dkbans.api.player.chatlog.ChatLogManager;
 import net.pretronic.dkbans.api.event.DKBansChannelBroadcastMessageReceiveEvent;
 import net.pretronic.dkbans.api.player.DKBansPlayerManager;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryManager;
 import net.pretronic.dkbans.api.player.report.ReportManager;
-import net.pretronic.dkbans.api.storage.DKBansStorage;
 import net.pretronic.dkbans.api.support.SupportTicketManager;
 import net.pretronic.dkbans.common.event.DefaultDKBansChannelBroadcastMessageReceiveEvent;
 import net.pretronic.dkbans.common.filter.DefaultFilterManager;
+import net.pretronic.dkbans.common.migration.DefaultMigrationManager;
 import net.pretronic.dkbans.common.player.chatlog.DefaultChatLogManager;
 import net.pretronic.dkbans.common.player.history.DefaultPlayerHistoryManager;
 import net.pretronic.dkbans.common.player.report.DefaultReportManager;
@@ -45,6 +46,7 @@ import java.util.concurrent.ExecutorService;
 
 public class DefaultDKBans extends DKBans {
 
+    private final String version;
     private final PretronicLogger logger;
     private final ExecutorService executorService;
     private final EventBus eventBus;
@@ -57,8 +59,10 @@ public class DefaultDKBans extends DKBans {
     private final DefaultTemplateManager templateManager;
     private final ChatLogManager chatLogManager;
     private final DKBansPlayerManager playerManager;
+    private final MigrationManager migrationManager;
 
-    public DefaultDKBans(PretronicLogger logger, ExecutorService executorService, EventBus eventBus, Database database, DKBansPlayerManager playerManager) {
+    public DefaultDKBans(String version, PretronicLogger logger, ExecutorService executorService, EventBus eventBus, Database database, DKBansPlayerManager playerManager) {
+        this.version =version;
         this.logger = logger;
         this.executorService = executorService;
         this.eventBus = eventBus;
@@ -68,9 +72,15 @@ public class DefaultDKBans extends DKBans {
         this.ticketManager = null;
         this.broadcastManager = null;
         this.filterManager = new DefaultFilterManager();
-        this.templateManager = new DefaultTemplateManager(this);
+        this.templateManager = new DefaultTemplateManager();
         this.chatLogManager = new DefaultChatLogManager();
         this.playerManager = playerManager;
+        this.migrationManager = new DefaultMigrationManager();
+    }
+
+    @Override
+    public String getVersion() {
+        return version;
     }
 
     @Override
@@ -131,6 +141,11 @@ public class DefaultDKBans extends DKBans {
     @Override
     public DKBansPlayerManager getPlayerManager() {
         return playerManager;
+    }
+
+    @Override
+    public MigrationManager getMigrationManager() {
+        return this.migrationManager;
     }
 
     @Override

@@ -35,6 +35,7 @@ import net.pretronic.libraries.document.Document;
 import net.pretronic.libraries.document.entry.DocumentEntry;
 import net.pretronic.libraries.document.type.DocumentFileType;
 import net.pretronic.libraries.utility.Convert;
+import net.pretronic.libraries.utility.annonations.Internal;
 import net.pretronic.libraries.utility.map.Pair;
 import net.pretronic.libraries.utility.map.Triple;
 
@@ -48,7 +49,7 @@ public class DefaultPunishmentTemplate extends DefaultTemplate implements Punish
     private final Map<Integer, PunishmentTemplateEntry> durations;
     private final Map<Integer, PunishmentTemplateEntry> points;
     private final int addedPoints;
-    private final double pointsDivider;
+    private double pointsDivider;
 
     public DefaultPunishmentTemplate(int id, String name, TemplateGroup group, String displayName, String permission, Collection<String> aliases,
                                      PlayerHistoryType historyType, boolean enabled, boolean hidden, TemplateCategory category, Document data) {
@@ -116,6 +117,11 @@ public class DefaultPunishmentTemplate extends DefaultTemplate implements Punish
             }
         }
         return punishmentTemplateEntry;
+    }
+
+    @Internal
+    public void setPointsDivider(double divider) {
+        this.pointsDivider = divider;
     }
 
     private Map<Integer, PunishmentTemplateEntry> loadDurations(Document data) {

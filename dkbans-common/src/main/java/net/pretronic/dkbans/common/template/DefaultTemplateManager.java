@@ -45,7 +45,7 @@ public class DefaultTemplateManager implements TemplateManager {
     private final Collection<TemplateGroup> templateGroups;
     private final Collection<TemplateCategory> templateCategories;
 
-    public DefaultTemplateManager(DKBans dkBans) {
+    public DefaultTemplateManager() {
         this.templateGroups = new ArrayList<>();
         this.templateCategories = new ArrayList<>();
         registerDefaultFactories();
@@ -62,7 +62,7 @@ public class DefaultTemplateManager implements TemplateManager {
     }
 
     @Override
-    public TemplateGroup createTemplateGroup(String name, TemplateType templateType, CalculationType calculationType, List<Template> templates) {
+    public TemplateGroup createTemplateGroup(String name, TemplateType templateType, CalculationType calculationType) {
         TemplateGroup templateGroup = DKBans.getInstance().getStorage().createTemplateGroup(name, templateType, calculationType);
         this.templateGroups.add(templateGroup);
         return templateGroup;

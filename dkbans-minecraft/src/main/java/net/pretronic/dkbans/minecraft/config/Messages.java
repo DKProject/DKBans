@@ -35,6 +35,7 @@ public class Messages {
     public static MessageComponent<?> ERROR_INVALID_DURATION_FORMAT  = Text.ofMessageKey("dkbans.error.invalid.durationFormat");
     public static MessageComponent<?> ERROR_INVALID_NUMBER  = Text.ofMessageKey("dkbans.error.invalid.number");
     public static MessageComponent<?> ERROR_ONLY_PLAYER = Text.ofMessageKey("dkbans.error.onlyPlayer");
+    public static MessageComponent<?> ERROR_ONLY_CONSOLE = Text.ofMessageKey("dkbans.error.onlyConsole");
     public static MessageComponent<?> ERROR_NO_PERMISSIONS = Text.ofMessageKey("dkbans.error.noPermissions");
 
     public static MessageComponent<?> PLAYER_NOT_FOUND = Text.ofMessageKey("dkbans.player.notFound");
@@ -177,6 +178,10 @@ public class Messages {
 
     public static MessageComponent<?> COMMAND_CHATLOG_USAGE = Text.ofMessageKey("dkbans.command.chatLog.usage");
     public static MessageComponent<?> COMMAND_CHATLOG_LIST = Text.ofMessageKey("dkbans.command.chatLog.list");
+
+
+    public static MessageComponent<?> COMMAND_DKBANS_HELP = Text.ofMessageKey("dkbans.command.dkbans.help");
+    public static MessageComponent<?> COMMAND_DKBANS_MIGRATE_HELP = Text.ofMessageKey("dkbans.command.dkbans.migrate.help");
 
     public static MessageComponent<?> getPunishmentMessage(PlayerHistoryEntrySnapshot snapshot){
         if(snapshot.getPunishmentType() == PunishmentType.BAN){
