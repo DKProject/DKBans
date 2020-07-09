@@ -20,6 +20,7 @@
 
 package net.pretronic.dkbans.common.template.unpunishment;
 
+import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.DKBansScope;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryType;
 import net.pretronic.dkbans.api.template.Template;
@@ -35,6 +36,7 @@ import net.pretronic.libraries.document.Document;
 import net.pretronic.libraries.document.entry.DocumentEntry;
 import net.pretronic.libraries.document.entry.PrimitiveEntry;
 import net.pretronic.libraries.utility.Convert;
+import net.pretronic.libraries.utility.Iterators;
 import net.pretronic.libraries.utility.map.Pair;
 import net.pretronic.libraries.utility.map.Triple;
 
@@ -42,7 +44,7 @@ import java.util.*;
 
 public class DefaultUnPunishmentTemplate extends DefaultTemplate implements UnPunishmentTemplate {
 
-    private final Collection<PunishmentTemplate> blacklistedTemplates;
+    private final Collection<BlacklistedTemplate> blacklistedTemplates;
     private final Collection<? extends DKBansScope> scopes;
 
     private final Map<Integer, UnPunishmentTemplateEntry> durations;
@@ -68,7 +70,7 @@ public class DefaultUnPunishmentTemplate extends DefaultTemplate implements UnPu
 
     @Override
     public Collection<PunishmentTemplate> getBlacklistedTemplates() {
-        return this.blacklistedTemplates;
+        return Iterators.map(this.blacklistedTemplates, BlacklistedTemplate::getTemplate);
     }
 
     @Override
@@ -96,7 +98,16 @@ public class DefaultUnPunishmentTemplate extends DefaultTemplate implements UnPu
         return this.pointsDivider;
     }
 
-    private Collection<PunishmentTemplate> loadBlacklistedTemplates(Document data) {
+    private Collection<BlacklistedTemplate> loadBlacklistedTemplates(Document data) {
+        if(data != null) {
+            for (DocumentEntry blacklisted : data) {
+                String[] splitted = blacklisted.toPrimitive().getAsString().split("@");
+
+                if(splitted.length != 2) throw new IllegalArgumentException("Wrong blacklisted unishment length. Invalid format. Use TemplateGroup@TemplateName");
+
+                this.blacklistedTemplates.add(new BlacklistedTemplate(splitted[0], splitted[1]));
+            }
+        }
         return new ArrayList<>();//@Todo implement blacklisted templates
     }
 
@@ -176,6 +187,33 @@ public class DefaultUnPunishmentTemplate extends DefaultTemplate implements UnPu
                     .add("removedPoints", template.removedPoints)
                     .add("pointsDivider", template.pointsDivider));
             return data;
+        }
+    }
+
+    private static class BlacklistedTemplate {
+
+        private final String templateGroupName;
+        private final String templateName;
+        private PunishmentTemplate template;
+
+        private BlacklistedTemplate(String templateGroupName, String templateName) {
+            this.templateGroupName = templateGroupName;
+            this.templateName = templateName;
+        }
+
+        public PunishmentTemplate getTemplate() {
+            if(template == null && templateGroupName != null && templateName != null) {
+                TemplateGroup templateGroup = DKBans.getInstance().getTemplateManager().getTemplateGroup(templateGroupName);
+                if(templateGroup == null) {
+                    return null;
+                }
+                Template template = templateGroup.getTemplate(templateName);
+                if(!(template instanceof PunishmentTemplate)) {
+                    return null;
+                }
+                this.template = (PunishmentTemplate) template;
+            }
+            return this.template;
         }
     }
 }
