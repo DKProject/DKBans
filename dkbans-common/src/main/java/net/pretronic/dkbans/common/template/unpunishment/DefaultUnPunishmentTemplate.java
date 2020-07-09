@@ -108,7 +108,7 @@ public class DefaultUnPunishmentTemplate extends DefaultTemplate implements UnPu
                 this.blacklistedTemplates.add(new BlacklistedTemplate(splitted[0], splitted[1]));
             }
         }
-        return new ArrayList<>();//@Todo implement blacklisted templates
+        return new ArrayList<>();
     }
 
     private Map<Integer, UnPunishmentTemplateEntry> loadDurations(Document data) {
