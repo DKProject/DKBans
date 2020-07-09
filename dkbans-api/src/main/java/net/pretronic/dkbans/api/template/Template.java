@@ -30,6 +30,8 @@ public interface Template {
 
     int getId();
 
+    int getInGroupId();
+
     String getName();
 
     TemplateGroup getGroup();

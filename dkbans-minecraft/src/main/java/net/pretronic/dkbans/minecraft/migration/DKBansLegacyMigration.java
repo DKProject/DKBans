@@ -91,6 +91,7 @@ public class DKBansLegacyMigration extends Migration {
             for (BanReason banReason : BanSystem.getInstance().getReasonProvider().getBanReasons()) {
                 DefaultPunishmentTemplate template = (DefaultPunishmentTemplate) TemplateFactory.create(TemplateType.PUNISHMENT,
                         banReason.getID(),
+                        banReason.getID(),
                         banReason.getName(),
                         templateGroup,
                         banReason.getDisplay(),

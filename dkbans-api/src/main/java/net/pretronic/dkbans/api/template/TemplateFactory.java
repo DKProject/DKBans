@@ -33,7 +33,7 @@ public abstract class TemplateFactory {
     private static final Map<TemplateType, TemplateFactory> FACTORY = new HashMap<>();
 
 
-    public abstract Template create(int id, String name, TemplateGroup group, String displayName, String permission, Collection<String> aliases,
+    public abstract Template create(int id, int inGroupId, String name, TemplateGroup group, String displayName, String permission, Collection<String> aliases,
                                     PlayerHistoryType historyType, boolean enabled, boolean hidden, TemplateCategory category, Document data);
 
     public abstract Document createData(Template template);
@@ -43,7 +43,7 @@ public abstract class TemplateFactory {
         FACTORY.put(templateType, factory);
     }
 
-    public static Template create(TemplateType templateType, int id, String name, TemplateGroup group, String displayName,
+    public static Template create(TemplateType templateType, int id, int inGroupId, String name, TemplateGroup group, String displayName,
                                   String permission, Collection<String> aliases, PlayerHistoryType historyType,
                                   boolean enabled, boolean hidden, TemplateCategory category, Document data) {
 
@@ -51,7 +51,7 @@ public abstract class TemplateFactory {
         TemplateFactory factory = FACTORY.get(templateType);
         if(factory == null) throw new IllegalArgumentException("No template factory for template type " + templateType.getName() + " found");
 
-        return factory.create(id, name, group, displayName, permission, aliases, historyType, enabled, hidden, category, data);
+        return factory.create(id, inGroupId, name, group, displayName, permission, aliases, historyType, enabled, hidden, category, data);
     }
 
     public static Document toData(Template template) {

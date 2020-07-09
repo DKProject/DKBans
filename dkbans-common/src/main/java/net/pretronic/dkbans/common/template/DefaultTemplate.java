@@ -32,6 +32,7 @@ import java.util.Collection;
 public class DefaultTemplate implements Template {
 
     private int id;
+    private final int inGroupId;
     private final String name;
     private final TemplateGroup group;
     private final String displayName;
@@ -43,9 +44,10 @@ public class DefaultTemplate implements Template {
     private final TemplateCategory category;
     private final Document data;
 
-    public DefaultTemplate(int id, String name, TemplateGroup group, String displayName, String permission, Collection<String> aliases, PlayerHistoryType historyType,
+    public DefaultTemplate(int id, int inGroupId, String name, TemplateGroup group, String displayName, String permission, Collection<String> aliases, PlayerHistoryType historyType,
                            boolean enabled, boolean hidden, TemplateCategory category, Document data) {
         this.id = id;
+        this.inGroupId = inGroupId;
         this.name = name;
         this.group = group;
         this.displayName = displayName;
@@ -61,6 +63,11 @@ public class DefaultTemplate implements Template {
     @Override
     public int getId() {
         return this.id;
+    }
+
+    @Override
+    public int getInGroupId() {
+        return this.inGroupId;
     }
 
     @Override

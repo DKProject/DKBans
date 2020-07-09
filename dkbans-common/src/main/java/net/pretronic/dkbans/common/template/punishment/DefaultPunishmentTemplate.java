@@ -51,9 +51,9 @@ public class DefaultPunishmentTemplate extends DefaultTemplate implements Punish
     private final int addedPoints;
     private double pointsDivider;
 
-    public DefaultPunishmentTemplate(int id, String name, TemplateGroup group, String displayName, String permission, Collection<String> aliases,
+    public DefaultPunishmentTemplate(int id, int inGroupId, String name, TemplateGroup group, String displayName, String permission, Collection<String> aliases,
                                      PlayerHistoryType historyType, boolean enabled, boolean hidden, TemplateCategory category, Document data) {
-        super(id, name, group, displayName, permission, aliases, historyType, enabled, hidden, category, data);
+        super(id, inGroupId, name, group, displayName, permission, aliases, historyType, enabled, hidden, category, data);
 
         this.durations = loadDurations(data.getDocument("durations"));
 
@@ -168,9 +168,9 @@ public class DefaultPunishmentTemplate extends DefaultTemplate implements Punish
     public static class Factory extends TemplateFactory {
 
         @Override
-        public Template create(int id, String name, TemplateGroup group, String displayName, String permission, Collection<String> aliases,
+        public Template create(int id, int inGroupId, String name, TemplateGroup group, String displayName, String permission, Collection<String> aliases,
                                PlayerHistoryType historyType, boolean enabled, boolean hidden, TemplateCategory category, Document data) {
-            return new DefaultPunishmentTemplate(id, name, group, displayName, permission, aliases, historyType, enabled,
+            return new DefaultPunishmentTemplate(id, inGroupId, name, group, displayName, permission, aliases, historyType, enabled,
                     hidden, category, data);
         }
 

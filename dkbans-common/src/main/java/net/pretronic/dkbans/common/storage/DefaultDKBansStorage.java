@@ -171,6 +171,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 TemplateCategory category = dkBans.getTemplateManager().getTemplateCategory(subResultEntry.getInt("CategoryId"));
                 templateGroup.addTemplateInternal(TemplateFactory.create(templateType,
                         subResultEntry.getInt("Id"),
+                        subResultEntry.getInt("InGroupId"),
                         name,
                         templateGroup,
                         subResultEntry.getString("DisplayName"),
@@ -206,7 +207,9 @@ public class DefaultDKBansStorage implements DKBansStorage {
                     .where("GroupId", templateGroup.getId())
                     .execute().isEmpty();
             if(exist) {
-                this.template.update().set("DisplayName", template.getDisplayName())
+                this.template.update()
+                        .set("InGroupId", template.getInGroupId())
+                        .set("DisplayName", template.getDisplayName())
                         .set("Permission", template.getPermission())
                         .set("Aliases", buildAliases(template.getAliases()))
                         .set("HistoryTypeId", template.getHistoryType() != null ? template.getHistoryType().getId() : null)
@@ -218,6 +221,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
                         .execute();
             } else {
                 int id = this.template.insert()
+                        .set("InGroupId", template.getInGroupId())
                         .set("Name", template.getName())
                         .set("DisplayName", template.getDisplayName())
                         .set("Permission", template.getPermission())
@@ -910,6 +914,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
     private DatabaseCollection createTemplateCollection() {
         return database.createCollection("dkbans_template")
                 .field("Id", DataType.INTEGER, FieldOption.PRIMARY_KEY, FieldOption.AUTO_INCREMENT)
+                .field("InGroupId", DataType.INTEGER, FieldOption.NOT_NULL)
                 .field("Name", DataType.STRING, FieldOption.NOT_NULL)
                 .field("DisplayName", DataType.STRING, FieldOption.NOT_NULL)
                 .field("Permission", DataType.STRING, FieldOption.NOT_NULL)

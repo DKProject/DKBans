@@ -21,20 +21,24 @@
 package net.pretronic.dkbans.minecraft.config;
 
 import net.pretronic.dkbans.api.DKBans;
+import net.pretronic.dkbans.api.DKBansScope;
 import net.pretronic.dkbans.api.player.history.CalculationType;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryType;
 import net.pretronic.dkbans.api.template.*;
 import net.pretronic.dkbans.common.template.DefaultTemplateGroup;
 import net.pretronic.libraries.document.Document;
+import net.pretronic.libraries.document.annotations.DocumentIgnored;
 import net.pretronic.libraries.document.annotations.DocumentKey;
 import net.pretronic.libraries.document.entry.DocumentEntry;
 import net.pretronic.libraries.utility.Convert;
+import net.pretronic.libraries.utility.duration.DurationProcessor;
 import net.pretronic.libraries.utility.io.FileUtil;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -61,7 +65,19 @@ public class DKBansConfig {
     public static long CHAT_FILTER_REPEAT_DELAY = 1000;
 
 
+    public static boolean JOINME_HEAD_ENABLED = true;
+
+    public static boolean JOINME_MULTIPLE_LINES = true;
+
+    public static Collection<DKBansScope> JOINME_DISABLED_SCOPES = new ArrayList<>();
+
+    private static String JOINME_COOLDOWN = DurationProcessor.getStandard().formatShort(Duration.ofMinutes(15));
+    @DocumentIgnored
+    public static long JOINME_COOLDOWN_DURATION = 0;
+
     public static void load(DKBans dkBans) {
+        JOINME_COOLDOWN_DURATION = DurationProcessor.getStandard().parse(JOINME_COOLDOWN).toMillis();
+
         File templates = new File("plugins/DKBans/templates/");
 
         if(!templates.exists()) templates.mkdirs();
@@ -118,7 +134,6 @@ public class DKBansConfig {
 
             int id = Convert.toInteger(documentEntry.getKey());
 
-
             String name = null;
             String display = null;
             String permission = null;
@@ -133,6 +148,7 @@ public class DKBansConfig {
 
             for (DocumentEntry entry : documentEntry) {
                 switch (entry.getKey().toLowerCase()) {
+
                     case "name": {
                         name = entry.toPrimitive().getAsString();
                         break;
@@ -181,7 +197,7 @@ public class DKBansConfig {
                     }
                 }
             }
-            Template template = TemplateFactory.create(templateType, id, name, templateGroup, display, permission, aliases,
+            Template template = TemplateFactory.create(templateType, id, id, name, templateGroup, display, permission, aliases,
                     historyType, enabled, hidden, category, data);
             templates.add(template);
 

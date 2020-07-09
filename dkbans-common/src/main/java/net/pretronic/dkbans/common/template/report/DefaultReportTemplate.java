@@ -44,9 +44,9 @@ public class DefaultReportTemplate extends DefaultTemplate implements ReportTemp
     private String targetTemplateGroupName;
     private String targetTemplateName;
 
-    public DefaultReportTemplate(int id, String name, TemplateGroup group, String displayName, String permission, Collection<String> aliases,
+    public DefaultReportTemplate(int id, int inGroupId, String name, TemplateGroup group, String displayName, String permission, Collection<String> aliases,
                                  PlayerHistoryType historyType, boolean enabled, boolean hidden, TemplateCategory category, Document data) {
-        super(id, name, group, displayName, permission, aliases, historyType, enabled, hidden, category, data);
+        super(id, inGroupId, name, group, displayName, permission, aliases, historyType, enabled, hidden, category, data);
 
         this.properties = load(data);
     }
@@ -95,9 +95,9 @@ public class DefaultReportTemplate extends DefaultTemplate implements ReportTemp
     public static class Factory extends TemplateFactory {
 
         @Override
-        public Template create(int id, String name, TemplateGroup group, String displayName, String permission, Collection<String> aliases,
+        public Template create(int id, int inGroupId, String name, TemplateGroup group, String displayName, String permission, Collection<String> aliases,
                                PlayerHistoryType historyType, boolean enabled, boolean hidden, TemplateCategory category, Document data) {
-            return new DefaultReportTemplate(id, name, group, displayName, permission, aliases, historyType, enabled, hidden, category, data);
+            return new DefaultReportTemplate(id, inGroupId, name, group, displayName, permission, aliases, historyType, enabled, hidden, category, data);
         }
 
         @Override

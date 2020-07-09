@@ -53,10 +53,10 @@ public class DefaultUnPunishmentTemplate extends DefaultTemplate implements UnPu
     private final int removedPoints;
     private final double pointsDivider;
 
-    public DefaultUnPunishmentTemplate(int id, String name, TemplateGroup group, String displayName, String permission,
+    public DefaultUnPunishmentTemplate(int id, int inGroupId, String name, TemplateGroup group, String displayName, String permission,
                                        Collection<String> aliases, PlayerHistoryType historyType, boolean enabled, boolean hidden,
                                        TemplateCategory category, Document data) {
-        super(id, name, group, displayName, permission, aliases, historyType, enabled, hidden, category, data);
+        super(id, inGroupId, name, group, displayName, permission, aliases, historyType, enabled, hidden, category, data);
 
         this.blacklistedTemplates = loadBlacklistedTemplates(data.getDocument("blacklisted"));
         this.scopes = loadScopes(data.getDocument("scopes"));
@@ -168,9 +168,9 @@ public class DefaultUnPunishmentTemplate extends DefaultTemplate implements UnPu
     public static class Factory extends TemplateFactory {
 
         @Override
-        public Template create(int id, String name, TemplateGroup group, String displayName, String permission, Collection<String> aliases,
+        public Template create(int id, int inGroupId, String name, TemplateGroup group, String displayName, String permission, Collection<String> aliases,
                                PlayerHistoryType historyType, boolean enabled, boolean hidden, TemplateCategory category, Document data) {
-            return new DefaultUnPunishmentTemplate(id, name, group, displayName, permission, aliases, historyType, enabled,
+            return new DefaultUnPunishmentTemplate(id, inGroupId, name, group, displayName, permission, aliases, historyType, enabled,
                     hidden, category, data);
         }
 
