@@ -114,6 +114,10 @@ messages:
   @for("report" in {reports}, ${dkbans.command.report.list.loop},"\n")'
   dkbans.command.report.list.loop: '&8» &e{report.player.displayName} &7Count&8: &e{entry.count}'
 
+  dkbans.command.report.teamReceive: '${dkbans.prefix.report} &6New report for &e{entry.report.player.displayName}&8:
+  &8» &7Reporter&8: &e{entry.reporter.displayName}
+  &8» &7Reason&8: &e{entry.reason}
+  &8» &7Server&8: &e{entry.serverName}'
 
   dkbans.command.filter.help: '${dkbans.prefix.chat} &6Filter help
   &7/filter list [area]

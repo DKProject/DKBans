@@ -163,6 +163,8 @@ public class Messages {
 
     public static MessageComponent<?> COMMAND_REPORT_LIST = Text.ofMessageKey("dkbans.command.report.list");
 
+    public static MessageComponent<?> COMMAND_REPORT_TEAM_RECEIVE = Text.ofMessageKey("dkbans.command.report.teamReceive");
+
 
 
     public static MessageComponent<?> COMMAND_PLAYER_NOTES_HELP = Text.ofMessageKey("dkbans.command.playerNotes.help");

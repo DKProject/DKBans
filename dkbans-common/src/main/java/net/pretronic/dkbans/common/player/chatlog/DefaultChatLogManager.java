@@ -27,6 +27,7 @@ import net.pretronic.dkbans.api.player.chatlog.PlayerChatLog;
 import net.pretronic.dkbans.api.player.chatlog.ServerChatLog;
 
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 public class DefaultChatLogManager implements ChatLogManager {
 
@@ -53,5 +54,10 @@ public class DefaultChatLogManager implements ChatLogManager {
     @Override
     public ChatLogEntry createChatLogEntry(UUID playerId, String message, long time, String serverName, UUID serverId, String filterAffiliationArea) {
         return DKBans.getInstance().getStorage().createChatLogEntry(playerId, message, time, serverName, serverId, filterAffiliationArea);
+    }
+
+    @Override
+    public CompletableFuture<ChatLogEntry> createChatLogEntryAsync(UUID playerId, String message, long time, String serverName, UUID serverId, String filterAffiliationArea) {
+        return DKBans.getInstance().getStorage().createChatLogEntryAsync(playerId, message, time, serverName, serverId, filterAffiliationArea);
     }
 }

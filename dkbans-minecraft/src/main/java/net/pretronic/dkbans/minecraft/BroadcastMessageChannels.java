@@ -23,4 +23,6 @@ public class BroadcastMessageChannels {
 
     public static final String TEAM_CHAT = "TEAM_CHAT";
 
+    public static final String REPORT_RECEIVE = "REPORT_RECEIVE";
+
 }

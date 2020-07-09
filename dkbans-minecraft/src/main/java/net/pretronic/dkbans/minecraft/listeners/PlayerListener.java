@@ -142,7 +142,7 @@ public class PlayerListener {
             sendMutedMessage(event.getOnlinePlayer(), mute);
         }else{
             String filterAffiliationArea = checkMessageBlocked(event,player);
-            DKBans.getInstance().getStorage().createChatLogEntryAsync(event.getPlayer().getUniqueId(),
+            DKBans.getInstance().getChatLogManager().createChatLogEntryAsync(event.getPlayer().getUniqueId(),
                     event.getMessage(),
                     System.currentTimeMillis(),
                     event.getOnlinePlayer().getServer().getIdentifier().getName(),

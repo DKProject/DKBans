@@ -21,6 +21,7 @@
 package net.pretronic.dkbans.api.player.chatlog;
 
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 public interface ChatLogManager {
 
@@ -33,4 +34,7 @@ public interface ChatLogManager {
     PlayerChatLog getPlayerChatLog(UUID playerId);
 
     ChatLogEntry createChatLogEntry(UUID playerId, String message, long time, String serverName, UUID serverId, String filterAffiliationArea);
+
+    CompletableFuture<ChatLogEntry> createChatLogEntryAsync(UUID playerId, String message, long time, String serverName, UUID serverId, String filterAffiliationArea);
+
 }
