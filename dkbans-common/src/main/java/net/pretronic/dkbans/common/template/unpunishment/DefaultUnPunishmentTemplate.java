@@ -103,7 +103,7 @@ public class DefaultUnPunishmentTemplate extends DefaultTemplate implements UnPu
             for (DocumentEntry blacklisted : data) {
                 String[] splitted = blacklisted.toPrimitive().getAsString().split("@");
 
-                if(splitted.length != 2) throw new IllegalArgumentException("Wrong blacklisted unishment length. Invalid format. Use TemplateGroup@TemplateName");
+                if(splitted.length != 2) throw new IllegalArgumentException("Wrong blacklisted un punishment length. Invalid format. Use TemplateGroup@TemplateName");
 
                 this.blacklistedTemplates.add(new BlacklistedTemplate(splitted[0], splitted[1]));
             }

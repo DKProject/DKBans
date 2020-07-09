@@ -20,8 +20,11 @@
 
 package net.pretronic.dkbans.common.template.punishment.types;
 
+import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.DKBansScope;
 import net.pretronic.dkbans.api.player.history.PunishmentType;
+import net.pretronic.dkbans.api.template.Template;
+import net.pretronic.dkbans.api.template.TemplateGroup;
 import net.pretronic.dkbans.api.template.punishment.PunishmentTemplate;
 import net.pretronic.dkbans.api.template.punishment.PunishmentTemplateEntry;
 import net.pretronic.dkbans.api.template.punishment.PunishmentTemplateEntryFactory;
@@ -32,12 +35,15 @@ import net.pretronic.libraries.document.Document;
 public class DefaultWarnPunishmentTemplateEntry extends DefaultPunishmentTemplateEntry implements WarnPunishmentTemplateEntry {
 
     private final boolean shouldKick;
-    private final PunishmentTemplate punishmentTemplate;
+    private final String punishmentTemplateGroupName;
+    private final String punishmentTemplateName;
+    private PunishmentTemplate punishmentTemplate;
 
-    public DefaultWarnPunishmentTemplateEntry(DKBansScope scope, boolean shouldKick, PunishmentTemplate punishmentTemplate) {
+    public DefaultWarnPunishmentTemplateEntry(DKBansScope scope, boolean shouldKick, String punishmentTemplateGroupName, String punishmentTemplateName) {
         super(PunishmentType.WARN, scope);
         this.shouldKick = shouldKick;
-        this.punishmentTemplate = punishmentTemplate;
+        this.punishmentTemplateGroupName = punishmentTemplateGroupName;
+        this.punishmentTemplateName = punishmentTemplateName;
     }
 
     @Override
@@ -47,6 +53,17 @@ public class DefaultWarnPunishmentTemplateEntry extends DefaultPunishmentTemplat
 
     @Override
     public PunishmentTemplate getPunishmentTemplate() {
+        if(punishmentTemplate == null && punishmentTemplateGroupName != null && punishmentTemplateName != null) {
+            TemplateGroup templateGroup = DKBans.getInstance().getTemplateManager().getTemplateGroup(punishmentTemplateGroupName);
+            if(templateGroup == null) {
+                return null;
+            }
+            Template template = templateGroup.getTemplate(punishmentTemplateName);
+            if(!(template instanceof PunishmentTemplate)) {
+                return null;
+            }
+            this.punishmentTemplate = (PunishmentTemplate) template;
+        }
         return this.punishmentTemplate;
     }
 
@@ -54,18 +71,15 @@ public class DefaultWarnPunishmentTemplateEntry extends DefaultPunishmentTemplat
 
         @Override
         public PunishmentTemplateEntry create(Document data) {
-            //@Todo link to ban template
-            PunishmentTemplate template = null;
+            String groupName = null;
+            String templateName = null;
             if(data.contains("targetPunishment")) {
-                String targetPunishment = data.getString("targetPunishment");
+                String[] splitted = data.getString("targetPunishment").split("@");
 
-                String templateGroup = null;
-                String templateName = null;
-                if(targetPunishment.contains("@")) {
-                    String[] splitted = targetPunishment.split("@");
-                }
+                groupName = splitted[0];
+                templateName = splitted[1];
             }
-            return new DefaultWarnPunishmentTemplateEntry(DKBansScope.fromData(data), data.getBoolean("kick"), null);
+            return new DefaultWarnPunishmentTemplateEntry(DKBansScope.fromData(data), data.getBoolean("kick"), groupName, templateName);
         }
 
         @Override
@@ -73,7 +87,10 @@ public class DefaultWarnPunishmentTemplateEntry extends DefaultPunishmentTemplat
             WarnPunishmentTemplateEntry entry = (WarnPunishmentTemplateEntry) entry0;
             Document data = Document.newDocument()
                     .add("type", entry.getType().getName())
-                    .add("kick", entry.shouldKick());//@Todo add link to punishment template
+                    .add("kick", entry.shouldKick());
+            if(entry.getPunishmentTemplate() != null) {
+                data.add("targetPunishment", entry.getPunishmentTemplate().getGroup().getName() + "@" + entry.getPunishmentTemplate().getName());
+            }
             if(entry.getScope() != null) {
                 data.add("scopeType", entry.getScope().getType())
                         .add("scopeName", entry.getScope().getName());
