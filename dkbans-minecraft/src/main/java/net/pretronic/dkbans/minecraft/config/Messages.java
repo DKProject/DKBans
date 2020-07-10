@@ -178,6 +178,23 @@ public class Messages {
     public static MessageComponent<?> COMMAND_DKBANS_HELP = Text.ofMessageKey("dkbans.command.dkbans.help");
     public static MessageComponent<?> COMMAND_DKBANS_MIGRATE_HELP = Text.ofMessageKey("dkbans.command.dkbans.migrate.help");
 
+
+    public static MessageComponent<?> COMMAND_JOINME_NOT_ENOUGH_AMOUNT = Text.ofMessageKey("dkbans.command.joinme.notEnoughAmount");
+    public static MessageComponent<?> COMMAND_JOINME_USAGE = Text.ofMessageKey("dkbans.command.joinme.usage");
+    public static MessageComponent<?> COMMAND_JOINME_NOT_EXIST = Text.ofMessageKey("dkbans.command.joinme.notExists");
+
+    public static MessageComponent<?> COMMAND_JOINME_LINE_1 = Text.ofMessageKey("dkbans.command.joinme.line1");
+    public static MessageComponent<?> COMMAND_JOINME_LINE_2 = Text.ofMessageKey("dkbans.command.joinme.line2");
+    public static MessageComponent<?> COMMAND_JOINME_LINE_3 = Text.ofMessageKey("dkbans.command.joinme.line3");
+    public static MessageComponent<?> COMMAND_JOINME_LINE_4 = Text.ofMessageKey("dkbans.command.joinme.line4");
+    public static MessageComponent<?> COMMAND_JOINME_LINE_5 = Text.ofMessageKey("dkbans.command.joinme.line5");
+    public static MessageComponent<?> COMMAND_JOINME_LINE_6 = Text.ofMessageKey("dkbans.command.joinme.line6");
+    public static MessageComponent<?> COMMAND_JOINME_LINE_7 = Text.ofMessageKey("dkbans.command.joinme.line7");
+    public static MessageComponent<?> COMMAND_JOINME_LINE_8 = Text.ofMessageKey("dkbans.command.joinme.line8");
+    public static MessageComponent<?> COMMAND_JOINME_LINE_9 = Text.ofMessageKey("dkbans.command.joinme.line9");
+    public static MessageComponent<?> COMMAND_JOINME_LINE_10 = Text.ofMessageKey("dkbans.command.joinme.line10");
+
+
     public static MessageComponent<?> getPunishmentMessage(PlayerHistoryEntrySnapshot snapshot){
         if(snapshot.getPunishmentType() == PunishmentType.BAN){
             return snapshot.isPermanently() ? PUNISH_BAN_MESSAGE_PERMANENTLY : PUNISH_BAN_MESSAGE_TEMPORARY;

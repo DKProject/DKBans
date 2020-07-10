@@ -37,13 +37,15 @@ public class DefaultWarnPunishmentTemplateEntry extends DefaultPunishmentTemplat
     private final boolean shouldKick;
     private final String punishmentTemplateGroupName;
     private final String punishmentTemplateName;
+    private final int punishmentTemplateId;
     private PunishmentTemplate punishmentTemplate;
 
-    public DefaultWarnPunishmentTemplateEntry(DKBansScope scope, boolean shouldKick, String punishmentTemplateGroupName, String punishmentTemplateName) {
+    public DefaultWarnPunishmentTemplateEntry(DKBansScope scope, boolean shouldKick, String punishmentTemplateGroupName, String punishmentTemplateName, int punishmentTemplateId) {
         super(PunishmentType.WARN, scope);
         this.shouldKick = shouldKick;
         this.punishmentTemplateGroupName = punishmentTemplateGroupName;
         this.punishmentTemplateName = punishmentTemplateName;
+        this.punishmentTemplateId = punishmentTemplateId;
     }
 
     @Override
@@ -53,12 +55,14 @@ public class DefaultWarnPunishmentTemplateEntry extends DefaultPunishmentTemplat
 
     @Override
     public PunishmentTemplate getPunishmentTemplate() {
-        if(punishmentTemplate == null && punishmentTemplateGroupName != null && punishmentTemplateName != null) {
+        if(punishmentTemplate == null && punishmentTemplateGroupName != null && (punishmentTemplateName != null || punishmentTemplateId != 0)) {
             TemplateGroup templateGroup = DKBans.getInstance().getTemplateManager().getTemplateGroup(punishmentTemplateGroupName);
             if(templateGroup == null) {
                 return null;
             }
-            Template template = templateGroup.getTemplate(punishmentTemplateName);
+            Template template;
+            if(punishmentTemplateName != null) template = templateGroup.getTemplate(punishmentTemplateName);
+            else template = templateGroup.getTemplate(punishmentTemplateId);
             if(!(template instanceof PunishmentTemplate)) {
                 return null;
             }
@@ -79,7 +83,7 @@ public class DefaultWarnPunishmentTemplateEntry extends DefaultPunishmentTemplat
                 groupName = splitted[0];
                 templateName = splitted[1];
             }
-            return new DefaultWarnPunishmentTemplateEntry(DKBansScope.fromData(data), data.getBoolean("kick"), groupName, templateName);
+            return new DefaultWarnPunishmentTemplateEntry(DKBansScope.fromData(data), data.getBoolean("kick"), groupName, templateName, 0);
         }
 
         @Override

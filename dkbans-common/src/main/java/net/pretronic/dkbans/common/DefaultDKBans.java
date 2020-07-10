@@ -24,6 +24,7 @@ import net.pretronic.databasequery.api.Database;
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.broadcast.BroadcastManager;
+import net.pretronic.dkbans.api.joinme.JoinMeManager;
 import net.pretronic.dkbans.api.migration.MigrationManager;
 import net.pretronic.dkbans.api.player.chatlog.ChatLogManager;
 import net.pretronic.dkbans.api.event.DKBansChannelBroadcastMessageReceiveEvent;
@@ -60,13 +61,15 @@ public class DefaultDKBans extends DKBans {
     private final ChatLogManager chatLogManager;
     private final DKBansPlayerManager playerManager;
     private final MigrationManager migrationManager;
+    private final JoinMeManager joinMeManager;
 
-    public DefaultDKBans(String version, PretronicLogger logger, ExecutorService executorService, EventBus eventBus, Database database, DKBansPlayerManager playerManager) {
+    public DefaultDKBans(String version, PretronicLogger logger, ExecutorService executorService, EventBus eventBus, Database database, DKBansPlayerManager playerManager, JoinMeManager joinMeManager) {
         this.version =version;
         this.logger = logger;
         this.executorService = executorService;
         this.eventBus = eventBus;
         this.storage = new DefaultDKBansStorage(this, database);
+        this.joinMeManager = joinMeManager;
         this.historyManager = new DefaultPlayerHistoryManager(this);
         this.reportManager = new DefaultReportManager();
         this.ticketManager = null;
@@ -146,6 +149,11 @@ public class DefaultDKBans extends DKBans {
     @Override
     public MigrationManager getMigrationManager() {
         return this.migrationManager;
+    }
+
+    @Override
+    public JoinMeManager getJoinMeManager() {
+        return this.joinMeManager;
     }
 
     @Override

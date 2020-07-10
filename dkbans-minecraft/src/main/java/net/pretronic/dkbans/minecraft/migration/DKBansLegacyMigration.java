@@ -42,6 +42,9 @@ import net.pretronic.dkbans.common.template.DefaultTemplateGroup;
 import net.pretronic.dkbans.common.template.punishment.DefaultPunishmentTemplate;
 import net.pretronic.dkbans.common.template.punishment.types.DefaultBanPunishmentTemplateEntry;
 import net.pretronic.dkbans.common.template.punishment.types.DefaultMutePunishmentTemplateEntry;
+import net.pretronic.dkbans.common.template.punishment.types.DefaultWarnPunishmentTemplateEntry;
+import net.pretronic.dkbans.common.template.report.DefaultReportTemplate;
+import net.pretronic.dkbans.common.template.unpunishment.DefaultUnPunishmentTemplate;
 import net.pretronic.libraries.document.Document;
 import net.pretronic.libraries.document.type.DocumentFileType;
 import org.mcnative.common.McNative;
@@ -87,7 +90,7 @@ public class DKBansLegacyMigration extends Migration {
         int amount = 0;
         BanMode banMode = BanSystem.getInstance().getConfig().banMode;
         if(banMode !=  BanMode.SELF) {
-            TemplateGroup templateGroup = getOrCreateGroup("ban", convertCalculationType(banMode));
+            DefaultTemplateGroup templateGroup = (DefaultTemplateGroup) getOrCreateGroup("ban", convertCalculationType(banMode));
             for (BanReason banReason : BanSystem.getInstance().getReasonProvider().getBanReasons()) {
                 DefaultPunishmentTemplate template = (DefaultPunishmentTemplate) TemplateFactory.create(TemplateType.PUNISHMENT,
                         banReason.getID(),
@@ -109,7 +112,7 @@ public class DKBansLegacyMigration extends Migration {
                 for (Map.Entry<Integer, BanReasonEntry> entry : banReason.getPointsDurations().entrySet()) {
                     template.getDurations().put(entry.getKey(), migrateBanReasonEntry(entry.getValue()));
                 }
-                ((DefaultTemplateGroup)templateGroup).addTemplateInternal(template);
+                templateGroup.addTemplateInternal(template);
 
                 amount++;
             }
@@ -123,11 +126,25 @@ public class DKBansLegacyMigration extends Migration {
 
         ReasonMode mode = BanSystem.getInstance().getConfig().kickMode;
         if(mode == ReasonMode.TEMPLATE) {
-            TemplateGroup templateGroup = getOrCreateGroup("kick", convertCalculationType(mode));
-            for (KickReason kickReason : BanSystem.getInstance().getReasonProvider().getKickReasons()) {
-
+            DefaultTemplateGroup templateGroup = (DefaultTemplateGroup) getOrCreateGroup("kick", convertCalculationType(mode));
+            for (KickReason reason : BanSystem.getInstance().getReasonProvider().getKickReasons()) {
+                DefaultPunishmentTemplate template = (DefaultPunishmentTemplate) TemplateFactory.create(TemplateType.PUNISHMENT,
+                        reason.getID(),
+                        reason.getID(),
+                        reason.getName(),
+                        templateGroup,
+                        reason.getDisplay(),
+                        reason.getPermission(),
+                        reason.getAliases(),
+                        getDefaultHistoryType(),
+                        true,
+                        reason.isHidden(),
+                        getCategory(),
+                        Document.newDocument());
                 amount++;
+                templateGroup.addTemplateInternal(template);
             }
+            DKBans.getInstance().getStorage().importTemplateGroup(templateGroup);
         }
         resultBuilder.addMigrated("KickReasons", amount);
     }
@@ -137,12 +154,29 @@ public class DKBansLegacyMigration extends Migration {
 
         ReasonMode mode = BanSystem.getInstance().getConfig().unbanMode;
         if(mode == ReasonMode.TEMPLATE) {
-            TemplateGroup templateGroup = getOrCreateGroup("unban", convertCalculationType(mode));
-            for (UnbanReason unbanReason : BanSystem.getInstance().getReasonProvider().getUnbanReasons()) {
-                //Template template = TemplateFactory.create()
+            DefaultTemplateGroup templateGroup = (DefaultTemplateGroup) getOrCreateGroup("unban", convertCalculationType(mode));
+            for (UnbanReason reason : BanSystem.getInstance().getReasonProvider().getUnbanReasons()) {
+                DefaultUnPunishmentTemplate template = (DefaultUnPunishmentTemplate) TemplateFactory.create(TemplateType.UNPUNISHMENT,
+                        reason.getID(),
+                        reason.getID(),
+                        reason.getName(),
+                        templateGroup,
+                        reason.getDisplay(),
+                        reason.getPermission(),
+                        reason.getAliases(),
+                        getDefaultHistoryType(),
+                        true,
+                        reason.isHidden(),
+                        getCategory(),
+                        Document.newDocument());
 
+                for (Integer id : reason.getNotForBanID()) {
+                    template.addBlacklistedTemplate(new DefaultUnPunishmentTemplate.BlacklistedTemplate("ban", null, id));
+                }
                 amount++;
+                templateGroup.addTemplateInternal(template);
             }
+            DKBans.getInstance().getStorage().importTemplateGroup(templateGroup);
         }
         resultBuilder.addMigrated("UnbanReasons", amount);
     }
@@ -152,11 +186,27 @@ public class DKBansLegacyMigration extends Migration {
 
         ReasonMode mode = BanSystem.getInstance().getConfig().reportMode;
         if(mode == ReasonMode.TEMPLATE) {
-            TemplateGroup templateGroup = getOrCreateGroup("report", convertCalculationType(mode));
-            for (ReportReason reportReason : BanSystem.getInstance().getReasonProvider().getReportReasons()) {
-
+            DefaultTemplateGroup templateGroup = (DefaultTemplateGroup) getOrCreateGroup("report", convertCalculationType(mode));
+            for (ReportReason reason : BanSystem.getInstance().getReasonProvider().getReportReasons()) {
+                DefaultReportTemplate template = (DefaultReportTemplate) TemplateFactory.create(TemplateType.PUNISHMENT,
+                        reason.getID(),
+                        reason.getID(),
+                        reason.getName(),
+                        templateGroup,
+                        reason.getDisplay(),
+                        reason.getPermission(),
+                        reason.getAliases(),
+                        getDefaultHistoryType(),
+                        true,
+                        reason.isHidden(),
+                        getCategory(),
+                        Document.newDocument());
+                template.setTargetTemplateGroupName("ban");
+                template.setTargetTemplateId(reason.getForBan());
                 amount++;
+                templateGroup.addTemplateInternal(template);
             }
+            DKBans.getInstance().getStorage().importTemplateGroup(templateGroup);
         }
         resultBuilder.addMigrated("ReportReasons", amount);
     }
@@ -166,11 +216,27 @@ public class DKBansLegacyMigration extends Migration {
 
         ReasonMode mode = BanSystem.getInstance().getConfig().warnMode;
         if(mode == ReasonMode.TEMPLATE) {
-            TemplateGroup templateGroup = getOrCreateGroup("report", convertCalculationType(mode));
-            for (WarnReason warnReason : BanSystem.getInstance().getReasonProvider().getWarnReasons()) {
-
+            DefaultTemplateGroup templateGroup = (DefaultTemplateGroup) getOrCreateGroup("report", convertCalculationType(mode));
+            for (WarnReason reason : BanSystem.getInstance().getReasonProvider().getWarnReasons()) {
+                DefaultPunishmentTemplate template = (DefaultPunishmentTemplate) TemplateFactory.create(TemplateType.PUNISHMENT,
+                        reason.getID(),
+                        reason.getID(),
+                        reason.getName(),
+                        templateGroup,
+                        reason.getDisplay(),
+                        reason.getPermission(),
+                        reason.getAliases(),
+                        getDefaultHistoryType(),
+                        true,
+                        reason.isHidden(),
+                        getCategory(),
+                        Document.newDocument());
+                DefaultWarnPunishmentTemplateEntry entry = new DefaultWarnPunishmentTemplateEntry(DKBansScope.GLOBAL, true,
+                        "ban", null, reason.getForBan());
+                templateGroup.addTemplateInternal(template);
                 amount++;
             }
+            DKBans.getInstance().getStorage().importTemplateGroup(templateGroup);
         }
         resultBuilder.addMigrated("WarnReasons", amount);
     }
@@ -333,5 +399,13 @@ public class DKBansLegacyMigration extends Migration {
         TemplateCategory category = DKBans.getInstance().getTemplateManager().getTemplateCategory("General");
         if(category == null) category = DKBans.getInstance().getTemplateManager().createTemplateCategory("General", "General");
         return category;
+    }
+
+    private PlayerHistoryType getDefaultHistoryType() {
+        PlayerHistoryType historyType = DKBans.getInstance().getHistoryManager().getHistoryType("Network");
+        if(historyType == null) {
+            historyType = DKBans.getInstance().getHistoryManager().createHistoryType("Network");
+        }
+        return historyType;
     }
 }

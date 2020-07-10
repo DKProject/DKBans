@@ -43,6 +43,7 @@ public class DefaultReportTemplate extends DefaultTemplate implements ReportTemp
 
     private String targetTemplateGroupName;
     private String targetTemplateName;
+    private int targetTemplateId;
 
     public DefaultReportTemplate(int id, int inGroupId, String name, TemplateGroup group, String displayName, String permission, Collection<String> aliases,
                                  PlayerHistoryType historyType, boolean enabled, boolean hidden, TemplateCategory category, Document data) {
@@ -53,12 +54,14 @@ public class DefaultReportTemplate extends DefaultTemplate implements ReportTemp
 
     @Override
     public PunishmentTemplate getTargetTemplate() {
-        if(targetTemplate == null && targetTemplateGroupName != null && targetTemplateName != null) {
+        if(targetTemplate == null && targetTemplateGroupName != null && (targetTemplateName != null || targetTemplateId != 0)) {
             TemplateGroup templateGroup = DKBans.getInstance().getTemplateManager().getTemplateGroup(targetTemplateGroupName);
             if(templateGroup == null) {
                 return null;
             }
-            Template template = templateGroup.getTemplate(targetTemplateName);
+            Template template;
+            if(targetTemplateName != null) template = templateGroup.getTemplate(targetTemplateName);
+            else template = templateGroup.getTemplate(targetTemplateId);
             if(!(template instanceof PunishmentTemplate)) {
                 return null;
             }
@@ -90,6 +93,18 @@ public class DefaultReportTemplate extends DefaultTemplate implements ReportTemp
             }
         }
         return properties;
+    }
+
+    public void setTargetTemplateGroupName(String targetTemplateGroupName) {
+        this.targetTemplateGroupName = targetTemplateGroupName;
+    }
+
+    public void setTargetTemplateName(String targetTemplateName) {
+        this.targetTemplateName = targetTemplateName;
+    }
+
+    public void setTargetTemplateId(int targetTemplateId) {
+        this.targetTemplateId = targetTemplateId;
     }
 
     public static class Factory extends TemplateFactory {

@@ -2,7 +2,7 @@
  * (C) Copyright 2020 The DKBans Project (Davide Wietlisbach & Philipp Elvin Friedhoff)
  *
  * @author Philipp Elvin Friedhoff
- * @since 25.06.20, 19:20
+ * @since 10.07.20, 20:11
  * @web %web%
  *
  * The DKBans Project is under the Apache License, version 2.0 (the "License");
@@ -18,15 +18,21 @@
  * under the License.
  */
 
-package net.pretronic.dkbans.minecraft;
+package net.pretronic.dkbans.api.joinme;
 
-public class PlayerSettingsKey {
+import net.pretronic.dkbans.api.player.DKBansPlayer;
 
-    public static final String TEAM_CHAT_LOGIN = "TeamChatLogin";
+public interface JoinMe {
 
-    public static final String REPORT_CHAT_LOGIN = "ReportLogin";
+    DKBansPlayer getPlayer();
 
-    public static final String PUNISH_NOTIFY_LOGIN = "PunishNotifyLogin";
+    String getServer();
 
-    public static final String JOINME_AMOUNT = "JoinMeAmount";
+    long getTimeout();
+
+    void setTimeout(long timeout);
+
+    default void disable() {
+        setTimeout(System.currentTimeMillis());
+    }
 }

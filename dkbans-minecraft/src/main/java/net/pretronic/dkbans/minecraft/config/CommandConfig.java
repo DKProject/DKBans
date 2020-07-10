@@ -97,11 +97,6 @@ public class CommandConfig {
             .permission("dkbans.command.chatlog")
             .create();
 
-    public static CommandConfiguration COMMAND_TEMPLATE = CommandConfiguration.newBuilder()
-            .name("template")
-            .permission("dkbans.command.template")
-            .create();
-
     public static CommandConfiguration COMMAND_MY_HISTORY_POINTS = CommandConfiguration.newBuilder()
             .name("myhistorypoints")
             .permission("dkbans.command.myhistorypoints")
@@ -116,6 +111,11 @@ public class CommandConfig {
             .permission("dkbans.command.report")
             .create();
     public static String COMMAND_REPORT_TEMPLATE_NAME = "report";
+
+
+    public static CommandConfiguration COMMAND_JOINME = CommandConfiguration.newBuilder()
+            .name("joinme")
+            .create();
 
     static {
 

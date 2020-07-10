@@ -21,6 +21,7 @@
 package net.pretronic.dkbans.minecraft.listeners;
 
 import net.pretronic.dkbans.api.event.DKBansChannelBroadcastMessageReceiveEvent;
+import net.pretronic.dkbans.api.event.DKBansJoinMeCreateEvent;
 import net.pretronic.dkbans.api.event.DKBansPlayerPunishEvent;
 import net.pretronic.dkbans.api.event.DKBansPlayerReportTeleportEvent;
 import net.pretronic.dkbans.api.player.history.PunishmentType;
@@ -28,12 +29,15 @@ import net.pretronic.dkbans.minecraft.BroadcastMessageChannels;
 import net.pretronic.dkbans.minecraft.PlayerSettingsKey;
 import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.dkbans.minecraft.config.Permissions;
+import net.pretronic.dkbans.minecraft.joinme.MinecraftJoinMe;
 import net.pretronic.libraries.event.Listener;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
 import org.mcnative.common.McNative;
 import org.mcnative.common.network.event.NetworkListener;
 import org.mcnative.common.player.OnlineMinecraftPlayer;
 import org.mcnative.common.text.components.MessageComponent;
+
+import java.util.List;
 
 public class InternalListener {
 
@@ -68,6 +72,17 @@ public class InternalListener {
         if(event.getSnapshot().getPunishmentType() == PunishmentType.BAN) handleBan(event, player);
         else if(event.getSnapshot().getPunishmentType() == PunishmentType.MUTE) handleMute(event, player);
         else if(event.getSnapshot().getPunishmentType() == PunishmentType.KICK) handleKick(event, player);
+    }
+
+    @NetworkListener
+    @Listener
+    public void onJoinMeCreate(DKBansJoinMeCreateEvent event) {
+        MinecraftJoinMe joinMe = ((MinecraftJoinMe)event.getJoinMe());
+        List<MessageComponent<?>> messageComponents = joinMe.create();
+
+        for (MessageComponent<?> messageComponent : messageComponents) {
+            McNative.getInstance().getLocal().broadcast(messageComponent);
+        }
     }
 
     private void handleMute(DKBansPlayerPunishEvent event, OnlineMinecraftPlayer player) {

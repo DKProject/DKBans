@@ -45,4 +45,8 @@ public interface TemplateGroup extends Iterable<Template> {
         return Iterators.findOne(getTemplates(), template -> template.hasName(name));
     }
 
+    default Template getTemplate(int inGroupId) {
+        return Iterators.findOne(getTemplates(), template -> template.getInGroupId() == inGroupId);
+    }
+
 }

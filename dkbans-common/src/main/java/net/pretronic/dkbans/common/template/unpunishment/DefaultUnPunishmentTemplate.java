@@ -37,6 +37,7 @@ import net.pretronic.libraries.document.entry.DocumentEntry;
 import net.pretronic.libraries.document.entry.PrimitiveEntry;
 import net.pretronic.libraries.utility.Convert;
 import net.pretronic.libraries.utility.Iterators;
+import net.pretronic.libraries.utility.annonations.Internal;
 import net.pretronic.libraries.utility.map.Pair;
 import net.pretronic.libraries.utility.map.Triple;
 
@@ -98,6 +99,12 @@ public class DefaultUnPunishmentTemplate extends DefaultTemplate implements UnPu
         return this.pointsDivider;
     }
 
+    @Internal
+    public void addBlacklistedTemplate(BlacklistedTemplate blacklistedTemplate) {
+        this.blacklistedTemplates.add(blacklistedTemplate);
+    }
+
+
     private Collection<BlacklistedTemplate> loadBlacklistedTemplates(Document data) {
         if(data != null) {
             for (DocumentEntry blacklisted : data) {
@@ -105,7 +112,7 @@ public class DefaultUnPunishmentTemplate extends DefaultTemplate implements UnPu
 
                 if(splitted.length != 2) throw new IllegalArgumentException("Wrong blacklisted un punishment length. Invalid format. Use TemplateGroup@TemplateName");
 
-                this.blacklistedTemplates.add(new BlacklistedTemplate(splitted[0], splitted[1]));
+                this.blacklistedTemplates.add(new BlacklistedTemplate(splitted[0], splitted[1], 0));
             }
         }
         return new ArrayList<>();
@@ -190,24 +197,29 @@ public class DefaultUnPunishmentTemplate extends DefaultTemplate implements UnPu
         }
     }
 
-    private static class BlacklistedTemplate {
+    @Internal
+    public static class BlacklistedTemplate {
 
         private final String templateGroupName;
         private final String templateName;
+        private final int templateId;
         private PunishmentTemplate template;
 
-        private BlacklistedTemplate(String templateGroupName, String templateName) {
+        public BlacklistedTemplate(String templateGroupName, String templateName, int templateId) {
             this.templateGroupName = templateGroupName;
             this.templateName = templateName;
+            this.templateId = templateId;
         }
 
         public PunishmentTemplate getTemplate() {
-            if(template == null && templateGroupName != null && templateName != null) {
+            if(template == null && templateGroupName != null && (templateName != null || templateId != 0)) {
                 TemplateGroup templateGroup = DKBans.getInstance().getTemplateManager().getTemplateGroup(templateGroupName);
                 if(templateGroup == null) {
                     return null;
                 }
-                Template template = templateGroup.getTemplate(templateName);
+                Template template;
+                if(templateName != null) template = templateGroup.getTemplate(templateName);
+                else template = templateGroup.getTemplate(templateId);
                 if(!(template instanceof PunishmentTemplate)) {
                     return null;
                 }

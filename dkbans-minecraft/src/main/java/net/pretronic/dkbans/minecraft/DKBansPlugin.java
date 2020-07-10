@@ -22,7 +22,6 @@ package net.pretronic.dkbans.minecraft;
 
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
-import net.pretronic.dkbans.api.player.history.PunishmentType;
 import net.pretronic.dkbans.api.template.TemplateGroup;
 import net.pretronic.dkbans.common.DefaultDKBans;
 import net.pretronic.dkbans.common.filter.DefaultFilter;
@@ -44,10 +43,10 @@ import net.pretronic.dkbans.minecraft.commands.dkbans.DKBansCommand;
 import net.pretronic.dkbans.minecraft.commands.history.MyHistoryPointsCommand;
 import net.pretronic.dkbans.minecraft.commands.punish.*;
 import net.pretronic.dkbans.minecraft.commands.report.ReportCommand;
-import net.pretronic.dkbans.minecraft.commands.template.TemplateCommand;
 import net.pretronic.dkbans.minecraft.commands.unpunish.UnpunishCommand;
 import net.pretronic.dkbans.minecraft.config.CommandConfig;
 import net.pretronic.dkbans.minecraft.config.DKBansConfig;
+import net.pretronic.dkbans.minecraft.joinme.MinecraftJoinMeManager;
 import net.pretronic.dkbans.minecraft.listeners.InternalListener;
 import net.pretronic.dkbans.minecraft.listeners.PlayerListener;
 import net.pretronic.dkbans.minecraft.migration.DKBansLegacyMigration;
@@ -63,7 +62,6 @@ import org.mcnative.common.plugin.MinecraftPlugin;
 import org.mcnative.common.plugin.configuration.ConfigurationProvider;
 
 import java.util.Map;
-import java.util.function.Function;
 
 public class DKBansPlugin extends MinecraftPlugin {
 
@@ -79,7 +77,7 @@ public class DKBansPlugin extends MinecraftPlugin {
                 , McNative.getInstance().getExecutorService()
                 ,McNative.getInstance().getLocal().getEventBus()
                 ,getRuntime().getRegistry().getService(ConfigurationProvider.class).getDatabase(this, true)
-                ,playerManager);
+                ,playerManager, new MinecraftJoinMeManager());
 
         DKBans.setInstance(dkBans);
 
@@ -115,13 +113,13 @@ public class DKBansPlugin extends MinecraftPlugin {
         getRuntime().getLocal().getCommandManager().registerCommand(new PunishNotifyCommand(this, CommandConfig.COMMAND_PUNISH_NOTIFY));
         getRuntime().getLocal().getCommandManager().registerCommand(new NotifyCommand(this, CommandConfig.COMMAND_NOTIFY));
         getRuntime().getLocal().getCommandManager().registerCommand(new ChatLogCommand(this, CommandConfig.COMMAND_CHATLOG));
-        getRuntime().getLocal().getCommandManager().registerCommand(new TemplateCommand(this, CommandConfig.COMMAND_TEMPLATE));
         getRuntime().getLocal().getCommandManager().registerCommand(new MyHistoryPointsCommand(this, CommandConfig.COMMAND_MY_HISTORY_POINTS));
 
 
         getRuntime().getLocal().getCommandManager().registerCommand(new HelpCommand(this, CommandConfig.COMMAND_HELP));
         getRuntime().getLocal().getCommandManager().registerCommand(new FilterCommand(this, CommandConfig.COMMAND_FILTER));
         getRuntime().getLocal().getCommandManager().registerCommand(new DKBansCommand(this));
+        getRuntime().getLocal().getCommandManager().registerCommand(new JoinMeCommand(this, CommandConfig.COMMAND_JOINME));
 
         for (CommandConfig.PunishmentTypeConfiguration configuration : CommandConfig.COMMAND_PUNISH_DIRECT) {
             Command command;

@@ -2,7 +2,7 @@
  * (C) Copyright 2020 The DKBans Project (Davide Wietlisbach & Philipp Elvin Friedhoff)
  *
  * @author Philipp Elvin Friedhoff
- * @since 21.06.20, 17:26
+ * @since 10.07.20, 20:11
  * @web %web%
  *
  * The DKBans Project is under the Apache License, version 2.0 (the "License");
@@ -18,16 +18,13 @@
  * under the License.
  */
 
-package net.pretronic.dkbans.minecraft.commands.template;
+package net.pretronic.dkbans.api.joinme;
 
-import net.pretronic.libraries.command.command.MainCommand;
-import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
-import net.pretronic.libraries.utility.interfaces.ObjectOwner;
+import net.pretronic.dkbans.api.player.DKBansPlayer;
 
-public class TemplateCommand extends MainCommand {
+public interface JoinMeManager {
 
-    public TemplateCommand(ObjectOwner owner, CommandConfiguration configuration) {
-        super(owner, configuration);
-        registerCommand(new TemplateImportCommand(owner));
-    }
+    JoinMe getJoinMe(DKBansPlayer player);
+
+    JoinMe sendJoinMe(DKBansPlayer player, String server, long timeout);
 }
