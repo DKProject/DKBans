@@ -68,7 +68,8 @@ public class DefaultPlayerHistory implements PlayerHistory {
     @Override
     public List<PlayerHistoryEntry> getEntries() {
         if(!loadedAll){
-            this.entries.addAll(DKBans.getInstance().getStorage().loadEntries(this,loadedActive));
+            this.entries.clear();
+            this.entries.addAll(DKBans.getInstance().getStorage().loadEntries(this));
             this.loadedAll = true;
         }
         return entries;
@@ -86,15 +87,11 @@ public class DefaultPlayerHistory implements PlayerHistory {
 
     @Override
     public List<PlayerHistoryEntry> getActiveEntries() {
-        if(loadedAll){
-            return Iterators.filter(entries, entry -> entry.getCurrent().isActive());
-        }else {
-            if(!loadedActive){
-                entries.addAll(DKBans.getInstance().getStorage().loadActiveEntries(this));
-                loadedActive = true;
-            }
-            return entries;
+        if(!loadedActive && !loadedAll){
+            entries.addAll(DKBans.getInstance().getStorage().loadActiveEntries(this));
+            loadedActive = true;
         }
+        return Iterators.filter(entries, PlayerHistoryEntry::isActive);
     }
 
     @Override

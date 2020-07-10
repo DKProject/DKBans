@@ -26,6 +26,7 @@ import net.pretronic.dkbans.api.filter.FilterManager;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryEntry;
 import net.pretronic.dkbans.api.player.history.PunishmentType;
+import net.pretronic.dkbans.common.DKBansUtil;
 import net.pretronic.dkbans.minecraft.PlayerSettingsKey;
 import net.pretronic.dkbans.minecraft.config.DKBansConfig;
 import net.pretronic.dkbans.minecraft.config.Messages;
@@ -33,6 +34,7 @@ import net.pretronic.dkbans.minecraft.config.Permissions;
 import net.pretronic.libraries.event.EventPriority;
 import net.pretronic.libraries.event.Listener;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
+import net.pretronic.libraries.utility.map.Pair;
 import org.mcnative.common.McNative;
 import org.mcnative.common.event.player.MinecraftPlayerChatEvent;
 import org.mcnative.common.event.player.MinecraftPlayerCommandPreprocessEvent;
@@ -118,7 +120,9 @@ public class PlayerListener {
         if(DKBansConfig.PLAYER_SESSION_LOGGING){
             ConnectedMinecraftPlayer connectedPlayer = McNative.getInstance().getLocal().getConnectedPlayer(player.getUniqueId());
 
-            dkBansPlayer.startSession(player.getName(),player.getAddress().getAddress(), "none", "none",
+            Pair<String,String> locationLookup = DKBansUtil.lookupLocation(player.getAddress().getAddress().getHostAddress());
+
+            dkBansPlayer.startSession(player.getName(),player.getAddress().getAddress(), locationLookup.getKey(), locationLookup.getValue(),
                     "none", UUID.randomUUID(), connectedPlayer.getProtocolVersion().getEdition().getName(),
                     connectedPlayer.getProtocolVersion().getNumber());
         }

@@ -50,7 +50,7 @@ public interface PlayerHistoryEntrySnapshot {
     Template getTemplate();
 
 
-    DKBansExecutor getStuff();
+    DKBansExecutor getStaff();
 
     DKBansScope getScope();
 

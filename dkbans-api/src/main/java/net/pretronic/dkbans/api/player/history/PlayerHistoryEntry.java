@@ -40,6 +40,11 @@ public interface PlayerHistoryEntry extends Iterable<PlayerHistoryEntrySnapshot>
     PlayerSession getSession();
 
 
+    boolean isActive();
+
+    boolean hasTimeout();
+
+
     PlayerHistoryEntrySnapshot getCurrent();
 
     PlayerHistoryEntrySnapshot getFirst();

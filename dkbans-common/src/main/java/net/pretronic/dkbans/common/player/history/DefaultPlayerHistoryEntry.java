@@ -32,8 +32,10 @@ import net.pretronic.libraries.utility.Validate;
 import net.pretronic.libraries.utility.annonations.Internal;
 import net.pretronic.libraries.utility.duration.DurationProcessor;
 
+import java.time.Duration;
 import java.util.Iterator;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class DefaultPlayerHistoryEntry implements PlayerHistoryEntry {
 
@@ -69,6 +71,17 @@ public class DefaultPlayerHistoryEntry implements PlayerHistoryEntry {
     @Override
     public PlayerSession getSession() {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean isActive() {
+        return getCurrent().isActive() && !hasTimeout();
+    }
+
+    @Override
+    public boolean hasTimeout() {
+        if(getCurrent().getTimeout() < 0) return false;
+        return getCurrent().getTimeout() < System.currentTimeMillis();
     }
 
     @Override
@@ -132,6 +145,6 @@ public class DefaultPlayerHistoryEntry implements PlayerHistoryEntry {
 
     @Internal
     public String getRemainingFormatted(){//@Todo make configurable
-        return DurationProcessor.getStandard().formatShort(getCurrent().getTimeout()-System.currentTimeMillis());
+        return DurationProcessor.getStandard().formatShort(Duration.ofMillis(getCurrent().getTimeout()-System.currentTimeMillis()));
     }
 }

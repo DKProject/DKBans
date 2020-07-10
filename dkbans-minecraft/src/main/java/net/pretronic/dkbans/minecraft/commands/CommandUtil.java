@@ -97,7 +97,7 @@ public class CommandUtil {
     public static boolean canOverridePunish(CommandSender sender,DKBansPlayer player, PunishmentType type){
         if(sender.hasPermission(Permissions.PUNISH_OVERRIDE_ALL)) return true;
         if(sender.hasPermission(Permissions.PUNISH_OVERRIDE_OWN)){
-            DKBansExecutor stuff = player.getHistory().getActiveEntry(type).getCurrent().getStuff();
+            DKBansExecutor stuff = player.getHistory().getActiveEntry(type).getCurrent().getStaff();
             return stuff != null && stuff.equals(sender);
         }
         return false;

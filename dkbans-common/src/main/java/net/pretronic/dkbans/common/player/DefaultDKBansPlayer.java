@@ -92,7 +92,7 @@ public  class DefaultDKBansPlayer implements DKBansPlayer {
 
     @Override
     public long getOnlineTime() {
-        throw new UnsupportedOperationException();
+        return 0;//@Todo calculate
     }
 
     @Override

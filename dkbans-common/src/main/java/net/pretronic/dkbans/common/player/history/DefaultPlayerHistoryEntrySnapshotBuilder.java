@@ -72,7 +72,7 @@ public class DefaultPlayerHistoryEntrySnapshotBuilder implements PlayerHistoryEn
             reason = snapshot.getReason();
             timeout = snapshot.getTimeout();
             template = snapshot.getTemplate();
-            stuff = snapshot.getStuff();
+            stuff = snapshot.getStaff();
             scope = snapshot.getScope();
             points = snapshot.getPoints();
             active = snapshot.isActive();
@@ -113,7 +113,7 @@ public class DefaultPlayerHistoryEntrySnapshotBuilder implements PlayerHistoryEn
 
     @Override
     public PlayerHistoryEntrySnapshotBuilder duration(Duration duration) {
-        return duration(duration.getNano(),TimeUnit.NANOSECONDS);
+        return duration(duration.getSeconds(),TimeUnit.SECONDS);
     }
 
     @Override
@@ -181,6 +181,7 @@ public class DefaultPlayerHistoryEntrySnapshotBuilder implements PlayerHistoryEn
 
         if(modifier == null) modifier = stuff;
         if(modifiedTime <= 0) modifiedTime = System.currentTimeMillis();
+        if(scope == null) scope = DKBansScope.GLOBAL;
 
         DefaultPlayerHistoryEntrySnapshot snapshot;
         if(entry == null){
@@ -193,7 +194,7 @@ public class DefaultPlayerHistoryEntrySnapshotBuilder implements PlayerHistoryEn
             DKBans.getInstance().getEventBus().callEvent(DKBansPlayerPunishEvent.class,new DefaultDKBansPlayerPunishEvent(player,snapshot));
             ((DefaultPlayerHistory)history).push(result.getKey());
         }else{
-            PlayerHistoryEntrySnapshot old =
+            PlayerHistoryEntrySnapshot old = entry.getCurrent();
             snapshot = new DefaultPlayerHistoryEntrySnapshot(entry, -1, historyType,
                     punishmentType, reason, timeout, template, stuff.getUniqueId(), scope, points, active, properties, revokeReason,
                     revokeTemplate, true, modifiedTime, modifier.getUniqueId());

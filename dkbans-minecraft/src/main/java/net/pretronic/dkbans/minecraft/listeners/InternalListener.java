@@ -57,7 +57,6 @@ public class InternalListener {
         }
     }
 
-
     @Listener
     public void onPlayerReport(DKBansPlayerReportTeleportEvent event) {
         OnlineMinecraftPlayer player = McNative.getInstance().getLocal().getOnlinePlayer(event.getPlayer().getUniqueId());
@@ -72,6 +71,7 @@ public class InternalListener {
         if(event.getSnapshot().getPunishmentType() == PunishmentType.BAN) handleBan(event, player);
         else if(event.getSnapshot().getPunishmentType() == PunishmentType.MUTE) handleMute(event, player);
         else if(event.getSnapshot().getPunishmentType() == PunishmentType.KICK) handleKick(event, player);
+        else if(event.getSnapshot().getPunishmentType() == PunishmentType.WARN) handleWarn(event, player);
     }
 
     @NetworkListener
@@ -81,7 +81,9 @@ public class InternalListener {
         List<MessageComponent<?>> messageComponents = joinMe.create();
 
         for (MessageComponent<?> messageComponent : messageComponents) {
-            McNative.getInstance().getLocal().broadcast(messageComponent);
+            McNative.getInstance().getLocal().broadcast(messageComponent,VariableSet.create()
+                    .add("server",event.getJoinMe().getServer())
+                    .addDescribed("player",event.getJoinMe().getPlayer()));
         }
     }
 
@@ -102,13 +104,14 @@ public class InternalListener {
         if (player != null) {
             MessageComponent<?> message = event.getSnapshot().isPermanently()
                     ? Messages.PUNISH_BAN_MESSAGE_PERMANENTLY : Messages.PUNISH_BAN_MESSAGE_TEMPORARY;
+
             player.kick(message, VariableSet.create()
                     .addDescribed("ban", event.getEntry())
                     .addDescribed("punish", event.getEntry())
                     .addDescribed("player", event.getPlayer()));
 
-            sendToStaff(event, Messages.PUNISH_BAN_NOTIFY, "ban");
         }
+        sendToStaff(event, Messages.PUNISH_BAN_NOTIFY, "ban");
     }
 
 
@@ -118,9 +121,18 @@ public class InternalListener {
                     .addDescribed("mute", event.getEntry())
                     .addDescribed("punish", event.getEntry())
                     .addDescribed("player", event.getPlayer()));
-
-            sendToStaff(event, Messages.PUNISH_KICK_NOTIFY, "kick");
         }
+        sendToStaff(event, Messages.PUNISH_KICK_NOTIFY, "kick");
+    }
+
+    private void handleWarn(DKBansPlayerPunishEvent event, OnlineMinecraftPlayer player) {
+        if (player != null) {
+            player.kick(Messages.PUNISH_WARN_MESSAGE_CHAT, VariableSet.create()
+                    .addDescribed("mute", event.getEntry())
+                    .addDescribed("punish", event.getEntry())
+                    .addDescribed("player", event.getPlayer()));
+        }
+        sendToStaff(event, Messages.PUNISH_WARN_NOTIFY, "kick");
     }
 
     private void sendToStaff(DKBansPlayerPunishEvent event, MessageComponent<?> punishBanNotify, String ban) {
@@ -128,6 +140,7 @@ public class InternalListener {
             if (staff.hasPermission(Permissions.PUNISH_NOTIFY)
                     && staff.hasSetting("DKBans", PlayerSettingsKey.PUNISH_NOTIFY_LOGIN, true)) {
                 staff.sendMessage(punishBanNotify, VariableSet.create()
+                        .addDescribed("player",event.getEntry().getHistory().getPlayer())
                         .addDescribed(ban, event.getEntry()));
             }
         }

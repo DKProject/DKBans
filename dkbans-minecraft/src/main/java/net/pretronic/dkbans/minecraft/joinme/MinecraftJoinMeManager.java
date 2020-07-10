@@ -21,6 +21,7 @@
 package net.pretronic.dkbans.minecraft.joinme;
 
 import net.pretronic.dkbans.api.DKBans;
+import net.pretronic.dkbans.api.event.DKBansJoinMeCreateEvent;
 import net.pretronic.dkbans.api.joinme.JoinMe;
 import net.pretronic.dkbans.api.joinme.JoinMeManager;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
@@ -29,6 +30,7 @@ import net.pretronic.libraries.utility.Iterators;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.UUID;
 
 public class MinecraftJoinMeManager implements JoinMeManager {
 
@@ -44,9 +46,15 @@ public class MinecraftJoinMeManager implements JoinMeManager {
     }
 
     @Override
+    public JoinMe getJoinMe(UUID playerId) {
+        return Iterators.findOne(joinMes, joinMe -> joinMe.getPlayer().getUniqueId().equals(playerId));
+    }
+
+    @Override
     public JoinMe sendJoinMe(DKBansPlayer player, String server, long timeout) {
         MinecraftJoinMe joinMe = new MinecraftJoinMe(player, server, timeout);
-        DKBans.getInstance().getEventBus().callEvent(new DefaultDKBansJoinMeCreateEvent(joinMe));
+        DKBans.getInstance().getEventBus().callEvent(DKBansJoinMeCreateEvent.class,new DefaultDKBansJoinMeCreateEvent(joinMe));
+        joinMes.add(joinMe);
         return joinMe;
     }
 }

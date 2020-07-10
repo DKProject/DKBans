@@ -74,6 +74,7 @@ messages:
   &3Remaining time&8: &e{ban.remainingFormatted}
   &e
   &aYou can make a unban request at &eforum.example.net'
+  dkbans.punish.ban.notify: '${dkbans.prefix} &9{player.displayName} &7has been &cbanned &7by &8{ban.staff.displayName} &7for &4{ban.reason}&7'
 
   dkbans.punish.mute.message.permanently: '&5
   ${dkbans.prefix} &cYou are &4&lPermanently &cbanned from the chat
@@ -87,11 +88,21 @@ messages:
   &e
   &8» &3Remaining time&8: &e{mute.remainingFormatted}
   &7'
+  dkbans.punish.mute.notify: '${dkbans.prefix} &9{player.displayName} &7has been &9muted &7by &8{mute.staff.displayName} &7for &4{mute.reason}&7'
 
   dkbans.punish.kick.message: '&e&lexample.net&r
   &e
   &cYou were kicked from the network
   &3Reason&8: &4&l{kick.reason}'
+
+  dkbans.punish.kick.notify: '${dkbans.prefix} &9{player.displayName} &7has been &ekicked &7by &8{kick.staff.displayName} &7for &4{kick.reason}&7'
+
+  dkbans.punish.warn.message.chat: '&5
+  ${dkbans.prefix} &cYou have been warned
+  &8» &3Reason&8: &4&l{warn.reason}
+  &8» &3WarnID&8: &7{warn.id}
+  &7'
+  dkbans.punish.warn.notify: '${dkbans.prefix} &9{player.displayName} &7has been &6warned s&7by &8{warn.staff.displayName} &7for &4{warn.reason}&7'
 
 
   dkbans.punish.success.ban: '${dkbans.prefix} &e{player.displayName} &7was banned'
@@ -104,6 +115,14 @@ messages:
   dkbans.punish.list.ban: '${dkbans.prefix} &6All banned players @for("punish" in {punishments},{dkbans.punish.list.loop},"\n","\n")'
   dkbans.punish.list.mute: '${dkbans.prefix} &6All muted muted @for("punish" in {punishments},{dkbans.punish.list.loop},"\n","\n")'
   dkbans.punish.list.loop: ' &8- &e{punish.history.player.displayName}'
+
+  dkbans.punish.already.banned: '${dkbans.prefix} &e{player.displayName} &cis already banned'
+  dkbans.punish.already.muted: '${dkbans.prefix} &e{player.displayName} &cis already muted'
+  dkbans.punish.override: '${dkbans.prefix} &7Do you want override it? !["&8[&7Click&8]"]("run://{command}")'
+
+
+  dkbans.punish.not.banned: '${dkbans.prefix} &e{player.displayName} &cis not banned'
+  dkbans.punish.not.muted: '${dkbans.prefix} &e{player.displayName} &cis not muted'
 
   dkbans.unpunish.help: '${dkbans.prefix} &cUsage&8: &7/{command} <player> [Reason]'
   dkbans.unpunish.success.ban: '${dkbans.prefix} &e{player.displayName} &7was unbanned'
@@ -199,7 +218,7 @@ messages:
   &8» &7FirstLogin&8: &e{player.firstLogin}
   &8» &7LastLogin&8: &e{player.lastLogin}
   &8» &7OnlineTime&8: &e{player.onlineTime}
-  &8» &7Ip&8: &e{player.activeSession.HostName}
+  &8» &7Ip&8: &e{player.activeSession.hostName}
   &8» &7Country&8: &e{player.activeSession.country}
   &8» &7Region&8: &e{player.activeSession.region}'
 
@@ -222,13 +241,13 @@ messages:
   dkbans.command.joinme.notEnoughAmount: '${dkbans.prefix} &cYou can not send a joinme'
   dkbans.command.joinme.usage: '${dkbans.prefix} &cUsage&8: &7/joinme [playerId]'
   dkbans.command.joinme.notExists: '${dkbans.prefix} &cThis joinme does not exist'
-  dkbans.command.joinme.line1: '!["&6"]("run://joinme {player.uniqueId}")'
-  dkbans.command.joinme.line2: '!["&6"]("run://joinme {player.uniqueId}")'
-  dkbans.command.joinme.line3: '!["&6"]("run://joinme {player.uniqueId}")'
-  dkbans.command.joinme.line4: '!["&6"]("run://joinme {player.uniqueId}")'
-  dkbans.command.joinme.line5: '  !["{player.name} &7is playing on &e[server]"]("run://joinme {player.uniqueId}")'
-  dkbans.command.joinme.line6: '!["           &7Click to join"]("run://joinme {player.uniqueId}")'
-  dkbans.command.joinme.line7: '!["&6"]("run://joinme {player.uniqueId}")'
-  dkbans.command.joinme.line8: '!["&6"]("run://joinme {player.uniqueId}")'
-  dkbans.command.joinme.line9: '!["&6"]("run://joinme {player.uniqueId}")'
-  dkbans.command.joinme.line10: '!["&6"]("run://joinme {player.uniqueId}")'
+  dkbans.command.joinme.line1: '&6'
+  dkbans.command.joinme.line2: '&6'
+  dkbans.command.joinme.line3: '&6'
+  dkbans.command.joinme.line4: '&6'
+  dkbans.command.joinme.line5: '  &e{player.displayName} &7is playing on &e{server}'
+  dkbans.command.joinme.line6: '           &7Click to join'
+  dkbans.command.joinme.line7: '&6'
+  dkbans.command.joinme.line8: '&6'
+  dkbans.command.joinme.line9: '&6'
+  dkbans.command.joinme.line10: '&6'

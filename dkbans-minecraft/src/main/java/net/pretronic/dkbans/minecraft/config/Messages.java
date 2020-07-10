@@ -108,6 +108,9 @@ public class Messages {
     public static MessageComponent<?> PUNISH_KICK_MESSAGE = Text.ofMessageKey("dkbans.punish.kick.message");
     public static MessageComponent<?> PUNISH_KICK_NOTIFY = Text.ofMessageKey("dkbans.punish.kick.notify");
 
+    public static MessageComponent<?> PUNISH_WARN_MESSAGE_CHAT = Text.ofMessageKey("dkbans.punish.warn.message.chat");
+    public static MessageComponent<?> PUNISH_WARN_NOTIFY = Text.ofMessageKey("dkbans.punish.warn.notify");
+
     public static MessageComponent<?> PUNISH_LIST_BAN = Text.ofMessageKey("dkbans.punish.list.ban");
     public static MessageComponent<?> PUNISH_LIST_MUTE = Text.ofMessageKey("dkbans.punish.list.mute");
 
@@ -119,7 +122,6 @@ public class Messages {
     public static MessageComponent<?> COMMAND_HELP = Text.ofMessageKey("dkbans.command.help");
 
     public static MessageComponent<?> COMMAND_JUMPTO_HELP = Text.ofMessageKey("dkbans.command.jumpto.help");
-    public static MessageComponent<?> COMMAND_KICK_HELP = Text.ofMessageKey("dkbans.command.kick.help");
     public static MessageComponent<?> COMMAND_NOTIFY_HELP = Text.ofMessageKey("dkbans.command.notify.help");
     public static MessageComponent<?> COMMAND_TEAM_CHAT_HELP = Text.ofMessageKey("dkbans.command.teamChat.help");
 

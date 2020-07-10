@@ -29,9 +29,11 @@ import net.pretronic.dkbans.minecraft.config.Permissions;
 import net.pretronic.libraries.command.command.BasicCommand;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
 import net.pretronic.libraries.command.sender.CommandSender;
+import net.pretronic.libraries.message.bml.variable.VariableSet;
 import net.pretronic.libraries.utility.Convert;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
 import org.mcnative.common.McNative;
+import org.mcnative.common.network.component.server.MinecraftServer;
 import org.mcnative.common.player.OnlineMinecraftPlayer;
 import org.mcnative.common.player.PlayerSetting;
 
@@ -52,25 +54,43 @@ public class JoinMeCommand extends BasicCommand {
         }
         OnlineMinecraftPlayer player = (OnlineMinecraftPlayer) sender;
         if(args.length == 0) {
-            if(player.hasPermission(Permissions.COMMAND_JOINME)) {
-                sendJoinMe(player);
-            } else {
+            if (!player.hasPermission(Permissions.COMMAND_JOINME)) {
                 PlayerSetting setting = player.getSetting("DKBans", PlayerSettingsKey.JOINME_AMOUNT);
-                if(setting.getIntValue() == 0) {
+                if (setting == null || setting.getIntValue() == 0) {
                     player.sendMessage(Messages.COMMAND_JOINME_NOT_ENOUGH_AMOUNT);
                     return;
                 }
-                setting.setValue(setting.getIntValue()-1);
-                sendJoinMe(player);
+                player.setSetting("DKBans", PlayerSettingsKey.JOINME_AMOUNT, setting.getIntValue() - 1);
             }
+            sendJoinMe(player);
         } else if(args.length == 1) {
             try {
-                UUID joinMeCreator = Convert.toUUID(args[0]);
+                UUID joinMeCreator = UUID.fromString(args[0]);
 
                 JoinMe joinMe = DKBans.getInstance().getJoinMeManager().getJoinMe(joinMeCreator);
+                if(joinMe == null){
+                    player.sendMessage(Messages.COMMAND_JOINME_NOT_EXIST);
+                    return;
+                }
 
-                player.connect(McNative.getInstance().getNetwork().getServer(joinMe.getServer()));
-            } catch (Exception exception) {
+                MinecraftServer server = McNative.getInstance().getNetwork().getServer(joinMe.getServer());
+                if(server == null) return;
+
+                if(joinMe.getServer().equals(((OnlineMinecraftPlayer) sender).getServer().getName())){
+                    sender.sendMessage(Messages.SERVER_ALREADY_CONNECTED, VariableSet.create()
+                            .add("prefix",Messages.PREFIX_NETWORK)
+                            .addDescribed("player",player)
+                            .addDescribed("server",server));
+                    return;
+                }
+
+                sender.sendMessage(Messages.SERVER_CONNECTING, VariableSet.create()
+                        .add("prefix",Messages.PREFIX_NETWORK)
+                        .addDescribed("player",player)
+                        .addDescribed("server",server));
+
+                player.connect(server);
+            } catch (IllegalArgumentException exception) {
                 player.sendMessage(Messages.COMMAND_JOINME_NOT_EXIST);
             }
         } else {

@@ -34,6 +34,7 @@ import net.pretronic.libraries.utility.annonations.Internal;
 import net.pretronic.libraries.utility.duration.DurationProcessor;
 import net.pretronic.libraries.utility.map.Pair;
 
+import java.time.Duration;
 import java.util.UUID;
 
 public class DefaultPlayerHistoryEntrySnapshot implements PlayerHistoryEntrySnapshot {
@@ -120,7 +121,7 @@ public class DefaultPlayerHistoryEntrySnapshot implements PlayerHistoryEntrySnap
     }
 
     @Override
-    public DKBansExecutor getStuff() {
+    public DKBansExecutor getStaff() {
         return DKBans.getInstance().getPlayerManager().getExecutor(stuffId);
     }
 
@@ -187,6 +188,6 @@ public class DefaultPlayerHistoryEntrySnapshot implements PlayerHistoryEntrySnap
 
     @Internal
     public String getDurationFormatted(){//@Todo make configurable
-        return DurationProcessor.getStandard().formatShort(timeout-getEntry().getCreated());
+        return DurationProcessor.getStandard().formatShort(Duration.ofMillis(timeout-getEntry().getCreated()));
     }
 }

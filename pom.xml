@@ -65,7 +65,7 @@
 
         <!-- Dependency version -->
         <dependency.pretronic.libraries>1.2.12.149-SNAPSHOT</dependency.pretronic.libraries>
-        <dependency.mcnative.version>1.3.74.273-SNAPSHOT</dependency.mcnative.version>
+        <dependency.mcnative.version>1.3.79.278-SNAPSHOT</dependency.mcnative.version>
         <dependency.pretronic.databasequery>1.2.21.47-SNAPSHOT</dependency.pretronic.databasequery>
 
         <!-- Maven plugins -->

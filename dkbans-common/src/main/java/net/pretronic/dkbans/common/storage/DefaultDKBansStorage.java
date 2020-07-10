@@ -276,12 +276,12 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 .set("HistoryId",historyId)
                 .set("Reason",snapshot.getReason())
                 .set("Timeout",snapshot.getTimeout())
-                .set("StaffId",snapshot.getStuff().getUniqueId())
+                .set("StaffId",snapshot.getStaff().getUniqueId())
                 .set("Points",snapshot.getPoints())
                 .set("Active",snapshot.isActive())
                 .set("Properties","{}")
                 .set("PunishmentType",snapshot.getPunishmentType().getName())
-                .set("RevokeReason",snapshot.getReason())
+                .set("RevokeReason",snapshot.getRevokeReason())
                 .set("ModifiedTime",snapshot.getModifiedTime())
                 .set("ModifiedBy",snapshot.getModifiedBy().getUniqueId())
                 .set("ModifiedActive",snapshot.isModifiedActive());
@@ -301,7 +301,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
         List<PlayerHistoryEntry> result = new ArrayList<>();
         QueryResult result0 = createBaseQuery(playerHistory)
                 .where("ModifiedActive",true).where("Active",true)
-                .or(query -> query.where("Timeout",-1).whereLower("Timeout",System.currentTimeMillis()))
+                .or(query -> query.where("Timeout",-1).whereHigher("Timeout",System.currentTimeMillis()))
                 .orderBy("ModifiedTime", SearchOrder.DESC)
                 .execute();
 
@@ -310,16 +310,10 @@ public class DefaultDKBansStorage implements DKBansStorage {
     }
 
     @Override
-    public List<PlayerHistoryEntry> loadEntries(PlayerHistory playerHistory, boolean skipActive) {
+    public List<PlayerHistoryEntry> loadEntries(PlayerHistory playerHistory) {
         List<PlayerHistoryEntry> result = new ArrayList<>();
 
         FindQuery query = createBaseQuery(playerHistory);
-
-        if(skipActive){
-            query.not(q -> q.where("ModifiedActive",true).where("Active",true)
-                    .or(q1 -> q1.where("Timeout",-1).whereLower("Timeout",System.currentTimeMillis()))
-                    .orderBy("ModifiedTime", SearchOrder.DESC)).execute();
-        }
 
         QueryResult result0 = query.execute();
 
@@ -383,7 +377,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 dkBans.getTemplateManager().getTemplate(resultEntry.getInt("RevokeTemplateId")),
                 resultEntry.getBoolean("ModifiedActive"),
                 resultEntry.getLong("ModifiedTime"),
-                resultEntry.getUniqueId("StaffId")/*@Todo add modified by*/);
+                resultEntry.getUniqueId("ModifiedBy"));
     }
 
     @Override

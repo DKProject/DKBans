@@ -20,6 +20,8 @@
 
 package net.pretronic.dkbans.minecraft.commands;
 
+import net.pretronic.dkbans.api.DKBans;
+import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.libraries.command.command.BasicCommand;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
@@ -43,13 +45,14 @@ public class PlayerInfoCommand extends BasicCommand {
 
         MinecraftPlayer player = CommandUtil.getPlayer(sender,arguments[0]);
         if(player == null) return;
+        DKBansPlayer dkBansPlayer = player.getAs(DKBansPlayer.class);
 
         if(player.isOnline()){
             sender.sendMessage(Messages.COMMAND_PLAYER_INFO_ONLINE,
-                    VariableSet.create().addDescribed("player",player));
+                    VariableSet.create().addDescribed("player",dkBansPlayer));
         }else{
             sender.sendMessage(Messages.COMMAND_PLAYER_INFO_OFFLINE,
-                    VariableSet.create().addDescribed("player",player));
+                    VariableSet.create().addDescribed("player",dkBansPlayer));
         }
     }
 }

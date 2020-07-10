@@ -100,11 +100,6 @@ public class TemplatePunishCommand extends BasicCommand {
     }
 
     private void sendTemplates(CommandSender sender){
-        System.out.println("Templates:");
-        for (Template template : templates.getTemplates()) {
-            System.out.println(template.getName());
-        }
-
         sender.sendMessage(Messages.PUNISH_TEMPLATE_LIST,VariableSet.create()
                 .add("prefix",Messages.PREFIX)
                 .add("templates",templates.getTemplates())

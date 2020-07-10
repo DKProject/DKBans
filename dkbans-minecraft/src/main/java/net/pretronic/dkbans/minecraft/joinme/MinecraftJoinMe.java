@@ -25,6 +25,8 @@ import net.pretronic.dkbans.api.joinme.JoinMe;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.minecraft.config.DKBansConfig;
 import net.pretronic.dkbans.minecraft.config.Messages;
+import net.pretronic.libraries.document.type.DocumentFileType;
+import net.pretronic.libraries.utility.exception.OperationFailedException;
 import org.mcnative.common.text.Text;
 import org.mcnative.common.text.components.MessageComponent;
 import org.mcnative.common.text.components.TextComponent;
@@ -39,6 +41,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+//@Todo joinme in common
 public class MinecraftJoinMe implements JoinMe {
 
     private final UUID playerId;
@@ -93,26 +96,31 @@ public class MinecraftJoinMe implements JoinMe {
                 try{
                     image = ImageIO.read(new URL("https://minotar.net/avatar/"+playerId+"/8.png"));
                 }catch (Exception exception) {
-                    throw new RuntimeException("Could not load joinme image from player "+playerId, exception);
+                    throw new OperationFailedException("Could not load joinme image from player "+playerId, exception);
                 }
                 if(image != null){
                     List<MessageComponent<?>> newComponents = new ArrayList<>();
                     ImageMessage message = new ImageMessage(image,8, '█');
+                    MessageComponent<?>[] headLines = message.getLinesAsMessageComponent();
                     int i = -1;
                     for(MessageComponent<?> line : components) {
                         if(i >= 0 && i < 8){
-                            TextComponent component = new TextComponent(message.getLines()[i]);
+                            TextComponent component = new TextComponent("");
+                            component.addExtra(headLines[i]);
+                            component.addExtra(line);
                             component.setClickEvent(new TextEvent<>(ClickAction.RUN_COMMAND, "/joinme "+playerId));
                             newComponents.add(component);
                         }else newComponents.add(line);
                         i++;
                     }
+
                     return newComponents;
                 }
             }catch (Exception exception){
                 exception.printStackTrace();
             }
         }
+
         return components;
     }
 }
