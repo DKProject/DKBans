@@ -124,6 +124,15 @@ public class DefaultPunishmentTemplate extends DefaultTemplate implements Punish
         this.pointsDivider = divider;
     }
 
+    @Override
+    public PunishmentType getFirstType() {
+        if(getGroup().getCalculationType() == CalculationType.AMOUNT) {
+            return this.durations.values().iterator().next().getType();
+        }else {
+            return this.points.values().iterator().next().getType();
+        }
+    }
+
     private Map<Integer, PunishmentTemplateEntry> loadDurations(Document data) {
         Map<Integer, PunishmentTemplateEntry> durations = new TreeMap<>(Integer::compare);
 

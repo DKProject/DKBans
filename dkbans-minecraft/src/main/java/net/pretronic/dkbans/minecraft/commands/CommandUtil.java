@@ -55,12 +55,15 @@ public class CommandUtil {
 
     public static MinecraftPlayer getPlayer(CommandSender sender,String name, boolean notSelf){
         if(notSelf && sender.getName().equalsIgnoreCase(name)){
-            sender.sendMessage(Messages.PLAYER_NOT_SELF, VariableSet.newEmptySet());
+            sender.sendMessage(Messages.PLAYER_NOT_SELF, VariableSet
+                    .create().addDescribed("prefix",Messages.PREFIX));
             return null;
         }
         MinecraftPlayer player = McNative.getInstance().getPlayerManager().getPlayer(name);
         if(player == null){
-            sender.sendMessage(Messages.PLAYER_NOT_FOUND, VariableSet.create().add("name",name));
+            sender.sendMessage(Messages.PLAYER_NOT_FOUND, VariableSet.create()
+                    .add("prefix",Messages.PREFIX)
+                    .add("name",name));
             return null;
         }
         return player;
@@ -114,30 +117,39 @@ public class CommandUtil {
     }
 
     public static void sendNotPunished(CommandSender sender,DKBansPlayer player, PunishmentType type){
+        VariableSet variables = VariableSet.create()
+                .addDescribed("player",player);
         if(type == PunishmentType.BAN){
-            sender.sendMessage(Messages.PUNISH_NOT_BANNED,VariableSet.create().addDescribed("player",player));
+            sender.sendMessage(Messages.PUNISH_NOT_BANNED,variables);
         }else{
-            sender.sendMessage(Messages.PUNISH_NOT_MUTED,VariableSet.create().addDescribed("player",player));
+            sender.sendMessage(Messages.PUNISH_NOT_MUTED,variables);
         }
     }
 
-    public static void sendPunishResultMessage(CommandSender sender,PlayerHistoryEntrySnapshot snapshot){
+    public static void sendPunishResultMessage(CommandSender sender,DKBansPlayer player,PlayerHistoryEntrySnapshot snapshot){
+        VariableSet variables = VariableSet.create()
+                .addDescribed("snapshot",snapshot)
+                .addDescribed("entry",snapshot.getEntry())
+                .addDescribed("player",player);
+
         if(snapshot.getPunishmentType() == PunishmentType.BAN){
-            sender.sendMessage(Messages.PUNISH_SUCCESS_BAN);
+            sender.sendMessage(Messages.PUNISH_SUCCESS_BAN,variables);
         }else if(snapshot.getPunishmentType() == PunishmentType.MUTE){
-            sender.sendMessage(Messages.PUNISH_SUCCESS_MUTE);
+            sender.sendMessage(Messages.PUNISH_SUCCESS_MUTE,variables);
         }else if(snapshot.getPunishmentType() == PunishmentType.KICK){
-            sender.sendMessage(Messages.PUNISH_SUCCESS_KICK);
+            sender.sendMessage(Messages.PUNISH_SUCCESS_KICK,variables);
         }else if(snapshot.getPunishmentType() == PunishmentType.WARN){
-            sender.sendMessage(Messages.PUNISH_SUCCESS_WARN);
+            sender.sendMessage(Messages.PUNISH_SUCCESS_WARN,variables);
         }
     }
 
-    public static void sendUnpunishResultMessage(CommandSender sender,PlayerHistoryEntrySnapshot snapshot){
+    public static void sendUnpunishResultMessage(CommandSender sender,DKBansPlayer player,PlayerHistoryEntrySnapshot snapshot){
         if(snapshot.getPunishmentType() == PunishmentType.BAN){
-            sender.sendMessage(Messages.UNPUNISH_SUCCESS_BAN);
+            sender.sendMessage(Messages.UNPUNISH_SUCCESS_BAN,VariableSet.create()
+                    .addDescribed("player",player));
         }else if(snapshot.getPunishmentType() == PunishmentType.MUTE){
-            sender.sendMessage(Messages.UNPUNISH_SUCCESS_MUTE);
+            sender.sendMessage(Messages.UNPUNISH_SUCCESS_MUTE,VariableSet.create()
+                    .addDescribed("player",player));
         }
     }
 

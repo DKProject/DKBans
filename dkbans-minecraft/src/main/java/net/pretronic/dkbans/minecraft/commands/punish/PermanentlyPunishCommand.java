@@ -83,6 +83,6 @@ public class PermanentlyPunishCommand extends BasicCommand {
                 .timeout(-1)
                 .reason(reason)
                 .execute();
-        CommandUtil.sendPunishResultMessage(sender,result);
+        CommandUtil.sendPunishResultMessage(sender,dkBansPlayer,result);
     }
 }

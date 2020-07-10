@@ -87,7 +87,7 @@ public class FilterCommand extends BasicCommand {
 
                 sender.sendMessage(Messages.COMMAND_FILTER_CREATED,VariableSet.create()
                         .addDescribed("filter",filter));
-
+                return;
             }else if(StringUtil.equalsOne(argument,"remove","delete","r","d") && arguments.length >= 2){
 
                 String rawId = arguments[1];
@@ -108,6 +108,7 @@ public class FilterCommand extends BasicCommand {
                 manager.deleteFilter(filter);
                 sender.sendMessage(Messages.COMMAND_FILTER_DELETED,VariableSet.create()
                         .addDescribed("filter",filter));
+                return;
             }
         }
         sender.sendMessage(Messages.COMMAND_FILTER_HELP);

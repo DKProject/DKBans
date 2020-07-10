@@ -27,7 +27,8 @@ import org.mcnative.common.text.components.MessageComponent;
 
 public class Messages {
 
-    public static MessageComponent<?> PREFIX  = Text.ofMessageKey("dkbans.prefix");
+    public static MessageComponent<?> PREFIX = Text.ofMessageKey("dkbans.prefix");
+    public static MessageComponent<?> PREFIX_NETWORK  = Text.ofMessageKey("dkbans.prefix.network");
     public static MessageComponent<?> PREFIX_TEAMCHAT  = Text.ofMessageKey("dkbans.prefix.teamchat");
     public static MessageComponent<?> PREFIX_REPORT  = Text.ofMessageKey("dkbans.prefix.report");
 
@@ -101,8 +102,11 @@ public class Messages {
     public static MessageComponent<?> PUNISH_BAN_NOTIFY = Text.ofMessageKey("dkbans.punish.ban.notify");
 
     public static MessageComponent<?> PUNISH_MUTE_MESSAGE_PERMANENTLY = Text.ofMessageKey("dkbans.punish.mute.message.permanently");
-    public static MessageComponent<?> PUNISH_MUTE_MESSAGE_TEMPORARY = Text.ofMessageKey("dkbans.punish..mute.message.temporary");
+    public static MessageComponent<?> PUNISH_MUTE_MESSAGE_TEMPORARY = Text.ofMessageKey("dkbans.punish.mute.message.temporary");
     public static MessageComponent<?> PUNISH_MUTE_NOTIFY = Text.ofMessageKey("dkbans.punish.mute.notify");
+
+    public static MessageComponent<?> PUNISH_KICK_MESSAGE = Text.ofMessageKey("dkbans.punish.kick.message");
+    public static MessageComponent<?> PUNISH_KICK_NOTIFY = Text.ofMessageKey("dkbans.punish.kick.notify");
 
     public static MessageComponent<?> PUNISH_LIST_BAN = Text.ofMessageKey("dkbans.punish.list.ban");
     public static MessageComponent<?> PUNISH_LIST_MUTE = Text.ofMessageKey("dkbans.punish.list.mute");
@@ -136,19 +140,10 @@ public class Messages {
 
     public static MessageComponent<?> COMMAND_TEMPLATE_IMPORT = Text.ofMessageKey("dkbans.command.template.import");
 
-    public static MessageComponent<?> COMMAND_REPORT_LOGIN_ALREADY = Text.ofMessageKey("dkbans.command.report.login.already");
-    public static MessageComponent<?> COMMAND_REPORT_LOGIN_SUCCESS = Text.ofMessageKey("dkbans.command.report.login.success");
-
-    public static MessageComponent<?> COMMAND_REPORT_LOGOUT_ALREADY = Text.ofMessageKey("dkbans.command.report.logout.already");
-    public static MessageComponent<?> COMMAND_REPORT_LOGOUT_SUCCESS = Text.ofMessageKey("dkbans.command.report.logout.success");
-
-    public static MessageComponent<?> COMMAND_REPORT_TOGGLE_LOGIN = Text.ofMessageKey("dkbans.command.report.toggle.login");
-    public static MessageComponent<?> COMMAND_REPORT_TOGGLE_LOGOUT = Text.ofMessageKey("dkbans.command.report.toggle.logout");
-
+    public static MessageComponent<?> COMMAND_REPORT_HELP = Text.ofMessageKey("dkbans.command.report.help");
     public static MessageComponent<?> COMMAND_REPORT_TEMPLATE_NOT_EXIST = Text.ofMessageKey("dkbans.command.report.template.notExist");
     public static MessageComponent<?> COMMAND_REPORT_ALREADY_REPORTED = Text.ofMessageKey("dkbans.command.report.already.reported");
     public static MessageComponent<?> COMMAND_REPORT_REPORTED = Text.ofMessageKey("dkbans.command.report.reported");
-    public static MessageComponent<?> COMMAND_REPORT_NO_REASON = Text.ofMessageKey("dkbans.command.report.noReason");
     public static MessageComponent<?> COMMAND_REPORT_LIST_TEMPLATE = Text.ofMessageKey("dkbans.command.report.listTemplates");
 
     public static MessageComponent<?> COMMAND_REPORT_TAKE_USAGE = Text.ofMessageKey("dkbans.command.report.take.usage");

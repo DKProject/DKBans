@@ -52,7 +52,9 @@ public class OnlineTimeCommand extends BasicCommand {
         }else{
             MinecraftPlayer player = McNative.getInstance().getPlayerManager().getPlayer(arguments[0]);
             if(player == null){
-                sender.sendMessage(Messages.PLAYER_NOT_FOUND, VariableSet.create().add("name",arguments[0]));
+                sender.sendMessage(Messages.PLAYER_NOT_FOUND, VariableSet.create()
+                        .add("prefix",Messages.PREFIX_NETWORK)
+                        .add("name",arguments[0]));
                 return;
             }
             DKBansPlayer dkBansPlayer = player.getAs(DKBansPlayer.class);

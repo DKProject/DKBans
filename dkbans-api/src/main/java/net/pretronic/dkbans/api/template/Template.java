@@ -55,7 +55,7 @@ public interface Template {
     Document getData();
 
     default boolean hasName(String name){
-        if(getName().equalsIgnoreCase(name) || GeneralUtil.isNaturalNumber(name) && getId() == Integer.parseInt(name)) return true;
+        if(getName().equalsIgnoreCase(name) || GeneralUtil.isNaturalNumber(name) && getInGroupId() == Integer.parseInt(name)) return true;
         for (String alias : getAliases()){
             if(alias.equalsIgnoreCase(name)) return true;
         }

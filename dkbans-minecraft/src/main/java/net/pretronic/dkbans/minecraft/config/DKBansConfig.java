@@ -170,9 +170,10 @@ public class DKBansConfig {
                         break;
                     }
                     case "category": {
-                        category = dkBans.getTemplateManager().getTemplateCategory(entry.toPrimitive().getAsString());
+                        String categoryName = entry.toPrimitive().getAsString();
+                        category = dkBans.getTemplateManager().getTemplateCategory(categoryName);
                         if(category == null) {
-                            category = dkBans.getTemplateManager().createTemplateCategory(name, name);
+                            category = dkBans.getTemplateManager().createTemplateCategory(categoryName, categoryName);
                         }
                         break;
                     }

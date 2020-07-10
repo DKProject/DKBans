@@ -74,6 +74,6 @@ public class OneTimePunishCommand extends BasicCommand {
                 .historyType(historyType)
                 .reason(reason)
                 .execute();
-        CommandUtil.sendPunishResultMessage(sender,snapshot);
+        CommandUtil.sendPunishResultMessage(sender,dkBansPlayer,snapshot);
     }
 }

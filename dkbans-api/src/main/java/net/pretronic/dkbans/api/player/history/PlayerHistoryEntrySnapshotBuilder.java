@@ -66,6 +66,8 @@ public interface PlayerHistoryEntrySnapshotBuilder {
 
     PlayerHistoryEntrySnapshotBuilder modifiedBy(DKBansExecutor executor);
 
+    PlayerHistoryEntrySnapshotBuilder modifiedTime(long timestamp) ;
+
     PlayerHistoryEntrySnapshot execute();
 
 }

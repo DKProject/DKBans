@@ -265,7 +265,9 @@ public class DefaultDKBansStorage implements DKBansStorage {
 
     @Override
     public int insertHistoryEntrySnapshot(PlayerHistoryEntrySnapshot snapshot) {//@Todo optimize with group execution
-        historyVersion.update().set("ModifiedActive").where("HistoryId",snapshot.getEntry().getId()).execute();
+        historyVersion.update()
+                .set("ModifiedActive",false)
+                .where("HistoryId",snapshot.getEntry().getId()).execute();
         return buildSnapshotQuery(snapshot.getEntry().getId(),snapshot);
     }
 
@@ -316,8 +318,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
         if(skipActive){
             query.not(q -> q.where("ModifiedActive",true).where("Active",true)
                     .or(q1 -> q1.where("Timeout",-1).whereLower("Timeout",System.currentTimeMillis()))
-                    .orderBy("ModifiedTime", SearchOrder.DESC)
-                    .execute());
+                    .orderBy("ModifiedTime", SearchOrder.DESC)).execute();
         }
 
         QueryResult result0 = query.execute();
@@ -550,6 +551,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 .set("Time", time)
                 .set("ServerName", serverName)
                 .set("ServerId", serverId)
+                .set("Properties", "{}")
                 .executeAndGetGeneratedKeyAsInt("Id");
         return new DefaultPlayerReportEntry(id, report, reporter, template, null , serverName, serverId, time, Document.newDocument());
     }
@@ -565,6 +567,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 .set("Time", time)
                 .set("ServerName", serverName)
                 .set("ServerId", serverId)
+                .set("Properties", "{}")
                 .executeAndGetGeneratedKeyAsInt("Id");
         return new DefaultPlayerReportEntry(id, report, reporter, null, reason , serverName, serverId, time, Document.newDocument());
     }
@@ -678,6 +681,15 @@ public class DefaultDKBansStorage implements DKBansStorage {
         return getPlayerNotesByResult(player, this.playerNotes.find()
                 .where("PlayerId", player.getUniqueId())
                 .whereBetween("Time", startTime, endTime)
+                .orderBy("Time", SearchOrder.ASC)
+                .execute());
+    }
+
+    @Override
+    public List<PlayerNote> getPagePlayerNotes(DKBansPlayer player, int page, int sizePerPage) {
+        return getPlayerNotesByResult(player, this.playerNotes.find()
+                .where("PlayerId", player.getUniqueId())
+                .page(page,sizePerPage)
                 .orderBy("Time", SearchOrder.ASC)
                 .execute());
     }
@@ -860,7 +872,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
     }
 
     private DatabaseCollection createReportsCollection() {
-        return database.createCollection("dkbans_reports")
+        return database.createCollection("dkbans_report")
                 .field("Id", DataType.INTEGER, FieldOption.PRIMARY_KEY, FieldOption.AUTO_INCREMENT)
                 .field("PlayerId", DataType.UUID, FieldOption.NOT_NULL)
                 .field("WatcherId", DataType.UUID)

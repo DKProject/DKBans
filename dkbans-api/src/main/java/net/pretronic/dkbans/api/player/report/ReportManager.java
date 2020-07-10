@@ -20,11 +20,9 @@
 
 package net.pretronic.dkbans.api.player.report;
 
-import net.pretronic.dkbans.api.DKBansScope;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.template.report.ReportTemplate;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 

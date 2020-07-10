@@ -68,6 +68,7 @@ public class PlayerListener {
         DKBansPlayer player = event.getPlayer().getAs(DKBansPlayer.class);
 
         if(player.hasActivePunish(PunishmentType.BAN)){
+
             PlayerHistoryEntry ban = player.getHistory().getActiveEntry(PunishmentType.BAN);
             event.setCancelled(true);
             MessageComponent<?> message = ban.getCurrent().isPermanently()
@@ -109,7 +110,7 @@ public class PlayerListener {
                     .add("statusFormatted", report ? Messages.STAFF_STATUS_LOGIN :  Messages.STAFF_STATUS_LOGOUT));
         }
 
-        if(DKBansConfig.PLAYER_ON_JOIN_LIST_REPORTS){
+        if(DKBansConfig.PLAYER_ON_JOIN_LIST_REPORTS && player.hasPermission(Permissions.COMMAND_REPORT_STUFF)){
             int openReports = DKBans.getInstance().getReportManager().getOpenReports().size();
             player.sendMessage(Messages.REPORT_COUNT_INFO,VariableSet.create().add("openReports",openReports));
         }
@@ -133,8 +134,11 @@ public class PlayerListener {
     public void onPlayerChat(MinecraftPlayerChatEvent event){
         if(event.isCancelled()) return;
         DKBansPlayer player = event.getPlayer().getAs(DKBansPlayer.class);
+        boolean bypass = event.getPlayer().hasPermission(Permissions.CHAT_BYPASS);
 
-        if(DKBansConfig.CHAT_FILTER_ENABLED && checkBasicFilters(event, player)) return;
+        if(DKBansConfig.CHAT_FILTER_ENABLED
+                && !bypass
+                && checkBasicFilters(event, player)) return;
 
         PlayerHistoryEntry mute = player.getHistory().getActiveEntry(PunishmentType.MUTE);
         if(mute != null){

@@ -123,6 +123,8 @@ public interface DKBansStorage {
 
     List<PlayerNote> getBetweenPlayerNotes(DKBansPlayer player, long startTime, long endTime);
 
+    List<PlayerNote> getPagePlayerNotes(DKBansPlayer player,int page, int sizePerPage);
+
 
     //Filter
 

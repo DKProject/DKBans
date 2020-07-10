@@ -51,13 +51,17 @@ public class PingCommand extends BasicCommand {
 
         MinecraftPlayer player = McNative.getInstance().getPlayerManager().getPlayer(arguments[0]);
         if(player == null){
-            sender.sendMessage(Messages.PLAYER_NOT_FOUND,VariableSet.create().add("name",arguments[0]));
+            sender.sendMessage(Messages.PLAYER_NOT_FOUND,VariableSet.create()
+                    .add("prefix",Messages.PREFIX_NETWORK)
+                    .add("name",arguments[0]));
             return;
         }
 
         OnlineMinecraftPlayer onlinePlayer = player.getAsOnlinePlayer();
         if(onlinePlayer == null){
-            sender.sendMessage(Messages.PLAYER_NOT_ONLINE,VariableSet.create().addDescribed("player",player));
+            sender.sendMessage(Messages.PLAYER_NOT_ONLINE,VariableSet.create()
+                    .add("prefix",Messages.PREFIX_NETWORK)
+                    .addDescribed("player",player));
             return;
         }
 

@@ -56,11 +56,30 @@ public class DefaultPlayerHistoryEntrySnapshotBuilder implements PlayerHistoryEn
     private String revokeReason = null;
     private Template revokeTemplate = null;
     private DKBansExecutor modifier;
+    private long modifiedTime;
 
     public DefaultPlayerHistoryEntrySnapshotBuilder(DKBansPlayer player, PlayerHistoryEntry entry) {
         this.player = player;
         this.history = player.getHistory();
         this.entry = entry;
+
+        modifiedTime = -1;
+
+        if(entry != null){
+            PlayerHistoryEntrySnapshot snapshot = entry.getCurrent();
+            historyType = snapshot.getHistoryType();
+            punishmentType = snapshot.getPunishmentType();
+            reason = snapshot.getReason();
+            timeout = snapshot.getTimeout();
+            template = snapshot.getTemplate();
+            stuff = snapshot.getStuff();
+            scope = snapshot.getScope();
+            points = snapshot.getPoints();
+            active = snapshot.isActive();
+            properties = snapshot.getProperties();
+            revokeReason = snapshot.getRevokeReason();
+            revokeTemplate = snapshot.getRevokeTemplate();
+        }
     }
 
     @Override
@@ -151,16 +170,23 @@ public class DefaultPlayerHistoryEntrySnapshotBuilder implements PlayerHistoryEn
     }
 
     @Override
+    public PlayerHistoryEntrySnapshotBuilder modifiedTime(long timestamp) {
+        this.modifiedTime = timestamp;
+        return this;
+    }
+
+    @Override
     public PlayerHistoryEntrySnapshot execute() {
         Validate.notNull(stuff,player,historyType,reason);
 
         if(modifier == null) modifier = stuff;
+        if(modifiedTime <= 0) modifiedTime = System.currentTimeMillis();
 
         DefaultPlayerHistoryEntrySnapshot snapshot;
         if(entry == null){
             snapshot = new DefaultPlayerHistoryEntrySnapshot(null, -1, historyType, punishmentType,
                     reason, timeout, template, stuff.getUniqueId(), scope, points, active, properties, revokeReason, revokeTemplate,
-                    true, System.currentTimeMillis(), modifier.getUniqueId());
+                    true, modifiedTime, modifier.getUniqueId());
 
             Pair<PlayerHistoryEntry, Integer> result = DKBans.getInstance().getStorage().createHistoryEntry(player, snapshot);
             snapshot.setInsertResult(result);
@@ -170,7 +196,7 @@ public class DefaultPlayerHistoryEntrySnapshotBuilder implements PlayerHistoryEn
             PlayerHistoryEntrySnapshot old =
             snapshot = new DefaultPlayerHistoryEntrySnapshot(entry, -1, historyType,
                     punishmentType, reason, timeout, template, stuff.getUniqueId(), scope, points, active, properties, revokeReason,
-                    revokeTemplate, true, System.currentTimeMillis(), modifier.getUniqueId());
+                    revokeTemplate, true, modifiedTime, modifier.getUniqueId());
             int id = DKBans.getInstance().getStorage().insertHistoryEntrySnapshot(snapshot);
             snapshot.setId(id);
             ((DefaultPlayerHistoryEntry)entry).setCurrent(snapshot);
