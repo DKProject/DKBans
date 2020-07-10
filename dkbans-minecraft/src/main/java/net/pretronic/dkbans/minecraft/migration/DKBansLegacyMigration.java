@@ -216,6 +216,7 @@ public class DKBansLegacyMigration extends Migration {
                 if(historyType == null) historyType = DKBans.getInstance().getHistoryManager().createHistoryType(entry.getPoints().getHistoryType().name());
                 builder.historyType(historyType);
                 builder.properties(DocumentFileType.JSON.getReader().read(entry.getProperties().toJson()));
+                builder.modifiedTime(entry.getTimeStamp());
 
                 if(entry instanceof Ban) {
                     PlayerHistoryEntry historyEntry = migrateBanEntry(builder, ((Ban) entry));

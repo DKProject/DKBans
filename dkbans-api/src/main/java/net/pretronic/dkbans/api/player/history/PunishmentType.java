@@ -20,13 +20,14 @@
 
 package net.pretronic.dkbans.api.player.history;
 
+import net.pretronic.libraries.message.bml.variable.describer.VariableObjectToString;
 import net.pretronic.libraries.utility.Iterators;
 import net.pretronic.libraries.utility.Validate;
 
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class PunishmentType {
+public class PunishmentType implements VariableObjectToString {
 
     private static final Collection<PunishmentType> REGISTRY = new ArrayList<>();
 
@@ -67,5 +68,10 @@ public class PunishmentType {
         PunishmentType punishmentType = new PunishmentType(name);
         REGISTRY.add(punishmentType);
         return punishmentType;
+    }
+
+    @Override
+    public String toStringVariable() {
+        return name;
     }
 }

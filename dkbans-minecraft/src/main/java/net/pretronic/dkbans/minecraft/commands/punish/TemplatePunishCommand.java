@@ -22,6 +22,7 @@ package net.pretronic.dkbans.minecraft.commands.punish;
 
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryEntrySnapshot;
+import net.pretronic.dkbans.api.template.Template;
 import net.pretronic.dkbans.api.template.TemplateGroup;
 import net.pretronic.dkbans.api.template.punishment.PunishmentTemplate;
 import net.pretronic.dkbans.api.template.punishment.PunishmentTemplateEntry;
@@ -60,7 +61,10 @@ public class TemplatePunishCommand extends BasicCommand {
             return;
         }
         if(!sender.hasPermission(template.getPermission())){
-            sender.sendMessage(Messages.PUNISH_TEMPLATE_NO_PERMISSION, VariableSet.create().addDescribed("template",template));
+            sender.sendMessage(Messages.PUNISH_TEMPLATE_NO_PERMISSION,
+                    VariableSet.create()
+                            .add("prefix",Messages.PREFIX)
+                            .addDescribed("template",template));
             return;
         }
 
@@ -92,11 +96,17 @@ public class TemplatePunishCommand extends BasicCommand {
 
         PlayerHistoryEntrySnapshot result = dkBansPlayer.punish(CommandUtil.getExecutor(sender),template);
         if(message != null) result.getEntry().createNote(CommandUtil.getExecutor(sender),message);
-        CommandUtil.sendPunishResultMessage(sender,result);
+        CommandUtil.sendPunishResultMessage(sender,dkBansPlayer,result);
     }
 
     private void sendTemplates(CommandSender sender){
+        System.out.println("Templates:");
+        for (Template template : templates.getTemplates()) {
+            System.out.println(template.getName());
+        }
+
         sender.sendMessage(Messages.PUNISH_TEMPLATE_LIST,VariableSet.create()
+                .add("prefix",Messages.PREFIX)
                 .add("templates",templates.getTemplates())
                 .add("command",getConfiguration().getName()));
     }

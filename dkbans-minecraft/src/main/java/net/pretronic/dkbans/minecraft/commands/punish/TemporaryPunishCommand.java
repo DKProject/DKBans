@@ -88,6 +88,6 @@ public class TemporaryPunishCommand extends BasicCommand {
                 .duration(duration)
                 .reason(reason)
                 .execute();
-        CommandUtil.sendPunishResultMessage(sender,result);
+        CommandUtil.sendPunishResultMessage(sender,dkBansPlayer,result);
     }
 }

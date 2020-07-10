@@ -56,7 +56,8 @@ public class ChatLogCommand extends BasicCommand {
             String playerName = args[1];
             MinecraftPlayer player = McNative.getInstance().getPlayerManager().getPlayer(playerName);
             if(player == null) {
-                sender.sendMessage(Messages.PLAYER_NOT_FOUND, VariableSet.create().add("name", playerName));
+                sender.sendMessage(Messages.PLAYER_NOT_FOUND, VariableSet.create()
+                        .add("name", playerName));
                 return;
             }
             ChatLog chatLog = DKBans.getInstance().getChatLogManager().getPlayerChatLog(player.getUniqueId());
@@ -67,7 +68,7 @@ public class ChatLogCommand extends BasicCommand {
             try {
                 UUID serverId = Convert.toUUID(server0);
                 chatLog = DKBans.getInstance().getChatLogManager().getServerChatLog(serverId);
-            } catch (IllegalArgumentException ignored) {
+            } catch (Exception ignored) {
                 chatLog = DKBans.getInstance().getChatLogManager().getServerChatLog(server0);
             }
             printChatLog(sender, chatLog, args);
@@ -82,6 +83,7 @@ public class ChatLogCommand extends BasicCommand {
             page = Convert.toInteger(args[2]);
         }
         List<ChatLogEntry> entries = chatLog.getPage(page, 10);
-        sender.sendMessage(Messages.COMMAND_CHATLOG_LIST, VariableSet.create().addDescribed("entries", entries));
+        sender.sendMessage(Messages.COMMAND_CHATLOG_LIST, VariableSet.create()
+                .addDescribed("entries", entries));
     }
 }

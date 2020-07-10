@@ -64,7 +64,7 @@
         <plugin.maven.deploy>3.0.0-M1</plugin.maven.deploy>
 
         <!-- Dependency version -->
-        <dependency.pretronic.libraries>1.2.4.140-SNAPSHOT</dependency.pretronic.libraries>
+        <dependency.pretronic.libraries>1.2.12.149-SNAPSHOT</dependency.pretronic.libraries>
         <dependency.mcnative.version>1.3.59.252-SNAPSHOT</dependency.mcnative.version>
         <dependency.pretronic.databasequery>1.2.21.47-SNAPSHOT</dependency.pretronic.databasequery>
 

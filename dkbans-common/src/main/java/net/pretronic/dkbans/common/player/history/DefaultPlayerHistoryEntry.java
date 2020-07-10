@@ -30,6 +30,7 @@ import net.pretronic.dkbans.api.player.session.PlayerSession;
 import net.pretronic.dkbans.api.template.unpunishment.UnPunishmentTemplate;
 import net.pretronic.libraries.utility.Validate;
 import net.pretronic.libraries.utility.annonations.Internal;
+import net.pretronic.libraries.utility.duration.DurationProcessor;
 
 import java.util.Iterator;
 import java.util.List;
@@ -127,5 +128,10 @@ public class DefaultPlayerHistoryEntry implements PlayerHistoryEntry {
         Validate.notNull(current);
         this.current = current;
         if(snapshots != null) snapshots.add(current);
+    }
+
+    @Internal
+    public String getRemainingFormatted(){//@Todo make configurable
+        return DurationProcessor.getStandard().formatShort(getCurrent().getTimeout()-System.currentTimeMillis());
     }
 }

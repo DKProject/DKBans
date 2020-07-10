@@ -26,6 +26,7 @@ import net.pretronic.dkbans.api.player.report.PlayerReportEntry;
 import net.pretronic.dkbans.api.template.Template;
 import net.pretronic.dkbans.api.template.TemplateGroup;
 import net.pretronic.dkbans.api.template.report.ReportTemplate;
+import net.pretronic.dkbans.minecraft.commands.CommandUtil;
 import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.libraries.command.NotFindable;
 import net.pretronic.libraries.command.command.MainCommand;
@@ -35,6 +36,7 @@ import net.pretronic.libraries.message.bml.variable.VariableSet;
 import net.pretronic.libraries.utility.Iterators;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
 import org.mcnative.common.McNative;
+import org.mcnative.common.player.MinecraftPlayer;
 import org.mcnative.common.player.OnlineMinecraftPlayer;
 
 import java.util.List;
@@ -81,21 +83,29 @@ public class ReportCommand extends MainCommand implements NotFindable {
             sender.sendMessage(Messages.ERROR_ONLY_PLAYER);
             return;
         }
+
         OnlineMinecraftPlayer player = (OnlineMinecraftPlayer) sender;
-        if(playerIdentifier == null && args.length == 0) {
+        if(playerIdentifier == null || playerIdentifier.length() == 0) {
             list(player);
             return;
         }
-        OnlineMinecraftPlayer target = McNative.getInstance().getLocal().getOnlinePlayer(playerIdentifier);
+
+        MinecraftPlayer target0 = CommandUtil.getPlayer(sender,playerIdentifier,true);
+        if(target0 == null) return;
+
+        OnlineMinecraftPlayer target = target0.getAsOnlinePlayer();
         if(target == null) {
-            player.sendMessage(Messages.PLAYER_NOT_FOUND);
+            player.sendMessage(Messages.PLAYER_NOT_ONLINE,VariableSet.create()
+                    .add("name",playerIdentifier)
+                    .addDescribed("player",target0)
+                    .add("prefix",Messages.PREFIX));
             return;
         }
-        if(args.length < 2) {
+        if(args.length < 1) {
             list(player);
             return;
         }
-        String reason = args[1];
+        String reason = args[0];
         if(this.templateGroup != null) {
             Template template = this.templateGroup.getTemplate(reason);
             if(!(template instanceof ReportTemplate)) {
@@ -112,7 +122,7 @@ public class ReportCommand extends MainCommand implements NotFindable {
 
     private void list(OnlineMinecraftPlayer player) {
         if(this.templateGroup == null) {
-            player.sendMessage(Messages.COMMAND_REPORT_NO_REASON);
+            player.sendMessage(Messages.COMMAND_REPORT_HELP);
         } else {
             List<Template> availableTemplates = Iterators.filter(this.templateGroup.getTemplates(), template -> template instanceof ReportTemplate
                     && player.hasPermission(template.getPermission()));

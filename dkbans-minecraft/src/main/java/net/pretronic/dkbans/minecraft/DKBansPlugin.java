@@ -25,15 +25,20 @@ import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.history.PunishmentType;
 import net.pretronic.dkbans.api.template.TemplateGroup;
 import net.pretronic.dkbans.common.DefaultDKBans;
+import net.pretronic.dkbans.common.filter.DefaultFilter;
 import net.pretronic.dkbans.common.player.DefaultDKBansPlayer;
+import net.pretronic.dkbans.common.player.chatlog.DefaultChatLogEntry;
+import net.pretronic.dkbans.common.player.chatlog.DefaultPlayerChatLog;
 import net.pretronic.dkbans.common.player.history.DefaultPlayerHistory;
 import net.pretronic.dkbans.common.player.history.DefaultPlayerHistoryEntry;
 import net.pretronic.dkbans.common.player.history.DefaultPlayerHistoryEntrySnapshot;
 import net.pretronic.dkbans.common.player.history.DefaultPlayerHistoryType;
 import net.pretronic.dkbans.common.player.note.DefaultPlayerNote;
+import net.pretronic.dkbans.common.player.report.DefaultPlayerReport;
 import net.pretronic.dkbans.common.template.DefaultTemplate;
 import net.pretronic.dkbans.common.template.DefaultTemplateCategory;
 import net.pretronic.dkbans.common.template.DefaultTemplateGroup;
+import net.pretronic.dkbans.common.template.punishment.DefaultPunishmentTemplate;
 import net.pretronic.dkbans.minecraft.commands.*;
 import net.pretronic.dkbans.minecraft.commands.dkbans.DKBansCommand;
 import net.pretronic.dkbans.minecraft.commands.history.MyHistoryPointsCommand;
@@ -161,15 +166,22 @@ public class DKBansPlugin extends MinecraftPlugin {
     private void registerDescribers(){
         VariableDescriberRegistry.registerDescriber(DefaultPlayerHistory.class);
         VariableDescriberRegistry.registerDescriber(DefaultPlayerHistoryEntrySnapshot.class);
-        VariableDescriberRegistry.registerDescriber(DefaultPlayerHistoryEntry.class);
         VariableDescriberRegistry.registerDescriber(DefaultPlayerHistoryType.class);
         VariableDescriberRegistry.registerDescriber(DefaultPlayerNote.class);
+        VariableDescriberRegistry.registerDescriber(DefaultPlayerChatLog.class);
+        VariableDescriberRegistry.registerDescriber(DefaultChatLogEntry.class);
+        VariableDescriberRegistry.registerDescriber(DefaultFilter.class);
+        VariableDescriberRegistry.registerDescriber(DefaultPlayerReport.class);
 
         VariableDescriberRegistry.registerDescriber(DefaultTemplate.class);
         VariableDescriberRegistry.registerDescriber(DefaultTemplateCategory.class);
         VariableDescriberRegistry.registerDescriber(DefaultTemplateGroup.class);
+        VariableDescriberRegistry.registerDescriber(DefaultPunishmentTemplate.class);
 
         VariableDescriber<DefaultDKBansPlayer> playerDescriber = VariableDescriberRegistry.registerDescriber(DefaultDKBansPlayer.class);
         playerDescriber.setForwardFunction(player -> McNative.getInstance().getPlayerManager().getPlayer(player.getUniqueId()));
+
+        VariableDescriber<DefaultPlayerHistoryEntry> entryDescriber =  VariableDescriberRegistry.registerDescriber(DefaultPlayerHistoryEntry.class);
+        entryDescriber.setForwardFunction(DefaultPlayerHistoryEntry::getCurrent);
     }
 }

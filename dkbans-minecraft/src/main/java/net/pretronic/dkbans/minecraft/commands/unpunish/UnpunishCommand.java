@@ -68,6 +68,6 @@ public class UnpunishCommand extends BasicCommand {
         if(arguments.length >= 2) reason = CommandUtil.readStringFromArguments(arguments,1);
 
         PlayerHistoryEntrySnapshot result = entry.unpunish(CommandUtil.getExecutor(sender),reason);
-        CommandUtil.sendUnpunishResultMessage(sender,result);
+        CommandUtil.sendUnpunishResultMessage(sender,dkBansPlayer,result);
     }
 }

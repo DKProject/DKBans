@@ -78,6 +78,12 @@
         </dependency>
         <dependency>
             <groupId>net.pretronic.libraries</groupId>
+            <artifactId>pretroniclibraries-message</artifactId>
+            <version>${dependency.pretronic.libraries}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.pretronic.libraries</groupId>
             <artifactId>pretroniclibraries-caching</artifactId>
             <version>${dependency.pretronic.libraries}</version>
             <scope>provided</scope>

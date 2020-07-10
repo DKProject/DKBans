@@ -87,7 +87,7 @@ public class DefaultPlayerNoteList implements PlayerNoteList {
 
     @Override
     public List<PlayerNote> getPage(int page, int sizePerPage) {
-        throw new UnsupportedOperationException();
+        return DKBans.getInstance().getStorage().getPagePlayerNotes(player,page,sizePerPage);
     }
 
 

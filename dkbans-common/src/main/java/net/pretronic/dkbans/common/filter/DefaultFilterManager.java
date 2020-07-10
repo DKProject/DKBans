@@ -73,7 +73,9 @@ public class DefaultFilterManager implements FilterManager {
     public Filter createFilter(String area, FilterOperation operation, String value) {
         Validate.notNull(operation,area,value);
         int id = DKBans.getInstance().getStorage().createFilter(area,operation.getName(),value);
-        return new DefaultFilter(id,area,operation,value);
+        Filter filter = new DefaultFilter(id,area,operation,value);
+        this.filters.add(filter);
+        return filter;
     }
 
     @Override

@@ -51,26 +51,31 @@ public class JumptoCommand extends BasicCommand {
 
         OnlineMinecraftPlayer onlinePlayer = player.getAsOnlinePlayer();
         if(onlinePlayer == null){
-            sender.sendMessage(Messages.PLAYER_NOT_ONLINE, VariableSet.create().add("player",player));
+            sender.sendMessage(Messages.PLAYER_NOT_ONLINE, VariableSet.create()
+                    .add("prefix",Messages.PREFIX_NETWORK)
+                    .addDescribed("player",player));
             return;
         }
 
         MinecraftServer server = onlinePlayer.getServer();
         if(server == null){
-            sender.sendMessage(Messages.SERVER_NOT_FOUND, VariableSet.create());
+            sender.sendMessage(Messages.SERVER_NOT_FOUND, VariableSet.create()
+                    .add("prefix",Messages.PREFIX_NETWORK));
             return;
         }
 
         if(server.getName().equals(((OnlineMinecraftPlayer) sender).getServer().getName())){
             sender.sendMessage(Messages.SERVER_ALREADY_CONNECTED, VariableSet.create()
-                    .add("player",player)
-                    .add("server",server));
+                    .add("prefix",Messages.PREFIX_NETWORK)
+                    .addDescribed("player",player)
+                    .addDescribed("server",server));
             return;
         }
 
         sender.sendMessage(Messages.SERVER_CONNECTING, VariableSet.create()
-                .add("player",player)
-                .add("server",server));
+                .add("prefix",Messages.PREFIX_NETWORK)
+                .addDescribed("player",player)
+                .addDescribed("server",server));
         ((OnlineMinecraftPlayer) sender).connect(server);
     }
 }
