@@ -20,6 +20,9 @@
 
 package net.pretronic.dkbans.minecraft.commands;
 
+import net.pretronic.dkbans.api.DKBans;
+import net.pretronic.dkbans.api.joinme.JoinMe;
+import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.minecraft.PlayerSettingsKey;
 import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.dkbans.minecraft.config.Permissions;
@@ -28,10 +31,12 @@ import net.pretronic.libraries.command.command.configuration.CommandConfiguratio
 import net.pretronic.libraries.command.sender.CommandSender;
 import net.pretronic.libraries.utility.Convert;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
+import org.mcnative.common.McNative;
 import org.mcnative.common.player.OnlineMinecraftPlayer;
 import org.mcnative.common.player.PlayerSetting;
 
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 public class JoinMeCommand extends BasicCommand {
 
@@ -62,7 +67,9 @@ public class JoinMeCommand extends BasicCommand {
             try {
                 UUID joinMeCreator = Convert.toUUID(args[0]);
 
+                JoinMe joinMe = DKBans.getInstance().getJoinMeManager().getJoinMe(joinMeCreator);
 
+                player.connect(McNative.getInstance().getNetwork().getServer(joinMe.getServer()));
             } catch (Exception exception) {
                 player.sendMessage(Messages.COMMAND_JOINME_NOT_EXIST);
             }
@@ -72,6 +79,6 @@ public class JoinMeCommand extends BasicCommand {
     }
 
     private void sendJoinMe(OnlineMinecraftPlayer player) {
-
+        DKBans.getInstance().getJoinMeManager().sendJoinMe(player.getAs(DKBansPlayer.class), player.getServer().getName(), 5*1000*60);
     }
 }
