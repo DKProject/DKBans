@@ -42,6 +42,7 @@
                     <target>8</target>
                 </configuration>
             </plugin>
+
             <plugin>
                 <groupId>org.mcnative</groupId>
                 <artifactId>mcnative-buildtool-maven</artifactId>
