@@ -206,8 +206,8 @@ public class Config extends SimpleConfig {
         this.reportControls = addAndGetBooleanValue("report.controls",true);
         this.reportDelay = addAndGetLongValue("report.delay",900000);
         this.reportAutoCommandExecuteOnProxy = addAndGetBooleanValue("report.autocommand.onproxy",false);
-        this.reportAutoCommandEnter = addAndGetStringListValue("report.autocommand.enter", Arrays.asList());//"tp [player]"
-        this.reportAutoCommandExit = addAndGetStringListValue("report.autocommand.exit", Arrays.asList());
+        //this.reportAutoCommandEnter = addAndGetStringListValue("report.autocommand.enter", Arrays.asList());//"tp [player]"
+      //  this.reportAutoCommandExit = addAndGetStringListValue("report.autocommand.exit", Arrays.asList());
 
         this.warnMode = ReasonMode.parse(addAndGetStringValue("warn.mode",ReasonMode.TEMPLATE.toString()));
         this.warnStaffName = addAndGetStringValue("warn.staffname","WarnManager");
@@ -226,7 +226,7 @@ public class Config extends SimpleConfig {
         this.joinMeCooldown = addAndGetLongValue("joinme.cooldown",120000L);
         this.joinMeTimeOut = addAndGetLongValue("joinme.timeout",300000);
         this.joinMeDisabledServerEquals = addAndGetBooleanValue("joinme.disabledservers.equals",false);
-        this.joinMeDisabledServerList = addAndGetStringListValue("joinme.disabledservers.list", Arrays.asList("lobby"));
+       // this.joinMeDisabledServerList = addAndGetStringListValue("joinme.disabledservers.list", Arrays.asList("lobby"));
 
         this.onJoinChatClear = addAndGetBooleanValue("player.onjoin.chatclear",true);
         this.onJoinTeamChatInfo = addAndGetBooleanValue("player.onjoin.teamchatinfo",true);
@@ -234,8 +234,9 @@ public class Config extends SimpleConfig {
         this.onJoinReportSize = addAndGetBooleanValue("player.onjoin.reportsize",true);
 
         this.tabCompleteBlockEnabled = addAndGetBooleanValue("tabcomplete.block.enabled",true);
-        List<String> tabOptions = addAndGetStringListValue("tabcomplete.options",Arrays.asList("dkbans.ban:/ban","dkbans.kick:/kick","/report"));
+       // List<String> tabOptions = addAndGetStringListValue("tabcomplete.options",Arrays.asList("dkbans.ban:/ban","dkbans.kick:/kick","/report"));
         this.tabCompleteOptions = new ArrayList<>();
+       /*
         for(String tabOption : tabOptions){
             try{
                 String[] split = tabOption.split(":");
@@ -244,6 +245,7 @@ public class Config extends SimpleConfig {
                 this.tabCompleteOptions.add(new TabCompleteOption(null,tabOption));
             }
         }
+        */
 
         this.chatBlockPlugin = addAndGetBooleanValue("chat.block.plugin",true);
         this.chatDelay = addAndGetLongValue("chat.delay",500);
@@ -267,6 +269,7 @@ public class Config extends SimpleConfig {
         this.playerColorDefault = addAndGetMessageValue("player.color.default","&8");
         this.playerColorConsole = addAndGetMessageValue("player.color.console","&4");
         this.playerColorColors = new ArrayList<>();
+        /*
         List<String> colors = addAndGetStringListValue("player.color.colors",Arrays.asList("dkbans.color.admin:&4"
                 ,"dkbans.color.developer:&b","dkbans.color.mod:&c","dkbans.color.supporter:&9","dkbans.color.builder:&3"
                 ,"dkbans.color.youtuber:&5","dkbans.color.premium:&6"));
@@ -276,6 +279,7 @@ public class Config extends SimpleConfig {
                 this.playerColorColors.add(new PlayerColor(split[0], split[1]));
             }catch (Exception exception){}
         }
+         */
 
         this.chatlogEnabled = addAndGetBooleanValue("chat.log.enabled",true);
         this.chatlogAutoDeleteEnabled = addAndGetBooleanValue("chat.log.autodelete.enabled",true);

@@ -22,9 +22,8 @@ package ch.dkrieger.bansystem.lib.config;
 
 import ch.dkrieger.bansystem.lib.Messages;
 import ch.dkrieger.bansystem.lib.utils.GeneralUtil;
-import net.md_5.bungee.config.Configuration;
-import net.md_5.bungee.config.ConfigurationProvider;
-import net.md_5.bungee.config.YamlConfiguration;
+import net.pretronic.libraries.document.Document;
+import net.pretronic.libraries.document.type.DocumentFileType;
 
 import java.io.File;
 import java.util.Collection;
@@ -34,7 +33,7 @@ import java.util.List;
 public abstract class SimpleConfig {
 
     private transient final File file;
-    private transient Configuration config;
+    private transient Document config;
 
     public SimpleConfig(File file) {
         this.file = file;
@@ -59,26 +58,17 @@ public abstract class SimpleConfig {
         save();
     }
     public void save(){
-        if(file == null || !file.exists()) return;
-        try {
-            ConfigurationProvider.getProvider(YamlConfiguration.class).save(this.config,file);
-        }catch (Exception exception) {
-            System.out.println(Messages.SYSTEM_PREFIX+"Could not save config file.");
-            System.out.println(Messages.SYSTEM_PREFIX+"Error: "+exception.getMessage());
-        }
+
     }
     public void load(){
         if(file == null) return;
         try{
             if(file.exists()) file.createNewFile();
-            this.config = ConfigurationProvider.getProvider(YamlConfiguration.class).load(file);
+            this.config = DocumentFileType.YAML.getReader().read(file);
         }catch (Exception exception){
             System.out.println(Messages.SYSTEM_PREFIX+"Could not load config file.");
             System.out.println(Messages.SYSTEM_PREFIX+"Error: "+exception.getMessage());
         }
-    }
-    public void setValue(String path, Object value){
-        this.config.set(path,value);
     }
     public void addValue(String path, Object value){
         if(!this.config.contains(path))this.config.set(path,value);
@@ -86,42 +76,14 @@ public abstract class SimpleConfig {
     public String getStringValue(String path){
         return this.config.getString(path);
     }
-    public int getIntValue(String path){
-        return this.config.getInt(path);
-    }
-    public double getDoubleValue(String path){
-        return this.config.getDouble(path);
-    }
-    public long getLongValue(String path){
-        return this.config.getLong(path);
-    }
-    public boolean getBooleanValue(String path){
-        return this.config.getBoolean(path);
-    }
-    public List<String> getStringListValue(String path){
-        return this.config.getStringList(path);
-    }
-    public List<String> getMessageListValue(String path) {
-        List<String> messages = new LinkedList<>();
-        getStringListValue(path).forEach((message)-> messages.add(message));
-        return messages;
-    }
-    public List<Integer> getIntListValue(String path){
-        return this.config.getIntList(path);
-    }
-    public List<Double> getDoubleListValue(String path){
-        return this.config.getDoubleList(path);
-    }
-    public List<Long> getLongListValue(String path){
-        return this.config.getLongList(path);
-    }
-    public List<Boolean> getBooleanListValue(String path){
-        return this.config.getBooleanList(path);
-    }
+
+
+    /*
     public Object getValue(String path){
         return this.config.getStringList(path);
     }
 
+     */
     public String addAndGetStringValue(String path, Object object){
         addValue(path,object);
         return this.config.getString(path);
@@ -148,45 +110,12 @@ public abstract class SimpleConfig {
         addValue(path,object);
         return this.config.getBoolean(path);
     }
-    public List<String> addAndGetStringListValue(String path,Object object){
-        addValue(path,object);
-        return this.config.getStringList(path);
-    }
-    public List<String> addAndGetMessageListValue(String path, Object object) {
-        addValue(path, object);
-        return getMessageListValue(path);
-    }
-    public List<Integer> addAndGetIntListValue(String path,Object object){
-        addValue(path,object);
-        return this.config.getIntList(path);
-    }
-    public List<Double> addAndGetDoubleListValue(String path,Object object){
-        addValue(path,object);
-        return this.config.getDoubleList(path);
-    }
 
-    public List<Long> addAndGetLongListValue(String path,Object object){
-        addValue(path,object);
-        return this.config.getLongList(path);
-    }
-    public List<Boolean> addAndGetBooleanListValue(String path,Object object){
-        addValue(path,object);
-        return this.config.getBooleanList(path);
-    }
     public char addAndGetCharValue(String path,Object object){
         addValue(path,object);
-        return this.config.getChar(path);
-    }
-    public Object addAndGetValue(String path,Object object){
-        addValue(path,object);
-        return this.config.getStringList(path);
+        return this.config.getCharacter(path);
     }
 
-    public Collection<String> getKeys(String path){
-        Configuration config = this.config.getSection(path);
-        if(config != null) return config.getKeys();
-        else return new LinkedList<>();
-    }
     public Boolean contains(String path){
         return this.config.contains(path);
     }
