@@ -37,17 +37,22 @@ public class DefaultPlayerHistoryManager implements PlayerHistoryManager {
 
     @Override
     public PunishmentList getActivePunishments() {
-        return null;
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public PunishmentList getActivePunishments(PunishmentType type) {
+        return new DefaultPunishmentList(type);
     }
 
     @Override
     public PunishmentList getActivePunishments(PunishmentType type, DKBansScope scope) {
-        return null;
+        return new DefaultPunishmentList(type);//@Todo add scope check
     }
 
     @Override
     public PlayerHistoryEntry getHistoryEntry(int id) {
-        return null;
+        return DKBans.getInstance().getStorage().loadEntry(id);
     }
 
     @Override

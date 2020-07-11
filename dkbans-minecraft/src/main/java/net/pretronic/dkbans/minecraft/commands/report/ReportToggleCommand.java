@@ -48,8 +48,8 @@ public class ReportToggleCommand extends BasicCommand {
         }
         OnlineMinecraftPlayer player = (OnlineMinecraftPlayer) sender;
 
-        PlayerSetting setting = player.getSetting("DKBans", PlayerSettingsKey.REPORT_CHAT_LOGIN);
-        changeLogin(player, setting.getBooleanValue(), !setting.getBooleanValue());
+        boolean current = player.hasSetting("DKBans", PlayerSettingsKey.REPORT_CHAT_LOGIN,true);
+        changeLogin(player, current,  !current);
     }
 
 

@@ -1,9 +1,8 @@
 /*
  * (C) Copyright 2020 The DKBans Project (Davide Wietlisbach & Philipp Elvin Friedhoff)
  *
- * @author Philipp Elvin Friedhoff
- * @since 21.06.20, 17:26
- * @web %web%
+ * @author Davide Wietlisbach
+ * @since 11.07.20, 10:16
  *
  * The DKBans Project is under the Apache License, version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,12 +17,13 @@
  * under the License.
  */
 
-package net.pretronic.dkbans.minecraft.commands.punish;
+package net.pretronic.dkbans.minecraft.commands.history;
 
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.history.PlayerHistory;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryEntry;
 import net.pretronic.dkbans.minecraft.commands.CommandUtil;
+import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.libraries.command.command.BasicCommand;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
 import net.pretronic.libraries.command.sender.CommandSender;
@@ -43,23 +43,19 @@ public class HistoryCommand extends BasicCommand {
     @Override
     public void execute(CommandSender sender, String[] arguments) {
         if(arguments.length < 1){
-            //@Todo usage
+            sender.sendMessage(Messages.COMMAND_HISTORY_HELP);
             return;
         }
 
-        MinecraftPlayer player = CommandUtil.getPlayer(sender,arguments[0],true);
+        MinecraftPlayer player = CommandUtil.getPlayer(sender,arguments[0]);
         if(player == null) return;
         DKBansPlayer dkBansPlayer = player.getAs(DKBansPlayer.class);
 
         PlayerHistory history = dkBansPlayer.getHistory();
 
-        int page = 1;
-        if(arguments.length > 1 && GeneralUtil.isNaturalNumber(arguments[1])){
-            page = Integer.parseInt(arguments[1]);
-        }
-
-        Collection<PlayerHistoryEntry> entries = history.getEntries(page,25);
-        sender.sendMessage(null, VariableSet.create().addDescribed("entries",entries));
-        //@Todo find solution for formatting
+        Collection<PlayerHistoryEntry> entries = history.getEntries();
+        sender.sendMessage(Messages.COMMAND_HISTORY_LIST, VariableSet.create()
+                .addDescribed("player",dkBansPlayer)
+                .addDescribed("entries",entries));
     }
 }

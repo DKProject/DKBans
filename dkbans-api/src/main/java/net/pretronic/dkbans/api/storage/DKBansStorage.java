@@ -73,6 +73,13 @@ public interface DKBansStorage {
 
     List<PlayerHistoryEntry> loadEntries(PlayerHistory history);
 
+    PlayerHistoryEntry loadEntry(int id);
+
+
+    List<PlayerHistoryEntry> getActiveEntries(PunishmentType type);
+
+    List<PlayerHistoryEntry> getActiveEntriesOnPage(PunishmentType type, int page, int pageSize);
+
 
     List<PlayerHistoryEntrySnapshot> loadSnapshots(PlayerHistoryEntry entry);
 
@@ -81,6 +88,12 @@ public interface DKBansStorage {
 
     Collection<PlayerHistoryType> loadPlayerHistoryTypes();
 
+
+    void clearHistory(UUID uniqueId);
+
+    void clearHistoryEntry(int id);
+
+    void clearHistoryEntry(Collection<PlayerHistoryEntry> entries);
 
 
     TemplateGroup createTemplateGroup(String name, TemplateType templateType, CalculationType calculationType);

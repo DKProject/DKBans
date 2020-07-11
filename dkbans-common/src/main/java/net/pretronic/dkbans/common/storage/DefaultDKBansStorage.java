@@ -66,6 +66,7 @@ import net.pretronic.libraries.utility.map.Pair;
 import java.net.InetAddress;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Function;
 
 public class DefaultDKBansStorage implements DKBansStorage {
 
@@ -299,7 +300,8 @@ public class DefaultDKBansStorage implements DKBansStorage {
     @Override
     public List<PlayerHistoryEntry> loadActiveEntries(PlayerHistory playerHistory) {
         List<PlayerHistoryEntry> result = new ArrayList<>();
-        QueryResult result0 = createBaseQuery(playerHistory)
+        QueryResult result0 = createBaseQuery()
+                .where("PlayerId",playerHistory.getPlayer().getUniqueId())
                 .where("ModifiedActive",true).where("Active",true)
                 .or(query -> query.where("Timeout",-1).whereHigher("Timeout",System.currentTimeMillis()))
                 .orderBy("ModifiedTime", SearchOrder.DESC)
@@ -313,11 +315,75 @@ public class DefaultDKBansStorage implements DKBansStorage {
     public List<PlayerHistoryEntry> loadEntries(PlayerHistory playerHistory) {
         List<PlayerHistoryEntry> result = new ArrayList<>();
 
-        FindQuery query = createBaseQuery(playerHistory);
+        FindQuery query = createBaseQuery().where("PlayerId",playerHistory.getPlayer().getUniqueId());
 
         QueryResult result0 = query.execute();
 
         readEntries(playerHistory, result, result0);
+        return result;
+    }
+
+    @Override
+    public PlayerHistoryEntry loadEntry(int id) {
+        FindQuery query = createBaseQuery().where("HistoryId",id);
+        return createSnapshots(query);
+    }
+
+    private PlayerHistoryEntry createSnapshots(FindQuery query) {
+        QueryResult result = query.execute();
+        if(result.isEmpty()) return null;
+
+        QueryResultEntry resultEntry = result.first();
+        DefaultPlayerHistoryEntrySnapshot snapshot = createSnapshot(resultEntry);
+
+        PlayerHistory playerHistory = DKBans.getInstance().getPlayerManager()
+                .getPlayer(resultEntry.getUniqueId("PlayerId")).getHistory();
+
+        DefaultPlayerHistoryEntry entry = new DefaultPlayerHistoryEntry(playerHistory,
+                resultEntry.getInt("HistoryId"),
+                snapshot,
+                resultEntry.getLong("Created"));
+        snapshot.setEntry(entry);
+        return entry;
+    }
+
+    @Override
+    public List<PlayerHistoryEntry> getActiveEntries(PunishmentType type) {
+        FindQuery query = createBaseQuery()
+                .where("ModifiedActive",true).where("Active",true)
+                .or(query1 -> query1.where("Timeout",-1).whereHigher("Timeout",System.currentTimeMillis()))
+                .where("PunishmentType",type.getName());
+        return createActiveEntries(query);
+    }
+
+    @Override
+    public List<PlayerHistoryEntry> getActiveEntriesOnPage(PunishmentType type, int page, int pageSize) {
+        FindQuery query = createBaseQuery()
+                .where("PunishmentType",type.getName())
+                .where("ModifiedActive",true).where("Active",true)
+                .or(query1 -> query1.where("Timeout",-1).whereHigher("Timeout",System.currentTimeMillis()))
+                .page(page,pageSize);
+        return createActiveEntries(query);
+    }
+
+    private List<PlayerHistoryEntry> createActiveEntries(FindQuery query) {
+        QueryResult queryResult = query.execute();
+        if(queryResult.isEmpty()) return null;
+
+        List<PlayerHistoryEntry> result = new ArrayList<>();
+        for (QueryResultEntry resultEntry : queryResult) {
+            DefaultPlayerHistoryEntrySnapshot snapshot = createSnapshot(resultEntry);
+
+            PlayerHistory playerHistory = DKBans.getInstance().getPlayerManager()
+                    .getPlayer(resultEntry.getUniqueId("PlayerId")).getHistory();
+
+            DefaultPlayerHistoryEntry entry = new DefaultPlayerHistoryEntry(playerHistory,
+                    resultEntry.getInt("HistoryId"),
+                    snapshot,
+                    resultEntry.getLong("Created"));
+            snapshot.setEntry(entry);
+            result.add(entry);
+        }
         return result;
     }
 
@@ -329,14 +395,14 @@ public class DefaultDKBansStorage implements DKBansStorage {
         return snapshots;
     }
 
-    private FindQuery createBaseQuery(PlayerHistory playerHistory) {
+    private FindQuery createBaseQuery() {
         return history.find()
                 .getAs(this.history, "Id", "HistoryId")
                 .getAs(this.historyVersion, "Id", "SnapshotId")
-                .get("Created", "Reason", "Timeout", "StaffId", "ScopeType", "ScopeName", "ScopeId", "Points", "Active", "Properties",
-                        "HistoryTypeId", "PunishmentType", "TemplateId", "RevokeTemplateId", "RevokeReason", "ModifiedTime", "ModifiedBy", "ModifiedActive")
-                .join(historyVersion).on(historyVersion,"HistoryId",history,"Id")
-                .where("PlayerId",playerHistory.getPlayer().getUniqueId());
+                .get("Created","PlayerId", "Reason", "Timeout", "StaffId", "ScopeType", "ScopeName", "ScopeId"
+                        , "Points", "Active", "Properties", "HistoryTypeId", "PunishmentType", "TemplateId"
+                        , "RevokeTemplateId", "RevokeReason", "ModifiedTime", "ModifiedBy", "ModifiedActive")
+                .join(historyVersion).on(historyVersion,"HistoryId",history,"Id");
     }
 
     private void readEntries(PlayerHistory playerHistory, List<PlayerHistoryEntry> result, QueryResult result0) {
@@ -391,6 +457,21 @@ public class DefaultDKBansStorage implements DKBansStorage {
         Collection<PlayerHistoryType> types = new ArrayList<>();
         this.historyType.find().execute().loadIn(types, entry -> new DefaultPlayerHistoryType(entry.getInt("Id"), entry.getString("Name")));
         return types;
+    }
+
+    @Override
+    public void clearHistory(UUID uniqueId) {
+        this.history.delete().where("PlayerId",uniqueId).execute();
+    }
+
+    @Override
+    public void clearHistoryEntry(int id) {
+        this.history.delete().where("Id",id).execute();
+    }
+
+    @Override
+    public void clearHistoryEntry(Collection<PlayerHistoryEntry> entries) {
+        this.history.delete().whereIn("Id", entries, PlayerHistoryEntry::getId).execute();
     }
 
     @Override
@@ -542,12 +623,13 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 .set("ReportId", report.getId())
                 .set("ReporterId", reporter.getUniqueId())
                 .set("TemplateId", template.getId())
+                .set("Reason", template.getDisplayName())
                 .set("Time", time)
                 .set("ServerName", serverName)
                 .set("ServerId", serverId)
                 .set("Properties", "{}")
                 .executeAndGetGeneratedKeyAsInt("Id");
-        return new DefaultPlayerReportEntry(id, report, reporter, template, null , serverName, serverId, time, Document.newDocument());
+        return new DefaultPlayerReportEntry(id, report, reporter, template, template.getDisplayName() , serverName, serverId, time, Document.newDocument());
     }
 
     @Override
@@ -833,7 +915,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
     private DatabaseCollection createHistoryVersionCollection() {
         return database.createCollection("dkbans_history_version")
                 .field("Id", DataType.INTEGER, FieldOption.PRIMARY_KEY, FieldOption.AUTO_INCREMENT)
-                .field("HistoryId", DataType.INTEGER, ForeignKey.of(this.history, "Id"), FieldOption.NOT_NULL)
+                .field("HistoryId", DataType.INTEGER, ForeignKey.of(this.history, "Id", ForeignKey.Option.CASCADE), FieldOption.NOT_NULL)
                 .field("Reason", DataType.STRING, FieldOption.NOT_NULL)
                 .field("Timeout", DataType.LONG, FieldOption.NOT_NULL)
                 .field("StaffId", DataType.UUID, FieldOption.NOT_NULL)

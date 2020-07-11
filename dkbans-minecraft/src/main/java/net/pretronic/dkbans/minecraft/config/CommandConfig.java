@@ -97,6 +97,17 @@ public class CommandConfig {
             .permission("dkbans.command.chatlog")
             .create();
 
+    public static CommandConfiguration COMMAND_HISTORY = CommandConfiguration.newBuilder()
+            .name("history")
+            .permission("dkbans.command.history")
+            .create();
+
+    @DocumentKey("command.resetHistory")
+    public static CommandConfiguration COMMAND_RESET_HISTORY = CommandConfiguration.newBuilder()
+            .name("resethistory")
+            .permission("dkbans.command.resethistory")
+            .create();
+
     public static CommandConfiguration COMMAND_MY_HISTORY_POINTS = CommandConfiguration.newBuilder()
             .name("myhistorypoints")
             .permission("dkbans.command.myhistorypoints")

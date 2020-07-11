@@ -32,7 +32,9 @@ import net.pretronic.libraries.utility.Validate;
 import net.pretronic.libraries.utility.annonations.Internal;
 import net.pretronic.libraries.utility.duration.DurationProcessor;
 
+import java.text.SimpleDateFormat;
 import java.time.Duration;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -146,5 +148,9 @@ public class DefaultPlayerHistoryEntry implements PlayerHistoryEntry {
     @Internal
     public String getRemainingFormatted(){//@Todo make configurable
         return DurationProcessor.getStandard().formatShort(Duration.ofMillis(getCurrent().getTimeout()-System.currentTimeMillis()));
+    }
+    @Internal
+    public String getCreatedFormatted(){//@Todo make configurable
+        return new SimpleDateFormat("dd-MM-yyyy hh:mm").format(new Date(getCreated()));
     }
 }

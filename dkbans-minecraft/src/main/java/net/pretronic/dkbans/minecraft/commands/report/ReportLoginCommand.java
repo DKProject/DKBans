@@ -46,8 +46,8 @@ public class ReportLoginCommand extends BasicCommand {
         }
         OnlineMinecraftPlayer player = (OnlineMinecraftPlayer) sender;
 
-        PlayerSetting setting = player.getSetting("DKBans", PlayerSettingsKey.REPORT_CHAT_LOGIN);
-        changeLogin(player, setting.getBooleanValue(), true);
+        boolean current = player.hasSetting("DKBans", PlayerSettingsKey.REPORT_CHAT_LOGIN,true);
+        changeLogin(player, current, true);
     }
 
     private void changeLogin(OnlineMinecraftPlayer player, boolean current, boolean action){

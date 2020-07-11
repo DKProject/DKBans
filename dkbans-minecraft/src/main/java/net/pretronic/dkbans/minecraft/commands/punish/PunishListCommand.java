@@ -28,6 +28,7 @@ import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.libraries.command.command.BasicCommand;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
 import net.pretronic.libraries.command.sender.CommandSender;
+import net.pretronic.libraries.document.type.DocumentFileType;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
 import net.pretronic.libraries.utility.GeneralUtil;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
@@ -56,9 +57,10 @@ public class PunishListCommand extends BasicCommand {
         PunishmentList punishments = DKBans.getInstance().getHistoryManager().getActivePunishments(type,scope);
         List<PlayerHistoryEntry> result = punishments.getPage(page,12);
 
-        MessageComponent<?> list = null;
+        MessageComponent<?> list;
         if(type == PunishmentType.BAN) list = Messages.PUNISH_LIST_BAN;
         else if(type == PunishmentType.MUTE) list = Messages.PUNISH_LIST_MUTE;
+        else throw new UnsupportedOperationException("Not listable type");
 
         sender.sendMessage(list, VariableSet.create()
                 .addDescribed("punishments",result)
