@@ -129,6 +129,7 @@ public class DefaultUnPunishmentTemplate extends DefaultTemplate implements UnPu
             return durations;
         }
 
+
         return new HashMap<>();
     }
 
