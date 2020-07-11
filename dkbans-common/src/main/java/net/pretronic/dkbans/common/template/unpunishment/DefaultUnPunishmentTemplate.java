@@ -119,12 +119,15 @@ public class DefaultUnPunishmentTemplate extends DefaultTemplate implements UnPu
     }
 
     private Map<Integer, UnPunishmentTemplateEntry> loadDurations(Document data) {
-        Map<Integer, UnPunishmentTemplateEntry> durations = new TreeMap<>(Integer::compare);
+        if(data != null) {
+            Map<Integer, UnPunishmentTemplateEntry> durations = new TreeMap<>(Integer::compare);
 
-        for (DocumentEntry entry0 : data) {
-            Pair<Integer, UnPunishmentTemplateEntry> entry = loadEntry(entry0);
-            durations.put(entry.getKey(), entry.getValue());
+            for (DocumentEntry entry0 : data) {
+                Pair<Integer, UnPunishmentTemplateEntry> entry = loadEntry(entry0);
+                durations.put(entry.getKey(), entry.getValue());
+            }
         }
+
         return durations;
     }
 

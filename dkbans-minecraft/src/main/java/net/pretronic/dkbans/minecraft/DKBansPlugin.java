@@ -55,14 +55,18 @@ import net.pretronic.dkbans.minecraft.migration.DKBansLegacyMigration;
 import net.pretronic.dkbans.minecraft.player.MinecraftPlayerManager;
 import net.pretronic.libraries.command.command.Command;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
+import net.pretronic.libraries.document.Document;
+import net.pretronic.libraries.document.type.DocumentFileType;
 import net.pretronic.libraries.message.bml.variable.describer.VariableDescriber;
 import net.pretronic.libraries.message.bml.variable.describer.VariableDescriberRegistry;
 import net.pretronic.libraries.plugin.lifecycle.Lifecycle;
 import net.pretronic.libraries.plugin.lifecycle.LifecycleState;
+import net.pretronic.libraries.utility.io.FileUtil;
 import org.mcnative.common.McNative;
 import org.mcnative.common.plugin.MinecraftPlugin;
 import org.mcnative.common.plugin.configuration.ConfigurationProvider;
 
+import java.io.File;
 import java.util.Map;
 
 public class DKBansPlugin extends MinecraftPlugin {
@@ -85,10 +89,8 @@ public class DKBansPlugin extends MinecraftPlugin {
 
         dkBans.getTemplateManager().initialize();
 
-        getConfiguration().load(DKBansConfig.class);
-        getConfiguration("commands").load(CommandConfig.class);
 
-        DKBansConfig.load(dkBans);
+        loadConfigs();
 
         registerCommands();
         registerDescribers();
@@ -185,5 +187,34 @@ public class DKBansPlugin extends MinecraftPlugin {
 
         VariableDescriber<DefaultPlayerHistoryEntry> entryDescriber =  VariableDescriberRegistry.registerDescriber(DefaultPlayerHistoryEntry.class);
         entryDescriber.setForwardFunction(DefaultPlayerHistoryEntry::getCurrent);
+    }
+
+    private void loadConfigs() {
+        File configLocation = new File("plugins/DKBans/config.yml");
+
+        if(configLocation.exists()) {
+            Document oldConfig = DocumentFileType.YAML.getReader().read(configLocation);
+
+            if(oldConfig.contains("storage.type")) {
+                getLogger().info("DKBans Legacy detected");
+
+                File legacyConfigLocation = new File("plugins/DKBans/legacy-config.yml");
+
+                FileUtil.copyFile(configLocation, legacyConfigLocation);
+
+                boolean success = configLocation.delete();
+                if(success) {
+                    getLogger().info("DKBans Legacy config successful copied to legacy-config.yml");
+                } else {
+                    getLogger().error("DKBans Legacy config can't be copied to legacy-config.yml");
+                }
+            }
+        }
+
+        getConfiguration().load(DKBansConfig.class);
+        getConfiguration("commands").load(CommandConfig.class);
+
+        DKBansConfig.load(dkBans);
+        getLogger().info("DKBans config loaded");
     }
 }

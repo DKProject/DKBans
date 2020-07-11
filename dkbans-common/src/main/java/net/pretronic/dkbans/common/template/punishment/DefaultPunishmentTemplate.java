@@ -136,22 +136,31 @@ public class DefaultPunishmentTemplate extends DefaultTemplate implements Punish
     private Map<Integer, PunishmentTemplateEntry> loadDurations(Document data) {
         Map<Integer, PunishmentTemplateEntry> durations = new TreeMap<>(Integer::compare);
 
-        for (DocumentEntry entry0 : data) {
-            Pair<Integer, PunishmentTemplateEntry> entry = loadEntry(entry0);
-            durations.put(entry.getKey(), entry.getValue());
+        if(data != null) {
+            for (DocumentEntry entry0 : data) {
+                Pair<Integer, PunishmentTemplateEntry> entry = loadEntry(entry0);
+                durations.put(entry.getKey(), entry.getValue());
+            }
         }
+
         return durations;
     }
 
     private Triple<Map<Integer, PunishmentTemplateEntry>, Integer, Double> loadPoints(Document data) {
-        int addedPoints = data.getInt("addedPoints");
-        double pointsDivider = data.getDouble("pointsDivider");
-        Map<Integer, PunishmentTemplateEntry> points = new HashMap<>();
+        int addedPoints = 0;
+        double pointsDivider = 0;
+        if(data != null) {
+            addedPoints = data.getInt("addedPoints");
+            pointsDivider = data.getDouble("pointsDivider");
+            Map<Integer, PunishmentTemplateEntry> points = new HashMap<>();
 
-        for (DocumentEntry entry0 : data.getDocument("durations")) {
-            Pair<Integer, PunishmentTemplateEntry> entry = loadEntry(entry0);
-            points.put(entry.getKey(), entry.getValue());
+            for (DocumentEntry entry0 : data.getDocument("durations")) {
+                Pair<Integer, PunishmentTemplateEntry> entry = loadEntry(entry0);
+                points.put(entry.getKey(), entry.getValue());
+            }
         }
+
+
 
         return new Triple<>(points, addedPoints, pointsDivider);
     }

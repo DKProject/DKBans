@@ -20,13 +20,15 @@
 
 package net.pretronic.dkbans.api.migration;
 
+import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class MigrationResultBuilder {
 
     private boolean success;
     private long time;
-    private Map<String, String> migrated;
+    private Map<String, String> migrated = new ConcurrentHashMap<>();
 
     public MigrationResultBuilder success(boolean success) {
         this.success = success;

@@ -50,6 +50,7 @@ import net.pretronic.libraries.document.type.DocumentFileType;
 import org.mcnative.common.McNative;
 import org.mcnative.common.player.data.PlayerDataProvider;
 
+import java.io.File;
 import java.time.Duration;
 import java.util.*;
 
@@ -66,7 +67,7 @@ public class DKBansLegacyMigration extends Migration {
             new BanSystem();
         }
         MigrationResultBuilder resultBuilder = new MigrationResultBuilder();
-        migrateReasons(resultBuilder);
+        //migrateReasons(resultBuilder);
         migratePlayers(resultBuilder);
 
         long end = System.currentTimeMillis();
@@ -75,7 +76,7 @@ public class DKBansLegacyMigration extends Migration {
 
     @Override
     public boolean isAvailable() {
-        return true;
+        return new File("plugins/DKBans/legacy-config.yml").exists();
     }
 
     private void migrateReasons(MigrationResultBuilder resultBuilder) {

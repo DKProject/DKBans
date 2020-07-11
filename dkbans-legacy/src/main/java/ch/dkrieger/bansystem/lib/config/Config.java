@@ -168,7 +168,7 @@ public class Config extends SimpleConfig {
     private transient DKBansPlatform platform;
 
     public Config(DKBansPlatform platform) {
-        super(new File(platform.getFolder(),"config.yml"));
+        super(new File(platform.getFolder(),"legacy-config.yml"));
         this.platform = platform;
     }
     @Override

@@ -76,20 +76,21 @@ public class DefaultReportTemplate extends DefaultTemplate implements ReportTemp
     }
 
     private Map<String, Object> load(Document data) {
-        String targetTemplate = data.getString("targetPunishment");
+        if(data.contains("targetPunishment")) {
+            String targetTemplate = data.getString("targetPunishment");
+            String[] splitted = targetTemplate.split("@");
 
-        String[] splitted = targetTemplate.split("@");
+            if(splitted.length != 2) throw new IllegalArgumentException("Wrong targetPunishment length. Invalid format. Use TemplateGroup@TemplateName");
 
-        if(splitted.length != 2) throw new IllegalArgumentException("Wrong targetPunishment length. Invalid format. Use TemplateGroup@TemplateName");
-
-        this.targetTemplateGroupName = splitted[0];
-        this.targetTemplateName = splitted[1];
+            this.targetTemplateGroupName = splitted[0];
+            this.targetTemplateName = splitted[1];
 
 
-        Map<String, Object> properties = new HashMap<>();
-        for (DocumentEntry entry : data) {
-            if(entry.getKey().equalsIgnoreCase("targetPunishment")) {
-                properties.put(entry.getKey(), entry.toPrimitive().getAsObject());
+            Map<String, Object> properties = new HashMap<>();
+            for (DocumentEntry entry : data) {
+                if(entry.getKey().equalsIgnoreCase("targetPunishment")) {
+                    properties.put(entry.getKey(), entry.toPrimitive().getAsObject());
+                }
             }
         }
         return properties;
