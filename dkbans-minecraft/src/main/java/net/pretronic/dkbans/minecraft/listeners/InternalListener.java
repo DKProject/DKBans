@@ -20,10 +20,8 @@
 
 package net.pretronic.dkbans.minecraft.listeners;
 
-import net.pretronic.dkbans.api.event.DKBansChannelBroadcastMessageReceiveEvent;
-import net.pretronic.dkbans.api.event.DKBansJoinMeCreateEvent;
-import net.pretronic.dkbans.api.event.DKBansPlayerPunishEvent;
-import net.pretronic.dkbans.api.event.DKBansPlayerReportTeleportEvent;
+import net.pretronic.dkbans.api.DKBans;
+import net.pretronic.dkbans.api.event.*;
 import net.pretronic.dkbans.api.player.history.PunishmentType;
 import net.pretronic.dkbans.minecraft.BroadcastMessageChannels;
 import net.pretronic.dkbans.minecraft.PlayerSettingsKey;
@@ -34,6 +32,7 @@ import net.pretronic.libraries.event.Listener;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
 import org.mcnative.common.McNative;
 import org.mcnative.common.network.event.NetworkListener;
+import org.mcnative.common.player.ConnectedMinecraftPlayer;
 import org.mcnative.common.player.OnlineMinecraftPlayer;
 import org.mcnative.common.text.components.MessageComponent;
 
@@ -58,10 +57,20 @@ public class InternalListener {
     }
 
     @Listener
-    public void onPlayerReport(DKBansPlayerReportTeleportEvent event) {
+    public void onPlayerReportTeleport(DKBansPlayerReportTeleportEvent event) {
         OnlineMinecraftPlayer player = McNative.getInstance().getLocal().getOnlinePlayer(event.getPlayer().getUniqueId());
         OnlineMinecraftPlayer target = McNative.getInstance().getLocal().getOnlinePlayer(event.getReport().getPlayer().getUniqueId());
         player.connect(target.getServer());
+    }
+
+    @NetworkListener
+    @Listener
+    public void onPlayerReportSend(DKBansPlayerReportSendEvent event) {
+        for (ConnectedMinecraftPlayer player : McNative.getInstance().getLocal().getConnectedPlayers()) {
+            if(player.hasPermission(Permissions.COMMAND_REPORT_STUFF)) {
+                player.sendMessage(Messages.COMMAND_REPORT_TEAM_RECEIVE, VariableSet.create().add("entry", event.getReportEntry()));
+            }
+        }
     }
 
     @NetworkListener

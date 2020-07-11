@@ -21,12 +21,14 @@
 package net.pretronic.dkbans.common.player.report;
 
 import net.pretronic.dkbans.api.DKBans;
+import net.pretronic.dkbans.api.event.DKBansPlayerReportSendEvent;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.report.PlayerReport;
 import net.pretronic.dkbans.api.player.report.PlayerReportEntry;
 import net.pretronic.dkbans.api.player.report.ReportManager;
 import net.pretronic.dkbans.api.player.report.ReportState;
 import net.pretronic.dkbans.api.template.report.ReportTemplate;
+import net.pretronic.dkbans.common.event.DefaultDKBansPlayerReportSendEvent;
 import net.pretronic.libraries.utility.Iterators;
 import net.pretronic.libraries.utility.Validate;
 
@@ -60,6 +62,9 @@ public class DefaultReportManager implements ReportManager {
         DefaultPlayerReportEntry entry = (DefaultPlayerReportEntry) DKBans.getInstance().getStorage()
                 .createPlayerReportEntry(report, executor, template, serverName, serverId);
         report.addEntry(entry);
+
+        DefaultDKBansPlayerReportSendEvent event = new DefaultDKBansPlayerReportSendEvent(entry);
+        DKBans.getInstance().getEventBus().callEvent(DKBansPlayerReportSendEvent.class, event);
         return entry;
     }
 
