@@ -92,8 +92,9 @@ public class DefaultReportTemplate extends DefaultTemplate implements ReportTemp
                     properties.put(entry.getKey(), entry.toPrimitive().getAsObject());
                 }
             }
+            return properties;
         }
-        return properties;
+        return new HashMap<>();
     }
 
     public void setTargetTemplateGroupName(String targetTemplateGroupName) {
