@@ -51,6 +51,7 @@ public class MessageConfig extends SimpleConfig{
         Messages.TIME_DAY_PLURAL = addAndGetMessageValue("time.day.plural","Days");
         Messages.TIME_DAY_SHORTCUT = addAndGetMessageValue("time.day.shortcut","D");
 
+
         Messages.TIME_HOUR_SINGULAR = addAndGetMessageValue("time.hour.singular","Hour");
         Messages.TIME_HOUR_PLURAL = addAndGetMessageValue("time.hour.plural","Hours");
         Messages.TIME_HOUR_SHORTCUT = addAndGetMessageValue("time.hour.shortcut","H");
