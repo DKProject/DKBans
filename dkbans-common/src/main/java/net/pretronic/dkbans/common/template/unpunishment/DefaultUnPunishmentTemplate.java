@@ -59,7 +59,8 @@ public class DefaultUnPunishmentTemplate extends DefaultTemplate implements UnPu
                                        TemplateCategory category, Document data) {
         super(id, inGroupId, name, group, displayName, permission, aliases, historyType, enabled, hidden, category, data);
 
-        this.blacklistedTemplates = loadBlacklistedTemplates(data.getDocument("blacklisted"));
+        this.blacklistedTemplates = new ArrayList<>();
+        loadBlacklistedTemplates(data.getDocument("blacklisted"));
         this.scopes = loadScopes(data.getDocument("scopes"));
         this.durations = loadDurations(data.getDocument("durations"));
 
@@ -105,7 +106,7 @@ public class DefaultUnPunishmentTemplate extends DefaultTemplate implements UnPu
     }
 
 
-    private Collection<BlacklistedTemplate> loadBlacklistedTemplates(Document data) {
+    private void loadBlacklistedTemplates(Document data) {
         if(data != null) {
             for (DocumentEntry blacklisted : data) {
                 String[] splitted = blacklisted.toPrimitive().getAsString().split("@");
@@ -115,7 +116,6 @@ public class DefaultUnPunishmentTemplate extends DefaultTemplate implements UnPu
                 this.blacklistedTemplates.add(new BlacklistedTemplate(splitted[0], splitted[1], 0));
             }
         }
-        return new ArrayList<>();
     }
 
     private Map<Integer, UnPunishmentTemplateEntry> loadDurations(Document data) {
@@ -126,9 +126,11 @@ public class DefaultUnPunishmentTemplate extends DefaultTemplate implements UnPu
                 Pair<Integer, UnPunishmentTemplateEntry> entry = loadEntry(entry0);
                 durations.put(entry.getKey(), entry.getValue());
             }
+            return durations;
         }
 
-        return durations;
+
+        return new HashMap<>();
     }
 
     private Triple<Map<Integer, UnPunishmentTemplateEntry>, Integer, Double> loadPoints(Document data) {

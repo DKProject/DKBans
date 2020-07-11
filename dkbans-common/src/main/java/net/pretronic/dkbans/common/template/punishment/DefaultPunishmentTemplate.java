@@ -148,10 +148,10 @@ public class DefaultPunishmentTemplate extends DefaultTemplate implements Punish
     private Triple<Map<Integer, PunishmentTemplateEntry>, Integer, Double> loadPoints(Document data) {
         int addedPoints = 0;
         double pointsDivider = 0;
+        Map<Integer, PunishmentTemplateEntry> points = new HashMap<>();
         if(data != null) {
             addedPoints = data.getInt("addedPoints");
             pointsDivider = data.getDouble("pointsDivider");
-            Map<Integer, PunishmentTemplateEntry> points = new HashMap<>();
 
             for (DocumentEntry entry0 : data.getDocument("durations")) {
                 Pair<Integer, PunishmentTemplateEntry> entry = loadEntry(entry0);
