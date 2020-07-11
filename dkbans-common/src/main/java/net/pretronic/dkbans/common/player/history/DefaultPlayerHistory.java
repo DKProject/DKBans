@@ -21,13 +21,19 @@
 package net.pretronic.dkbans.common.player.history;
 
 import net.pretronic.dkbans.api.DKBans;
+import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.DKBansScope;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.history.*;
 import net.pretronic.libraries.utility.Iterators;
+import net.pretronic.libraries.utility.Validate;
 
+import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 
 public class DefaultPlayerHistory implements PlayerHistory {
@@ -118,7 +124,7 @@ public class DefaultPlayerHistory implements PlayerHistory {
 
     @Override
     public List<PlayerHistoryEntry> getEntries(int page, int size) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -165,12 +171,39 @@ public class DefaultPlayerHistory implements PlayerHistory {
 
     @Override
     public void clear() {
-        throw new UnsupportedOperationException();
+        this.entries.clear();
+        loadedAll = true;
+        DKBans.getInstance().getStorage().clearHistory(player.getUniqueId());
+    }
+
+    @Override
+    public void clearLast(int amount) {
+        AtomicInteger integer = new AtomicInteger();
+        List<PlayerHistoryEntry> entries = Iterators.remove(getEntries(), entry -> integer.getAndIncrement() < amount);
+        DKBans.getInstance().getStorage().clearHistoryEntry(entries);
+    }
+
+    @Override
+    public void clearLast(Duration duration) {
+        Validate.notNull(duration);
+        long maxTime = System.currentTimeMillis()-duration.toMillis();
+        List<PlayerHistoryEntry> reversedEntries = new ArrayList<>(getEntries());
+        Collections.reverse(reversedEntries);
+        List<PlayerHistoryEntry> entries = Iterators.remove(reversedEntries, entry -> entry.getCreated() > maxTime);
+        DKBans.getInstance().getStorage().clearHistoryEntry(entries);
+    }
+
+    @Override
+    public void clearByStaff(DKBansExecutor executor) {
+        Validate.notNull(executor);
+        List<PlayerHistoryEntry> entries = Iterators.remove(getEntries(), entry -> entry.getCurrent().getStaff().equals(executor));
+        DKBans.getInstance().getStorage().clearHistoryEntry(entries);
     }
 
     @Override
     public void delete(int id) {
-        throw new UnsupportedOperationException();
+        DKBans.getInstance().getStorage().clearHistoryEntry(id);
+        Iterators.removeOne(this.entries, entry -> entry.getId() == id);
     }
 
     public void push(PlayerHistoryEntry entry){

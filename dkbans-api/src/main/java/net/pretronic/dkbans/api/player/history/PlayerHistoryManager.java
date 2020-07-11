@@ -28,6 +28,8 @@ public interface PlayerHistoryManager {
 
     PunishmentList getActivePunishments();
 
+    PunishmentList getActivePunishments(PunishmentType type);
+
     PunishmentList getActivePunishments(PunishmentType type, DKBansScope scope);
 
 

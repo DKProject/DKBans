@@ -114,6 +114,13 @@ public class Messages {
     public static MessageComponent<?> PUNISH_LIST_BAN = Text.ofMessageKey("dkbans.punish.list.ban");
     public static MessageComponent<?> PUNISH_LIST_MUTE = Text.ofMessageKey("dkbans.punish.list.mute");
 
+    public static MessageComponent<?> COMMAND_HISTORY_HELP = Text.ofMessageKey("dkbans.command.history.help");
+    public static MessageComponent<?> COMMAND_HISTORY_LIST = Text.ofMessageKey("dkbans.command.history.list");//&8» &eKick &8| &7[time] - &7[reason]
+
+    public static MessageComponent<?> COMMAND_RESET_HISTORY_HELP = Text.ofMessageKey("dkbans.command.resetHistory.help");
+    public static MessageComponent<?> COMMAND_RESET_HISTORY_MANY = Text.ofMessageKey("dkbans.command.resetHistory.many");
+    public static MessageComponent<?> COMMAND_RESET_HISTORY_ONE = Text.ofMessageKey("dkbans.command.resetHistory.one");
+
     public static MessageComponent<?> COMMAND_PLAYER_INFO_HELP = Text.ofMessageKey("dkbans.command.playerInfo.help");
     public static MessageComponent<?> COMMAND_PLAYER_INFO_OFFLINE = Text.ofMessageKey("dkbans.command.playerInfo.offline");
     public static MessageComponent<?> COMMAND_PLAYER_INFO_ONLINE = Text.ofMessageKey("dkbans.command.playerInfo.online");
@@ -161,7 +168,7 @@ public class Messages {
 
     public static MessageComponent<?> COMMAND_REPORT_LIST = Text.ofMessageKey("dkbans.command.report.list");
 
-    public static MessageComponent<?> COMMAND_REPORT_TEAM_RECEIVE = Text.ofMessageKey("dkbans.command.report.teamReceive");
+    public static MessageComponent<?> COMMAND_REPORT_NOTFIY = Text.ofMessageKey("dkbans.command.report.notify");
 
 
 

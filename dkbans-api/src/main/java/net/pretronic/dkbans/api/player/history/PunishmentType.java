@@ -32,23 +32,29 @@ public class PunishmentType implements VariableObjectToString {
     private static final Collection<PunishmentType> REGISTRY = new ArrayList<>();
 
 
-    public static final PunishmentType BAN = registerPunishmentType("BAN");
+    public static final PunishmentType BAN = registerPunishmentType("BAN","&c");
 
-    public static final PunishmentType MUTE = registerPunishmentType("MUTE");
+    public static final PunishmentType MUTE = registerPunishmentType("MUTE","&9");
 
-    public static final PunishmentType WARN = registerPunishmentType("WARN");
+    public static final PunishmentType WARN = registerPunishmentType("WARN","&6");
 
-    public static final PunishmentType KICK = registerPunishmentType("KICK");
+    public static final PunishmentType KICK = registerPunishmentType("KICK","&e");
 
 
     private final String name;
+    private final String color;
 
-    private PunishmentType(String name) {
+    private PunishmentType(String name,String color) {
         this.name = name;
+        this.color = color;
     }
 
     public String getName() {
         return name;
+    }
+
+    public String getColor() {
+        return color;
     }
 
     @Override
@@ -64,8 +70,8 @@ public class PunishmentType implements VariableObjectToString {
         return punishmentType;
     }
 
-    public static PunishmentType registerPunishmentType(String name) {
-        PunishmentType punishmentType = new PunishmentType(name);
+    public static PunishmentType registerPunishmentType(String name,String color) {
+        PunishmentType punishmentType = new PunishmentType(name,color);
         REGISTRY.add(punishmentType);
         return punishmentType;
     }

@@ -35,6 +35,7 @@ import net.pretronic.dkbans.common.player.history.DefaultPlayerHistoryEntrySnaps
 import net.pretronic.dkbans.common.player.history.DefaultPlayerHistoryType;
 import net.pretronic.dkbans.common.player.note.DefaultPlayerNote;
 import net.pretronic.dkbans.common.player.report.DefaultPlayerReport;
+import net.pretronic.dkbans.common.player.report.DefaultPlayerReportEntry;
 import net.pretronic.dkbans.common.player.session.DefaultPlayerSession;
 import net.pretronic.dkbans.common.template.DefaultTemplate;
 import net.pretronic.dkbans.common.template.DefaultTemplateCategory;
@@ -42,7 +43,9 @@ import net.pretronic.dkbans.common.template.DefaultTemplateGroup;
 import net.pretronic.dkbans.common.template.punishment.DefaultPunishmentTemplate;
 import net.pretronic.dkbans.minecraft.commands.*;
 import net.pretronic.dkbans.minecraft.commands.dkbans.DKBansCommand;
+import net.pretronic.dkbans.minecraft.commands.history.HistoryCommand;
 import net.pretronic.dkbans.minecraft.commands.history.MyHistoryPointsCommand;
+import net.pretronic.dkbans.minecraft.commands.history.ResetHistoryCommand;
 import net.pretronic.dkbans.minecraft.commands.punish.*;
 import net.pretronic.dkbans.minecraft.commands.report.ReportCommand;
 import net.pretronic.dkbans.minecraft.commands.unpunish.UnpunishCommand;
@@ -115,8 +118,10 @@ public class DKBansPlugin extends MinecraftPlugin {
         getRuntime().getLocal().getCommandManager().registerCommand(new PunishNotifyCommand(this, CommandConfig.COMMAND_PUNISH_NOTIFY));
         getRuntime().getLocal().getCommandManager().registerCommand(new NotifyCommand(this, CommandConfig.COMMAND_NOTIFY));
         getRuntime().getLocal().getCommandManager().registerCommand(new ChatLogCommand(this, CommandConfig.COMMAND_CHATLOG));
-        getRuntime().getLocal().getCommandManager().registerCommand(new MyHistoryPointsCommand(this, CommandConfig.COMMAND_MY_HISTORY_POINTS));
 
+        getRuntime().getLocal().getCommandManager().registerCommand(new HistoryCommand(this, CommandConfig.COMMAND_HISTORY));
+        getRuntime().getLocal().getCommandManager().registerCommand(new ResetHistoryCommand(this, CommandConfig.COMMAND_RESET_HISTORY));
+        getRuntime().getLocal().getCommandManager().registerCommand(new MyHistoryPointsCommand(this, CommandConfig.COMMAND_MY_HISTORY_POINTS));
 
         getRuntime().getLocal().getCommandManager().registerCommand(new HelpCommand(this, CommandConfig.COMMAND_HELP));
         getRuntime().getLocal().getCommandManager().registerCommand(new FilterCommand(this, CommandConfig.COMMAND_FILTER));
@@ -172,6 +177,7 @@ public class DKBansPlugin extends MinecraftPlugin {
         VariableDescriberRegistry.registerDescriber(DefaultChatLogEntry.class);
         VariableDescriberRegistry.registerDescriber(DefaultFilter.class);
         VariableDescriberRegistry.registerDescriber(DefaultPlayerReport.class);
+        VariableDescriberRegistry.registerDescriber(DefaultPlayerReportEntry.class);
 
         VariableDescriberRegistry.registerDescriber(DefaultTemplate.class);
         VariableDescriberRegistry.registerDescriber(DefaultTemplateCategory.class);

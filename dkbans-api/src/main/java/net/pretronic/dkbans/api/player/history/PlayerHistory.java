@@ -20,9 +20,11 @@
 
 package net.pretronic.dkbans.api.player.history;
 
+import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.DKBansScope;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 
+import java.time.Duration;
 import java.util.Collection;
 import java.util.List;
 
@@ -82,6 +84,13 @@ public interface PlayerHistory {
     int calculate(CalculationType calculationType, PunishmentType type);
 
     void clear();
+
+    void clearLast(int amount);
+
+    void clearLast(Duration duration);
+
+    void clearByStaff(DKBansExecutor executor);
+
 
     void delete(int id);
 
