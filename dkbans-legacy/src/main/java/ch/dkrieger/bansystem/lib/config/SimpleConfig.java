@@ -22,7 +22,6 @@ package ch.dkrieger.bansystem.lib.config;
 
 import ch.dkrieger.bansystem.lib.Messages;
 import ch.dkrieger.bansystem.lib.utils.GeneralUtil;
-import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
@@ -87,9 +86,6 @@ public abstract class SimpleConfig {
     public String getStringValue(String path){
         return this.config.getString(path);
     }
-    public String getMessageValue(String path){
-        return ChatColor.translateAlternateColorCodes('&',getStringValue(path));
-    }
     public int getIntValue(String path){
         return this.config.getInt(path);
     }
@@ -107,7 +103,7 @@ public abstract class SimpleConfig {
     }
     public List<String> getMessageListValue(String path) {
         List<String> messages = new LinkedList<>();
-        getStringListValue(path).forEach((message)-> messages.add(ChatColor.translateAlternateColorCodes('&', message)));
+        getStringListValue(path).forEach((message)-> messages.add(message));
         return messages;
     }
     public List<Integer> getIntListValue(String path){
@@ -134,7 +130,7 @@ public abstract class SimpleConfig {
         addValue(path,object);
         String result = getStringValue(path);
         if(result == null) return "";
-        return GeneralUtil.buildNextLineColor(ChatColor.translateAlternateColorCodes('&',result));
+        return GeneralUtil.buildNextLineColor(result);
     }
     public int addAndGetIntValue(String path,Object object){
         addValue(path,object);

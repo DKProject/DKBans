@@ -20,12 +20,6 @@
 
 package ch.dkrieger.bansystem.lib.broadcast;
 
-import ch.dkrieger.bansystem.lib.BanSystem;
-import ch.dkrieger.bansystem.lib.player.NetworkPlayer;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.TextComponent;
-
 public class Broadcast {
 
     private int id;
@@ -50,13 +44,15 @@ public class Broadcast {
     }
 
     public String getMessage() {
-        return message!=null?ChatColor.translateAlternateColorCodes('&',message):"";
+        return "";
     }
+
     public String getPermission() {
-        return permission!=null?permission:"";
+        return "";
     }
+
     public String getHover() {
-        return hover!=null?ChatColor.translateAlternateColorCodes('&',hover):"";
+        return "";
     }
 
     public long getCreated() {
@@ -116,7 +112,7 @@ public class Broadcast {
             this.type = type;
         }
         public String getMessage() {
-            return message!=null?ChatColor.translateAlternateColorCodes('&',message):"";
+            return message;
         }
         public ClickType getType() {
             return type;
@@ -144,8 +140,5 @@ public class Broadcast {
             return null;
         }
 
-        public ClickEvent.Action toClickAction(){
-            return (this==URL?ClickEvent.Action.OPEN_URL:(this==OPENCHAT?ClickEvent.Action.SUGGEST_COMMAND:ClickEvent.Action.RUN_COMMAND));
-        }
     }
 }

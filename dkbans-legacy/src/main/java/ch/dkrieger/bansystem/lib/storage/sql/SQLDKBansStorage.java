@@ -39,13 +39,11 @@ import ch.dkrieger.bansystem.lib.stats.PlayerStats;
 import ch.dkrieger.bansystem.lib.storage.DKBansStorage;
 import ch.dkrieger.bansystem.lib.storage.StorageType;
 import ch.dkrieger.bansystem.lib.storage.sql.query.ColumnType;
-import ch.dkrieger.bansystem.lib.storage.sql.query.ExecuteQuery;
 import ch.dkrieger.bansystem.lib.storage.sql.query.QueryOption;
 import ch.dkrieger.bansystem.lib.storage.sql.query.SelectQuery;
 import ch.dkrieger.bansystem.lib.storage.sql.table.Table;
 import ch.dkrieger.bansystem.lib.utils.Document;
 import ch.dkrieger.bansystem.lib.utils.GeneralUtil;
-import com.google.gson.reflect.TypeToken;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

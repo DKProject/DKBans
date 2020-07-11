@@ -30,11 +30,9 @@ import net.pretronic.libraries.utility.Validate;
 
 import java.time.Duration;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Predicate;
 
 public class DefaultPlayerHistory implements PlayerHistory {
 

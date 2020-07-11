@@ -21,13 +21,7 @@
 package ch.dkrieger.bansystem.lib.report;
 
 import ch.dkrieger.bansystem.lib.BanSystem;
-import ch.dkrieger.bansystem.lib.Messages;
 import ch.dkrieger.bansystem.lib.player.NetworkPlayer;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.ComponentBuilder;
-import net.md_5.bungee.api.chat.HoverEvent;
-import net.md_5.bungee.api.chat.TextComponent;
 
 import java.util.UUID;
 
@@ -61,7 +55,7 @@ public class Report {
         return reporter;
     }
     public String getReason() {
-        return ChatColor.translateAlternateColorCodes('&',reason);
+        return reason;
     }
 
     public String getRwaReason() {
@@ -94,26 +88,5 @@ public class Report {
 
     public void setStaff(UUID staff){
         this.staff = staff;
-    }
-
-    public TextComponent toMessage(){
-        TextComponent component = new TextComponent(Messages.REPORT_MESSAGE_TEXT
-                .replace("[prefix]",Messages.PREFIX_REPORT)
-                .replace("[reason]",getReason())
-                .replace("[server]",getReportedServer())
-                .replace("[message]",getMessage())
-                .replace("[time]",BanSystem.getInstance().getConfig().dateFormat.format(getTimeStamp()))
-                .replace("[reporter]",getReporter().getColoredName())
-                .replace("[player]",getPlayer().getColoredName()));
-        component.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,new ComponentBuilder(Messages.REPORT_MESSAGE_HOVER
-                .replace("[prefix]",Messages.PREFIX_REPORT)
-                .replace("[reason]",getReason())
-                .replace("[server]",getReportedServer())
-                .replace("[message]",getMessage())
-                .replace("[time]",BanSystem.getInstance().getConfig().dateFormat.format(getTimeStamp()))
-                .replace("[reporter]",getReporter().getColoredName())
-                .replace("[player]",getPlayer().getColoredName())).create()));
-        component.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,"/report take "+getUUID()));
-        return component;
     }
 }

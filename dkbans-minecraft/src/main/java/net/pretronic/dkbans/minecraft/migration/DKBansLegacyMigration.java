@@ -35,7 +35,10 @@ import net.pretronic.dkbans.api.migration.MigrationResult;
 import net.pretronic.dkbans.api.migration.MigrationResultBuilder;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.history.*;
-import net.pretronic.dkbans.api.template.*;
+import net.pretronic.dkbans.api.template.TemplateCategory;
+import net.pretronic.dkbans.api.template.TemplateFactory;
+import net.pretronic.dkbans.api.template.TemplateGroup;
+import net.pretronic.dkbans.api.template.TemplateType;
 import net.pretronic.dkbans.api.template.punishment.PunishmentTemplateEntry;
 import net.pretronic.dkbans.common.player.history.DefaultPlayerHistoryEntrySnapshotBuilder;
 import net.pretronic.dkbans.common.template.DefaultTemplateGroup;
@@ -52,7 +55,10 @@ import org.mcnative.common.player.data.PlayerDataProvider;
 
 import java.io.File;
 import java.time.Duration;
-import java.util.*;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 public class DKBansLegacyMigration extends Migration {
 

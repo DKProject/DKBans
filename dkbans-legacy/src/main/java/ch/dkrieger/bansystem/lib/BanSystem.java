@@ -37,8 +37,6 @@ import ch.dkrieger.bansystem.lib.storage.json.JsonDKBansStorage;
 import ch.dkrieger.bansystem.lib.storage.mongodb.MongoDBDKBansStorage;
 import ch.dkrieger.bansystem.lib.storage.sql.SQLDKBansStorage;
 
-import java.util.Properties;
-
 public class BanSystem {
 
     private static BanSystem instance;

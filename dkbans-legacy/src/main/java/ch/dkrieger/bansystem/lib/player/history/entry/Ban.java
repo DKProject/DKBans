@@ -27,9 +27,6 @@ import ch.dkrieger.bansystem.lib.player.history.HistoryPoints;
 import ch.dkrieger.bansystem.lib.utils.Document;
 import ch.dkrieger.bansystem.lib.utils.GeneralUtil;
 import ch.dkrieger.bansystem.lib.utils.RuntimeTypeAdapterFactory;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.TextComponent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -151,34 +148,6 @@ public class Ban extends HistoryEntry {
         return "Ban";
     }
 
-    @Override
-    public TextComponent getListMessage() {
-        String message = Messages.HISTORY_LIST_BAN_NETWORK;
-        if(banType == BanType.CHAT) message = Messages.HISTORY_LIST_BAN_CHAT;
-        return new TextComponent(message = replace(message,false));
-    }
-    public TextComponent getInfo(boolean first){
-        String message = Messages.HISTORY_INFO_BAN_NETWORK;
-        if(banType == BanType.CHAT) message = Messages.HISTORY_INFO_BAN_CHAT;
-        TextComponent changes = new TextComponent(Messages.HISTORY_INFO_BAN_CHANGES.replace("[changeCount]",""+versions.size()));
-        changes.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,"/history "+uuid+" "+id+" list"));
-        return GeneralUtil.replaceTextComponent(message = replace(message,first),"[changes]",changes);
-    }
-
-
-    @Override
-    public TextComponent getInfoMessage() {
-        return getInfo(false);
-    }
-
-    public TextComponent toMessage(){
-        String message = Messages.BAN_MESSAGE_NETWORK_TEMPORARY;
-        if(getBanType() == BanType.CHAT){
-            message = Messages.BAN_MESSAGE_CHAT_TEMPORARY;
-            if(getTimeOut() <= 0) message = Messages.BAN_MESSAGE_CHAT_PERMANENT;
-        }else if(getTimeOut() <= 0) message = Messages.BAN_MESSAGE_NETWORK_PERMANENT;
-        return new TextComponent(replace(message,false));
-    }
     public String replace(String message, boolean first){
         return message
                 .replace("[player]",getPlayer().getColoredName())

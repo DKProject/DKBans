@@ -20,7 +20,6 @@
 
 package net.pretronic.dkbans.api.migration;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 

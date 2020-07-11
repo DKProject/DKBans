@@ -21,7 +21,6 @@
 package net.pretronic.dkbans.common.player.report;
 
 import net.pretronic.dkbans.api.DKBansExecutor;
-import net.pretronic.dkbans.api.DKBansScope;
 import net.pretronic.dkbans.api.player.report.PlayerReport;
 import net.pretronic.dkbans.api.player.report.PlayerReportEntry;
 import net.pretronic.dkbans.api.template.report.ReportTemplate;

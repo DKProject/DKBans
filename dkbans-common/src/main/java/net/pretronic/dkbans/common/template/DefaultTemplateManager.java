@@ -38,7 +38,6 @@ import net.pretronic.libraries.utility.Iterators;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 public class DefaultTemplateManager implements TemplateManager {
 

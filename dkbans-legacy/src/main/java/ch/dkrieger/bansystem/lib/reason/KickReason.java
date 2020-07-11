@@ -24,7 +24,6 @@ import ch.dkrieger.bansystem.lib.player.NetworkPlayer;
 import ch.dkrieger.bansystem.lib.player.history.HistoryPoints;
 import ch.dkrieger.bansystem.lib.player.history.entry.Kick;
 import ch.dkrieger.bansystem.lib.utils.Document;
-import net.md_5.bungee.api.ChatColor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +61,7 @@ public class KickReason {
     }
 
     public String getDisplay() {
-        return ChatColor.translateAlternateColorCodes('&',display);
+        return display;
     }
     public String getRawDisplay(){
         return display;

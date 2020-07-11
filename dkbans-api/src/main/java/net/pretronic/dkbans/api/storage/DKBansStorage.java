@@ -21,7 +21,6 @@
 package net.pretronic.dkbans.api.storage;
 
 import net.pretronic.dkbans.api.DKBansExecutor;
-import net.pretronic.dkbans.api.DKBansScope;
 import net.pretronic.dkbans.api.filter.Filter;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.chatlog.ChatLogEntry;

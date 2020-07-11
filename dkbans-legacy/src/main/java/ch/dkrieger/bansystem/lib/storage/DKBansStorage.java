@@ -24,15 +24,12 @@ import ch.dkrieger.bansystem.lib.broadcast.Broadcast;
 import ch.dkrieger.bansystem.lib.filter.Filter;
 import ch.dkrieger.bansystem.lib.player.IPBan;
 import ch.dkrieger.bansystem.lib.player.NetworkPlayer;
-import ch.dkrieger.bansystem.lib.player.OnlineSession;
 import ch.dkrieger.bansystem.lib.player.chatlog.ChatLog;
-import ch.dkrieger.bansystem.lib.player.chatlog.ChatLogEntry;
 import ch.dkrieger.bansystem.lib.player.history.History;
 import ch.dkrieger.bansystem.lib.player.history.entry.Ban;
 import ch.dkrieger.bansystem.lib.player.history.entry.HistoryEntry;
 import ch.dkrieger.bansystem.lib.report.Report;
 import ch.dkrieger.bansystem.lib.stats.NetworkStats;
-import ch.dkrieger.bansystem.lib.stats.PlayerStats;
 import ch.dkrieger.bansystem.lib.utils.Document;
 
 import java.util.Collection;

@@ -22,14 +22,11 @@ package ch.dkrieger.bansystem.lib.player.history.entry;
 
 import ch.dkrieger.bansystem.lib.BanSystem;
 import ch.dkrieger.bansystem.lib.player.NetworkPlayer;
-import ch.dkrieger.bansystem.lib.player.NetworkPlayerUpdateCause;
 import ch.dkrieger.bansystem.lib.player.history.BanType;
 import ch.dkrieger.bansystem.lib.player.history.HistoryPoints;
 import ch.dkrieger.bansystem.lib.utils.Document;
 import ch.dkrieger.bansystem.lib.utils.GeneralUtil;
 import ch.dkrieger.bansystem.lib.utils.RuntimeTypeAdapterFactory;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.TextComponent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -77,7 +74,7 @@ public abstract class HistoryEntry {
     }
 
     public String getReason() {
-        return ChatColor.translateAlternateColorCodes('&',reason);
+        return reason;
     }
     public String getRawReason() {
         return reason;
@@ -133,10 +130,6 @@ public abstract class HistoryEntry {
     }
 
     public abstract String getTypeName();
-
-    public abstract TextComponent getListMessage();
-
-    public abstract TextComponent getInfoMessage();
 
     public static void buildAdapter(){
         RuntimeTypeAdapterFactory<HistoryEntry> adapter = RuntimeTypeAdapterFactory.of(HistoryEntry.class, "historyAdapterType");

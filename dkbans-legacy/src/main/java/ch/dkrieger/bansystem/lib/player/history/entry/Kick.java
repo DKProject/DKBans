@@ -24,7 +24,6 @@ import ch.dkrieger.bansystem.lib.BanSystem;
 import ch.dkrieger.bansystem.lib.Messages;
 import ch.dkrieger.bansystem.lib.player.history.HistoryPoints;
 import ch.dkrieger.bansystem.lib.utils.Document;
-import net.md_5.bungee.api.chat.TextComponent;
 
 import java.util.UUID;
 
@@ -45,19 +44,6 @@ public class Kick extends HistoryEntry {
         return "Kick";
     }
 
-    @Override
-    public TextComponent getListMessage() {
-        return new TextComponent(repalce(Messages.HISTORY_LIST_KICK));
-    }
-
-    @Override
-    public TextComponent getInfoMessage() {
-        return new TextComponent(repalce(Messages.HISTORY_INFO_KICK));
-    }
-
-    public TextComponent toMessage(){
-        return new TextComponent(repalce(Messages.KICK_MESSAGE));
-    }
     private String repalce(String message){
         return message.replace("[prefix]",Messages.PREFIX_BAN)
                 .replace("[id]",""+getID())

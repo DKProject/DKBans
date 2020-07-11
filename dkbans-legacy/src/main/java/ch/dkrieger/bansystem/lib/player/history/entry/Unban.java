@@ -20,12 +20,9 @@
 
 package ch.dkrieger.bansystem.lib.player.history.entry;
 
-import ch.dkrieger.bansystem.lib.BanSystem;
-import ch.dkrieger.bansystem.lib.Messages;
 import ch.dkrieger.bansystem.lib.player.history.BanType;
 import ch.dkrieger.bansystem.lib.player.history.HistoryPoints;
 import ch.dkrieger.bansystem.lib.utils.Document;
-import net.md_5.bungee.api.chat.TextComponent;
 
 import java.util.UUID;
 
@@ -42,30 +39,6 @@ public class Unban extends HistoryEntry {
     public BanType getBanType() {
         if(banType == null) return BanType.NETWORK;
         return banType;
-    }
-
-    @Override
-    public TextComponent getListMessage() {
-        return new TextComponent(replace(Messages.HISTORY_LIST_UNBAN));
-    }
-    @Override
-    public TextComponent getInfoMessage() {
-        return new TextComponent(replace(Messages.HISTORY_INFO_UNBAN));
-    }
-    private String replace(String message){
-        return message.replace("[prefix]",Messages.PREFIX_BAN)
-                .replace("[id]",""+getID())
-                .replace("[reason]",getReason())
-                .replace("[type]",getTypeName())
-                .replace("[points]",""+getPoints().getPoints())
-                .replace("[pointsType]",getPoints().getHistoryType().getDisplay())
-                .replace("[reasonID]",""+getReasonID())
-                .replace("[message]",getMessage())
-                .replace("[time]",BanSystem.getInstance().getConfig().dateFormat.format(getTimeStamp()))
-                .replace("[ip]",getIp())
-                .replace("[banType]",getBanType().getDisplay())
-                .replace("[staff]",getStaffName())
-                .replace("[player]",getPlayer().getColoredName());
     }
 
     @Override

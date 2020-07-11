@@ -24,7 +24,6 @@ import ch.dkrieger.bansystem.lib.BanSystem;
 import ch.dkrieger.bansystem.lib.Messages;
 import ch.dkrieger.bansystem.lib.player.history.HistoryPoints;
 import ch.dkrieger.bansystem.lib.utils.Document;
-import net.md_5.bungee.api.chat.TextComponent;
 
 import java.util.UUID;
 
@@ -46,15 +45,6 @@ public class Unwarn extends HistoryEntry{
         return "Unwarn";
     }
 
-    @Override
-    public TextComponent getListMessage() {
-        return new TextComponent(replace(Messages.HISTORY_LIST_UNWARN));
-    }
-
-    @Override
-    public TextComponent getInfoMessage() {
-        return new TextComponent(replace(Messages.HISTORY_INFO_UNWARN));
-    }
 
     public String replace(String message){
         return message

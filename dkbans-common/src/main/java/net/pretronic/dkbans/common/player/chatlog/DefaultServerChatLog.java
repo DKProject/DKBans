@@ -21,7 +21,6 @@
 package net.pretronic.dkbans.common.player.chatlog;
 
 import net.pretronic.databasequery.api.query.type.FindQuery;
-import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.player.chatlog.ServerChatLog;
 import net.pretronic.dkbans.common.DefaultDKBans;
 import net.pretronic.libraries.utility.Validate;

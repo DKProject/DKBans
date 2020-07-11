@@ -22,7 +22,6 @@ package net.pretronic.dkbans.common.migration;
 
 import net.pretronic.dkbans.api.migration.Migration;
 import net.pretronic.dkbans.api.migration.MigrationManager;
-import net.pretronic.dkbans.api.migration.MigrationResult;
 import net.pretronic.libraries.utility.Iterators;
 import net.pretronic.libraries.utility.Validate;
 

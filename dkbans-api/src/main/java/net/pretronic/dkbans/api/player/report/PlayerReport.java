@@ -23,9 +23,7 @@ package net.pretronic.dkbans.api.player.report;
 import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryEntry;
-import net.pretronic.dkbans.api.template.report.ReportTemplate;
 
-import java.util.Collection;
 import java.util.List;
 
 public interface PlayerReport {

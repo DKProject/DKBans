@@ -24,7 +24,6 @@ import ch.dkrieger.bansystem.lib.BanSystem;
 import ch.dkrieger.bansystem.lib.Messages;
 import ch.dkrieger.bansystem.lib.player.history.HistoryPoints;
 import ch.dkrieger.bansystem.lib.utils.Document;
-import net.md_5.bungee.api.chat.TextComponent;
 
 import java.util.UUID;
 
@@ -55,22 +54,7 @@ public class Warn extends HistoryEntry{
         return "Warn";
     }
 
-    @Override
-    public TextComponent getListMessage() {
-        return new TextComponent(replace(Messages.HISTORY_LIST_WARN));
-    }
-    @Override
-    public TextComponent getInfoMessage() {
-        return new TextComponent(replace(Messages.HISTORY_INFO_KICK));
-    }
-    public TextComponent toChatMessage(){
-        return new TextComponent(replace(Messages.WARN_CHAT_MESSAGE));
 
-    }
-    public TextComponent toKickMessage(){
-        return new TextComponent(replace(Messages.WARN_KICK_MESSAGE));
-
-    }
     public String replace(String message){
         return message
                 .replace("[prefix]",Messages.PREFIX_BAN)

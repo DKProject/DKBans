@@ -23,7 +23,6 @@ package net.pretronic.dkbans.api.template;
 import net.pretronic.dkbans.api.player.history.CalculationType;
 
 import java.util.Collection;
-import java.util.List;
 
 public interface TemplateManager {
 

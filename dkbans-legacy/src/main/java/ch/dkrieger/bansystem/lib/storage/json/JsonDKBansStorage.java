@@ -20,13 +20,11 @@
 
 package ch.dkrieger.bansystem.lib.storage.json;
 
-import ch.dkrieger.bansystem.lib.BanSystem;
 import ch.dkrieger.bansystem.lib.broadcast.Broadcast;
 import ch.dkrieger.bansystem.lib.config.Config;
 import ch.dkrieger.bansystem.lib.filter.Filter;
 import ch.dkrieger.bansystem.lib.player.IPBan;
 import ch.dkrieger.bansystem.lib.player.NetworkPlayer;
-import ch.dkrieger.bansystem.lib.player.OnlineSession;
 import ch.dkrieger.bansystem.lib.player.chatlog.ChatLog;
 import ch.dkrieger.bansystem.lib.player.chatlog.ChatLogEntry;
 import ch.dkrieger.bansystem.lib.player.history.History;
@@ -34,7 +32,6 @@ import ch.dkrieger.bansystem.lib.player.history.entry.Ban;
 import ch.dkrieger.bansystem.lib.player.history.entry.HistoryEntry;
 import ch.dkrieger.bansystem.lib.report.Report;
 import ch.dkrieger.bansystem.lib.stats.NetworkStats;
-import ch.dkrieger.bansystem.lib.stats.PlayerStats;
 import ch.dkrieger.bansystem.lib.storage.DKBansStorage;
 import ch.dkrieger.bansystem.lib.utils.Document;
 import ch.dkrieger.bansystem.lib.utils.GeneralUtil;
@@ -42,7 +39,6 @@ import com.google.gson.reflect.TypeToken;
 
 import java.io.File;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class JsonDKBansStorage implements DKBansStorage {

@@ -33,7 +33,6 @@ import net.pretronic.dkbans.api.template.punishment.PunishmentTemplateEntryFacto
 import net.pretronic.dkbans.common.template.DefaultTemplate;
 import net.pretronic.libraries.document.Document;
 import net.pretronic.libraries.document.entry.DocumentEntry;
-import net.pretronic.libraries.document.type.DocumentFileType;
 import net.pretronic.libraries.utility.Convert;
 import net.pretronic.libraries.utility.annonations.Internal;
 import net.pretronic.libraries.utility.map.Pair;

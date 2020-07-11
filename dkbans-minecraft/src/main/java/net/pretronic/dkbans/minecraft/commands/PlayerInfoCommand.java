@@ -20,7 +20,6 @@
 
 package net.pretronic.dkbans.minecraft.commands;
 
-import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.libraries.command.command.BasicCommand;

@@ -20,7 +20,6 @@
 
 package net.pretronic.dkbans.minecraft.listeners;
 
-import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.event.*;
 import net.pretronic.dkbans.api.player.history.PunishmentType;
 import net.pretronic.dkbans.minecraft.BroadcastMessageChannels;

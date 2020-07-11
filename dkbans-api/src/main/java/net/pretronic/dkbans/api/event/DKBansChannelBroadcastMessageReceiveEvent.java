@@ -21,7 +21,6 @@
 package net.pretronic.dkbans.api.event;
 
 import net.pretronic.dkbans.api.DKBansExecutor;
-import net.pretronic.libraries.document.Document;
 
 public interface DKBansChannelBroadcastMessageReceiveEvent extends DKBansEvent {
 

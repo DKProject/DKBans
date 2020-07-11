@@ -22,7 +22,6 @@ package net.pretronic.dkbans.minecraft.commands.punish;
 
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryEntrySnapshot;
-import net.pretronic.dkbans.api.template.Template;
 import net.pretronic.dkbans.api.template.TemplateGroup;
 import net.pretronic.dkbans.api.template.punishment.PunishmentTemplate;
 import net.pretronic.dkbans.api.template.punishment.PunishmentTemplateEntry;

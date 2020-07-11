@@ -25,10 +25,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.TextComponent;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -205,11 +201,6 @@ public class GeneralUtil {
         U result = null;
         while(iterator.hasNext() && (result=iterator.next()) != null) if(acceptAble.accept(result)) iterator.remove();
     }
-    public static  TextComponent createLinkedMCText(String text, String link){
-        TextComponent component = new TextComponent(text);
-        component.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND,link));
-        return component;
-    }
     public static long convertToMillis(long time, String timeType){
         if(timeType == null) return TimeUnit.DAYS.toMillis(time);
         try{
@@ -223,35 +214,6 @@ public class GeneralUtil {
         else if(equalsOne(timeType,"month","months","monate","monaten","mo")) return TimeUnit.DAYS.toMillis(time*30);
         else if(equalsOne(timeType,"year","years","jahr","jahre","y","j")) return TimeUnit.DAYS.toMillis(time*360);
         throw new IllegalArgumentException("False time unit");
-    }
-    public static TextComponent replaceTextComponent(TextComponent text, String replacement, TextComponent component){
-        final List<BaseComponent> components = text.getExtra();
-        if(components != null && components.size() > 0){
-            for (BaseComponent subComponent : components) {
-                if(subComponent instanceof TextComponent)replaceTextComponent((TextComponent) subComponent,replacement,component);
-            }
-            text.setExtra(components);
-        }
-        if(text.getText() != null && !(text.getText().equalsIgnoreCase("null") )&& !(text.getText().equalsIgnoreCase(""))){
-            TextComponent newTC = replaceTextComponent(text.getText(),replacement,component);
-            text.setText("");
-            newTC.setText("");
-            if(text.getExtra() == null) text.setExtra(new ArrayList<>());
-            text.getExtra().addAll(newTC.getExtra());
-        }
-        return text;
-    }
-    public static TextComponent replaceTextComponent(String text, String replacement, TextComponent component){
-        TextComponent message = new TextComponent();
-        if(text.contains(replacement)){
-            int index = text.lastIndexOf(replacement);
-            message.addExtra(new TextComponent(text.substring(0,index)));
-            message.addExtra(component);
-            text = text.substring(index).replace(replacement,"");
-        }
-        if(text.length() > 0) message.addExtra(text);
-        message.setText("");
-        return message;
     }
 
     public static String arrayToString(String[] array, String split){
@@ -290,27 +252,7 @@ public class GeneralUtil {
     }
 
     public static String buildNextLineColor(String message){
-        String newMessage = "";
-        String lastColor = null;
-        boolean nextColor = false;
-
-        for(char c : message.toCharArray()){
-            if(c == '§') nextColor = true;
-            else {
-                if(c == ' '){
-                    if(lastColor != null){
-                        newMessage += (" "+lastColor);
-                        continue;
-                    }
-                }else if(nextColor){
-                    ChatColor  color = ChatColor.getByChar(c);
-                    if(color != null) lastColor = "§"+c;
-                }
-                nextColor = false;
-            }
-            newMessage += c;
-        }
-        return newMessage;
+        return null;
     }
 
     public static UUID getMojangUUIDByName(String name) {

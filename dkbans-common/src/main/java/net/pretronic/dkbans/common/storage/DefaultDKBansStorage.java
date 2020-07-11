@@ -66,7 +66,6 @@ import net.pretronic.libraries.utility.map.Pair;
 import java.net.InetAddress;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Function;
 
 public class DefaultDKBansStorage implements DKBansStorage {
 

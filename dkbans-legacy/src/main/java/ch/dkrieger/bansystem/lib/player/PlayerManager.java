@@ -22,9 +22,7 @@ package ch.dkrieger.bansystem.lib.player;
 
 import ch.dkrieger.bansystem.lib.BanSystem;
 import ch.dkrieger.bansystem.lib.Messages;
-import ch.dkrieger.bansystem.lib.filter.FilterType;
 import ch.dkrieger.bansystem.lib.player.chatlog.ChatLog;
-import ch.dkrieger.bansystem.lib.player.chatlog.ChatLogEntry;
 import ch.dkrieger.bansystem.lib.utils.Document;
 import ch.dkrieger.bansystem.lib.utils.GeneralUtil;
 

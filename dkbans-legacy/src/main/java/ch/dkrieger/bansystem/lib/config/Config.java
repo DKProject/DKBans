@@ -32,7 +32,6 @@ import ch.dkrieger.bansystem.lib.storage.StorageType;
 import ch.dkrieger.bansystem.lib.utils.Document;
 import ch.dkrieger.bansystem.lib.utils.GeneralUtil;
 import ch.dkrieger.bansystem.lib.utils.TabCompleteOption;
-import net.md_5.bungee.api.ChatColor;
 
 import java.io.File;
 import java.text.DateFormat;
@@ -274,7 +273,7 @@ public class Config extends SimpleConfig {
         for(String color : colors){
             try{
                 String[] split = color.split(":");
-                this.playerColorColors.add(new PlayerColor(split[0], ChatColor.translateAlternateColorCodes('&',split[1])));
+                this.playerColorColors.add(new PlayerColor(split[0], split[1]));
             }catch (Exception exception){}
         }
 
