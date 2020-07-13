@@ -86,11 +86,13 @@ public class DKBansLegacyMigration extends Migration {
     }
 
     private void migrateReasons(MigrationResultBuilder resultBuilder) {
+        DKBans.getInstance().getTemplateManager().clearCache();
         migrateBanReasons(resultBuilder);
         migrateKickReasons(resultBuilder);
         migrateUnbanReasons(resultBuilder);
         migrateReportReasons(resultBuilder);
         migrateWarnReasons(resultBuilder);
+        DKBans.getInstance().getTemplateManager().loadTemplateGroups();
     }
 
     private void migrateBanReasons(MigrationResultBuilder resultBuilder) {
@@ -123,7 +125,7 @@ public class DKBansLegacyMigration extends Migration {
 
                 amount++;
             }
-            DKBans.getInstance().getStorage().importTemplateGroup(templateGroup);
+            DKBans.getInstance().getTemplateManager().importTemplateGroup(templateGroup);
         }
         resultBuilder.addMigrated("BanReasons", amount);
     }
@@ -151,7 +153,7 @@ public class DKBansLegacyMigration extends Migration {
                 amount++;
                 templateGroup.addTemplateInternal(template);
             }
-            DKBans.getInstance().getStorage().importTemplateGroup(templateGroup);
+            DKBans.getInstance().getTemplateManager().importTemplateGroup(templateGroup);
         }
         resultBuilder.addMigrated("KickReasons", amount);
     }
@@ -183,7 +185,7 @@ public class DKBansLegacyMigration extends Migration {
                 amount++;
                 templateGroup.addTemplateInternal(template);
             }
-            DKBans.getInstance().getStorage().importTemplateGroup(templateGroup);
+            DKBans.getInstance().getTemplateManager().importTemplateGroup(templateGroup);
         }
         resultBuilder.addMigrated("UnbanReasons", amount);
     }
@@ -195,7 +197,7 @@ public class DKBansLegacyMigration extends Migration {
         if(mode == ReasonMode.TEMPLATE) {
             DefaultTemplateGroup templateGroup = (DefaultTemplateGroup) getOrCreateGroup("report", convertCalculationType(mode));
             for (ReportReason reason : BanSystem.getInstance().getReasonProvider().getReportReasons()) {
-                DefaultReportTemplate template = (DefaultReportTemplate) TemplateFactory.create(TemplateType.PUNISHMENT,
+                DefaultReportTemplate template = (DefaultReportTemplate) TemplateFactory.create(TemplateType.REPORT,
                         reason.getID(),
                         reason.getID(),
                         reason.getName(),
@@ -213,7 +215,7 @@ public class DKBansLegacyMigration extends Migration {
                 amount++;
                 templateGroup.addTemplateInternal(template);
             }
-            DKBans.getInstance().getStorage().importTemplateGroup(templateGroup);
+            DKBans.getInstance().getTemplateManager().importTemplateGroup(templateGroup);
         }
         resultBuilder.addMigrated("ReportReasons", amount);
     }
@@ -243,7 +245,7 @@ public class DKBansLegacyMigration extends Migration {
                 templateGroup.addTemplateInternal(template);
                 amount++;
             }
-            DKBans.getInstance().getStorage().importTemplateGroup(templateGroup);
+            DKBans.getInstance().getTemplateManager().importTemplateGroup(templateGroup);
         }
         resultBuilder.addMigrated("WarnReasons", amount);
     }

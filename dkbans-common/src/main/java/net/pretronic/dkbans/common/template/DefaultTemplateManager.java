@@ -113,6 +113,24 @@ public class DefaultTemplateManager implements TemplateManager {
         return category;
     }
 
+    @Override
+    public void importTemplateGroup(TemplateGroup group) {
+        DKBans.getInstance().getStorage().importTemplateGroup(group);
+    }
+
+    @Override
+    public void clearCache() {
+        for (TemplateGroup templateGroup : this.templateGroups) {
+            templateGroup.getTemplates().clear();
+        }
+    }
+
+    @Override
+    public void loadTemplateGroups() {
+        this.templateGroups.clear();
+        this.templateGroups.addAll(DKBans.getInstance().getStorage().loadTemplateGroups());
+    }
+
     private void registerDefaultFactories() {
         TemplateFactory.register(TemplateType.PUNISHMENT, new DefaultPunishmentTemplate.Factory());
 
@@ -130,7 +148,7 @@ public class DefaultTemplateManager implements TemplateManager {
     }
 
     public void initialize() {
-        this.templateGroups.addAll(DKBans.getInstance().getStorage().loadTemplateGroups());
         this.templateCategories.addAll(DKBans.getInstance().getStorage().loadTemplateCategories());
+        loadTemplateGroups();
     }
 }

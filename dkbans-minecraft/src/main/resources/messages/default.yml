@@ -253,6 +253,7 @@ messages:
   dkbans.command.chatLog.list.loop: '&8» {entry.player.displayName} &7on &e{entry.timeFormatted}&8: &f{entry.message}'
   dkbans.command.dkbans.help: '${dkbans.prefix} &cInvalid usage of &eDKBans &ccommand&8
   &8» &7/dkbans migrate <name> (Only executable from console)'
+  dkbans.command.dkbans.template.import: '${dkbans.prefix} &7You have imported &e{count} &7template groups with an amount of &e{templateCount} &7templates'
   dkbans.command.joinme.notEnoughAmount: '${dkbans.prefix} &cYou can not send a joinme'
   dkbans.command.joinme.usage: '${dkbans.prefix} &cUsage&8: &7/joinme [playerId]'
   dkbans.command.joinme.notExists: '${dkbans.prefix} &cThis joinme does not exist'

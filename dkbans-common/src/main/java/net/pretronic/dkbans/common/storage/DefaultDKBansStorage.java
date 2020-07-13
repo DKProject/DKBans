@@ -169,6 +169,10 @@ public class DefaultDKBansStorage implements DKBansStorage {
 
                 Collection<String> aliases = loadAliases(subResultEntry.getString("Aliases"));
                 TemplateCategory category = dkBans.getTemplateManager().getTemplateCategory(subResultEntry.getInt("CategoryId"));
+                PlayerHistoryType historyType = null;
+                if(subResultEntry.contains("HistoryTypeId")) {
+                    historyType = dkBans.getHistoryManager().getHistoryType(subResultEntry.getInt("HistoryTypeId"));
+                }
                 templateGroup.addTemplateInternal(TemplateFactory.create(templateType,
                         subResultEntry.getInt("Id"),
                         subResultEntry.getInt("InGroupId"),
@@ -177,7 +181,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
                         subResultEntry.getString("DisplayName"),
                         subResultEntry.getString("Permission"),
                         aliases,
-                        dkBans.getHistoryManager().getHistoryType(subResultEntry.getInt("HistoryTypeId")),
+                        historyType,
                         subResultEntry.getBoolean("Enabled"),
                         subResultEntry.getBoolean("Hidden"),
                         category,
@@ -190,11 +194,10 @@ public class DefaultDKBansStorage implements DKBansStorage {
 
     @Override
     public void importTemplateGroup(TemplateGroup templateGroup) {
-        FindQuery groupExist = this.templateGroups.find().where("Name", templateGroup.getName())
+        FindQuery groupExist = this.templateGroups.find()
+                .where("Name", templateGroup.getName())
                 .where("TemplateType", templateGroup.getTemplateType().getName());
-        if(templateGroup.getId() != -1) {
-            groupExist.where("Id", templateGroup.getId());
-        }
+
         if(groupExist.execute().isEmpty()) {
             int id = templateGroups.insert().set("Name", templateGroup.getName())
                     .set("Type", templateGroup.getName())
@@ -202,13 +205,13 @@ public class DefaultDKBansStorage implements DKBansStorage {
             ((DefaultTemplateGroup)templateGroup).setIdInternal(id);
         }
         for (Template template : templateGroup.getTemplates()) {
-            boolean exist = !this.template.find().where("Id", template.getId())
-                    .where("Name", template.getName())
+            boolean exist = !this.template.find()
+                    .where("InGroupId", template.getInGroupId())
                     .where("GroupId", templateGroup.getId())
                     .execute().isEmpty();
             if(exist) {
                 this.template.update()
-                        .set("InGroupId", template.getInGroupId())
+                        .set("Name", template.getName())
                         .set("DisplayName", template.getDisplayName())
                         .set("Permission", template.getPermission())
                         .set("Aliases", buildAliases(template.getAliases()))
@@ -217,7 +220,8 @@ public class DefaultDKBansStorage implements DKBansStorage {
                         .set("Hidden", template.isHidden())
                         .set("CategoryId", template.getCategory().getId())
                         .set("Data", DocumentFileType.JSON.getWriter().write(TemplateFactory.toData(template), false))
-                        .where("Id", template.getId())
+                        .where("InGroupId", template.getInGroupId())
+                        .where("GroupId", templateGroup.getId())
                         .execute();
             } else {
                 int id = this.template.insert()

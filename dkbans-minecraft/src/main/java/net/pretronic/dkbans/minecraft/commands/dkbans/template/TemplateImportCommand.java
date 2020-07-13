@@ -27,6 +27,7 @@ import net.pretronic.libraries.command.command.configuration.CommandConfiguratio
 import net.pretronic.libraries.command.sender.CommandSender;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
+import net.pretronic.libraries.utility.map.Pair;
 
 public class TemplateImportCommand extends BasicCommand {
 
@@ -36,7 +37,9 @@ public class TemplateImportCommand extends BasicCommand {
 
     @Override
     public void execute(CommandSender commandSender, String[] args) {
-        int count = DKBansConfig.importTemplates();
-        commandSender.sendMessage(Messages.COMMAND_TEMPLATE_IMPORT, VariableSet.create().add("count", count));
+        Pair<Integer, Integer> data = DKBansConfig.importTemplates();
+        commandSender.sendMessage(Messages.COMMAND_TEMPLATE_IMPORT, VariableSet.create()
+                .add("count", data.getKey())
+                .add("templateCount", data.getValue()));
     }
 }

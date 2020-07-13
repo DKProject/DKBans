@@ -25,6 +25,7 @@ import net.pretronic.dkbans.api.template.Template;
 import net.pretronic.dkbans.api.template.TemplateCategory;
 import net.pretronic.dkbans.api.template.TemplateGroup;
 import net.pretronic.libraries.document.Document;
+import net.pretronic.libraries.utility.Validate;
 import net.pretronic.libraries.utility.annonations.Internal;
 
 import java.util.Collection;
@@ -46,6 +47,7 @@ public class DefaultTemplate implements Template {
 
     public DefaultTemplate(int id, int inGroupId, String name, TemplateGroup group, String displayName, String permission, Collection<String> aliases, PlayerHistoryType historyType,
                            boolean enabled, boolean hidden, TemplateCategory category, Document data) {
+        Validate.notNull(name, group, displayName, category, data);
         this.id = id;
         this.inGroupId = inGroupId;
         this.name = name;
