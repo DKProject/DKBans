@@ -30,6 +30,7 @@ import net.pretronic.dkbans.api.migration.MigrationManager;
 import net.pretronic.dkbans.api.player.DKBansPlayerManager;
 import net.pretronic.dkbans.api.player.chatlog.ChatLogManager;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryManager;
+import net.pretronic.dkbans.api.player.ipblacklist.IpAddressBlacklistManager;
 import net.pretronic.dkbans.api.player.report.ReportManager;
 import net.pretronic.dkbans.api.support.SupportTicketManager;
 import net.pretronic.dkbans.common.event.DefaultDKBansChannelBroadcastMessageReceiveEvent;
@@ -37,6 +38,7 @@ import net.pretronic.dkbans.common.filter.DefaultFilterManager;
 import net.pretronic.dkbans.common.migration.DefaultMigrationManager;
 import net.pretronic.dkbans.common.player.chatlog.DefaultChatLogManager;
 import net.pretronic.dkbans.common.player.history.DefaultPlayerHistoryManager;
+import net.pretronic.dkbans.common.player.ipblacklist.DefaultIpAddressBlacklistManager;
 import net.pretronic.dkbans.common.player.report.DefaultReportManager;
 import net.pretronic.dkbans.common.storage.DefaultDKBansStorage;
 import net.pretronic.dkbans.common.template.DefaultTemplateManager;
@@ -62,6 +64,7 @@ public class DefaultDKBans extends DKBans {
     private final DKBansPlayerManager playerManager;
     private final MigrationManager migrationManager;
     private final JoinMeManager joinMeManager;
+    private final IpAddressBlacklistManager ipAddressBlacklistManager;
 
     public DefaultDKBans(String version, PretronicLogger logger, ExecutorService executorService, EventBus eventBus, Database database, DKBansPlayerManager playerManager, JoinMeManager joinMeManager) {
         this.version =version;
@@ -79,6 +82,7 @@ public class DefaultDKBans extends DKBans {
         this.chatLogManager = new DefaultChatLogManager();
         this.playerManager = playerManager;
         this.migrationManager = new DefaultMigrationManager();
+        this.ipAddressBlacklistManager = new DefaultIpAddressBlacklistManager();
     }
 
     @Override
@@ -154,6 +158,11 @@ public class DefaultDKBans extends DKBans {
     @Override
     public JoinMeManager getJoinMeManager() {
         return this.joinMeManager;
+    }
+
+    @Override
+    public IpAddressBlacklistManager getIpAddressBlacklistManager() {
+        return this.ipAddressBlacklistManager;
     }
 
     @Override

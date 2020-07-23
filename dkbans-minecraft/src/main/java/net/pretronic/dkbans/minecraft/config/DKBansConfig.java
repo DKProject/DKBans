@@ -76,8 +76,15 @@ public class DKBansConfig {
     @DocumentIgnored
     public static long JOINME_COOLDOWN_DURATION = 0;
 
+    private static String IP_ADDRESS_BLOCK_ALT_MIN_PLAYTIME = DurationProcessor.getStandard().formatShort(Duration.ofMinutes(3));
+
+    @DocumentIgnored
+    public static long IP_ADDRESS_BLOCK_ALT_MIN_PLAYTIME_TIME = 0;
+
+
     public static void load(DKBans dkBans) {
         JOINME_COOLDOWN_DURATION = DurationProcessor.getStandard().parse(JOINME_COOLDOWN).toMillis();
+        IP_ADDRESS_BLOCK_ALT_MIN_PLAYTIME_TIME = DurationProcessor.getStandard().parse(IP_ADDRESS_BLOCK_ALT_MIN_PLAYTIME).toMillis();
 
         File templates = new File("plugins/DKBans/templates/");
 

@@ -33,6 +33,7 @@ import net.pretronic.dkbans.common.player.history.DefaultPlayerHistory;
 import net.pretronic.dkbans.common.player.history.DefaultPlayerHistoryEntry;
 import net.pretronic.dkbans.common.player.history.DefaultPlayerHistoryEntrySnapshot;
 import net.pretronic.dkbans.common.player.history.DefaultPlayerHistoryType;
+import net.pretronic.dkbans.common.player.ipblacklist.DefaultIpAddressBlock;
 import net.pretronic.dkbans.common.player.note.DefaultPlayerNote;
 import net.pretronic.dkbans.common.player.report.DefaultPlayerReport;
 import net.pretronic.dkbans.common.player.report.DefaultPlayerReportEntry;
@@ -46,6 +47,8 @@ import net.pretronic.dkbans.minecraft.commands.dkbans.DKBansCommand;
 import net.pretronic.dkbans.minecraft.commands.history.HistoryCommand;
 import net.pretronic.dkbans.minecraft.commands.history.MyHistoryPointsCommand;
 import net.pretronic.dkbans.minecraft.commands.history.ResetHistoryCommand;
+import net.pretronic.dkbans.minecraft.commands.ip.IpBlockCommand;
+import net.pretronic.dkbans.minecraft.commands.ip.IpInfoCommand;
 import net.pretronic.dkbans.minecraft.commands.punish.*;
 import net.pretronic.dkbans.minecraft.commands.report.ReportCommand;
 import net.pretronic.dkbans.minecraft.commands.unpunish.UnpunishCommand;
@@ -130,6 +133,9 @@ public class DKBansPlugin extends MinecraftPlugin {
         getRuntime().getLocal().getCommandManager().registerCommand(new DKBansCommand(this));
         getRuntime().getLocal().getCommandManager().registerCommand(new JoinMeCommand(this, CommandConfig.COMMAND_JOINME));
 
+        getRuntime().getLocal().getCommandManager().registerCommand(new IpInfoCommand(this, CommandConfig.COMMAND_IP_INFO));
+        getRuntime().getLocal().getCommandManager().registerCommand(new IpBlockCommand(this, CommandConfig.COMMAND_IP_BLOCK));
+
         for (CommandConfig.PunishmentTypeConfiguration configuration : CommandConfig.COMMAND_PUNISH_DIRECT) {
             Command command;
 
@@ -187,6 +193,8 @@ public class DKBansPlugin extends MinecraftPlugin {
         VariableDescriberRegistry.registerDescriber(DefaultPunishmentTemplate.class);
         VariableDescriberRegistry.registerDescriber(DefaultPlayerSession.class);
         VariableDescriberRegistry.registerDescriber(PunishmentType.class);
+
+        VariableDescriberRegistry.registerDescriber(DefaultIpAddressBlock.class);
 
         VariableDescriber<DefaultDKBansPlayer> playerDescriber = VariableDescriberRegistry.registerDescriber(DefaultDKBansPlayer.class);
         playerDescriber.setForwardFunction(player -> McNative.getInstance().getPlayerManager().getPlayer(player.getUniqueId()));

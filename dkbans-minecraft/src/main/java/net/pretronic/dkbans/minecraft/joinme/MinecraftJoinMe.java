@@ -85,7 +85,7 @@ public class MinecraftJoinMe implements JoinMe {
             components.add(Messages.COMMAND_JOINME_LINE_7);
             components.add(Messages.COMMAND_JOINME_LINE_8);
             components.add(Messages.COMMAND_JOINME_LINE_9);
-            components.add(Messages.COMMAND_JOINME_LINE_1);
+            components.add(Messages.COMMAND_JOINME_LINE_10);
         }
 
         if(DKBansConfig.JOINME_HEAD_ENABLED) {

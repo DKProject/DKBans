@@ -29,6 +29,7 @@ public interface DKBansExecutor {
 
     DKBansExecutor CONSOLE = new SpecialExecutor(new UUID(0,0),"Console");
 
+    DKBansExecutor IP_ADDRESS_BLOCK = new SpecialExecutor(new UUID(0,1),"IpAddressBlock");
 
     String getName();
 
