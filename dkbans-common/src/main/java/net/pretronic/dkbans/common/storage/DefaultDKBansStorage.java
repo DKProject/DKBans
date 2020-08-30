@@ -47,6 +47,7 @@ import net.pretronic.dkbans.api.player.report.ReportState;
 import net.pretronic.dkbans.api.player.session.PlayerSession;
 import net.pretronic.dkbans.api.storage.DKBansStorage;
 import net.pretronic.dkbans.api.template.*;
+import net.pretronic.dkbans.api.template.punishment.PunishmentTemplate;
 import net.pretronic.dkbans.api.template.report.ReportTemplate;
 import net.pretronic.dkbans.common.filter.DefaultFilter;
 import net.pretronic.dkbans.common.player.chatlog.DefaultChatLogEntry;
@@ -690,6 +691,16 @@ public class DefaultDKBansStorage implements DKBansStorage {
     }
 
     @Override
+    public IpAddressBlock blockIpAddress(String ipAddress, IpAddressBlockType type, DKBansExecutor staff, String reason, long timeout, String forReason, long forDuration) {
+        return null;
+    }
+
+    @Override
+    public IpAddressBlock blockIpAddress(String ipAddress, IpAddressBlockType type, DKBansExecutor staff, String reason, long timeout, PunishmentTemplate forTemplate) {
+        return null;
+    }
+
+    @Override
     public void unblockIpAddress(IpAddressBlock addressBlock) {
         this.ipAddressBlacklist.delete().where("Id", addressBlock.getId()).execute();
     }
@@ -718,7 +729,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 entry.getLong("DisconnectTime"));
     }
 
-    
+
     @Override
     public List<PlayerNote> getPlayerNotes(DKBansPlayer player) {
         return getPlayerNotesByResult(player, this.playerNotes.find().where("PlayerId", player.getUniqueId()).execute());
