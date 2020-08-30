@@ -95,7 +95,6 @@ public class DKBansPlugin extends MinecraftPlugin {
 
         dkBans.getTemplateManager().initialize();
 
-
         loadConfigs();
 
         registerCommands();
