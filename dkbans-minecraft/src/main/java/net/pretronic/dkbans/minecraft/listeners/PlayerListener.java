@@ -46,7 +46,6 @@ import org.mcnative.common.event.player.MinecraftPlayerLogoutEvent;
 import org.mcnative.common.event.player.login.MinecraftPlayerLoginEvent;
 import org.mcnative.common.event.player.login.MinecraftPlayerPostLoginEvent;
 import org.mcnative.common.player.ConnectedMinecraftPlayer;
-import org.mcnative.common.player.MinecraftPlayer;
 import org.mcnative.common.player.OnlineMinecraftPlayer;
 import org.mcnative.common.text.Text;
 import org.mcnative.common.text.components.MessageComponent;
