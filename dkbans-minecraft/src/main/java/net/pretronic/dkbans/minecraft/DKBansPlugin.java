@@ -227,7 +227,7 @@ public class DKBansPlugin extends MinecraftPlugin {
         getConfiguration().load(DKBansConfig.class);
         getConfiguration("commands").load(CommandConfig.class);
 
-        DKBansConfig.load(dkBans);
+        DKBansConfig.load();
         getLogger().info("DKBans config loaded");
     }
 }

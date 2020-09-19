@@ -54,7 +54,7 @@ public class DefaultPunishmentTemplate extends DefaultTemplate implements Punish
     public DefaultPunishmentTemplate(int id, int inGroupId, String name, TemplateGroup group, String displayName, String permission, Collection<String> aliases,
                                      PlayerHistoryType historyType, boolean enabled, boolean hidden, TemplateCategory category, Document data) {
         super(id, inGroupId, name, group, displayName, permission, aliases, historyType, enabled, hidden, category, data);
-        Validate.notNull(historyType);
+        Validate.notNull(historyType, "History can't be null");
 
         this.durations = loadDurations(data.getDocument("durations"));
 

@@ -174,8 +174,9 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 Collection<String> aliases = loadAliases(subResultEntry.getString("Aliases"));
                 TemplateCategory category = dkBans.getTemplateManager().getTemplateCategory(subResultEntry.getInt("CategoryId"));
                 PlayerHistoryType historyType = null;
-                if(subResultEntry.contains("HistoryTypeId")) {
-                    historyType = dkBans.getHistoryManager().getHistoryType(subResultEntry.getInt("HistoryTypeId"));
+                Object historyTypeId = subResultEntry.getObject("HistoryTypeId");
+                if(historyTypeId instanceof Integer) {
+                    historyType = dkBans.getHistoryManager().getHistoryType((int) historyTypeId);
                 }
                 templateGroup.addTemplateInternal(TemplateFactory.create(templateType,
                         subResultEntry.getInt("Id"),

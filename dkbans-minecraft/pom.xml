@@ -69,8 +69,6 @@
                     </manifest>
                     <loader>
                         <version>${project.version}</version>
-                        <versionUrl>https://mirror.pretronic.net/v1/{plugin.id}/versions/latest?plain=true&amp;qualifier={qualifier}</versionUrl>
-                        <downloadUrl>https://mirror.pretronic.net/v1/{plugin.id}/versions/{version.build}/download</downloadUrl>
                     </loader>
                 </configuration>
             </plugin>

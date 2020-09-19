@@ -82,7 +82,7 @@ public class DKBansConfig {
     public static long IP_ADDRESS_BLOCK_ALT_MIN_PLAYTIME_TIME = 0;
 
 
-    public static void load(DKBans dkBans) {
+    public static void load() {
         JOINME_COOLDOWN_DURATION = DurationProcessor.getStandard().parse(JOINME_COOLDOWN).toMillis();
         IP_ADDRESS_BLOCK_ALT_MIN_PLAYTIME_TIME = DurationProcessor.getStandard().parse(IP_ADDRESS_BLOCK_ALT_MIN_PLAYTIME).toMillis();
 
@@ -98,6 +98,8 @@ public class DKBansConfig {
             } catch (IOException exception) {
                 exception.printStackTrace();
             }
+        }
+        if(DKBans.getInstance().getTemplateManager().getTemplateGroups().isEmpty()) {
             importTemplates();
         }
     }
