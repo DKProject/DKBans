@@ -128,6 +128,16 @@ public class CommandConfig {
             .name("joinme")
             .create();
 
+    public static CommandConfiguration COMMAND_IP_INFO = CommandConfiguration.newBuilder()
+            .name("ipInfo")
+            .permission("dkbans.command.ipInfo")
+            .create();
+
+    public static CommandConfiguration COMMAND_IP_BLOCK = CommandConfiguration.newBuilder()
+            .name("ipBlock")
+            .permission("dkbans.command.ipBlock")
+            .create();
+
     static {
 
         //Ban

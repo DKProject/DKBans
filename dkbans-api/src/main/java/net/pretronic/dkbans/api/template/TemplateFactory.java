@@ -50,7 +50,6 @@ public abstract class TemplateFactory {
         Validate.notNull(templateType, name, category);
         TemplateFactory factory = FACTORY.get(templateType);
         if(factory == null) throw new IllegalArgumentException("No template factory for template type " + templateType.getName() + " found");
-
         return factory.create(id, inGroupId, name, group, displayName, permission, aliases, historyType, enabled, hidden, category, data);
     }
 

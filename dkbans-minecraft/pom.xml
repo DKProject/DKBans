@@ -25,7 +25,7 @@
     <parent>
         <artifactId>DKBans</artifactId>
         <groupId>net.pretronic.dkbans</groupId>
-        <version>1.1.0.138-BETA</version>
+        <version>1.2.4.148-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -42,7 +42,6 @@
                     <target>8</target>
                 </configuration>
             </plugin>
-
             <plugin>
                 <groupId>org.mcnative</groupId>
                 <artifactId>mcnative-buildtool-maven</artifactId>
@@ -70,8 +69,6 @@
                     </manifest>
                     <loader>
                         <version>${project.version}</version>
-                        <versionUrl>https://mirror.pretronic.net/v1/{plugin.id}/versions/latest?plain=true&amp;qualifier={qualifier}</versionUrl>
-                        <downloadUrl>https://mirror.pretronic.net/v1/{plugin.id}/versions/{version.build}/download</downloadUrl>
                     </loader>
                 </configuration>
             </plugin>

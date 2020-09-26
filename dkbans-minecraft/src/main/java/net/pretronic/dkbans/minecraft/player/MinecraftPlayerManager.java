@@ -50,6 +50,7 @@ public class MinecraftPlayerManager implements DKBansPlayerManager {
 
         this.specialExecutors = new ArrayList<>();
         this.specialExecutors.add(DKBansExecutor.CONSOLE);
+        this.specialExecutors.add(DKBansExecutor.IP_ADDRESS_BLOCK);
     }
 
     @Override

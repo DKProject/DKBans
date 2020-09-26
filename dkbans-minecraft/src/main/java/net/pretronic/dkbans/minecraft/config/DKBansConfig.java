@@ -33,6 +33,7 @@ import net.pretronic.libraries.document.entry.DocumentEntry;
 import net.pretronic.libraries.utility.Convert;
 import net.pretronic.libraries.utility.duration.DurationProcessor;
 import net.pretronic.libraries.utility.io.FileUtil;
+import net.pretronic.libraries.utility.map.Pair;
 
 import java.io.File;
 import java.io.IOException;
@@ -43,7 +44,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class DKBansConfig {
 
@@ -75,8 +75,15 @@ public class DKBansConfig {
     @DocumentIgnored
     public static long JOINME_COOLDOWN_DURATION = 0;
 
-    public static void load(DKBans dkBans) {
+    private static String IP_ADDRESS_BLOCK_ALT_MIN_PLAYTIME = DurationProcessor.getStandard().formatShort(Duration.ofMinutes(3));
+
+    @DocumentIgnored
+    public static long IP_ADDRESS_BLOCK_ALT_MIN_PLAYTIME_TIME = 0;
+
+
+    public static void load() {
         JOINME_COOLDOWN_DURATION = DurationProcessor.getStandard().parse(JOINME_COOLDOWN).toMillis();
+        IP_ADDRESS_BLOCK_ALT_MIN_PLAYTIME_TIME = DurationProcessor.getStandard().parse(IP_ADDRESS_BLOCK_ALT_MIN_PLAYTIME).toMillis();
 
         File templates = new File("plugins/DKBans/templates/");
 
@@ -90,24 +97,26 @@ public class DKBansConfig {
             } catch (IOException exception) {
                 exception.printStackTrace();
             }
-
-            FileUtil.processFilesHierarchically(templates, file -> {
-                TemplateGroup group = loadTemplateConfig(dkBans, Document.read(file));
-                dkBans.getStorage().importTemplateGroup(group);
-            });
+        }
+        if(DKBans.getInstance().getTemplateManager().getTemplateGroups().isEmpty()) {
+            importTemplates();
         }
     }
 
-    public static int importTemplates() {
+    public static Pair<Integer, Integer> importTemplates() {
         File templates = new File("plugins/DKBans/templates/");
 
-        AtomicInteger count = new AtomicInteger();
-        FileUtil.processFilesHierarchically(templates, file -> {
+        int templateCount = 0;
+        int groupCount = 0;
+        DKBans.getInstance().getTemplateManager().clearCache();
+        for (File file : FileUtil.getFilesHierarchically(templates)) {
             TemplateGroup group = loadTemplateConfig(DKBans.getInstance(), Document.read(file));
-            DKBans.getInstance().getStorage().importTemplateGroup(group);
-            count.incrementAndGet();
-        });
-        return count.get();
+            DKBans.getInstance().getTemplateManager().importTemplateGroup(group);
+            groupCount++;
+            templateCount+=group.getTemplates().size();
+        }
+        DKBans.getInstance().getTemplateManager().loadTemplateGroups();
+        return new Pair<>(groupCount, templateCount);
     }
 
     private static TemplateGroup loadTemplateConfig(DKBans dkBans, Document document) {
@@ -132,7 +141,7 @@ public class DKBansConfig {
         for (DocumentEntry entry0 : document.getDocument("templates")) {
             Document documentEntry = entry0.toDocument();
 
-            int id = Convert.toInteger(documentEntry.getKey());
+            int inGroupId = Convert.toInteger(documentEntry.getKey());
 
             String name = null;
             String display = null;
@@ -198,10 +207,9 @@ public class DKBansConfig {
                     }
                 }
             }
-            Template template = TemplateFactory.create(templateType, id, id, name, templateGroup, display, permission, aliases,
+            Template template = TemplateFactory.create(templateType, -1, inGroupId, name, templateGroup, display, permission, aliases,
                     historyType, enabled, hidden, category, data);
             templates.add(template);
-
         }
         ((DefaultTemplateGroup)templateGroup).addTemplatesInternal(templates);
 

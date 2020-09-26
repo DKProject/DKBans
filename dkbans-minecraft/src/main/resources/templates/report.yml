@@ -3,12 +3,11 @@ calculation: AMOUNT
 name: report
 templates:
   1:
-    name: Provocation
-    display: Provocation
-    permission: dkbans.ban.reason.provocation
+    name: ReportTest
+    display: ReportTest
+    permission: dkbans.ban.reason.reportTest
     aliases:
-      - provocation
-      - provo
+      - rep
     hidden: false
     category: TEST
     targetPunishment: ban@Provocation

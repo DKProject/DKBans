@@ -25,6 +25,8 @@ import net.pretronic.dkbans.api.filter.Filter;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.chatlog.ChatLogEntry;
 import net.pretronic.dkbans.api.player.history.*;
+import net.pretronic.dkbans.api.player.ipblacklist.IpAddressBlock;
+import net.pretronic.dkbans.api.player.ipblacklist.IpAddressBlockType;
 import net.pretronic.dkbans.api.player.note.PlayerNote;
 import net.pretronic.dkbans.api.player.note.PlayerNoteType;
 import net.pretronic.dkbans.api.player.report.PlayerReport;
@@ -34,6 +36,7 @@ import net.pretronic.dkbans.api.player.session.PlayerSession;
 import net.pretronic.dkbans.api.template.TemplateCategory;
 import net.pretronic.dkbans.api.template.TemplateGroup;
 import net.pretronic.dkbans.api.template.TemplateType;
+import net.pretronic.dkbans.api.template.punishment.PunishmentTemplate;
 import net.pretronic.dkbans.api.template.report.ReportTemplate;
 import net.pretronic.libraries.utility.map.Pair;
 
@@ -163,6 +166,17 @@ public interface DKBansStorage {
 
     CompletableFuture<ChatLogEntry> createChatLogEntryAsync(UUID playerId, String message, long time, String serverName, UUID serverId, String filterAffiliationArea);
 
+
+
+    //Ip blacklist
+
+    IpAddressBlock getIpAddressBlock(String ipAddress);
+
+    IpAddressBlock blockIpAddress(String ipAddress, IpAddressBlockType type, DKBansExecutor staff, String reason, long timeout, String forReason, long forDuration);
+
+    IpAddressBlock blockIpAddress(String ipAddress, IpAddressBlockType type, DKBansExecutor staff, String reason, long timeout, PunishmentTemplate forTemplate);
+
+    void unblockIpAddress(IpAddressBlock addressBlock);
       /*
     private final PlayerHistoryEntry entry;
     private final int id;

@@ -37,6 +37,7 @@ import net.pretronic.libraries.document.entry.DocumentEntry;
 import net.pretronic.libraries.document.entry.PrimitiveEntry;
 import net.pretronic.libraries.utility.Convert;
 import net.pretronic.libraries.utility.Iterators;
+import net.pretronic.libraries.utility.Validate;
 import net.pretronic.libraries.utility.annonations.Internal;
 import net.pretronic.libraries.utility.map.Pair;
 import net.pretronic.libraries.utility.map.Triple;
@@ -58,7 +59,7 @@ public class DefaultUnPunishmentTemplate extends DefaultTemplate implements UnPu
                                        Collection<String> aliases, PlayerHistoryType historyType, boolean enabled, boolean hidden,
                                        TemplateCategory category, Document data) {
         super(id, inGroupId, name, group, displayName, permission, aliases, historyType, enabled, hidden, category, data);
-
+        Validate.notNull(historyType);
         this.blacklistedTemplates = new ArrayList<>();
         loadBlacklistedTemplates(data.getDocument("blacklisted"));
         this.scopes = loadScopes(data.getDocument("scopes"));

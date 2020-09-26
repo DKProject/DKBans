@@ -38,6 +38,7 @@ import net.pretronic.libraries.utility.interfaces.ObjectOwner;
 import org.mcnative.common.player.MinecraftPlayer;
 import org.mcnative.common.player.OnlineMinecraftPlayer;
 
+import java.util.Comparator;
 import java.util.List;
 
 /*
@@ -125,6 +126,7 @@ public class ReportCommand extends MainCommand implements NotFindable {
         } else {
             List<Template> availableTemplates = Iterators.filter(this.templateGroup.getTemplates(), template -> template instanceof ReportTemplate
                     && player.hasPermission(template.getPermission()));
+            availableTemplates.sort(Comparator.comparingInt(Template::getInGroupId));
             player.sendMessage(Messages.COMMAND_REPORT_LIST_TEMPLATE, VariableSet.create().addDescribed("templates", availableTemplates));
         }
     }

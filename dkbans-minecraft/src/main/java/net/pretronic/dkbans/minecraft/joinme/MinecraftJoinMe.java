@@ -26,16 +26,17 @@ import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.minecraft.config.DKBansConfig;
 import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.libraries.utility.exception.OperationFailedException;
+import org.mcnative.common.text.ImageText;
 import org.mcnative.common.text.components.MessageComponent;
 import org.mcnative.common.text.components.TextComponent;
 import org.mcnative.common.text.event.ClickAction;
 import org.mcnative.common.text.event.TextEvent;
-import org.mcnative.common.utils.ImageMessage;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -85,7 +86,7 @@ public class MinecraftJoinMe implements JoinMe {
             components.add(Messages.COMMAND_JOINME_LINE_7);
             components.add(Messages.COMMAND_JOINME_LINE_8);
             components.add(Messages.COMMAND_JOINME_LINE_9);
-            components.add(Messages.COMMAND_JOINME_LINE_1);
+            components.add(Messages.COMMAND_JOINME_LINE_10);
         }
 
         if(DKBansConfig.JOINME_HEAD_ENABLED) {
@@ -97,9 +98,8 @@ public class MinecraftJoinMe implements JoinMe {
                     throw new OperationFailedException("Could not load joinme image from player "+playerId, exception);
                 }
                 if(image != null){
-                    List<MessageComponent<?>> newComponents = new ArrayList<>();
-                    ImageMessage message = new ImageMessage(image,8, '█');
-                    MessageComponent<?>[] headLines = message.getLinesAsMessageComponent();
+                    ImageText message = ImageText.compile(image,8, '█');
+                    MessageComponent<?>[] headLines = message.buildLines();
                     int i = -1;
                     for(MessageComponent<?> line : components) {
                         if(i >= 0 && i < 8){
@@ -107,12 +107,12 @@ public class MinecraftJoinMe implements JoinMe {
                             component.addExtra(headLines[i]);
                             component.addExtra(line);
                             component.setClickEvent(new TextEvent<>(ClickAction.RUN_COMMAND, "/joinme "+playerId));
-                            newComponents.add(component);
-                        }else newComponents.add(line);
+                            message.addTextExtension(i,component);
+                        }else message.addTextExtension(i,line);
                         i++;
                     }
 
-                    return newComponents;
+                    return Arrays.asList(message.buildLines());
                 }
             }catch (Exception exception){
                 exception.printStackTrace();

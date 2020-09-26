@@ -21,11 +21,15 @@
 package net.pretronic.dkbans.minecraft.listeners;
 
 import net.pretronic.dkbans.api.DKBans;
+import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.filter.FilterAffiliationArea;
 import net.pretronic.dkbans.api.filter.FilterManager;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryEntry;
+import net.pretronic.dkbans.api.player.history.PlayerHistoryEntrySnapshotBuilder;
 import net.pretronic.dkbans.api.player.history.PunishmentType;
+import net.pretronic.dkbans.api.player.ipblacklist.IpAddressBlock;
+import net.pretronic.dkbans.api.player.ipblacklist.IpAddressBlockType;
 import net.pretronic.dkbans.common.DKBansUtil;
 import net.pretronic.dkbans.minecraft.PlayerSettingsKey;
 import net.pretronic.dkbans.minecraft.config.DKBansConfig;
@@ -81,7 +85,21 @@ public class PlayerListener {
                     .addDescribed("player",event.getPlayer()));
             return;
         }
-        //@Todo check for new players because of alt manager
+        IpAddressBlock ipAddressBlock = DKBans.getInstance().getIpAddressBlacklistManager().getIpAddressBlock(event.getOnlinePlayer().getAddress().getAddress().getHostAddress());
+        if(ipAddressBlock != null) {
+            long minOnlineTime = DKBansConfig.IP_ADDRESS_BLOCK_ALT_MIN_PLAYTIME_TIME;
+            if(ipAddressBlock.getType() == IpAddressBlockType.BLOCK
+                    || (ipAddressBlock.getType() == IpAddressBlockType.ALT && event.getPlayer().getFirstPlayed()+minOnlineTime < System.currentTimeMillis())) {
+                PlayerHistoryEntrySnapshotBuilder builder = player.punish().stuff(DKBansExecutor.IP_ADDRESS_BLOCK);
+                if(ipAddressBlock.getForTemplate() != null) {
+                    builder.template(ipAddressBlock.getForTemplate());
+                } else {
+                    builder.reason(ipAddressBlock.getForReason())
+                            .timeout(System.currentTimeMillis()+ipAddressBlock.getForDuration());
+                }
+                builder.execute();
+            }
+        }
     }
 
     @Listener(priority = EventPriority.LOWEST)

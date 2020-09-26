@@ -38,6 +38,11 @@ public class Messages {
     public static MessageComponent<?> ERROR_ONLY_PLAYER = Text.ofMessageKey("dkbans.error.onlyPlayer");
     public static MessageComponent<?> ERROR_ONLY_CONSOLE = Text.ofMessageKey("dkbans.error.onlyConsole");
     public static MessageComponent<?> ERROR_NO_PERMISSIONS = Text.ofMessageKey("dkbans.error.noPermissions");
+    public static MessageComponent<?> ERROR_INVALID_IP_ADDRESS = Text.ofMessageKey("dkbans.error.invalidIpAddress");
+    public static MessageComponent<?> ERROR_INVALID_TEMPLATE_SPECIFIER_FORMAT = Text.ofMessageKey("dkbans.error.invalid.templateSpecifierFormat");
+    public static MessageComponent<?> ERROR_TEMPLATE_GROUP_NOT_EXISTS = Text.ofMessageKey("dkbans.error.templateGroup.notExists");
+    public static MessageComponent<?> ERROR_TEMPLATE_NOT_EXISTS = Text.ofMessageKey("dkbans.error.template.notExists");
+    public static MessageComponent<?> ERROR_IP_BLOCK_NOT_EXISTS = Text.ofMessageKey("dkbans.error.ipBlock.notExists");
 
     public static MessageComponent<?> PLAYER_NOT_FOUND = Text.ofMessageKey("dkbans.player.notFound");
     public static MessageComponent<?> PLAYER_NOT_ONLINE = Text.ofMessageKey("dkbans.player.notOnline");
@@ -147,7 +152,7 @@ public class Messages {
     public static MessageComponent<?> COMMAND_FILTER_DELETED = Text.ofMessageKey("dkbans.command.filter.deleted");
     public static MessageComponent<?> COMMAND_FILTER_CREATED = Text.ofMessageKey("dkbans.command.filter.created");
 
-    public static MessageComponent<?> COMMAND_TEMPLATE_IMPORT = Text.ofMessageKey("dkbans.command.template.import");
+    public static MessageComponent<?> COMMAND_TEMPLATE_IMPORT = Text.ofMessageKey("dkbans.command.dkbans.template.import");
 
     public static MessageComponent<?> COMMAND_REPORT_HELP = Text.ofMessageKey("dkbans.command.report.help");
     public static MessageComponent<?> COMMAND_REPORT_TEMPLATE_NOT_EXIST = Text.ofMessageKey("dkbans.command.report.template.notExist");
@@ -203,6 +208,17 @@ public class Messages {
     public static MessageComponent<?> COMMAND_JOINME_LINE_9 = Text.ofMessageKey("dkbans.command.joinme.line9");
     public static MessageComponent<?> COMMAND_JOINME_LINE_10 = Text.ofMessageKey("dkbans.command.joinme.line10");
 
+
+    public static MessageComponent<?> COMMAND_IP_INFO_USAGE = Text.ofMessageKey("dkbans.command.ip.info.usage");
+    public static MessageComponent<?> COMMAND_IP_INFO_BLOCKED = Text.ofMessageKey("dkbans.command.ip.info.blocked");
+    public static MessageComponent<?> COMMAND_IP_INFO_NOT_BLOCKED = Text.ofMessageKey("dkbans.command.ip.info.notBlocked");
+
+    public static MessageComponent<?> COMMAND_IP_BLOCK_USAGE = Text.ofMessageKey("dkbans.command.ip.block.usage");
+    public static MessageComponent<?> COMMAND_IP_BlOCK_INVALID_TYPE = Text.ofMessageKey("dkbans.command.ip.block.invalid.type");
+    public static MessageComponent<?> COMMAND_IP_BLOCK = Text.ofMessageKey("dkbans.command.ip.block");
+
+    public static MessageComponent<?> COMMAND_IP_UNBLOCK_USAGE = Text.ofMessageKey("dkbans.command.ip.unblock.usage");
+    public static MessageComponent<?> COMMAND_IP_UNBLOCK = Text.ofMessageKey("dkbans.command.ip.unblock");
 
     public static MessageComponent<?> getPunishmentMessage(PlayerHistoryEntrySnapshot snapshot){
         if(snapshot.getPunishmentType() == PunishmentType.BAN){

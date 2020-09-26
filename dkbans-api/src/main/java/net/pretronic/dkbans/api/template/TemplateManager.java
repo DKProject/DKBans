@@ -48,4 +48,9 @@ public interface TemplateManager {
 
     TemplateCategory createTemplateCategory(String name, String displayName);
 
+    void importTemplateGroup(TemplateGroup group);
+
+    void clearCache();
+
+    void loadTemplateGroups();
 }

@@ -37,6 +37,8 @@ import net.pretronic.dkbans.api.filter.Filter;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.chatlog.ChatLogEntry;
 import net.pretronic.dkbans.api.player.history.*;
+import net.pretronic.dkbans.api.player.ipblacklist.IpAddressBlock;
+import net.pretronic.dkbans.api.player.ipblacklist.IpAddressBlockType;
 import net.pretronic.dkbans.api.player.note.PlayerNote;
 import net.pretronic.dkbans.api.player.note.PlayerNoteType;
 import net.pretronic.dkbans.api.player.report.PlayerReport;
@@ -45,12 +47,14 @@ import net.pretronic.dkbans.api.player.report.ReportState;
 import net.pretronic.dkbans.api.player.session.PlayerSession;
 import net.pretronic.dkbans.api.storage.DKBansStorage;
 import net.pretronic.dkbans.api.template.*;
+import net.pretronic.dkbans.api.template.punishment.PunishmentTemplate;
 import net.pretronic.dkbans.api.template.report.ReportTemplate;
 import net.pretronic.dkbans.common.filter.DefaultFilter;
 import net.pretronic.dkbans.common.player.chatlog.DefaultChatLogEntry;
 import net.pretronic.dkbans.common.player.history.DefaultPlayerHistoryEntry;
 import net.pretronic.dkbans.common.player.history.DefaultPlayerHistoryEntrySnapshot;
 import net.pretronic.dkbans.common.player.history.DefaultPlayerHistoryType;
+import net.pretronic.dkbans.common.player.ipblacklist.DefaultIpAddressBlock;
 import net.pretronic.dkbans.common.player.note.DefaultPlayerNote;
 import net.pretronic.dkbans.common.player.report.DefaultPlayerReport;
 import net.pretronic.dkbans.common.player.report.DefaultPlayerReportEntry;
@@ -169,6 +173,11 @@ public class DefaultDKBansStorage implements DKBansStorage {
 
                 Collection<String> aliases = loadAliases(subResultEntry.getString("Aliases"));
                 TemplateCategory category = dkBans.getTemplateManager().getTemplateCategory(subResultEntry.getInt("CategoryId"));
+                PlayerHistoryType historyType = null;
+                Object historyTypeId = subResultEntry.getObject("HistoryTypeId");
+                if(historyTypeId instanceof Integer) {
+                    historyType = dkBans.getHistoryManager().getHistoryType((int) historyTypeId);
+                }
                 templateGroup.addTemplateInternal(TemplateFactory.create(templateType,
                         subResultEntry.getInt("Id"),
                         subResultEntry.getInt("InGroupId"),
@@ -177,7 +186,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
                         subResultEntry.getString("DisplayName"),
                         subResultEntry.getString("Permission"),
                         aliases,
-                        dkBans.getHistoryManager().getHistoryType(subResultEntry.getInt("HistoryTypeId")),
+                        historyType,
                         subResultEntry.getBoolean("Enabled"),
                         subResultEntry.getBoolean("Hidden"),
                         category,
@@ -190,11 +199,10 @@ public class DefaultDKBansStorage implements DKBansStorage {
 
     @Override
     public void importTemplateGroup(TemplateGroup templateGroup) {
-        FindQuery groupExist = this.templateGroups.find().where("Name", templateGroup.getName())
+        FindQuery groupExist = this.templateGroups.find()
+                .where("Name", templateGroup.getName())
                 .where("TemplateType", templateGroup.getTemplateType().getName());
-        if(templateGroup.getId() != -1) {
-            groupExist.where("Id", templateGroup.getId());
-        }
+
         if(groupExist.execute().isEmpty()) {
             int id = templateGroups.insert().set("Name", templateGroup.getName())
                     .set("Type", templateGroup.getName())
@@ -202,13 +210,13 @@ public class DefaultDKBansStorage implements DKBansStorage {
             ((DefaultTemplateGroup)templateGroup).setIdInternal(id);
         }
         for (Template template : templateGroup.getTemplates()) {
-            boolean exist = !this.template.find().where("Id", template.getId())
-                    .where("Name", template.getName())
+            boolean exist = !this.template.find()
+                    .where("InGroupId", template.getInGroupId())
                     .where("GroupId", templateGroup.getId())
                     .execute().isEmpty();
             if(exist) {
                 this.template.update()
-                        .set("InGroupId", template.getInGroupId())
+                        .set("Name", template.getName())
                         .set("DisplayName", template.getDisplayName())
                         .set("Permission", template.getPermission())
                         .set("Aliases", buildAliases(template.getAliases()))
@@ -217,7 +225,8 @@ public class DefaultDKBansStorage implements DKBansStorage {
                         .set("Hidden", template.isHidden())
                         .set("CategoryId", template.getCategory().getId())
                         .set("Data", DocumentFileType.JSON.getWriter().write(TemplateFactory.toData(template), false))
-                        .where("Id", template.getId())
+                        .where("InGroupId", template.getInGroupId())
+                        .where("GroupId", templateGroup.getId())
                         .execute();
             } else {
                 int id = this.template.insert()
@@ -667,6 +676,36 @@ public class DefaultDKBansStorage implements DKBansStorage {
         return future;
     }
 
+    @Override
+    public IpAddressBlock getIpAddressBlock(String ipAddress) {
+        QueryResultEntry result = this.ipAddressBlacklist.find().where("Address", ipAddress).execute().firstOrNull();
+        if(result == null) return null;
+        return new DefaultIpAddressBlock(result.getInt("Id"),
+                result.getString("Address"),
+                IpAddressBlockType.valueOf(result.getString("Type")),
+                result.getUniqueId("StaffId"),
+                result.getString("Reason"),
+                result.getLong("Timeout"),
+                result.getString("ForReason"),
+                result.getLong("ForDuration"),
+                result.getInt("ForTemplateId"));
+    }
+
+    @Override
+    public IpAddressBlock blockIpAddress(String ipAddress, IpAddressBlockType type, DKBansExecutor staff, String reason, long timeout, String forReason, long forDuration) {
+        return null;
+    }
+
+    @Override
+    public IpAddressBlock blockIpAddress(String ipAddress, IpAddressBlockType type, DKBansExecutor staff, String reason, long timeout, PunishmentTemplate forTemplate) {
+        return null;
+    }
+
+    @Override
+    public void unblockIpAddress(IpAddressBlock addressBlock) {
+        this.ipAddressBlacklist.delete().where("Id", addressBlock.getId()).execute();
+    }
+
     private List<PlayerSession> getPlayerSessionsByResult(DKBansPlayer player, QueryResult result) {
         List<PlayerSession> sessions = new ArrayList<>();
         result.loadIn(sessions, entry -> getPlayerSessionByResultEntry(player, entry));
@@ -691,7 +730,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 entry.getLong("DisconnectTime"));
     }
 
-    
+
     @Override
     public List<PlayerNote> getPlayerNotes(DKBansPlayer player) {
         return getPlayerNotesByResult(player, this.playerNotes.find().where("PlayerId", player.getUniqueId()).execute());
@@ -972,12 +1011,14 @@ public class DefaultDKBansStorage implements DKBansStorage {
     private DatabaseCollection createIpAddressBlacklistCollection() {
         return database.createCollection("dkbans_ipaddress_blacklist")
                 .field("Id", DataType.INTEGER, FieldOption.PRIMARY_KEY, FieldOption.AUTO_INCREMENT)
-                .field("IpAddress", DataType.STRING, FieldOption.NOT_NULL)
+                .field("Address", DataType.STRING, FieldOption.NOT_NULL)
+                .field("Type", DataType.STRING, FieldOption.NOT_NULL)
+                .field("StaffId", DataType.UUID, FieldOption.NOT_NULL)
                 .field("Reason", DataType.STRING, FieldOption.NOT_NULL)
                 .field("Timeout", DataType.LONG, FieldOption.NOT_NULL)
-                .field("ExecutorId", DataType.UUID, FieldOption.NOT_NULL)
-                .field("TemplateId", DataType.INTEGER, ForeignKey.of(this.template, "Id"))
-                .field("Type", DataType.STRING, FieldOption.NOT_NULL)
+                .field("ForReason", DataType.STRING)
+                .field("ForDuration", DataType.LONG)
+                .field("ForTemplateId", DataType.INTEGER, ForeignKey.of(this.template, "Id"))
                 .create();
     }
 

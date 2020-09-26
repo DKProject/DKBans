@@ -2,7 +2,7 @@
  * (C) Copyright 2020 The DKBans Project (Davide Wietlisbach & Philipp Elvin Friedhoff)
  *
  * @author Philipp Elvin Friedhoff
- * @since 10.07.20, 18:06
+ * @since 23.07.20, 21:03
  * @web %web%
  *
  * The DKBans Project is under the Apache License, version 2.0 (the "License");
@@ -18,28 +18,39 @@
  * under the License.
  */
 
-package net.pretronic.dkbans.minecraft.commands.dkbans.template;
+package net.pretronic.dkbans.minecraft.commands.ip;
 
-import net.pretronic.dkbans.minecraft.config.DKBansConfig;
+import net.pretronic.dkbans.api.DKBans;
+import net.pretronic.dkbans.api.player.ipblacklist.IpAddressBlock;
 import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.libraries.command.command.BasicCommand;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
 import net.pretronic.libraries.command.sender.CommandSender;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
-import net.pretronic.libraries.utility.map.Pair;
 
-public class TemplateImportCommand extends BasicCommand {
+/*
+/ipunblock <address>
+ */
+public class IpUnblockCommand extends BasicCommand {
 
-    public TemplateImportCommand(ObjectOwner owner) {
-        super(owner, CommandConfiguration.name("import"));
+    public IpUnblockCommand(ObjectOwner owner, CommandConfiguration configuration) {
+        super(owner, configuration);
     }
 
     @Override
-    public void execute(CommandSender commandSender, String[] args) {
-        Pair<Integer, Integer> data = DKBansConfig.importTemplates();
-        commandSender.sendMessage(Messages.COMMAND_TEMPLATE_IMPORT, VariableSet.create()
-                .add("count", data.getKey())
-                .add("templateCount", data.getValue()));
+    public void execute(CommandSender sender, String[] args) {
+        if(args.length != 1) {
+            sender.sendMessage(Messages.COMMAND_IP_UNBLOCK_USAGE);
+            return;
+        }
+        String address = args[0];
+        IpAddressBlock addressBlock = DKBans.getInstance().getIpAddressBlacklistManager().getIpAddressBlock(address);
+        if(addressBlock == null) {
+            sender.sendMessage(Messages.ERROR_IP_BLOCK_NOT_EXISTS, VariableSet.create().add("prefix", Messages.PREFIX).add("address", address));
+            return;
+        }
+        DKBans.getInstance().getIpAddressBlacklistManager().unblockIpAddress(addressBlock);
+        sender.sendMessage(Messages.COMMAND_IP_UNBLOCK, VariableSet.create().add("block", addressBlock));
     }
 }

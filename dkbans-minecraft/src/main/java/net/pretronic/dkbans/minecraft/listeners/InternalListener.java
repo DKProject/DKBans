@@ -30,7 +30,6 @@ import net.pretronic.dkbans.minecraft.joinme.MinecraftJoinMe;
 import net.pretronic.libraries.event.Listener;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
 import org.mcnative.common.McNative;
-import org.mcnative.common.network.event.NetworkListener;
 import org.mcnative.common.player.ConnectedMinecraftPlayer;
 import org.mcnative.common.player.OnlineMinecraftPlayer;
 import org.mcnative.common.text.components.MessageComponent;
@@ -39,7 +38,6 @@ import java.util.List;
 
 public class InternalListener {
 
-    @NetworkListener
     @Listener
     public void onChannelBroadcastMessageReceive(DKBansChannelBroadcastMessageReceiveEvent event) {
         if(event.getChannel().equals(BroadcastMessageChannels.TEAM_CHAT)){
@@ -62,7 +60,6 @@ public class InternalListener {
         player.connect(target.getServer());
     }
 
-    @NetworkListener
     @Listener
     public void onPlayerReportSend(DKBansPlayerReportSendEvent event) {
         for (ConnectedMinecraftPlayer player : McNative.getInstance().getLocal().getConnectedPlayers()) {
@@ -74,7 +71,6 @@ public class InternalListener {
         }
     }
 
-    @NetworkListener
     @Listener
     public void onPlayerPunish(DKBansPlayerPunishEvent event){
         OnlineMinecraftPlayer player = McNative.getInstance().getLocal().getConnectedPlayer(event.getPlayer().getUniqueId());
@@ -84,7 +80,6 @@ public class InternalListener {
         else if(event.getSnapshot().getPunishmentType() == PunishmentType.WARN) handleWarn(event, player);
     }
 
-    @NetworkListener
     @Listener
     public void onJoinMeCreate(DKBansJoinMeCreateEvent event) {
         MinecraftJoinMe joinMe = ((MinecraftJoinMe)event.getJoinMe());

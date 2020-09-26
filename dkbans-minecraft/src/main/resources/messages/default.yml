@@ -18,6 +18,12 @@ messages:
   dkbans.error.onlyPlayer: '{prefix} &cThis command can only be executed as a player'
   dkbans.error.onlyConsole: '{prefix} &cThis command can only be executed from console'
   dkbans.error.noPermissions: '{prefix} &cYou are not allowed to execute this command'
+  dkbans.error.invalidIpAddress: '{prefix} &e{address} &cis not an ip address'
+  dkbans.error.invalid.templateSpecifierFormat: '{prefix} &cWrong template specifier format. Use &etemplate@group'
+  dkbans.error.templateGroup.notExists: '{prefix} &e{templateGroup} &ctemplate group does not exist'
+  dkbans.error.template.notExists: '{prefix} &e{template} &ctemplate does not exist'
+  dkbans.error.ipBlock.notExists: '{prefix} &cAn ip block for address &e{address} &cdoes not exist'
+
 
   dkbans.player.notFound: '{prefix} &cThe player &e{name} &cwas not found'
   dkbans.player.notOnline: '{prefix} &cThe player &e{player.displayName} &cis not online'
@@ -253,6 +259,7 @@ messages:
   dkbans.command.chatLog.list.loop: '&8» {entry.player.displayName} &7on &e{entry.timeFormatted}&8: &f{entry.message}'
   dkbans.command.dkbans.help: '${dkbans.prefix} &cInvalid usage of &eDKBans &ccommand&8
   &8» &7/dkbans migrate <name> (Only executable from console)'
+  dkbans.command.dkbans.template.import: '${dkbans.prefix} &7You have imported &e{count} &7template groups with an amount of &e{templateCount} &7templates'
   dkbans.command.joinme.notEnoughAmount: '${dkbans.prefix} &cYou can not send a joinme'
   dkbans.command.joinme.usage: '${dkbans.prefix} &cUsage&8: &7/joinme [playerId]'
   dkbans.command.joinme.notExists: '${dkbans.prefix} &cThis joinme does not exist'
@@ -266,3 +273,20 @@ messages:
   dkbans.command.joinme.line8: '&6'
   dkbans.command.joinme.line9: '&6'
   dkbans.command.joinme.line10: '&6'
+  dkbans.command.ip.info.usage: '${dkbans.prefix} &cUsage&8: &7/ipinfo <address>'
+  dkbans.command.ip.info.blocked: '${dkbans.prefix} &6Ip info of address &e{block.address}
+  &8» &7Type&8: &e{block.type}
+  &8» &7Staff&8 &e{block.staff.name}
+  &8» &7Reason&8: &e{block.reason}
+  &8» &7Timeout&8: &e{block.timeout}
+
+  &8» &7For reason&8: &e{block.forReason}
+  &8» &7For timeout&8: &e{block.forTimeout}'
+  dkbans.command.ip.info.notBlocked: '${dkbans.prefix} &7Ip &e{address} &7is not blocked'
+  dkbans.command.ip.block.usage: '${dkbans.prefix} &cInvalid usage of &eIpBlock &ccommand&8:
+  &7/ipblock <address> <type> <reason> <timeout> <forReason> <forTimeout>
+  &7/ipblock <address> <type> <reason> <timeout> <forTemplate>'
+  dkbans.command.ip.block.invalid.type: '${dkbans.prefix} &e{type} &cis an invalid block type'
+  dkbans.command.ip.block: '${dkbans.prefix} &7You have blocked the ip address 6e{block.address}'
+  dkbans.command.ip.unblock.usage: '${dkbans.prefix} &cUsage&8: &7/ipunblock <address>'
+  dkbans.command.ip.unblock: '${dkbans.prefix} &7You have unblocked the address &e{block.address}'
