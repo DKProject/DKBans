@@ -25,7 +25,7 @@
     <parent>
         <artifactId>DKBans</artifactId>
         <groupId>net.pretronic.dkbans</groupId>
-        <version>1.2.4.149-BETA</version>
+        <version>1.2.1.153-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -64,7 +64,7 @@
                         <version>${project.version}</version>
                         <main>net.pretronic.dkbans.minecraft.DKBansPlugin</main>
                         <website>https://pretronic.net</website>
-                        <author>Davide Wietlisbach &amp; Philipp Elvin Friedhoff</author>
+                        <author>Pretronic</author>
                         <messageModule>DKBans</messageModule>
                     </manifest>
                     <loader>
