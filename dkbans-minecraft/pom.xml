@@ -64,7 +64,7 @@
                         <version>${project.version}</version>
                         <main>net.pretronic.dkbans.minecraft.DKBansPlugin</main>
                         <website>https://pretronic.net</website>
-                        <author>Davide Wietlisbach &amp; Philipp Elvin Friedhoff</author>
+                        <author>Pretronic</author>
                         <messageModule>DKBans</messageModule>
                     </manifest>
                     <loader>
