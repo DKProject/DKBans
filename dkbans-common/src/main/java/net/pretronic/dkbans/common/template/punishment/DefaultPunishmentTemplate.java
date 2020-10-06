@@ -108,6 +108,8 @@ public class DefaultPunishmentTemplate extends DefaultTemplate implements Punish
         int count = player.getHistory().calculate(getGroup().getCalculationType(), getHistoryType());
         if(getGroup().getCalculationType() == CalculationType.POINTS) {
             count = (int) Math.round(count/pointsDivider);
+        }else{
+            count++;
         }
 
         PunishmentTemplateEntry punishmentTemplateEntry = null;
@@ -115,6 +117,7 @@ public class DefaultPunishmentTemplate extends DefaultTemplate implements Punish
         for (Map.Entry<Integer, PunishmentTemplateEntry> entry : data.entrySet()) {
             if(count <= entry.getKey()) {
                 punishmentTemplateEntry = entry.getValue();
+                break;
             }
         }
         return punishmentTemplateEntry;

@@ -98,17 +98,10 @@ public class MinecraftJoinMe implements JoinMe {
                     throw new OperationFailedException("Could not load joinme image from player "+playerId, exception);
                 }
                 if(image != null){
-                    ImageText message = ImageText.compile(image,8, '█');
-                    MessageComponent<?>[] headLines = message.buildLines();
-                    int i = -1;
+                    ImageText message = ImageText.compile(image,8,1, '█');
+                    int i = 0;
                     for(MessageComponent<?> line : components) {
-                        if(i >= 0 && i < 8){
-                            TextComponent component = new TextComponent("");
-                            component.addExtra(headLines[i]);
-                            component.addExtra(line);
-                            component.setClickEvent(new TextEvent<>(ClickAction.RUN_COMMAND, "/joinme "+playerId));
-                            message.addTextExtension(i,component);
-                        }else message.addTextExtension(i,line);
+                        message.addTextExtension(i,line);
                         i++;
                     }
 

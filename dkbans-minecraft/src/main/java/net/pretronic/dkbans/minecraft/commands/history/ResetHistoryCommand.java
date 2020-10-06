@@ -42,7 +42,6 @@ public class ResetHistoryCommand extends BasicCommand {
         super(owner, configuration);
     }
 
-    //last 10     //last 10d // by <staff>
     @Override
     public void execute(CommandSender sender, String[] arguments) {
         if(arguments.length < 1){
@@ -50,7 +49,7 @@ public class ResetHistoryCommand extends BasicCommand {
             return;
         }
 
-        MinecraftPlayer player = CommandUtil.getPlayer(sender,arguments[0],true);
+        MinecraftPlayer player = CommandUtil.getPlayer(sender,arguments[0]);
         if(player == null) return;
 
         DKBansPlayer dkBansPlayer = player.getAs(DKBansPlayer.class);

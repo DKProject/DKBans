@@ -12,7 +12,6 @@ templates:
     hidden: false
     historyType: CHAT
     category: TEST
-
     durations:
       1:
         type: WARN
@@ -23,7 +22,7 @@ templates:
         scopeType: SERVER_GROUP
         scopeName: TTT
         duration: 3d
-      5:
+      3:
         type: BAN
         scope: GLOBAL
         duration: 30d
