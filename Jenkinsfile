@@ -18,6 +18,7 @@ boolean JAVADOCS_ENABLED = true
 String JAVADOCS_NAME = "dkbans"
 String JAVADOCS_MODULES = ":DKBans,:dkbans-api"
 
+
 def MIRROR_SERVER_PUBLISHING = [
   "dkbans-minecraft/target/dkbans-minecraft-%version%.jar": "default",
   "dkbans-minecraft/target/dkbans-minecraft-%version%-loader.jar": "loader"
