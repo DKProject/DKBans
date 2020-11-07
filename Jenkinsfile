@@ -20,7 +20,7 @@ String JAVADOCS_MODULES = ":DKBans,:dkbans-api"
 
 def MIRROR_SERVER_PUBLISHING = [
   "dkbans-minecraft/target/dkbans-minecraft-%version%.jar": "default",
-  "dkbans-minecraft/target/dkbans-minecraft-%version%-loader.jar": "loader",
+  "dkbans-minecraft/target/dkbans-minecraft-%version%-loader.jar": "loader"
 ]
 
 String MAVEN_SETTINGS_FILE_ID = "afe25550-309e-40c1-80ad-59da7989fb4e"
@@ -153,7 +153,7 @@ pipeline {
                                 customHeaders:[[name:'token', value:SECRET, maskValue:true]],
                                 url: "https://mirror.mcnative.org/v1/$RESOURCE_ID/versions/create?name=$VERSION&qualifier=$QUALIFIER&buildNumber=$BUILD_NUMBER")
 
-                        for(entry in MIRROR_SERVER_PUBLISHING) {
+                        MIRROR_SERVER_PUBLISHING.each { entry ->
                             sleep 1
                             httpRequest(acceptType: 'APPLICATION_JSON', contentType: 'APPLICATION_OCTETSTREAM',
                                     httpMode: 'POST', ignoreSslErrors: true, timeout: 3000,
