@@ -71,6 +71,7 @@ import net.pretronic.libraries.utility.io.FileUtil;
 import org.mcnative.common.McNative;
 import org.mcnative.common.plugin.MinecraftPlugin;
 import org.mcnative.common.plugin.configuration.ConfigurationProvider;
+import org.mcnative.common.serviceprovider.message.ColoredString;
 
 import java.io.File;
 import java.util.Map;
@@ -191,7 +192,8 @@ public class DKBansPlugin extends MinecraftPlugin {
         VariableDescriberRegistry.registerDescriber(DefaultTemplateGroup.class);
         VariableDescriberRegistry.registerDescriber(DefaultPunishmentTemplate.class);
         VariableDescriberRegistry.registerDescriber(DefaultPlayerSession.class);
-        VariableDescriberRegistry.registerDescriber(PunishmentType.class);
+        VariableDescriber<?> punishmentDescriber = VariableDescriberRegistry.registerDescriber(PunishmentType.class);
+        ColoredString.makeDescriberColored(punishmentDescriber);
 
         VariableDescriberRegistry.registerDescriber(DefaultIpAddressBlock.class);
 

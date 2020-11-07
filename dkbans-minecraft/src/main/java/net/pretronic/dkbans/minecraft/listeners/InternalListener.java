@@ -32,6 +32,7 @@ import net.pretronic.libraries.message.bml.variable.VariableSet;
 import org.mcnative.common.McNative;
 import org.mcnative.common.player.ConnectedMinecraftPlayer;
 import org.mcnative.common.player.OnlineMinecraftPlayer;
+import org.mcnative.common.protocol.MinecraftProtocolVersion;
 import org.mcnative.common.text.components.MessageComponent;
 
 import java.util.List;
@@ -132,8 +133,8 @@ public class InternalListener {
 
     private void handleWarn(DKBansPlayerPunishEvent event, OnlineMinecraftPlayer player) {
         if (player != null) {
-            player.kick(Messages.PUNISH_WARN_MESSAGE_CHAT, VariableSet.create()
-                    .addDescribed("mute", event.getEntry())
+            player.sendMessage(Messages.PUNISH_WARN_MESSAGE_CHAT, VariableSet.create()
+                    .addDescribed("warn", event.getEntry())
                     .addDescribed("punish", event.getEntry())
                     .addDescribed("player", event.getPlayer()));
         }
