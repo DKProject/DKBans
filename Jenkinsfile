@@ -120,7 +120,7 @@ pipeline {
                 script {
                     if(!JAVADOCS_ENABLED) return
                     if(BRANCH == "origin/$BRANCH_MASTER" || (BRANCH_BETA != null && BRANCH == "origin/$BRANCH_BETA")) {
-                        sh 'mvn javadoc:aggregate-jar -pl ${JAVADOCS_MODULES}'
+                        sh 'mvn javadoc:aggregate-jar -pl '+ JAVADOCS_MODULES
                         withCredentials([string(credentialsId: JAVADOCS_TOKEN_CREDENTIAL_ID, variable: 'SECRET')]) {
 
                             httpRequest(acceptType: 'APPLICATION_JSON', contentType: 'APPLICATION_OCTETSTREAM',
