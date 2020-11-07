@@ -18,9 +18,10 @@ boolean JAVADOCS_ENABLED = true
 String JAVADOCS_NAME = "dkbans"
 String JAVADOCS_MODULES = ":DKBans,:dkbans-api"
 
+
 def MIRROR_SERVER_PUBLISHING = [
-  "dkbans-minecraft/target/dkbans-minecraft-%version%.jar": "default",
-  "dkbans-minecraft/target/dkbans-minecraft-%version%-loader.jar": "loader"
+        "dkbans-minecraft/target/dkbans-minecraft-%version%.jar": "default",
+        "dkbans-minecraft/target/dkbans-minecraft-%version%-loader.jar": "loader"
 ]
 
 String MAVEN_SETTINGS_FILE_ID = "afe25550-309e-40c1-80ad-59da7989fb4e"
@@ -120,16 +121,16 @@ pipeline {
                 script {
                     if(!JAVADOCS_ENABLED) return
                     if(BRANCH == "origin/$BRANCH_MASTER" || (BRANCH_BETA != null && BRANCH == "origin/$BRANCH_BETA")) {
-                        sh 'mvn javadoc:aggregate-jar -pl ${JAVADOCS_MODULES}'
+                        sh 'mvn javadoc:aggregate-jar -Dadditionalparam=-Xdoclint:none -DadditionalJOption=-Xdoclint:none -pl '+ JAVADOCS_MODULES
                         withCredentials([string(credentialsId: JAVADOCS_TOKEN_CREDENTIAL_ID, variable: 'SECRET')]) {
-
+                            String name = env.JOB_NAME
                             httpRequest(acceptType: 'APPLICATION_JSON', contentType: 'APPLICATION_OCTETSTREAM',
                                     httpMode: 'POST', ignoreSslErrors: true, timeout: 3000,
                                     multipartName: 'file',
                                     responseHandle: 'NONE',
-                                    uploadFile: "target/${JAVADOCS_NAME}-${VERSION}-javadoc.jar",
+                                    uploadFile: "target/${name}-${VERSION}-javadoc.jar",
                                     customHeaders:[[name:'token', value:"${SECRET}", maskValue:true]],
-                                    url: "https://pretronic.net/javadoc/${name}/${VERSION}/create")
+                                    url: "https://pretronic.net/javadoc/${JAVADOCS_NAME}/${VERSION}/create")
                         }
                     }
                 }
