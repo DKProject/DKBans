@@ -122,7 +122,7 @@ pipeline {
                     if(BRANCH == "origin/$BRANCH_MASTER" || (BRANCH_BETA != null && BRANCH == "origin/$BRANCH_BETA")) {
                         sh 'mvn javadoc:aggregate-jar -Dadditionalparam=-Xdoclint:none -DadditionalJOption=-Xdoclint:none -pl '+ JAVADOCS_MODULES
                         withCredentials([string(credentialsId: JAVADOCS_TOKEN_CREDENTIAL_ID, variable: 'SECRET')]) {
-
+                            String name = env.JOB_NAME
                             httpRequest(acceptType: 'APPLICATION_JSON', contentType: 'APPLICATION_OCTETSTREAM',
                                     httpMode: 'POST', ignoreSslErrors: true, timeout: 3000,
                                     multipartName: 'file',
