@@ -84,11 +84,13 @@ public class InternalListener {
     @Listener
     public void onJoinMeCreate(DKBansJoinMeCreateEvent event) {
         MinecraftJoinMe joinMe = ((MinecraftJoinMe)event.getJoinMe());
-        MessageComponent<?> messageComponents = joinMe.create();
+        List<MessageComponent<?>> messageComponents = joinMe.create();
 
-        McNative.getInstance().getLocal().broadcast(messageComponents,VariableSet.create()
-                .add("server",event.getJoinMe().getServer())
-                .addDescribed("player",event.getJoinMe().getPlayer()));
+        for (MessageComponent<?> messageComponent : messageComponents) {
+            McNative.getInstance().getLocal().broadcast(messageComponent,VariableSet.create()
+                    .add("server",event.getJoinMe().getServer())
+                    .addDescribed("player",event.getJoinMe().getPlayer()));
+        }
     }
 
     private void handleMute(DKBansPlayerPunishEvent event, OnlineMinecraftPlayer player) {

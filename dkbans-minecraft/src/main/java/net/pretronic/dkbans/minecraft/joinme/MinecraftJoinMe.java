@@ -75,7 +75,7 @@ public class MinecraftJoinMe implements JoinMe {
     }
 
 
-    public MessageComponent<?> create(){
+    public List<MessageComponent<?>> create(){
         List<MessageComponent<?>> components = new ArrayList<>();
         components.add(Messages.COMMAND_JOINME_LINE_1);
         if(DKBansConfig.JOINME_MULTIPLE_LINES){
@@ -113,10 +113,14 @@ public class MinecraftJoinMe implements JoinMe {
             }
         }
 
-        TextComponent root = new TextComponent();
-        components.forEach(root::addExtra);
-        root.setClickEvent(new TextEvent<>(ClickAction.RUN_COMMAND, CommandConfig.COMMAND_JOINME.getName()+" "+playerId));
+        List<MessageComponent<?>> result = new ArrayList<>();
 
-        return root;
+        for (MessageComponent<?> component : components) {
+            TextComponent root = new TextComponent();
+            root.addExtra(component);
+            root.setClickEvent(new TextEvent<>(ClickAction.RUN_COMMAND, "/"+CommandConfig.COMMAND_JOINME.getName()+" "+playerId));
+        }
+
+        return result;
     }
 }
