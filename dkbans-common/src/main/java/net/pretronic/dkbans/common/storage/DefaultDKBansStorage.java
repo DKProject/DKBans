@@ -220,11 +220,11 @@ public class DefaultDKBansStorage implements DKBansStorage {
             ((DefaultTemplateGroup)templateGroup).setIdInternal(id);
         }
         for (Template template : templateGroup.getTemplates()) {
-            boolean exist = !this.template.find()
+            QueryResult result = this.template.find()
                     .where("InGroupId", template.getInGroupId())
                     .where("GroupId", templateGroup.getId())
-                    .execute().isEmpty();
-            if(exist) {
+                    .execute();
+            if(!result.isEmpty()) {
                 this.template.update()
                         .set("Name", template.getName())
                         .set("DisplayName", template.getDisplayName())
@@ -238,6 +238,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
                         .where("InGroupId", template.getInGroupId())
                         .where("GroupId", templateGroup.getId())
                         .execute();
+                ((DefaultTemplate)template).setIdInternal(result.first().getInt("Id"));
             } else {
                 int id = this.template.insert()
                         .set("InGroupId", template.getInGroupId())
