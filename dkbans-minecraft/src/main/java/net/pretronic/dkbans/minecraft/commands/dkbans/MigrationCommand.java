@@ -34,9 +34,9 @@ import org.mcnative.common.McNative;
 
 import java.util.concurrent.TimeUnit;
 
-public class DKBansMigrateCommand extends BasicCommand {
+public class MigrationCommand extends BasicCommand {
 
-    public DKBansMigrateCommand(ObjectOwner owner) {
+    public MigrationCommand(ObjectOwner owner) {
         super(owner, CommandConfiguration.newBuilder().name("migrate").permission(Permissions.ADMIN).create());
     }
 

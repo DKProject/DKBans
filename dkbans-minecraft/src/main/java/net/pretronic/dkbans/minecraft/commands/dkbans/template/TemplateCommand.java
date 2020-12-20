@@ -20,6 +20,7 @@
 
 package net.pretronic.dkbans.minecraft.commands.dkbans.template;
 
+import net.pretronic.dkbans.minecraft.config.Permissions;
 import net.pretronic.libraries.command.command.MainCommand;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
@@ -29,7 +30,7 @@ public class TemplateCommand extends MainCommand {
     public TemplateCommand(ObjectOwner owner) {
         super(owner, CommandConfiguration.newBuilder()
                 .name("template")
-                .permission("dkbans.command.template")
+                .permission(Permissions.ADMIN)
                 .create());
         registerCommand(new TemplateImportCommand(owner));
     }

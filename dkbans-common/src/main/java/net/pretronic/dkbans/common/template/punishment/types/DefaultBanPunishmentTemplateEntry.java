@@ -49,7 +49,13 @@ public class DefaultBanPunishmentTemplateEntry extends DefaultPunishmentTemplate
 
         @Override
         public PunishmentTemplateEntry create(Document data) {
-            return new DefaultBanPunishmentTemplateEntry(DKBansScope.fromData(data), DurationProcessor.getStandard().parse(data.getString("duration")));
+
+            String rawDuration = data.getString("duration");
+            Duration duration;
+            if(rawDuration == null || rawDuration.trim().equals("-1")) duration = Duration.ofMillis(-1);
+            else duration = DurationProcessor.getStandard().parse(data.getString("duration"));
+
+            return new DefaultBanPunishmentTemplateEntry(DKBansScope.fromData(data),duration);
         }
 
         @Override

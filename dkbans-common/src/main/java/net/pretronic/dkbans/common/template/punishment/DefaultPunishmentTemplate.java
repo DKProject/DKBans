@@ -104,7 +104,6 @@ public class DefaultPunishmentTemplate extends DefaultTemplate implements Punish
         if(entry instanceof DurationAble) {
             builder.duration(((DurationAble)entry).getDuration());
         }
-
     }
 
     @Override
