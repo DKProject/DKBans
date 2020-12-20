@@ -108,6 +108,7 @@ public class DefaultPlayerHistoryEntrySnapshotBuilder implements PlayerHistoryEn
 
     @Override
     public PlayerHistoryEntrySnapshotBuilder duration(long time, TimeUnit unit) {
+        if(time <= 0) return timeout(-1);
         return timeout(System.currentTimeMillis()+unit.toMillis(time));
     }
 

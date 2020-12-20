@@ -9,27 +9,35 @@ templates:
     aliases:
       - false
     hidden: false
-    historyType: CHAT
-    category: TEST
-    scopes:
-      - SERVER_GROUP:TTT
+    historyType: NETWORK
+    category: Unbans
     blacklisted: []
     durations:
       1:
-        BAN:
-          removeTime: 1m
-          divider: 2
-        MUTE:
-          removeTime: 1m
+        ALL:
+          removeTime: -1
           divider: 2
     points:
       removedPoints: 100
       pointsDivider: 2
-      durations:
-        1:
-          BAN:
-            removeTime: 1m
-            divider: 2
-          MUTE:
-            removeTime: 1m
-            divider: 2
+  2:
+    name: acceptedrequest
+    display: Accepted Request
+    permission: dkbans.unban.reason.falsban
+    aliases:
+      - false
+    hidden: false
+    historyType: NETWORK
+    category: Unbans
+    blacklisted: []
+    durations:
+      1:
+        BAN:
+          removeTime: 0
+          divider: 2
+        MUTE:
+          removeTime: 0
+          divider: 3
+    points:
+      removedPoints: 100
+      pointsDivider: 2

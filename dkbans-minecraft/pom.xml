@@ -67,9 +67,6 @@
                         <author>Pretronic</author>
                         <messageModule>DKBans</messageModule>
                     </manifest>
-                    <loader>
-                        <version>${project.version}</version>
-                    </loader>
                 </configuration>
             </plugin>
             <plugin>

@@ -96,7 +96,6 @@ public class DefaultPunishmentTemplate extends DefaultTemplate implements Punish
         if(entry instanceof DurationAble) {
             builder.duration(((DurationAble)entry).getDuration());
         }
-
     }
 
     @Override
@@ -163,9 +162,6 @@ public class DefaultPunishmentTemplate extends DefaultTemplate implements Punish
                 points.put(entry.getKey(), entry.getValue());
             }
         }
-
-
-
         return new Triple<>(points, addedPoints, pointsDivider);
     }
 
