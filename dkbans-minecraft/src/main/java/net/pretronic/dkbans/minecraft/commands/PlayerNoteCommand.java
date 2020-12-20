@@ -61,6 +61,8 @@ public class PlayerNoteCommand extends BasicCommand {
 
             List<PlayerNote> notes = dkBansPlayer.getNotes().getPage(page,15);
             sender.sendMessage(Messages.COMMAND_PLAYER_NOTES_LIST, VariableSet.create()
+                    .addDescribed("player",player)
+                    .addDescribed("page",page)
                     .addDescribed("nextPage",page+1)
                     .addDescribed("previousPage",page == 1 ? 1 : page-1)
                     .addDescribed("notes",notes));

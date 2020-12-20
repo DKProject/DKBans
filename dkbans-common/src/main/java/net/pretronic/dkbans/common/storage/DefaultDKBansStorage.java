@@ -143,7 +143,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 .set("CreatorId",creatorId)
                 .set("Time",System.currentTimeMillis())
                 .set("Message",message)
-                .set("Type",type.getId())
+                .set("TypeId",type.getId())
                 .executeAndGetGeneratedKeyAsInt("Id");
     }
 
@@ -1003,7 +1003,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 .field("SenderId", DataType.UUID, FieldOption.NOT_NULL)
                 .field("Time", DataType.LONG, FieldOption.NOT_NULL)
                 .field("Message", DataType.STRING, FieldOption.NOT_NULL)
-                .field("Type", DataType.STRING, FieldOption.NOT_NULL)
+                .field("TypeId", DataType.INTEGER, FieldOption.NOT_NULL)
                 .create();
     }
 

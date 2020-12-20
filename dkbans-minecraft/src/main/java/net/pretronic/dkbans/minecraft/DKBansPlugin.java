@@ -95,27 +95,22 @@ public class DKBansPlugin extends MinecraftPlugin {
                 ,getRuntime().getRegistry().getService(ConfigurationProvider.class).getDatabase(this, true)
                 ,playerManager, new MinecraftJoinMeManager());
 
+
         DKBans.setInstance(dkBans);
-
         dkBans.getBroadcastManager().init();
-
         dkBans.getTemplateManager().initialize();
 
         loadConfigs();
-
         registerCommands();
         registerDescribers();
 
         dkBans.getFilterManager().initialize();
+        dkBans.getMigrationManager().registerMigration(new DKBansLegacyMigration());
+        initBroadcast();
 
         getRuntime().getLocal().getEventBus().subscribe(this,new PlayerListener());
         getRuntime().getLocal().getEventBus().subscribe(this,new InternalListener());
-
         getRuntime().getPlayerManager().registerPlayerAdapter(DKBansPlayer.class, player -> playerManager.getPlayer(player.getUniqueId()));
-
-        initBroadcast();
-
-        dkBans.getMigrationManager().registerMigration(new DKBansLegacyMigration());
 
         getLogger().info("DKBans started successfully");
     }
@@ -189,7 +184,6 @@ public class DKBansPlugin extends MinecraftPlugin {
         VariableDescriberRegistry.registerDescriber(DefaultPlayerHistory.class);
         VariableDescriberRegistry.registerDescriber(DefaultPlayerHistoryEntrySnapshot.class);
         VariableDescriberRegistry.registerDescriber(DefaultPlayerHistoryType.class);
-        VariableDescriberRegistry.registerDescriber(DefaultPlayerNote.class);
         VariableDescriberRegistry.registerDescriber(DefaultPlayerChatLog.class);
         VariableDescriberRegistry.registerDescriber(DefaultChatLogEntry.class);
         VariableDescriberRegistry.registerDescriber(DefaultFilter.class);
@@ -211,6 +205,9 @@ public class DKBansPlugin extends MinecraftPlugin {
 
         VariableDescriber<DefaultPlayerHistoryEntry> entryDescriber =  VariableDescriberRegistry.registerDescriber(DefaultPlayerHistoryEntry.class);
         entryDescriber.setForwardFunction(DefaultPlayerHistoryEntry::getCurrent);
+
+        VariableDescriber<DefaultPlayerNote> notesDescriber =  VariableDescriberRegistry.registerDescriber(DefaultPlayerNote.class);
+        notesDescriber.registerFunction("formattedTime", note -> DKBansConfig.FORMAT_DATE.format(note.getTime()));
     }
 
     private void loadConfigs() {

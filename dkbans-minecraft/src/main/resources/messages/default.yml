@@ -246,16 +246,16 @@ messages:
   dkbans.command.playerNotes.help: '${dkbans.prefix} &cInvalid usage of dkbans command&8:
   &7/pnotes <player> [list]
   &7/pnotes <player> add <message>'
-  dkbans.command.playerNotes.list: '${dkbans.prefix} &cUsage&8: &7/pnotes
+  dkbans.command.playerNotes.list: '${dkbans.prefix} &7Notes of &e{player.displayName}&8:
   @for("note" in {notes},{dkbans.command.playerNotes.list.loop},"\n","\n")'
-  dkbans.command.playerNotes.list.loop: '&8» &e{note.formattedTime} &8- {note.creator.displayName}&8:
-  &8> &7{note.message}'C
+  dkbans.command.playerNotes.list.loop: '&8» &e{note.formattedTime} &8- {note.creator.displayName} &8| &7Page&8: &7{page}
+  &8> &7{note.message}'
   dkbans.command.playerNotes.added: '&8» &a+ &e{note.formattedTime} &8- {note.creator.displayName}&8:
   &8> &7{note.message}'
   dkbans.command.chatLog.usage: '${dkbans.prefix.chat} &cInvalid usage of chatLog command&8:
   &7/chatlog player <name> [page]
   &7/chatlog server <name, id> [page]'
-  dkbans.command.chatLog.list: '${dkbans.prefix.chat} &6ChatLog page {page}
+  dkbans.command.chatLog.list: '${dkbans.prefix.chat} &7ChatLog page {page}
   @for("entry" in {entries}, ${dkbans.command.chatLog.list.loop},"\n")'
   dkbans.command.chatLog.list.loop: '&8» {entry.player.displayName} &7on &e{entry.timeFormatted}&8: &f{entry.message}'
   dkbans.command.dkbans.help: '${dkbans.prefix} &cInvalid usage of dkbans command&8:
