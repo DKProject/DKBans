@@ -60,23 +60,35 @@ public class DefaultUnPunishmentTemplateEntry implements UnPunishmentTemplateEnt
             for (DocumentEntry data1 : data0) {
 
                 String punishmentType0 = data1.getKey();
-                PunishmentType punishmentType = PunishmentType.getPunishmentType(punishmentType0);
-
-                Map<String, Object> properties = new HashMap<>();
-                long removeTime = 0;
-                double divider = 0;
-                for (DocumentEntry entry : data1.toDocument()) {
-                    if(entry.getKey().equalsIgnoreCase("removeTime")) {
-                        removeTime = entry.toPrimitive().getAsLong();
-                    } else if(entry.getKey().equalsIgnoreCase("divider")) {
-                        divider = entry.toPrimitive().getAsDouble();
-                    } else {
-                        properties.put(entry.getKey(), entry.toPrimitive().getAsObject());
+                if(punishmentType0.equalsIgnoreCase("ALL")) {
+                    for (PunishmentType punishmentType : PunishmentType.getPunishmentTypes()) {
+                        createPunishmentType(data1, options, punishmentType);
                     }
+                } else {
+                    PunishmentType punishmentType = PunishmentType.getPunishmentType(punishmentType0);
+                    createPunishmentType(data1, options, punishmentType);
                 }
-                options.put(punishmentType, new DefaultUnPunishmentTemplateEntryOption(removeTime, divider, properties));
+
+
+
             }
             return new DefaultUnPunishmentTemplateEntry(options);
+        }
+
+        private void createPunishmentType(DocumentEntry data1, Map<PunishmentType, UnPunishmentTemplateEntryOption> options, PunishmentType punishmentType) {
+            Map<String, Object> properties = new HashMap<>();
+            long removeTime = 0;
+            double divider = 0;
+            for (DocumentEntry entry : data1.toDocument()) {
+                if(entry.getKey().equalsIgnoreCase("removeTime")) {
+                    removeTime = entry.toPrimitive().getAsLong();
+                } else if(entry.getKey().equalsIgnoreCase("divider")) {
+                    divider = entry.toPrimitive().getAsDouble();
+                } else {
+                    properties.put(entry.getKey(), entry.toPrimitive().getAsObject());
+                }
+            }
+            options.put(punishmentType, new DefaultUnPunishmentTemplateEntryOption(removeTime, divider, properties));
         }
 
         @Override

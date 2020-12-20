@@ -63,6 +63,10 @@ public class PunishmentType implements VariableObjectToString {
                 ((PunishmentType)o).getName().equalsIgnoreCase(getName());
     }
 
+    public static Collection<PunishmentType> getPunishmentTypes() {
+        return REGISTRY;
+    }
+
     public static PunishmentType getPunishmentType(String name) {
         Validate.notNull(name);
         PunishmentType punishmentType = Iterators.findOne(REGISTRY, type -> type.getName().equalsIgnoreCase(name));
