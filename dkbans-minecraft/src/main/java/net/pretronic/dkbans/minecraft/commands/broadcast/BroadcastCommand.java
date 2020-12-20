@@ -2,7 +2,7 @@
  * (C) Copyright 2020 The DKBans Project (Davide Wietlisbach & Philipp Elvin Friedhoff)
  *
  * @author Philipp Elvin Friedhoff
- * @since 21.06.20, 17:26
+ * @since 18.12.20, 17:04
  * @web %web%
  *
  * The DKBans Project is under the Apache License, version 2.0 (the "License");
@@ -18,16 +18,17 @@
  * under the License.
  */
 
-package net.pretronic.dkbans.api.broadcast;
+package net.pretronic.dkbans.minecraft.commands.broadcast;
 
-public interface BroadcastAssignment {
+import net.pretronic.dkbans.minecraft.commands.broadcast.group.BroadcastGroupCommand;
+import net.pretronic.libraries.command.command.MainCommand;
+import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
+import net.pretronic.libraries.utility.interfaces.ObjectOwner;
 
-    int getId();
+public class BroadcastCommand extends MainCommand {
 
-    Broadcast getBroadcast();
-
-    int getPosition();
-
-    void setPosition(int position);
-
+    public BroadcastCommand(ObjectOwner owner, CommandConfiguration configuration) {
+        super(owner, configuration);
+        registerCommand(new BroadcastGroupCommand(owner));
+    }
 }

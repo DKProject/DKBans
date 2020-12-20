@@ -156,7 +156,6 @@ public class DKBansConfig {
             Document data = Document.newDocument();
 
             for (DocumentEntry entry : documentEntry) {
-                System.out.println("Entry: "+entry.getKey());
                 switch (entry.getKey().toLowerCase()) {
 
                     case "name": {
@@ -194,15 +193,11 @@ public class DKBansConfig {
                         break;
                     }
                     case "historytype": {
-                        System.out.println("Found history type");
                         String historyType0 = entry.toPrimitive().getAsString();
-                        System.out.println(historyType0);
 
                         historyType = dkBans.getHistoryManager().getHistoryType(historyType0);
-                        System.out.println(historyType);
                         if(historyType0 != null && historyType == null) {
                             historyType = dkBans.getHistoryManager().createHistoryType(historyType0);
-                            System.out.println("Created: "+historyType);
                         }
                         break;
                     }

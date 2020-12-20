@@ -25,6 +25,7 @@ import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.history.PunishmentType;
 import net.pretronic.dkbans.api.template.TemplateGroup;
 import net.pretronic.dkbans.common.DefaultDKBans;
+import net.pretronic.dkbans.common.broadcast.BroadcastTask;
 import net.pretronic.dkbans.common.filter.DefaultFilter;
 import net.pretronic.dkbans.common.player.DefaultDKBansPlayer;
 import net.pretronic.dkbans.common.player.chatlog.DefaultChatLogEntry;
@@ -43,6 +44,7 @@ import net.pretronic.dkbans.common.template.DefaultTemplateCategory;
 import net.pretronic.dkbans.common.template.DefaultTemplateGroup;
 import net.pretronic.dkbans.common.template.punishment.DefaultPunishmentTemplate;
 import net.pretronic.dkbans.minecraft.commands.*;
+import net.pretronic.dkbans.minecraft.commands.broadcast.BroadcastCommand;
 import net.pretronic.dkbans.minecraft.commands.dkbans.DKBansCommand;
 import net.pretronic.dkbans.minecraft.commands.history.HistoryCommand;
 import net.pretronic.dkbans.minecraft.commands.history.MyHistoryPointsCommand;
@@ -75,6 +77,7 @@ import org.mcnative.common.serviceprovider.message.ColoredString;
 
 import java.io.File;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class DKBansPlugin extends MinecraftPlugin {
 
@@ -108,6 +111,8 @@ public class DKBansPlugin extends MinecraftPlugin {
 
         getRuntime().getPlayerManager().registerPlayerAdapter(DKBansPlayer.class, player -> playerManager.getPlayer(player.getUniqueId()));
 
+        initBroadcast();
+
         dkBans.getMigrationManager().registerMigration(new DKBansLegacyMigration());
 
         getLogger().info("DKBans started successfully");
@@ -135,6 +140,8 @@ public class DKBansPlugin extends MinecraftPlugin {
 
         getRuntime().getLocal().getCommandManager().registerCommand(new IpInfoCommand(this, CommandConfig.COMMAND_IP_INFO));
         getRuntime().getLocal().getCommandManager().registerCommand(new IpBlockCommand(this, CommandConfig.COMMAND_IP_BLOCK));
+
+        getRuntime().getLocal().getCommandManager().registerCommand(new BroadcastCommand(this, CommandConfig.COMMAND_BROADCAST));
 
         for (CommandConfig.PunishmentTypeConfiguration configuration : CommandConfig.COMMAND_PUNISH_DIRECT) {
             Command command;
@@ -231,5 +238,12 @@ public class DKBansPlugin extends MinecraftPlugin {
 
         DKBansConfig.load();
         getLogger().info("DKBans config loaded");
+    }
+
+    private void initBroadcast() {
+        McNative.getInstance().getScheduler().createTask(this)
+                .interval(1, TimeUnit.MINUTES)
+                .execute(new BroadcastTask().start())
+                .start();
     }
 }

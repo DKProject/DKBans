@@ -79,9 +79,4 @@ public interface BroadcastGroup extends Iterable<BroadcastAssignment>{
     BroadcastAssignment getNext(int position);
 
     BroadcastAssignment getNext(BroadcastAssignment current);
-
-
-    void delete();
-
-
 }

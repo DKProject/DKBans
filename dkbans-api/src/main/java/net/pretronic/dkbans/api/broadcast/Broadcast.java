@@ -20,8 +20,6 @@
 
 package net.pretronic.dkbans.api.broadcast;
 
-import net.pretronic.dkbans.api.DKBansExecutor;
-
 public interface Broadcast {
 
     int getId();
@@ -39,12 +37,4 @@ public interface Broadcast {
     String getText();
 
     void setText(String text);
-
-
-    void send();
-
-    void send(Iterable<DKBansExecutor> executors);
-
-    void delete();
-
 }

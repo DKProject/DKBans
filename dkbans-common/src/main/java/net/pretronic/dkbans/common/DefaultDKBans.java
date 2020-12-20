@@ -33,6 +33,7 @@ import net.pretronic.dkbans.api.player.history.PlayerHistoryManager;
 import net.pretronic.dkbans.api.player.ipblacklist.IpAddressBlacklistManager;
 import net.pretronic.dkbans.api.player.report.ReportManager;
 import net.pretronic.dkbans.api.support.SupportTicketManager;
+import net.pretronic.dkbans.common.broadcast.DefaultBroadcastManager;
 import net.pretronic.dkbans.common.event.DefaultDKBansChannelBroadcastMessageReceiveEvent;
 import net.pretronic.dkbans.common.filter.DefaultFilterManager;
 import net.pretronic.dkbans.common.migration.DefaultMigrationManager;
@@ -76,7 +77,7 @@ public class DefaultDKBans extends DKBans {
         this.historyManager = new DefaultPlayerHistoryManager(this);
         this.reportManager = new DefaultReportManager();
         this.ticketManager = null;
-        this.broadcastManager = null;
+        this.broadcastManager = new DefaultBroadcastManager();
         this.filterManager = new DefaultFilterManager();
         this.templateManager = new DefaultTemplateManager();
         this.chatLogManager = new DefaultChatLogManager();
@@ -169,5 +170,9 @@ public class DefaultDKBans extends DKBans {
     public void broadcastMessage(String channel, DKBansExecutor executor, String message) {
         getEventBus().callEvent(DKBansChannelBroadcastMessageReceiveEvent.class
                 ,new DefaultDKBansChannelBroadcastMessageReceiveEvent(channel, message, executor));
+    }
+
+    public static DefaultDKBans getInstance() {
+        return (DefaultDKBans) DKBans.getInstance();
     }
 }

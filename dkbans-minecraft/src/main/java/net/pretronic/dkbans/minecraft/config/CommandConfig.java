@@ -138,6 +138,11 @@ public class CommandConfig {
             .permission("dkbans.command.ipBlock")
             .create();
 
+    public static CommandConfiguration COMMAND_BROADCAST = CommandConfiguration.newBuilder()
+            .name("broadcast")
+            .permission("dkbans.command.broadcast")
+            .create();
+
     static {
 
         //Ban
