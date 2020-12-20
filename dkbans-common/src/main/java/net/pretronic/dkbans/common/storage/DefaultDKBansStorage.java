@@ -93,9 +93,10 @@ public class DefaultDKBansStorage implements DKBansStorage {
 
     private final DatabaseCollection filter;
 
-    /*private final DatabaseCollection broadcast;
+    private final DatabaseCollection broadcast;
     private final DatabaseCollection broadcastGroupAssignment;
     private final DatabaseCollection broadcastGroup;
+    /*
     private final DatabaseCollection supportTicket;
     private final DatabaseCollection supportTicketParticipants;
     private final DatabaseCollection supportTicketMessages;*/
@@ -125,6 +126,9 @@ public class DefaultDKBansStorage implements DKBansStorage {
         this.filter = createFilterCollection();
         this.playerChatLog = createPlayerChatLogCollection();
 
+        this.broadcast = createBroadcastCollection();
+        this.broadcastGroup = createBroadcastGroupCollection();
+        this.broadcastGroupAssignment = createBroadcastGroupAssignment();
     }
 
     @Override
@@ -883,6 +887,18 @@ public class DefaultDKBansStorage implements DKBansStorage {
         return filter;
     }
 
+    public DatabaseCollection getBroadcast() {
+        return broadcast;
+    }
+
+    public DatabaseCollection getBroadcastGroupAssignment() {
+        return broadcastGroupAssignment;
+    }
+
+    public DatabaseCollection getBroadcastGroup() {
+        return broadcastGroup;
+    }
+
     private DatabaseCollection createPlayerSessionsCollection() {
         return database.createCollection("dkbans_player_sessions")
                 .field("Id", DataType.INTEGER, FieldOption.PRIMARY_KEY, FieldOption.AUTO_INCREMENT)
@@ -1061,6 +1077,38 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 .field("AffiliationArea", DataType.STRING,32, FieldOption.NOT_NULL)
                 .field("Operation", DataType.STRING,32, FieldOption.NOT_NULL)
                 .field("Value", DataType.STRING,512, FieldOption.NOT_NULL)
+                .create();
+    }
+
+    private DatabaseCollection createBroadcastCollection() {
+        return database.createCollection("dkbans_broadcast")
+                .field("Id", DataType.INTEGER, FieldOption.PRIMARY_KEY, FieldOption.AUTO_INCREMENT)
+                .field("Name", DataType.STRING, FieldOption.NOT_NULL, FieldOption.UNIQUE)
+                .field("Visibility", DataType.STRING, FieldOption.NOT_NULL)
+                .field("Text", DataType.STRING, 1024, FieldOption.NOT_NULL)
+                .create();
+    }
+
+    private DatabaseCollection createBroadcastGroupCollection() {
+        return database.createCollection("dkbans_broadcast_group")
+                .field("Id", DataType.INTEGER, FieldOption.PRIMARY_KEY, FieldOption.AUTO_INCREMENT)
+                .field("Name", DataType.STRING, FieldOption.NOT_NULL, FieldOption.UNIQUE)
+                .field("Enabled", DataType.BOOLEAN, FieldOption.NOT_NULL)
+                .field("Permission", DataType.STRING)
+                .field("Interval", DataType.LONG, FieldOption.NOT_NULL)
+                .field("Order", DataType.STRING, FieldOption.NOT_NULL)
+                .field("ScopeType", DataType.STRING)
+                .field("ScopeName", DataType.STRING)
+                .field("ScopeId", DataType.UUID)
+                .create();
+    }
+
+    private DatabaseCollection createBroadcastGroupAssignment() {
+        return database.createCollection("dkbans_broadcast_group_assignment")
+                .field("Id", DataType.INTEGER, FieldOption.PRIMARY_KEY, FieldOption.AUTO_INCREMENT)
+                .field("BroadcastId", DataType.INTEGER, ForeignKey.of(this.broadcast, "Id"), FieldOption.NOT_NULL)
+                .field("GroupId", DataType.INTEGER, ForeignKey.of(this.broadcastGroup, "Id"), FieldOption.NOT_NULL)
+                .field("Position", DataType.INTEGER, FieldOption.NOT_NULL)
                 .create();
     }
 }

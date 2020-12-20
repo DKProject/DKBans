@@ -22,6 +22,7 @@ package net.pretronic.dkbans.common.template.unpunishment;
 
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.DKBansScope;
+import net.pretronic.dkbans.api.player.history.CalculationType;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryType;
 import net.pretronic.dkbans.api.template.Template;
 import net.pretronic.dkbans.api.template.TemplateCategory;
@@ -63,12 +64,20 @@ public class DefaultUnPunishmentTemplate extends DefaultTemplate implements UnPu
         this.blacklistedTemplates = new ArrayList<>();
         loadBlacklistedTemplates(data.getDocument("blacklisted"));
         this.scopes = loadScopes(data.getDocument("scopes"));
-        this.durations = loadDurations(data.getDocument("durations"));
 
-        Triple<Map<Integer, UnPunishmentTemplateEntry>, Integer, Double> points = loadPoints(data.getDocument("points"));
-        this.points = points.getFirst();
-        this.removedPoints = points.getSecond();
-        this.pointsDivider = points.getThird();
+
+        Map<Integer, UnPunishmentTemplateEntry> durations = loadDurations(data.getDocument("durations"));
+        if(group.getCalculationType() == CalculationType.POINTS) {
+            this.durations = new HashMap<>();
+            this.points = durations;
+        } else {
+            this.durations = durations;
+            this.points = new HashMap<>();
+        }
+
+        Pair<Integer, Double> points = loadPoints(data.getDocument("points"));
+        this.removedPoints = points.getKey();
+        this.pointsDivider = points.getValue();
     }
 
     @Override
@@ -130,21 +139,14 @@ public class DefaultUnPunishmentTemplate extends DefaultTemplate implements UnPu
             return durations;
         }
 
-
         return new HashMap<>();
     }
 
-    private Triple<Map<Integer, UnPunishmentTemplateEntry>, Integer, Double> loadPoints(Document data) {
+    private Pair<Integer, Double> loadPoints(Document data) {
         int addedPoints = data.getInt("removedPoints");
         double pointsDivider = data.getDouble("pointsDivider");
-        Map<Integer, UnPunishmentTemplateEntry> points = new HashMap<>();
 
-        for (DocumentEntry entry0 : data.getDocument("durations")) {
-            Pair<Integer, UnPunishmentTemplateEntry> entry = loadEntry(entry0);
-            points.put(entry.getKey(), entry.getValue());
-        }
-
-        return new Triple<>(points, addedPoints, pointsDivider);
+        return new Pair<>(addedPoints, pointsDivider);
     }
 
     private Pair<Integer, UnPunishmentTemplateEntry> loadEntry(DocumentEntry entry) {

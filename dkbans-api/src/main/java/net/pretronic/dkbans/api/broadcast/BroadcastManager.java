@@ -20,6 +20,8 @@
 
 package net.pretronic.dkbans.api.broadcast;
 
+import net.pretronic.dkbans.api.player.DKBansPlayer;
+
 import java.util.Collection;
 
 public interface BroadcastManager {
@@ -37,6 +39,8 @@ public interface BroadcastManager {
 
     Collection<BroadcastGroup> getGroups();
 
+    BroadcastGroup searchGroup(Object value);
+
     BroadcastGroup getGroup(int id);
 
     BroadcastGroup getGroup(String name);
@@ -45,5 +49,5 @@ public interface BroadcastManager {
 
     void deleteGroup(int id);
 
-
+    Collection<DKBansPlayer> sendBroadcast(Broadcast broadcast);
 }
