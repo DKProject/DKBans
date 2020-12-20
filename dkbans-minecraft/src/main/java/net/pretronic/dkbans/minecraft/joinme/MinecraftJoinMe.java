@@ -23,6 +23,7 @@ package net.pretronic.dkbans.minecraft.joinme;
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.joinme.JoinMe;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
+import net.pretronic.dkbans.minecraft.config.CommandConfig;
 import net.pretronic.dkbans.minecraft.config.DKBansConfig;
 import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.libraries.utility.exception.OperationFailedException;
@@ -74,7 +75,7 @@ public class MinecraftJoinMe implements JoinMe {
     }
 
 
-    public List<MessageComponent<?>> create(){
+    public MessageComponent<?> create(){
         List<MessageComponent<?>> components = new ArrayList<>();
         components.add(Messages.COMMAND_JOINME_LINE_1);
         if(DKBansConfig.JOINME_MULTIPLE_LINES){
@@ -105,13 +106,17 @@ public class MinecraftJoinMe implements JoinMe {
                         i++;
                     }
 
-                    return Arrays.asList(message.buildLines());
+                    components =  Arrays.asList(message.buildLines());
                 }
             }catch (Exception exception){
                 exception.printStackTrace();
             }
         }
 
-        return components;
+        TextComponent root = new TextComponent();
+        components.forEach(root::addExtra);
+        root.setClickEvent(new TextEvent<>(ClickAction.RUN_COMMAND, CommandConfig.COMMAND_JOINME.getName()+" "+playerId));
+
+        return root;
     }
 }

@@ -67,7 +67,7 @@ public class PlayerNoteCommand extends BasicCommand {
 
         }else if(StringUtil.equalsOne(argument,"add","a","create","c")){
             PlayerNote note = dkBansPlayer.createNote(CommandUtil.getExecutor(sender)
-                    ,CommandUtil.readStringFromArguments(arguments,1));
+                    ,CommandUtil.readStringFromArguments(arguments,2));
             sender.sendMessage(Messages.COMMAND_PLAYER_NOTES_ADDED, VariableSet.create()
                     .addDescribed("note",note));
         }else {

@@ -39,7 +39,7 @@ public class OnlineTimeCommand extends BasicCommand {
 
     @Override
     public void execute(CommandSender sender, String[] arguments) {
-        if(arguments.length == 1){
+        if(arguments.length == 0){
             if(sender instanceof MinecraftPlayer){
                 DKBansPlayer player = ((MinecraftPlayer) sender).getAs(DKBansPlayer.class);
                 sender.sendMessage(Messages.ONLINE_TIME_SELF, VariableSet.create()

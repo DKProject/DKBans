@@ -52,7 +52,7 @@ public class DefaultBanPunishmentTemplateEntry extends DefaultPunishmentTemplate
 
             String rawDuration = data.getString("duration");
             Duration duration;
-            if(rawDuration == null || rawDuration.trim().equals("-1")) duration = Duration.ofMillis(-1);
+            if(rawDuration == null || rawDuration.trim().equals("-1") || rawDuration.trim().equals("0")) duration = Duration.ofMillis(-1);
             else duration = DurationProcessor.getStandard().parse(data.getString("duration"));
 
             return new DefaultBanPunishmentTemplateEntry(DKBansScope.fromData(data),duration);

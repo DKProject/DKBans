@@ -138,7 +138,13 @@ public class DefaultDKBansStorage implements DKBansStorage {
 
     @Override
     public int createPlayerNote(UUID playerId, UUID creatorId, PlayerNoteType type, String message) {
-        return 0;
+        return this.playerNotes.insert()
+                .set("PlayerId",playerId)
+                .set("CreatorId",creatorId)
+                .set("Time",System.currentTimeMillis())
+                .set("Message",message)
+                .set("Type",type.getId())
+                .executeAndGetGeneratedKeyAsInt("Id");
     }
 
     @Override
@@ -943,7 +949,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
         return database.createCollection("dkbans_player_notes")
                 .field("Id", DataType.INTEGER, FieldOption.PRIMARY_KEY, FieldOption.AUTO_INCREMENT)
                 .field("PlayerId", DataType.UUID, FieldOption.NOT_NULL)
-                .field("SenderId", DataType.UUID, FieldOption.NOT_NULL)
+                .field("CreatorId", DataType.UUID, FieldOption.NOT_NULL)
                 .field("Time", DataType.LONG, FieldOption.NOT_NULL)
                 .field("Message", DataType.STRING, FieldOption.NOT_NULL)
                 .field("TypeId", DataType.INTEGER, FieldOption.NOT_NULL)
