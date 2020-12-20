@@ -58,7 +58,7 @@ public class DefaultDKBans extends DKBans {
     private final PlayerHistoryManager historyManager;
     private final ReportManager reportManager;
     private final SupportTicketManager ticketManager;
-    private final BroadcastManager broadcastManager;
+    private final DefaultBroadcastManager broadcastManager;
     private final DefaultFilterManager filterManager;
     private final DefaultTemplateManager templateManager;
     private final ChatLogManager chatLogManager;
@@ -127,7 +127,7 @@ public class DefaultDKBans extends DKBans {
     }
 
     @Override
-    public BroadcastManager getBroadcastManager() {
+    public DefaultBroadcastManager getBroadcastManager() {
         return this.broadcastManager;
     }
 
