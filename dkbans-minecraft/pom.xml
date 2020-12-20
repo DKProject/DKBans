@@ -60,7 +60,6 @@
                     <manifest>
                         <name>DKBans</name>
                         <id>ea6d0f4d-1a8f-4f9b-835a-c17b9169df17</id>
-                        <category>Network Management</category>
                         <version>${project.version}</version>
                         <main>net.pretronic.dkbans.minecraft.DKBansPlugin</main>
                         <website>https://pretronic.net</website>
