@@ -40,8 +40,13 @@ public class DefaultBroadcastManager implements BroadcastManager {
     private final Collection<BroadcastGroup> groups;
 
     public DefaultBroadcastManager() {
-        this.broadcasts = loadBroadcasts();
-        this.groups = loadGroups();
+        this.broadcasts = new ArrayList<>();
+        this.groups = new ArrayList<>();
+    }
+
+    public void init() {
+        this.broadcasts.addAll(loadBroadcasts());
+        this.groups.addAll(loadGroups());
     }
 
     @Override
