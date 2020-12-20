@@ -53,8 +53,12 @@ public class DefaultBanPunishmentTemplateEntry extends DefaultPunishmentTemplate
             try {
 
                 Duration duration;
-                if(rawDuration == null || rawDuration.trim().equals("-1") || rawDuration.trim().equals("0")) duration = Duration.ofMillis(-1);
-                else duration = DurationProcessor.getStandard().parse(rawDuration);
+                if(rawDuration == null || rawDuration.trim().equals("-1") || rawDuration.trim().equals("-1.0")
+                        || rawDuration.trim().equals("0") || rawDuration.trim().equals("0.0")) {
+                    duration = Duration.ofMillis(-1);
+                } else {
+                    duration = DurationProcessor.getStandard().parse(rawDuration);
+                }
                 return new DefaultBanPunishmentTemplateEntry(DKBansScope.fromData(data),duration);
             } catch (IllegalArgumentException exception) {
                 throw new IllegalArgumentException(String.format("Can't parse duration (%s) of ban punishment template entry", rawDuration));
