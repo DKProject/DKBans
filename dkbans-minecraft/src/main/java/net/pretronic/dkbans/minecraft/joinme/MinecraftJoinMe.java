@@ -119,6 +119,7 @@ public class MinecraftJoinMe implements JoinMe {
             TextComponent root = new TextComponent();
             root.addExtra(component);
             root.setClickEvent(new TextEvent<>(ClickAction.RUN_COMMAND, "/"+CommandConfig.COMMAND_JOINME.getName()+" "+playerId));
+            result.add(root);
         }
 
         return result;
