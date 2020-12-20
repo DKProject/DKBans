@@ -160,13 +160,15 @@ public class DefaultUnPunishmentTemplate extends DefaultTemplate implements UnPu
 
     private Collection<? extends DKBansScope> loadScopes(Document data) {
         Collection<DKBansScope> scopes = new ArrayList<>();
-        for (DocumentEntry scope0 : data) {
-            Document scope = scope0.toDocument();
-            if(scope.size() == 1) {
-                PrimitiveEntry firstEntry = scope.getEntry(0).toPrimitive();
-                scopes.add(new DKBansScope(firstEntry.getKey(), firstEntry.getAsString(), null));
-            } else {
-                scopes.add(scope.getAsObject(DKBansScope.class));
+        if(data != null) {
+            for (DocumentEntry scope0 : data) {
+                Document scope = scope0.toDocument();
+                if(scope.size() == 1) {
+                    PrimitiveEntry firstEntry = scope.getEntry(0).toPrimitive();
+                    scopes.add(new DKBansScope(firstEntry.getKey(), firstEntry.getAsString(), null));
+                } else {
+                    scopes.add(scope.getAsObject(DKBansScope.class));
+                }
             }
         }
         return scopes;

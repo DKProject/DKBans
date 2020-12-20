@@ -50,11 +50,18 @@ public class DefaultMutePunishmentTemplateEntry extends DefaultPunishmentTemplat
         @Override
         public PunishmentTemplateEntry create(Document data) {
             String rawDuration = data.getString("duration");
-            Duration duration;
-            if(rawDuration == null || rawDuration.trim().equals("-1")) duration = Duration.ofMillis(-1);
-            else duration = DurationProcessor.getStandard().parse(data.getString("duration"));
-
-            return new DefaultMutePunishmentTemplateEntry(DKBansScope.fromData(data),duration);
+            try {
+                Duration duration;
+                if(rawDuration == null || rawDuration.trim().equals("-1") || rawDuration.trim().equals("-1.0")
+                        || rawDuration.trim().equals("0") || rawDuration.trim().equals("0.0")) {
+                    duration = Duration.ofMillis(-1);
+                } else {
+                    duration = DurationProcessor.getStandard().parse(rawDuration);
+                }
+                return new DefaultMutePunishmentTemplateEntry(DKBansScope.fromData(data),duration);
+            } catch (IllegalArgumentException exception) {
+                throw new IllegalArgumentException(String.format("Can't parse duration (%s) of mute punishment template entry", rawDuration));
+            }
         }
 
         @Override
