@@ -228,6 +228,7 @@ public class DKBansPlugin extends MinecraftPlugin {
                         .append(group.getScope().getName());
                 if(group.getScope().getId() != null) builder.append(":").append(group.getScope().getId());
                 builder.append("]");
+                return builder.toString();
             }
             return "none";
         });
