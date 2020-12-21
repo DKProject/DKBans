@@ -45,7 +45,6 @@ public class BroadcastTask implements Runnable {
 
     @Override
     public void run() {
-        System.out.println("BROADCAST TASK");
         for (BroadcastGroup group0 : DefaultDKBans.getInstance().getBroadcastManager().getGroups()) {
             if(!group0.isEnabled()) continue;
             DefaultBroadcastGroup group = ((DefaultBroadcastGroup) group0);

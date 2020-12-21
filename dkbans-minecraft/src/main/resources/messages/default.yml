@@ -297,13 +297,23 @@ messages:
 
   dkbans.command.broadcast.notFound: '${dkbans.prefix} &cNo broadcast found for &e{broadcast}'
 
+  dkbans.command.broadcast.group.help: '${dkbans.prefix} &cInvalid usage of &eBroadcast group &ccommand&8:
+  &7/broadcastgroup <name> create <interval>
+  &7/broadcastgroup <name> assignment
+  &7broadcastgroup <name> edit'
   dkbans.command.broadcast.group.create.help: '${dkbans.prefix} &cInvalid usage of &eBroadcast group create &ccommand&8:
-  &7/broadcast group <name> create <interval>'
+  &7/broadcastgroup <name> create <interval>'
   dkbans.command.broadcast.group.created: '${dkbans.prefix} &7You have successfully created the broadcast group &e{group.name}'
 
   dkbans.command.broadcast.group.alreadyExists: '${dkbans.prefix} &cA broadcast group with the name &e{name} already exists'
   dkbans.command.broadcast.alreadyExists: '${dkbans.prefix} &cA broadcast with the name &e{name} already exists'
 
+  dkbans.command.broadcast.group.assignment.help: '${dkbans.prefix} &cInvalid usage of &eassignment &ccommand&8:
+  &7/broadcastgroup <name> assignment <name>
+     &8- &7list
+     &8- &7add
+     &8- &7remove
+     &8- %7[info]'
   dkbans.command.broadcast.group.assignment.list: '${dkbans.prefix} &Assignments&8:
   @for("assignment" in {assignments},{dkbans.command.broadcast.group.assignment.list.loop},"\n","\n")'
   dkbans.command.broadcast.group.assignment.list.loop: '&8» &7Id&8: &e{assignment.id} &7Name&8: &e{assignment.broadcast.name} &7Position&8: &e {assignment.position}'

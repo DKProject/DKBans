@@ -43,35 +43,47 @@ public class BroadcastGroupAssignmentCommand extends ObjectCommand<BroadcastGrou
     public void execute(CommandSender commandSender, BroadcastGroup group, String[] args) {
         System.out.println("Assignment:" + Arrays.toString(args) + ":" + group);
         if(args[0].equalsIgnoreCase("list")) {
-            commandSender.sendMessage(Messages.COMMAND_BROADCAST_GROUP_ASSIGNMENT_LIST, VariableSet.create().addDescribed("assignments", group.getAssignments()));
+            list(commandSender, group);
         } else if(args[0].equalsIgnoreCase("help")) {
-
-        } else if(args.length > 1) {
+            commandSender.sendMessage(Messages.COMMAND_BROADCAST_GROUP_ASSIGNMENT_HELP);
+        } else {
             String rawIdentifier = args[0];
-            if(args[1].equalsIgnoreCase("add")) {
-                Broadcast broadcast = DKBans.getInstance().getBroadcastManager().searchBroadcast(rawIdentifier);
-                if(broadcast == null) {
-                    commandSender.sendMessage(Messages.COMMAND_BROADCAST_NOT_FOUND, VariableSet.create().add("broadcast", rawIdentifier));
-                    return;
+            if(args.length > 1) {
+                if(args[1].equalsIgnoreCase("add")) {
+                    Broadcast broadcast = DKBans.getInstance().getBroadcastManager().searchBroadcast(rawIdentifier);
+                    if(broadcast == null) {
+                        commandSender.sendMessage(Messages.COMMAND_BROADCAST_NOT_FOUND, VariableSet.create().add("broadcast", rawIdentifier));
+                        return;
+                    }
+                    BroadcastAssignment assignment = group.addBroadcast(broadcast);
+                    commandSender.sendMessage(Messages.COMMAND_BROADCAST_GROUP_ASSIGNMENT_ADD, VariableSet.create().addDescribed("assignment", assignment));
+                } else if(args[1].equalsIgnoreCase("remove")) {
+                    BroadcastAssignment assignment = group.searchAssignment(rawIdentifier);
+                    if(assignment == null) {
+                        commandSender.sendMessage(Messages.COMMAND_BROADCAST_GROUP_ASSIGNMENT_NOT_FOUND, VariableSet.create().add("assignment", rawIdentifier));
+                        return;
+                    }
+                    group.removeAssignment(assignment);
+                    commandSender.sendMessage(Messages.COMMAND_BROADCAST_GROUP_ASSIGNMENT_REMOVE, VariableSet.create().addDescribed("assignment", assignment));
+                } else if(args[1].equalsIgnoreCase("info")) {
+                    info(commandSender, group, rawIdentifier);
                 }
-                BroadcastAssignment assignment = group.addBroadcast(broadcast);
-                commandSender.sendMessage(Messages.COMMAND_BROADCAST_GROUP_ASSIGNMENT_ADD, VariableSet.create().addDescribed("assignment", assignment));
-            } else if(args[1].equalsIgnoreCase("remove")) {
-                BroadcastAssignment assignment = group.searchAssignment(rawIdentifier);
-                if(assignment == null) {
-                    commandSender.sendMessage(Messages.COMMAND_BROADCAST_GROUP_ASSIGNMENT_NOT_FOUND, VariableSet.create().add("assignment", rawIdentifier));
-                    return;
-                }
-                group.removeAssignment(assignment);
-                commandSender.sendMessage(Messages.COMMAND_BROADCAST_GROUP_ASSIGNMENT_REMOVE, VariableSet.create().addDescribed("assignment", assignment));
-            } else if(args[1].equalsIgnoreCase("info")) {
-                BroadcastAssignment assignment = group.searchAssignment(rawIdentifier);
-                if(assignment == null) {
-                    commandSender.sendMessage(Messages.COMMAND_BROADCAST_GROUP_ASSIGNMENT_NOT_FOUND, VariableSet.create().add("assignment", rawIdentifier));
-                    return;
-                }
-                commandSender.sendMessage(Messages.COMMAND_BROADCAST_GROUP_ASSIGNMENT_INFO, VariableSet.create().addDescribed("assignment", assignment));
+            } else {
+                info(commandSender, group, rawIdentifier);
             }
         }
+    }
+
+    private void list(CommandSender commandSender, BroadcastGroup group) {
+        commandSender.sendMessage(Messages.COMMAND_BROADCAST_GROUP_ASSIGNMENT_LIST, VariableSet.create().addDescribed("assignments", group.getAssignments()));
+    }
+
+    private void info(CommandSender commandSender, BroadcastGroup group, String rawIdentifier) {
+        BroadcastAssignment assignment = group.searchAssignment(rawIdentifier);
+        if(assignment == null) {
+            commandSender.sendMessage(Messages.COMMAND_BROADCAST_GROUP_ASSIGNMENT_NOT_FOUND, VariableSet.create().add("assignment", rawIdentifier));
+            return;
+        }
+        commandSender.sendMessage(Messages.COMMAND_BROADCAST_GROUP_ASSIGNMENT_INFO, VariableSet.create().addDescribed("assignment", assignment));
     }
 }

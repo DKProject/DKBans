@@ -22,7 +22,9 @@ package net.pretronic.dkbans.minecraft.commands.broadcastgroup;
 
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.broadcast.BroadcastGroup;
+import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
+import net.pretronic.libraries.command.command.object.DefinedNotFindable;
 import net.pretronic.libraries.command.command.object.MainObjectCommand;
 import net.pretronic.libraries.command.command.object.ObjectNotFindable;
 import net.pretronic.libraries.command.sender.CommandSender;
@@ -30,13 +32,15 @@ import net.pretronic.libraries.utility.interfaces.ObjectOwner;
 
 import java.util.Arrays;
 
-public class BroadcastGroupCommand extends MainObjectCommand<BroadcastGroup> implements ObjectNotFindable {
+public class BroadcastGroupCommand extends MainObjectCommand<BroadcastGroup> implements ObjectNotFindable, DefinedNotFindable<BroadcastGroup> {
 
     private final BroadcastGroupCreateCommand createCommand;
+    private final BroadcastGroupListCommand listCommand;
 
     public BroadcastGroupCommand(ObjectOwner owner, CommandConfiguration configuration) {
         super(owner, configuration);
         this.createCommand = new BroadcastGroupCreateCommand(owner);
+        this.listCommand = new BroadcastGroupListCommand(owner);
         registerCommand(new BroadcastGroupAssignmentCommand(owner));
     }
 
@@ -48,11 +52,20 @@ public class BroadcastGroupCommand extends MainObjectCommand<BroadcastGroup> imp
     @Override
     public void objectNotFound(CommandSender commandSender, String command, String[] args) {
         if(command.equalsIgnoreCase("list")) {
-
+            listCommand.execute(commandSender, args);
         } else if(command.equalsIgnoreCase("help")) {
-
+            commandSender.sendMessage(Messages.COMMAND_BROADCAST_GROUP_HELP);
         } else if(args.length > 0 && args[0].equalsIgnoreCase("create")) {
             createCommand.execute(commandSender, command, Arrays.copyOfRange(args, 1, args.length));
+        }
+    }
+
+    @Override
+    public void commandNotFound(CommandSender commandSender, BroadcastGroup group, String command, String[] args) {
+        if(group != null) {
+            commandSender.sendMessage(Messages.COMMAND_BROADCAST_GROUP_HELP);
+        } else {
+            listCommand.execute(commandSender, args);
         }
     }
 }

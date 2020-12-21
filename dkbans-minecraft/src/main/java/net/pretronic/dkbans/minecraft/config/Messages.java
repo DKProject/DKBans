@@ -225,9 +225,11 @@ public class Messages {
     public static MessageComponent<?> COMMAND_BROADCAST_ALREADY_EXISTS = Text.ofMessageKey("dkbans.command.broadcast.alreadyExists");
     public static MessageComponent<?> COMMAND_BROADCAST_GROUP_ALREADY_EXISTS = Text.ofMessageKey("dkbans.command.broadcast.group.alreadyExists");
 
+    public static MessageComponent<?> COMMAND_BROADCAST_GROUP_HELP = Text.ofMessageKey("dkbans.command.broadcast.group.help");
     public static MessageComponent<?> COMMAND_BROADCAST_GROUP_CREATE_HELP = Text.ofMessageKey("dkbans.command.broadcast.group.create.help");
     public static MessageComponent<?> COMMAND_BROADCAST_GROUP_CREATED = Text.ofMessageKey("dkbans.command.broadcast.group.created");
 
+    public static MessageComponent<?> COMMAND_BROADCAST_GROUP_ASSIGNMENT_HELP = Text.ofMessageKey("dkbans.command.broadcast.group.assignment.help");
     public static MessageComponent<?> COMMAND_BROADCAST_GROUP_ASSIGNMENT_NOT_FOUND = Text.ofMessageKey("dkbans.command.broadcast.group.assignment.notFound");
     public static MessageComponent<?> COMMAND_BROADCAST_GROUP_ASSIGNMENT_LIST = Text.ofMessageKey("dkbans.command.broadcast.group.assignment.list");
     public static MessageComponent<?> COMMAND_BROADCAST_GROUP_ASSIGNMENT_INFO = Text.ofMessageKey("dkbans.command.broadcast.group.assignment.info");
