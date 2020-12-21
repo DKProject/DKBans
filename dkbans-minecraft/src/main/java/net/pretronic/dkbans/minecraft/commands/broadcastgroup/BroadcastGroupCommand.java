@@ -42,6 +42,7 @@ public class BroadcastGroupCommand extends MainObjectCommand<BroadcastGroup> imp
         this.createCommand = new BroadcastGroupCreateCommand(owner);
         this.listCommand = new BroadcastGroupListCommand(owner);
         registerCommand(new BroadcastGroupAssignmentCommand(owner));
+        registerCommand(new BroadcastGroupEditCommand(owner));
     }
 
     @Override

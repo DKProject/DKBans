@@ -15,11 +15,14 @@ messages:
   dkbans.error.internal: '{prefix} &cAn internal server error occurred, please contact a network administrator"'
   dkbans.error.invalid.DurationFormat: '{prefix} &e{duration} &cis not a valid duration'
   dkbans.error.invalid.number: '{prefix} &e{number} &cis not a valid number'
+  dkbans.error.invalid.boolean: '{prefix} &e{value} &cis not a valid boolean'
   dkbans.error.onlyPlayer: '{prefix} &cThis command can only be executed as a player'
   dkbans.error.onlyConsole: '{prefix} &cThis command can only be executed from console'
   dkbans.error.noPermissions: '{prefix} &cYou are not allowed to execute this command'
   dkbans.error.invalidIpAddress: '{prefix} &e{address} &cis not an ip address'
   dkbans.error.invalid.templateSpecifierFormat: '{prefix} &cWrong template specifier format. Use &etemplate@group'
+  dkbans.error.invalidBroadcastOrder: '{prefix} &e{value} &cis not a valid broadcast order'
+  dkbans.error.invalidScope: '{prefix} &e{value} &cis not a valid scope. Use &e <type:name:[id]>'
   dkbans.error.templateGroup.notExists: '{prefix} &e{templateGroup} &ctemplate group does not exist'
   dkbans.error.template.notExists: '{prefix} &e{template} &ctemplate does not exist'
   dkbans.error.ipBlock.notExists: '{prefix} &cAn ip block for address &e{address} &cdoes not exist'
@@ -336,3 +339,13 @@ messages:
   &7/broadcast <name> create <visibility> <text>'
   dkbans.command.broadcast.visibility.notExists: '${dkbans.prefix} &cThe broadcast visibility &e{name} &cdoes not exists'
   dkbans.command.broadcast.created: '${dkbans.prefix} &7You have successfully created the broadcast &e{broadcast.name}'
+
+  dkbans.command.broadcast.group.edit.help: '${dkbans.prefix} &cInvalid usage of &eassignment &ccommand&8:
+  &7/broadcastgroup <name> edit
+    &8- &7name <name>
+    &8- &7enabled <true, false>
+    &8- &7permission <permission>
+    &8- %7order <order>
+    &8- &7interval <interval>
+    &8- &7scope <type:name:[id]>'
+  dkbans.command.broadcast.group.edit.edited: '${dkbans.prefix} &7You have edited the property &e{property} &7to &e{value}'

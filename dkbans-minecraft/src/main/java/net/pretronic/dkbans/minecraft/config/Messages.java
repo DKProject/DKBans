@@ -35,6 +35,7 @@ public class Messages {
     public static MessageComponent<?> ERROR_INTERNAL  = Text.ofMessageKey("dkbans.error.internal");
     public static MessageComponent<?> ERROR_INVALID_DURATION_FORMAT  = Text.ofMessageKey("dkbans.error.invalid.durationFormat");
     public static MessageComponent<?> ERROR_INVALID_NUMBER  = Text.ofMessageKey("dkbans.error.invalid.number");
+    public static MessageComponent<?> ERROR_INVALID_BOOLEAN  = Text.ofMessageKey("dkbans.error.invalid.boolean");
     public static MessageComponent<?> ERROR_ONLY_PLAYER = Text.ofMessageKey("dkbans.error.onlyPlayer");
     public static MessageComponent<?> ERROR_ONLY_CONSOLE = Text.ofMessageKey("dkbans.error.onlyConsole");
     public static MessageComponent<?> ERROR_NO_PERMISSIONS = Text.ofMessageKey("dkbans.error.noPermissions");
@@ -43,6 +44,8 @@ public class Messages {
     public static MessageComponent<?> ERROR_TEMPLATE_GROUP_NOT_EXISTS = Text.ofMessageKey("dkbans.error.templateGroup.notExists");
     public static MessageComponent<?> ERROR_TEMPLATE_NOT_EXISTS = Text.ofMessageKey("dkbans.error.template.notExists");
     public static MessageComponent<?> ERROR_IP_BLOCK_NOT_EXISTS = Text.ofMessageKey("dkbans.error.ipBlock.notExists");
+    public static MessageComponent<?> ERROR_INVALID_BROADCAST_ORDER = Text.ofMessageKey("dkbans.error.invalidBroadcastOrder");
+    public static MessageComponent<?> ERROR_INVALID_SCOPE = Text.ofMessageKey("dkbans.error.invalidScope");
 
     public static MessageComponent<?> PLAYER_NOT_FOUND = Text.ofMessageKey("dkbans.player.notFound");
     public static MessageComponent<?> PLAYER_NOT_ONLINE = Text.ofMessageKey("dkbans.player.notOnline");
@@ -240,6 +243,9 @@ public class Messages {
     public static MessageComponent<?> COMMAND_BROADCAST_VISIBILITY_NOT_EXISTS = Text.ofMessageKey("dkbans.command.broadcast.visibility.notExists");
     public static MessageComponent<?> COMMAND_BROADCAST_HELP = Text.ofMessageKey("dkbans.command.broadcast.create.help");
     public static MessageComponent<?> COMMAND_BROADCAST_CREATED = Text.ofMessageKey("dkbans.command.broadcast.created");
+
+    public static MessageComponent<?> COMMAND_BROADCAST_GROUP_EDIT_HELP = Text.ofMessageKey("dkbans.command.broadcast.group.edit.help");
+    public static MessageComponent<?> COMMAND_BROADCAST_GROUP_EDIT_EDITED = Text.ofMessageKey("dkbans.command.broadcast.group.edit.edited");
 
 
     public static MessageComponent<?> getPunishmentMessage(PlayerHistoryEntrySnapshot snapshot){
