@@ -229,6 +229,7 @@ public class Messages {
     public static MessageComponent<?> COMMAND_BROADCAST_GROUP_ALREADY_EXISTS = Text.ofMessageKey("dkbans.command.broadcast.group.alreadyExists");
 
     public static MessageComponent<?> COMMAND_BROADCAST_GROUP_HELP = Text.ofMessageKey("dkbans.command.broadcast.group.help");
+    public static MessageComponent<?> COMMAND_BROADCAST_GROUP_INFO = Text.ofMessageKey("dkbans.command.broadcast.group.info");
     public static MessageComponent<?> COMMAND_BROADCAST_GROUP_LIST = Text.ofMessageKey("dkbans.command.broadcast.group.list");
     public static MessageComponent<?> COMMAND_BROADCAST_GROUP_CREATE_HELP = Text.ofMessageKey("dkbans.command.broadcast.group.create.help");
     public static MessageComponent<?> COMMAND_BROADCAST_GROUP_CREATED = Text.ofMessageKey("dkbans.command.broadcast.group.created");

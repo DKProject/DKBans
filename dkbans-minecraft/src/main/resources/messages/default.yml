@@ -318,6 +318,15 @@ messages:
   @for("group" in {groups},${dkbans.command.broadcast.group.list.loop},"\n","\n")'
   dkbans.command.broadcast.group.list.loop: '&8» &7Id&8: &e{group.id} &7Name&8: &e{group.name}'
 
+  dkbans.command.broadcast.group.info: '${dkbans.prefix} &6Group info
+  &8» &7Id&8: &e{group.id}
+  &8» &7Name&8: &e{group.name}
+  &8» &Enabled&8: &e{group.enabled}
+  &8» &Permission&8: &e{group.permission}
+  &8» &7Order&8: &e{group.order}
+  &8» &7Interval&8: &e{group.interval}
+  &8» &7Scope&8: &e{group.formattedScope}'
+
   dkbans.command.broadcast.group.assignment.help: '${dkbans.prefix} &cInvalid usage of &eassignment &ccommand&8:
   &7/broadcastgroup <name> assignment <name>
      &8- &7list
