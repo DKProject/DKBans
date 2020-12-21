@@ -31,6 +31,8 @@ import net.pretronic.libraries.command.sender.CommandSender;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
 
+import java.util.Arrays;
+
 public class BroadcastGroupAssignmentCommand extends ObjectCommand<BroadcastGroup> {
 
     public BroadcastGroupAssignmentCommand(ObjectOwner owner) {
@@ -39,6 +41,7 @@ public class BroadcastGroupAssignmentCommand extends ObjectCommand<BroadcastGrou
 
     @Override
     public void execute(CommandSender commandSender, BroadcastGroup group, String[] args) {
+        System.out.println("Assignment:" + Arrays.toString(args) + ":" + group);
         if(args[0].equalsIgnoreCase("list")) {
             commandSender.sendMessage(Messages.COMMAND_BROADCAST_GROUP_ASSIGNMENT_LIST, VariableSet.create().addDescribed("assignments", group.getAssignments()));
         } else if(args[0].equalsIgnoreCase("help")) {
