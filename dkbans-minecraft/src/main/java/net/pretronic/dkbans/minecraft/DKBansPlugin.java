@@ -218,7 +218,9 @@ public class DKBansPlugin extends MinecraftPlugin {
 
         VariableDescriberRegistry.registerDescriber(DefaultBroadcast.class);
         VariableDescriberRegistry.registerDescriber(DefaultBroadcastAssignment.class);
-        VariableDescriberRegistry.registerDescriber(DefaultBroadcastGroup.class);
+        VariableDescriber<DefaultBroadcastGroup> groupDescriber = VariableDescriberRegistry.registerDescriber(DefaultBroadcastGroup.class);
+        groupDescriber.registerFunction("enabled", DefaultBroadcastGroup::isEnabled);
+
     }
 
     private void loadConfigs() {
