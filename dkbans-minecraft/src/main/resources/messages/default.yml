@@ -260,9 +260,15 @@ messages:
   dkbans.command.chatLog.usage: '${dkbans.prefix.chat} &cInvalid usage of chatLog command&8:
   &7/chatlog player <name> [page]
   &7/chatlog server <name, id> [page]'
-  dkbans.command.chatLog.list: '${dkbans.prefix.chat} &7ChatLog page {page}
-  @for("entry" in {entries}, ${dkbans.command.chatLog.list.loop},"\n")'
-  dkbans.command.chatLog.list.loop: '&8» {entry.player.displayName} &7on &e{entry.timeFormatted}&8: &f{entry.message}'
+
+  dkbans.command.chatlog.player.list: '${dkbans.prefix.chat} &7Chatlog of player {player.displayName} &8| &7Page:8: {page}
+  @for("entry" in {entries}, ${dkbans.command.chatLog.player.list.loop},"\n")'
+  dkbans.command.chatlog.player.list.loop: '&8» {entry.serverName} &7on &e{entry.timeFormatted}&8: &f{entry.message}'
+
+  dkbans.command.chatlog.server.list: '${dkbans.prefix.chat} &7Chatlog of server {server.name} &8| &7Page:8: {page}
+  @for("entry" in {entries}, ${dkbans.command.chatLog.server.list.loop},"\n")'
+  dkbans.command.chatlog.server.list.loop: '&8» {entry.player.displayName} &7on &e{entry.timeFormatted}&8: &f{entry.message}'
+
   dkbans.command.dkbans.help: '${dkbans.prefix} &cInvalid usage of dkbans command&8:
   &7/dkbans info
   &7/dkbans migrate <plugin>
