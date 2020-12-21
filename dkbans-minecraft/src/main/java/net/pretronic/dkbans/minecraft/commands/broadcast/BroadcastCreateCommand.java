@@ -2,7 +2,7 @@
  * (C) Copyright 2020 The DKBans Project (Davide Wietlisbach & Philipp Elvin Friedhoff)
  *
  * @author Philipp Elvin Friedhoff
- * @since 21.12.20, 14:34
+ * @since 21.12.20, 17:05
  * @web %web%
  *
  * The DKBans Project is under the Apache License, version 2.0 (the "License");
@@ -39,7 +39,7 @@ public class BroadcastCreateCommand extends ObjectCommand<String> {
     @Override
     public void execute(CommandSender commandSender, String name, String[] args) {
         if(args.length < 2) {
-            commandSender.sendMessage(Messages.COMMAND_BROADCAST_HELP);
+            commandSender.sendMessage(Messages.COMMAND_BROADCAST_CREATE_HELP);
             return;
         }
         if(DKBans.getInstance().getBroadcastManager().getBroadcast(name) != null) {

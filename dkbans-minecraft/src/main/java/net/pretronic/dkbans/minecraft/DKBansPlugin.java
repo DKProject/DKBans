@@ -251,7 +251,7 @@ public class DKBansPlugin extends MinecraftPlugin {
 
     private void initBroadcast() {
         McNative.getInstance().getScheduler().createTask(this)
-                .interval(5, TimeUnit.SECONDS)
+                .interval(1, TimeUnit.SECONDS)
                 .execute(new BroadcastTask().start())
                 .start();
     }

@@ -22,37 +22,53 @@ package net.pretronic.dkbans.minecraft.commands.broadcast;
 
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.broadcast.Broadcast;
-import net.pretronic.libraries.command.command.MainCommand;
+import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
+import net.pretronic.libraries.command.command.object.DefinedNotFindable;
 import net.pretronic.libraries.command.command.object.MainObjectCommand;
 import net.pretronic.libraries.command.command.object.ObjectNotFindable;
 import net.pretronic.libraries.command.sender.CommandSender;
+import net.pretronic.libraries.message.bml.variable.VariableSet;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
 
 import java.util.Arrays;
 
-public class BroadcastCommand extends MainObjectCommand<Broadcast> implements ObjectNotFindable {
+public class BroadcastCommand extends MainObjectCommand<Broadcast> implements ObjectNotFindable, DefinedNotFindable<Broadcast> {
 
     private final BroadcastCreateCommand createCommand;
+    private final BroadcastListCommand listCommand;
 
     public BroadcastCommand(ObjectOwner owner, CommandConfiguration configuration) {
         super(owner, configuration);
         this.createCommand = new BroadcastCreateCommand(owner);
+        this.listCommand = new BroadcastListCommand(owner);
+        registerCommand(new BroadcastDirectCommand(owner));
     }
 
     @Override
-    public Broadcast getObject(CommandSender commandSender, String search) {
-        return DKBans.getInstance().getBroadcastManager().searchBroadcast(search);
+    public Broadcast getObject(CommandSender commandSender, String value) {
+        return DKBans.getInstance().getBroadcastManager().getBroadcast(value);
     }
 
     @Override
     public void objectNotFound(CommandSender commandSender, String command, String[] args) {
-        if(command.equalsIgnoreCase("list")) {
-
-        } else if(command.equalsIgnoreCase("help")) {
-
+        if(command.equalsIgnoreCase("help")) {
+            commandSender.sendMessage(Messages.COMMAND_BROADCAST_HELP);
+        } else if(command.equalsIgnoreCase("list")) {
+            this.listCommand.execute(commandSender, args);
         } else if(args.length > 0 && args[0].equalsIgnoreCase("create")) {
             createCommand.execute(commandSender, command, Arrays.copyOfRange(args, 1, args.length));
+        } else {
+            commandSender.sendMessage(Messages.COMMAND_BROADCAST_NOT_FOUND, VariableSet.create().add("broadcast", command));
+        }
+    }
+
+    @Override
+    public void commandNotFound(CommandSender commandSender, Broadcast broadcast, String command, String[] args) {
+        if(broadcast != null) {
+            commandSender.sendMessage(Messages.COMMAND_BROADCAST_HELP);
+        } else {
+            listCommand.execute(commandSender, args);
         }
     }
 }
