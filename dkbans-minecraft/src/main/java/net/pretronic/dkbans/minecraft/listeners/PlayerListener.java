@@ -153,18 +153,17 @@ public class PlayerListener {
     @Listener//@Todo async
     public void onPlayerDisconnect(MinecraftPlayerLogoutEvent event) {
         event.getPlayer().getAs(DKBansPlayer.class).finishSession(event.getOnlinePlayer().getServer().getName(),
-                UUID.randomUUID());//event.getOnlinePlayer().getServer().getIdentifier().getUniqueId() @Todo change if method is implemented
+                event.getOnlinePlayer().getServer().getIdentifier().getUniqueId());
     }
 
-    @Listener(priority = EventPriority.HIGHEST)//@Todo async
+    @Listener(priority = EventPriority.HIGHEST)
     public void onPlayerChat(MinecraftPlayerChatEvent event){
         if(event.isCancelled()) return;
         DKBansPlayer player = event.getPlayer().getAs(DKBansPlayer.class);
         boolean bypass = event.getPlayer().hasPermission(Permissions.CHAT_BYPASS);
 
-        if(DKBansConfig.CHAT_FILTER_ENABLED
-                && !bypass
-                && checkBasicFilters(event, player)) return;
+
+        if(DKBansConfig.CHAT_FILTER_ENABLED && !bypass && checkBasicFilters(event, player)) return;
 
         PlayerHistoryEntry mute = player.getHistory().getActiveEntry(PunishmentType.MUTE);
         if(mute != null){
