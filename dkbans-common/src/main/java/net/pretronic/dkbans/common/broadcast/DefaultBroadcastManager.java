@@ -168,6 +168,8 @@ public class DefaultBroadcastManager implements BroadcastManager {
                 assignmentsToGroup.put(groupId, new ArrayList<>());
             }
             Collection<BroadcastAssignment> assignments = assignmentsToGroup.get(groupId);
+            System.out.println(assignments);
+            System.out.println(result.getInt("Id") + ":" + result.getInt("BroadcastId") + ":" + groupId + ":" + result.getInt("Position"));
             assignments.add(new DefaultBroadcastAssignment(result.getInt("Id"), result.getInt("BroadcastId"), groupId, result.getInt("Position")));
         }
 
