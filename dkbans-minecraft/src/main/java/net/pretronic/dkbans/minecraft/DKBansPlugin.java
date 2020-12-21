@@ -232,7 +232,7 @@ public class DKBansPlugin extends MinecraftPlugin {
             }
             return "none";
         });
-        groupDescriber.registerFunction("formattedInterval", group -> DurationProcessor.getStandard().format(group.getInterval()));
+        groupDescriber.registerFunction("formattedInterval", group -> DurationProcessor.getStandard().format(group.getInterval(), true));
     }
 
     private void loadConfigs() {
