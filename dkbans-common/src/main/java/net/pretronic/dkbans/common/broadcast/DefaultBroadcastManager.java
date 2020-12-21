@@ -178,13 +178,19 @@ public class DefaultBroadcastManager implements BroadcastManager {
             if(assignments == null) {
                 assignments = new ArrayList<>();
             }
+            DKBansScope scope = null;
+            String rawScopeType = result.getString("ScopeType");
+            String rawScopeName = result.getString("ScopeName");
+            if(rawScopeType != null && rawScopeName != null) {
+                scope = new DKBansScope(rawScopeType, rawScopeName, result.getUniqueId("ScopeId"));
+            }
             DefaultBroadcastGroup group = new DefaultBroadcastGroup(groupId,
                     result.getString("Name"),
                     result.getBoolean("Enabled"),
                     result.getString("Permission"),
                     BroadcastOrder.valueOf(result.getString("Order")),
                     result.getInt("Interval"),
-                    new DKBansScope(result.getString("ScopeType"), result.getString("ScopeName"), result.getUniqueId("ScopeId")),
+                    scope,
                     assignments);
             return group;
         });
