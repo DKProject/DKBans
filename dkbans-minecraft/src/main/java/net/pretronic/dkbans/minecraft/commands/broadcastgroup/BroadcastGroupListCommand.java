@@ -21,6 +21,7 @@
 package net.pretronic.dkbans.minecraft.commands.broadcastgroup;
 
 import net.pretronic.dkbans.api.DKBans;
+import net.pretronic.dkbans.api.broadcast.BroadcastGroup;
 import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.libraries.command.command.BasicCommand;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
@@ -37,7 +38,9 @@ public class BroadcastGroupListCommand extends BasicCommand {
 
     @Override
     public void execute(CommandSender commandSender, String[] strings) {
-        System.out.println(DKBans.getInstance().getBroadcastManager().getGroups());
+        for (BroadcastGroup group : DKBans.getInstance().getBroadcastManager().getGroups()) {
+            System.out.println(group.getId());
+        }
         commandSender.sendMessage(Messages.COMMAND_BROADCAST_GROUP_LIST, VariableSet.create().addDescribed("groups", DKBans.getInstance().getBroadcastManager().getGroups()));
     }
 }
