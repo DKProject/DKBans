@@ -242,9 +242,9 @@ messages:
   &8» &7FirstLogin&8: &e{player.firstLogin}
   &8» &7LastLogin&8: &e{player.lastLogin}
   &8» &7OnlineTime&8: &e{player.onlineTime}
-  &8» &7Ip&8: &e{player.activeSession.hostName}
-  &8» &7Country&8: &e{player.activeSession.country}
-  &8» &7Region&8: &e{player.activeSession.region}'
+  &8» &7Ip&8: &e{player.lastSession.hostName}
+  &8» &7Country&8: &e{player.lastSession.country}
+  &8» &7Region&8: &e{player.lastSession.region}'
 
   dkbans.command.playerNotes.help: '${dkbans.prefix} &cInvalid usage of dkbans command&8:
   &7/pnotes <player> [list]

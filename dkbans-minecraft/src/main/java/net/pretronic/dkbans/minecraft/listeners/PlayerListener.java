@@ -45,6 +45,7 @@ import org.mcnative.common.event.player.MinecraftPlayerCommandPreprocessEvent;
 import org.mcnative.common.event.player.MinecraftPlayerLogoutEvent;
 import org.mcnative.common.event.player.login.MinecraftPlayerLoginEvent;
 import org.mcnative.common.event.player.login.MinecraftPlayerPostLoginEvent;
+import org.mcnative.common.network.component.server.ProxyServer;
 import org.mcnative.common.player.ConnectedMinecraftPlayer;
 import org.mcnative.common.player.OnlineMinecraftPlayer;
 import org.mcnative.common.text.Text;
@@ -140,9 +141,12 @@ public class PlayerListener {
 
             Pair<String,String> locationLookup = DKBansUtil.lookupLocation(player.getAddress().getAddress().getHostAddress());
 
+            ProxyServer proxy = player.getProxy();
+
             dkBansPlayer.startSession(player.getName(),player.getAddress().getAddress(), locationLookup.getKey(), locationLookup.getValue(),
-                    "none", UUID.randomUUID(), connectedPlayer.getProtocolVersion().getEdition().getName(),
-                    connectedPlayer.getProtocolVersion().getNumber());
+                    proxy != null ? proxy.getName() : null, proxy != null ? proxy.getUniqueId() : null
+                    ,connectedPlayer.getProtocolVersion().getEdition().getName()
+                    ,connectedPlayer.getProtocolVersion().getNumber());
         }
     }
 
