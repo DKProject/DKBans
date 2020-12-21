@@ -241,12 +241,19 @@ public class Messages {
     public static MessageComponent<?> COMMAND_BROADCAST_GROUP_ASSIGNMENT_ADD = Text.ofMessageKey("dkbans.command.broadcast.group.assignment.add");
 
     public static MessageComponent<?> COMMAND_BROADCAST_VISIBILITY_NOT_EXISTS = Text.ofMessageKey("dkbans.command.broadcast.visibility.notExists");
-    public static MessageComponent<?> COMMAND_BROADCAST_HELP = Text.ofMessageKey("dkbans.command.broadcast.create.help");
+    public static MessageComponent<?> COMMAND_BROADCAST_CREATE_HELP = Text.ofMessageKey("dkbans.command.broadcast.create.help");
     public static MessageComponent<?> COMMAND_BROADCAST_CREATED = Text.ofMessageKey("dkbans.command.broadcast.created");
+
+    public static MessageComponent<?> COMMAND_BROADCAST_GROUP_NOT_FOUND = Text.ofMessageKey("dkbans.command.broadcast.group.notFound");
+
+    public static MessageComponent<?> COMMAND_BROADCAST_LIST = Text.ofMessageKey("dkbans.command.broadcast.list");
+
+    public static MessageComponent<?> COMMAND_BROADCAST_DIRECT = Text.ofMessageKey("dkbans.command.broadcast.direct");
 
     public static MessageComponent<?> COMMAND_BROADCAST_GROUP_EDIT_HELP = Text.ofMessageKey("dkbans.command.broadcast.group.edit.help");
     public static MessageComponent<?> COMMAND_BROADCAST_GROUP_EDIT_EDITED = Text.ofMessageKey("dkbans.command.broadcast.group.edit.edited");
 
+    public static MessageComponent<?> COMMAND_BROADCAST_HELP = Text.ofMessageKey("dkbans.command.broadcast.help");
 
     public static MessageComponent<?> getPunishmentMessage(PlayerHistoryEntrySnapshot snapshot){
         if(snapshot.getPunishmentType() == PunishmentType.BAN){

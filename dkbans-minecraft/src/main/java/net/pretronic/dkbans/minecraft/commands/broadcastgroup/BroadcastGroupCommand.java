@@ -28,6 +28,7 @@ import net.pretronic.libraries.command.command.object.DefinedNotFindable;
 import net.pretronic.libraries.command.command.object.MainObjectCommand;
 import net.pretronic.libraries.command.command.object.ObjectNotFindable;
 import net.pretronic.libraries.command.sender.CommandSender;
+import net.pretronic.libraries.message.bml.variable.VariableSet;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
 
 import java.util.Arrays;
@@ -58,6 +59,8 @@ public class BroadcastGroupCommand extends MainObjectCommand<BroadcastGroup> imp
             commandSender.sendMessage(Messages.COMMAND_BROADCAST_GROUP_HELP);
         } else if(args.length > 0 && args[0].equalsIgnoreCase("create")) {
             createCommand.execute(commandSender, command, Arrays.copyOfRange(args, 1, args.length));
+        } else {
+            commandSender.sendMessage(Messages.COMMAND_BROADCAST_GROUP_NOT_FOUND, VariableSet.create().add("group", command));
         }
     }
 
