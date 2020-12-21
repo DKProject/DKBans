@@ -28,9 +28,9 @@ import java.util.regex.Pattern;
 
 public class RegexOperation implements FilterOperation {
 
-    private static final String NAME = "PATTERN";
+    private static final String NAME = "REGEX";
 
-    private Pattern pattern;
+    private final Pattern pattern;
 
     public RegexOperation(String value) {
         Validate.notNull(value);
@@ -44,7 +44,7 @@ public class RegexOperation implements FilterOperation {
 
     @Override
     public boolean matches(String input) {
-        return pattern.matcher(input).matches();
+        return pattern.matcher(input).find();
     }
 
     public static class Factory implements FilterOperationFactory {

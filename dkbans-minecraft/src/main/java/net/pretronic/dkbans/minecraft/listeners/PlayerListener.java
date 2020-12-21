@@ -156,15 +156,13 @@ public class PlayerListener {
                 UUID.randomUUID());//event.getOnlinePlayer().getServer().getIdentifier().getUniqueId() @Todo change if method is implemented
     }
 
-    @Listener(priority = EventPriority.HIGHEST)//@Todo async
+    @Listener(priority = EventPriority.HIGHEST)
     public void onPlayerChat(MinecraftPlayerChatEvent event){
         if(event.isCancelled()) return;
         DKBansPlayer player = event.getPlayer().getAs(DKBansPlayer.class);
         boolean bypass = event.getPlayer().hasPermission(Permissions.CHAT_BYPASS);
 
-        if(DKBansConfig.CHAT_FILTER_ENABLED
-                && !bypass
-                && checkBasicFilters(event, player)) return;
+        if(DKBansConfig.CHAT_FILTER_ENABLED && !bypass && checkBasicFilters(event, player)) return;
 
         PlayerHistoryEntry mute = player.getHistory().getActiveEntry(PunishmentType.MUTE);
         if(mute != null){
