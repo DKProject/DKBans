@@ -37,6 +37,7 @@ public class BroadcastGroupListCommand extends BasicCommand {
 
     @Override
     public void execute(CommandSender commandSender, String[] strings) {
+        System.out.println(DKBans.getInstance().getBroadcastManager().getGroups());
         commandSender.sendMessage(Messages.COMMAND_BROADCAST_GROUP_LIST, VariableSet.create().addDescribed("groups", DKBans.getInstance().getBroadcastManager().getGroups()));
     }
 }

@@ -20,6 +20,7 @@
 
 package net.pretronic.dkbans.minecraft.commands.broadcast;
 
+import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.broadcast.Broadcast;
 import net.pretronic.libraries.command.command.MainCommand;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
@@ -40,8 +41,8 @@ public class BroadcastCommand extends MainObjectCommand<Broadcast> implements Ob
     }
 
     @Override
-    public Broadcast getObject(CommandSender commandSender, String s) {
-        return null;
+    public Broadcast getObject(CommandSender commandSender, String search) {
+        return DKBans.getInstance().getBroadcastManager().searchBroadcast(search);
     }
 
     @Override
