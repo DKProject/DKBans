@@ -73,6 +73,7 @@ import net.pretronic.libraries.message.bml.variable.describer.VariableDescriber;
 import net.pretronic.libraries.message.bml.variable.describer.VariableDescriberRegistry;
 import net.pretronic.libraries.plugin.lifecycle.Lifecycle;
 import net.pretronic.libraries.plugin.lifecycle.LifecycleState;
+import net.pretronic.libraries.utility.duration.DurationProcessor;
 import net.pretronic.libraries.utility.io.FileUtil;
 import org.mcnative.common.McNative;
 import org.mcnative.common.plugin.MinecraftPlugin;
@@ -231,7 +232,7 @@ public class DKBansPlugin extends MinecraftPlugin {
             }
             return "none";
         });
-
+        groupDescriber.registerFunction("formattedInterval", group -> DurationProcessor.getStandard().format(group.getInterval()));
     }
 
     private void loadConfigs() {
