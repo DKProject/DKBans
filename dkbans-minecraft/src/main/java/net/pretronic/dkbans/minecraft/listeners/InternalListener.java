@@ -124,7 +124,7 @@ public class InternalListener {
     private void handleKick(DKBansPlayerPunishEvent event, OnlineMinecraftPlayer player) {
         if (player != null) {
             player.kick(Messages.PUNISH_KICK_MESSAGE, VariableSet.create()
-                    .addDescribed("mute", event.getEntry())
+                    .addDescribed("kick", event.getEntry())
                     .addDescribed("punish", event.getEntry())
                     .addDescribed("player", event.getPlayer()));
         }

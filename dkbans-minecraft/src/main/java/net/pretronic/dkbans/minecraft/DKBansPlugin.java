@@ -188,14 +188,13 @@ public class DKBansPlugin extends MinecraftPlugin {
 
     private void registerDescribers(){
         VariableDescriberRegistry.registerDescriber(DefaultPlayerHistory.class);
-        VariableDescriberRegistry.registerDescriber(DefaultPlayerHistoryEntrySnapshot.class);
         VariableDescriberRegistry.registerDescriber(DefaultPlayerHistoryType.class);
+        VariableDescriberRegistry.registerDescriber(DefaultPlayerHistoryEntrySnapshot.class);
         VariableDescriberRegistry.registerDescriber(DefaultPlayerChatLog.class);
         VariableDescriberRegistry.registerDescriber(DefaultChatLogEntry.class);
         VariableDescriberRegistry.registerDescriber(DefaultFilter.class);
         VariableDescriberRegistry.registerDescriber(DefaultPlayerReport.class);
         VariableDescriberRegistry.registerDescriber(DefaultPlayerReportEntry.class);
-
         VariableDescriberRegistry.registerDescriber(DefaultTemplate.class);
         VariableDescriberRegistry.registerDescriber(DefaultTemplateCategory.class);
         VariableDescriberRegistry.registerDescriber(DefaultTemplateGroup.class);
