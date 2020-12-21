@@ -26,6 +26,7 @@ import net.pretronic.dkbans.api.broadcast.BroadcastAssignment;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.common.broadcast.BroadcastSender;
 import net.pretronic.dkbans.minecraft.config.Messages;
+import net.pretronic.libraries.message.MessageProvider;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
 import org.mcnative.common.McNative;
 import org.mcnative.common.player.OnlineMinecraftPlayer;
@@ -42,7 +43,7 @@ public class MinecraftBroadcastSender implements BroadcastSender {
     public Collection<DKBansPlayer> sendBroadcast(Broadcast broadcast) {
         return sendBroadcast(onlinePlayer -> {
             onlinePlayer.sendMessage(Messages.BROADCAST, VariableSet.create()
-                    .add("message", new ColoredString(broadcast.getText()))
+                    .add("message", McNative.getInstance().getRegistry().getService(MessageProvider.class).getProcessor().parse(broadcast.getText()))
                     .addDescribed("player", VariableSet.create().addDescribed("player", onlinePlayer)));
             return true;
         });
@@ -53,7 +54,7 @@ public class MinecraftBroadcastSender implements BroadcastSender {
         return sendBroadcast(onlinePlayer -> {
             if(onlinePlayer.hasPermission(broadcast.getGroup().getPermission())) {
                 onlinePlayer.sendMessage(Messages.BROADCAST, VariableSet.create()
-                        .add("message", new ColoredString(broadcast.getBroadcast().getText()))
+                        .add("message", McNative.getInstance().getRegistry().getService(MessageProvider.class).getProcessor().parse(broadcast.getBroadcast().getText()))
                         .addDescribed("player", VariableSet.create().addDescribed("player", onlinePlayer)));
                 return true;
             }
