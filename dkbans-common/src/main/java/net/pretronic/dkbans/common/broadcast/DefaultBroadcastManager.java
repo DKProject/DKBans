@@ -101,6 +101,12 @@ public class DefaultBroadcastManager implements BroadcastManager {
     }
 
     @Override
+    public void deleteBroadcast(Broadcast broadcast) {
+        Validate.notNull(broadcast);
+        deleteBroadcast(broadcast.getId());
+    }
+
+    @Override
     public Collection<BroadcastGroup> getGroups() {
         return this.groups;
     }

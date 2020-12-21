@@ -340,6 +340,7 @@ messages:
   &7/broadcast <name> create <visibility> <text>'
   dkbans.command.broadcast.visibility.notExists: '${dkbans.prefix} &cThe broadcast visibility &e{name} &cdoes not exists'
   dkbans.command.broadcast.created: '${dkbans.prefix} &7You have successfully created the broadcast &e{broadcast.name}'
+  dkbans.command.broadcast.deleted: '${dkbans.prefix} &7You have successfully deleted the broadcast &e{broadcast.name}'
 
   dkbans.command.broadcast.group.edit.help: '${dkbans.prefix} &cInvalid usage of &eassignment &ccommand&8:
   &7/broadcastgroup <name> edit

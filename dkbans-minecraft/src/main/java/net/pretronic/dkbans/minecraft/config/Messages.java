@@ -255,6 +255,8 @@ public class Messages {
 
     public static MessageComponent<?> COMMAND_BROADCAST_HELP = Text.ofMessageKey("dkbans.command.broadcast.help");
 
+    public static MessageComponent<?> COMMAND_BROADCAST_DELETED = Text.ofMessageKey("dkbans.command.broadcast.deleted");
+
     public static MessageComponent<?> getPunishmentMessage(PlayerHistoryEntrySnapshot snapshot){
         if(snapshot.getPunishmentType() == PunishmentType.BAN){
             return snapshot.isPermanently() ? PUNISH_BAN_MESSAGE_PERMANENTLY : PUNISH_BAN_MESSAGE_TEMPORARY;

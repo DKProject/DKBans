@@ -38,6 +38,8 @@ public interface BroadcastManager {
 
     void deleteBroadcast(int id);
 
+    void deleteBroadcast(Broadcast broadcast);
+
 
     Collection<BroadcastGroup> getGroups();
 
