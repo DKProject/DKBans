@@ -300,13 +300,18 @@ messages:
   dkbans.command.broadcast.group.help: '${dkbans.prefix} &cInvalid usage of &eBroadcast group &ccommand&8:
   &7/broadcastgroup <name> create <interval>
   &7/broadcastgroup <name> assignment
-  &7broadcastgroup <name> edit'
+  &7broadcastgroup <name> edit
+  &7broadcastgroup list'
   dkbans.command.broadcast.group.create.help: '${dkbans.prefix} &cInvalid usage of &eBroadcast group create &ccommand&8:
   &7/broadcastgroup <name> create <interval>'
   dkbans.command.broadcast.group.created: '${dkbans.prefix} &7You have successfully created the broadcast group &e{group.name}'
 
   dkbans.command.broadcast.group.alreadyExists: '${dkbans.prefix} &cA broadcast group with the name &e{name} already exists'
   dkbans.command.broadcast.alreadyExists: '${dkbans.prefix} &cA broadcast with the name &e{name} already exists'
+
+  dkbans.command.broadcast.group.list: '${dkbans.prefix} &Broadcast groups&8:
+  @for("group" in {groups},{dkbans.command.broadcast.group.list.loop},"\n","\n")'
+  dkbans.command.broadcast.group.list.loop: '&8» &7Id&8: &e{group.id} &7Name&8: &e{group.name} &7Permission&8: &e{group.permission} &7Order&8: &e{group.order} &7Interval&8: {group.interval}s'
 
   dkbans.command.broadcast.group.assignment.help: '${dkbans.prefix} &cInvalid usage of &eassignment &ccommand&8:
   &7/broadcastgroup <name> assignment <name>
