@@ -26,6 +26,9 @@ import net.pretronic.dkbans.api.player.history.PunishmentType;
 import net.pretronic.dkbans.api.template.TemplateGroup;
 import net.pretronic.dkbans.common.DefaultDKBans;
 import net.pretronic.dkbans.common.broadcast.BroadcastTask;
+import net.pretronic.dkbans.common.broadcast.DefaultBroadcast;
+import net.pretronic.dkbans.common.broadcast.DefaultBroadcastAssignment;
+import net.pretronic.dkbans.common.broadcast.DefaultBroadcastGroup;
 import net.pretronic.dkbans.common.filter.DefaultFilter;
 import net.pretronic.dkbans.common.player.DefaultDKBansPlayer;
 import net.pretronic.dkbans.common.player.chatlog.DefaultChatLogEntry;
@@ -211,6 +214,10 @@ public class DKBansPlugin extends MinecraftPlugin {
 
         VariableDescriber<DefaultPlayerNote> notesDescriber =  VariableDescriberRegistry.registerDescriber(DefaultPlayerNote.class);
         notesDescriber.registerFunction("formattedTime", note -> DKBansConfig.FORMAT_DATE.format(note.getTime()));
+
+        VariableDescriberRegistry.registerDescriber(DefaultBroadcast.class);
+        VariableDescriberRegistry.registerDescriber(DefaultBroadcastAssignment.class);
+        VariableDescriberRegistry.registerDescriber(DefaultBroadcastGroup.class);
     }
 
     private void loadConfigs() {
