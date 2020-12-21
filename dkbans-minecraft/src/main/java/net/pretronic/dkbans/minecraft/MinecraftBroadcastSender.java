@@ -36,7 +36,6 @@ import java.util.function.Predicate;
 
 public class MinecraftBroadcastSender implements BroadcastSender {
 
-
     @Override
     public Collection<DKBansPlayer> sendBroadcast(Broadcast broadcast) {
         return sendBroadcast(onlinePlayer -> {

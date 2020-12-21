@@ -48,7 +48,7 @@ public class BroadcastTask implements Runnable {
         for (BroadcastGroup group0 : DefaultDKBans.getInstance().getBroadcastManager().getGroups()) {
             if(!group0.isEnabled()) continue;
             DefaultBroadcastGroup group = ((DefaultBroadcastGroup) group0);
-            long interval = group.getInterval()*1000;
+            long interval = group.getInterval()* 1000L;
             if((System.currentTimeMillis()-group.getLastBroadcastTime()) > interval) {
 
                 group.setLastBroadcastTime(System.currentTimeMillis());
