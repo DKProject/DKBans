@@ -33,7 +33,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Function;
 
 public class DefaultBroadcastManager implements BroadcastManager {
 
@@ -90,20 +89,22 @@ public class DefaultBroadcastManager implements BroadcastManager {
                 .set("visibility", visibility)
                 .set("text", text)
                 .executeAndGetGeneratedKeyAsInt("Id");
-
-        return new DefaultBroadcast(id, name, visibility, text);
+        Broadcast broadcast = new DefaultBroadcast(id, name, visibility, text);
+        this.broadcasts.add(broadcast);
+        return broadcast;
     }
 
     @Override
     public void deleteBroadcast(int id) {
         Validate.isTrue(id > 0, "Id is invalid, must be greater then 0");
-        DefaultDKBans.getInstance().getStorage().getBroadcast().delete().where("Id", id).execute();
+        deleteBroadcast(Iterators.findOne(this.broadcasts, broadcast -> broadcast.getId() == id));
     }
 
     @Override
     public void deleteBroadcast(Broadcast broadcast) {
         Validate.notNull(broadcast);
-        deleteBroadcast(broadcast.getId());
+        DefaultDKBans.getInstance().getStorage().getBroadcast().delete().where("Id", broadcast.getId()).execute();
+        this.broadcasts.remove(broadcast);
     }
 
     @Override
@@ -137,15 +138,23 @@ public class DefaultBroadcastManager implements BroadcastManager {
                 .set("Interval", interval)
                 .set("Order", BroadcastOrder.SORTED)
                 .executeAndGetGeneratedKeyAsInt("Id");
-        return new DefaultBroadcastGroup(id, name, interval);
+        BroadcastGroup group = new DefaultBroadcastGroup(id, name, interval);
+        this.groups.add(group);
+        return group;
     }
 
     @Override
     public void deleteGroup(int id) {
         Validate.isTrue(id > 0, "Id is invalid, must be greater then 0");
+        deleteGroup(Iterators.findOne(this.groups, group -> group.getId() == id));
+    }
+
+    @Override
+    public void deleteGroup(BroadcastGroup group) {
         DefaultDKBans.getInstance().getStorage().getBroadcastGroup().delete()
-                .where("Id", id)
+                .where("Id", group.getId())
                 .execute();
+        this.groups.remove(group);
     }
 
     @Override

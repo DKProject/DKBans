@@ -53,6 +53,8 @@ public interface BroadcastManager {
 
     void deleteGroup(int id);
 
+    void deleteGroup(BroadcastGroup group);
+
     Collection<DKBansPlayer> sendBroadcast(Broadcast broadcast);
 
     Collection<DKBansPlayer> sendBroadcast(BroadcastAssignment broadcast);
