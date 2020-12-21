@@ -25,9 +25,11 @@ import net.pretronic.dkbans.api.broadcast.Broadcast;
 import net.pretronic.dkbans.api.broadcast.BroadcastAssignment;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.common.broadcast.BroadcastSender;
+import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
 import org.mcnative.common.McNative;
 import org.mcnative.common.player.OnlineMinecraftPlayer;
+import org.mcnative.common.serviceprovider.message.ColoredString;
 import org.mcnative.common.text.Text;
 
 import java.util.ArrayList;
@@ -39,7 +41,9 @@ public class MinecraftBroadcastSender implements BroadcastSender {
     @Override
     public Collection<DKBansPlayer> sendBroadcast(Broadcast broadcast) {
         return sendBroadcast(onlinePlayer -> {
-            onlinePlayer.sendMessage(Text.of(broadcast.getText()), VariableSet.create().addDescribed("player", onlinePlayer));
+            onlinePlayer.sendMessage(Messages.BROADCAST, VariableSet.create()
+                    .add("message", new ColoredString(broadcast.getText()))
+                    .addDescribed("player", VariableSet.create().addDescribed("player", onlinePlayer)));
             return true;
         });
     }
@@ -48,7 +52,9 @@ public class MinecraftBroadcastSender implements BroadcastSender {
     public Collection<DKBansPlayer> sendBroadcast(BroadcastAssignment broadcast) {
         return sendBroadcast(onlinePlayer -> {
             if(onlinePlayer.hasPermission(broadcast.getGroup().getPermission())) {
-                onlinePlayer.sendMessage(Text.of(broadcast.getBroadcast().getText()), VariableSet.create().addDescribed("player", onlinePlayer));
+                onlinePlayer.sendMessage(Messages.BROADCAST, VariableSet.create()
+                        .add("message", new ColoredString(broadcast.getBroadcast().getText()))
+                        .addDescribed("player", VariableSet.create().addDescribed("player", onlinePlayer)));
                 return true;
             }
             return false;
