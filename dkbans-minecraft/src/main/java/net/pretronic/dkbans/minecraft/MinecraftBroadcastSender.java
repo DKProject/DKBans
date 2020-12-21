@@ -44,7 +44,7 @@ public class MinecraftBroadcastSender implements BroadcastSender {
         return sendBroadcast(onlinePlayer -> {
             onlinePlayer.sendMessage(Messages.BROADCAST, VariableSet.create()
                     .add("message", McNative.getInstance().getRegistry().getService(MessageProvider.class).getProcessor().parse(broadcast.getText()))
-                    .addDescribed("player", VariableSet.create().addDescribed("player", onlinePlayer)));
+                    .addDescribed("player", onlinePlayer));
             return true;
         });
     }
@@ -55,7 +55,7 @@ public class MinecraftBroadcastSender implements BroadcastSender {
             if(onlinePlayer.hasPermission(broadcast.getGroup().getPermission())) {
                 onlinePlayer.sendMessage(Messages.BROADCAST, VariableSet.create()
                         .add("message", McNative.getInstance().getRegistry().getService(MessageProvider.class).getProcessor().parse(broadcast.getBroadcast().getText()))
-                        .addDescribed("player", VariableSet.create().addDescribed("player", onlinePlayer)));
+                        .addDescribed("player", onlinePlayer));
                 return true;
             }
             return false;
