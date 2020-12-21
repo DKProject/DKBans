@@ -316,7 +316,7 @@ messages:
 
   dkbans.command.broadcast.group.list: '${dkbans.prefix} &6Broadcast groups&8:
   @for("group" in {groups},${dkbans.command.broadcast.group.list.loop},"\n","\n")'
-  dkbans.command.broadcast.group.list.loop: '&8» &7Id&8: &e{group.id}'
+  dkbans.command.broadcast.group.list.loop: '&8» &7Id&8: &e{group.id} &7Enabled&8: &e{group.enabled} &Permission&8: &e{group.permission} &Order&8: &e{group.order} &Interval&8: &e{group.interval}'
 
   dkbans.command.broadcast.group.assignment.help: '${dkbans.prefix} &cInvalid usage of &eassignment &ccommand&8:
   &7/broadcastgroup <name> assignment <name>
