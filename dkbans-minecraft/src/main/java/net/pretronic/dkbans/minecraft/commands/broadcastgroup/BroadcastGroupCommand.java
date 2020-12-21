@@ -70,7 +70,7 @@ public class BroadcastGroupCommand extends MainObjectCommand<BroadcastGroup> imp
     @Override
     public void commandNotFound(CommandSender commandSender, BroadcastGroup group, String command, String[] args) {
         if(group != null) {
-            infoCommand.execute(commandSender, args);
+            infoCommand.execute(commandSender, group, args);
         } else {
             listCommand.execute(commandSender, args);
         }
