@@ -221,7 +221,7 @@ public class DKBansPlugin extends MinecraftPlugin {
         VariableDescriber<DefaultBroadcastGroup> groupDescriber = VariableDescriberRegistry.registerDescriber(DefaultBroadcastGroup.class);
         groupDescriber.registerFunction("enabled", DefaultBroadcastGroup::isEnabled);
         groupDescriber.registerFunction("formattedScope", group -> {
-            if(group != null) {
+            if(group.getScope() != null) {
                 StringBuilder builder = new StringBuilder().append("[")
                         .append(group.getScope().getType())
                         .append(":")
