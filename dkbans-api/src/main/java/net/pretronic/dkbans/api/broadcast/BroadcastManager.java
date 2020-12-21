@@ -38,6 +38,8 @@ public interface BroadcastManager {
 
     void deleteBroadcast(int id);
 
+    void deleteBroadcast(Broadcast broadcast);
+
 
     Collection<BroadcastGroup> getGroups();
 
@@ -50,6 +52,8 @@ public interface BroadcastManager {
     BroadcastGroup createGroup(String name, int interval);
 
     void deleteGroup(int id);
+
+    void deleteGroup(BroadcastGroup group);
 
     Collection<DKBansPlayer> sendBroadcast(Broadcast broadcast);
 

@@ -43,11 +43,12 @@ public class BroadcastCommand extends MainObjectCommand<Broadcast> implements Ob
         this.createCommand = new BroadcastCreateCommand(owner);
         this.listCommand = new BroadcastListCommand(owner);
         registerCommand(new BroadcastDirectCommand(owner));
+        registerCommand(new BroadcastDeleteCommand(owner));
     }
 
     @Override
     public Broadcast getObject(CommandSender commandSender, String value) {
-        return DKBans.getInstance().getBroadcastManager().getBroadcast(value);
+        return DKBans.getInstance().getBroadcastManager().searchBroadcast(value);
     }
 
     @Override

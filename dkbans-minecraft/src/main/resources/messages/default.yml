@@ -11,6 +11,7 @@ messages:
   dkbans.prefix.report: '&8» &6DKReport &8|&f'
   dkbans.prefix.teamchat: '&8» &eTeamChat &8|&f'
   dkbans.prefix.chat: '&8» &eChat &8|&f'
+  dkbans.prefix.broadcast: '&8» &aBroadcast &8|&f'
 
   dkbans.error.internal: '{prefix} &cAn internal server error occurred, please contact a network administrator"'
   dkbans.error.invalid.DurationFormat: '{prefix} &e{duration} &cis not a valid duration'
@@ -315,8 +316,17 @@ messages:
   dkbans.command.broadcast.alreadyExists: '${dkbans.prefix} &cA broadcast with the name &e{name} already exists'
 
   dkbans.command.broadcast.group.list: '${dkbans.prefix} &6Broadcast groups&8:
-  @for("group" in {groups},{dkbans.command.broadcast.group.list.loop},"\n","\n")'
-  dkbans.command.broadcast.group.list.loop: '&8» &7Id&8: &e{group.id}'
+  @for("group" in {groups},${dkbans.command.broadcast.group.list.loop},"\n","\n")'
+  dkbans.command.broadcast.group.list.loop: '&8» &7Id&8: &e{group.id} &7Name&8: &e{group.name}'
+
+  dkbans.command.broadcast.group.info: '${dkbans.prefix} &6Group info
+  &8» &7Id&8: &e{group.id}
+  &8» &7Name&8: &e{group.name}
+  &8» &Enabled&8: &e{group.enabled}
+  &8» &Permission&8: &e{group.permission}
+  &8» &7Order&8: &e{group.order}
+  &8» &7Interval&8: &e{group.interval}
+  &8» &7Scope&8: &e{group.formattedScope}'
 
   dkbans.command.broadcast.group.assignment.help: '${dkbans.prefix} &cInvalid usage of &eassignment &ccommand&8:
   &7/broadcastgroup <name> assignment <name>
@@ -325,7 +335,7 @@ messages:
      &8- &7remove
      &8- %7[info]'
   dkbans.command.broadcast.group.assignment.list: '${dkbans.prefix} &6Assignments&8:
-  @for("assignment" in {assignments},{dkbans.command.broadcast.group.assignment.list.loop},"\n","\n")'
+  @for("assignment" in {assignments},${dkbans.command.broadcast.group.assignment.list.loop},"\n","\n")'
   dkbans.command.broadcast.group.assignment.list.loop: '&8» &7Id&8: &e{assignment.id} &7Name&8: &e{assignment.broadcast.name} &7Position&8: &e {assignment.position}'
 
   dkbans.command.broadcast.group.assignment.notFound: '${dkbans.prefix} &cNo assignment found for &e{assignment}'
@@ -341,6 +351,7 @@ messages:
   &7/broadcast <name> create <visibility> <text>'
   dkbans.command.broadcast.visibility.notExists: '${dkbans.prefix} &cThe broadcast visibility &e{name} &cdoes not exists'
   dkbans.command.broadcast.created: '${dkbans.prefix} &7You have successfully created the broadcast &e{broadcast.name}'
+  dkbans.command.broadcast.deleted: '${dkbans.prefix} &7You have successfully deleted the broadcast &e{broadcast.name}'
 
   dkbans.command.broadcast.group.edit.help: '${dkbans.prefix} &cInvalid usage of &eassignment &ccommand&8:
   &7/broadcastgroup <name> edit
@@ -352,8 +363,8 @@ messages:
     &8- &7scope <type:name:[id]>'
   dkbans.command.broadcast.group.edit.edited: '${dkbans.prefix} &7You have edited the property &e{property} &7to &e{value}'
 
-  dkbans.command.broadcast.list: '${dkbans.prefix} &Broadcasts&8:
-  @for("broadcast" in {broadcasts},{dkbans.command.broadcast.list.loop},"\n","\n")'
+  dkbans.command.broadcast.list: '${dkbans.prefix} &6Broadcasts&8:
+  @for("broadcast" in {broadcasts}, ${dkbans.command.broadcast.list.loop},"\n","\n")'
   dkbans.command.broadcast.list.loop: '&8» &7Id&8: &e{broadcast.id} &7Name&8: &e{broadcast.name} &7Visibility&8: {broadcast.visibility}'
 
   dkbans.command.broadcast.direct: '${dkbans.prefix} &7You have successfully broadcast the message'
@@ -361,3 +372,7 @@ messages:
   &7/broadcast <name> create <visibility> <text>
   &7/broadcast <name> delete
   &7/broadcast <name> direct'
+
+  dkbans.broadcast: '&9
+  ${dkbans.prefix.broadcast} {message}
+  &a'

@@ -37,6 +37,7 @@ public class BroadcastGroupCommand extends MainObjectCommand<BroadcastGroup> imp
 
     private final BroadcastGroupCreateCommand createCommand;
     private final BroadcastGroupListCommand listCommand;
+    private final BroadcastGroupInfoCommand infoCommand;
 
     public BroadcastGroupCommand(ObjectOwner owner, CommandConfiguration configuration) {
         super(owner, configuration);
@@ -44,6 +45,8 @@ public class BroadcastGroupCommand extends MainObjectCommand<BroadcastGroup> imp
         this.listCommand = new BroadcastGroupListCommand(owner);
         registerCommand(new BroadcastGroupAssignmentCommand(owner));
         registerCommand(new BroadcastGroupEditCommand(owner));
+        this.infoCommand = new BroadcastGroupInfoCommand(owner);
+        registerCommand(infoCommand);
     }
 
     @Override

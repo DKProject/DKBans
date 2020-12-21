@@ -217,7 +217,20 @@ public class DKBansPlugin extends MinecraftPlugin {
 
         VariableDescriberRegistry.registerDescriber(DefaultBroadcast.class);
         VariableDescriberRegistry.registerDescriber(DefaultBroadcastAssignment.class);
-        VariableDescriberRegistry.registerDescriber(DefaultBroadcastGroup.class);
+        VariableDescriber<DefaultBroadcastGroup> groupDescriber = VariableDescriberRegistry.registerDescriber(DefaultBroadcastGroup.class);
+        groupDescriber.registerFunction("enabled", DefaultBroadcastGroup::isEnabled);
+        groupDescriber.registerFunction("formattedScope", group -> {
+            if(group != null) {
+                StringBuilder builder = new StringBuilder().append("[")
+                        .append(group.getScope().getType())
+                        .append(":")
+                        .append(group.getScope().getName());
+                if(group.getScope().getId() != null) builder.append(":").append(group.getScope().getId());
+                builder.append("]");
+            }
+            return "none";
+        });
+
     }
 
     private void loadConfigs() {
@@ -251,6 +264,7 @@ public class DKBansPlugin extends MinecraftPlugin {
 
     private void initBroadcast() {
         McNative.getInstance().getScheduler().createTask(this)
+                .delay(5, TimeUnit.SECONDS)
                 .interval(1, TimeUnit.SECONDS)
                 .execute(new BroadcastTask().start())
                 .start();
