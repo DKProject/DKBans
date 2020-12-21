@@ -164,12 +164,10 @@ public class DefaultBroadcastManager implements BroadcastManager {
         Map<Integer, Collection<BroadcastAssignment>> assignmentsToGroup = new HashMap<>();
         for (QueryResultEntry result : DefaultDKBans.getInstance().getStorage().getBroadcastGroupAssignment().find().execute()) {
             int groupId = result.getInt("GroupId");
-            if(assignmentsToGroup.containsKey(groupId)) {
+            if(!assignmentsToGroup.containsKey(groupId)) {
                 assignmentsToGroup.put(groupId, new ArrayList<>());
             }
             Collection<BroadcastAssignment> assignments = assignmentsToGroup.get(groupId);
-            System.out.println(assignments);
-            System.out.println(result.getInt("Id") + ":" + result.getInt("BroadcastId") + ":" + groupId + ":" + result.getInt("Position"));
             assignments.add(new DefaultBroadcastAssignment(result.getInt("Id"), result.getInt("BroadcastId"), groupId, result.getInt("Position")));
         }
 
