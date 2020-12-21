@@ -45,6 +45,7 @@ import net.pretronic.dkbans.common.template.DefaultTemplateGroup;
 import net.pretronic.dkbans.common.template.punishment.DefaultPunishmentTemplate;
 import net.pretronic.dkbans.minecraft.commands.*;
 import net.pretronic.dkbans.minecraft.commands.broadcast.BroadcastCommand;
+import net.pretronic.dkbans.minecraft.commands.broadcastgroup.BroadcastGroupCommand;
 import net.pretronic.dkbans.minecraft.commands.dkbans.DKBansCommand;
 import net.pretronic.dkbans.minecraft.commands.history.HistoryCommand;
 import net.pretronic.dkbans.minecraft.commands.history.MyHistoryPointsCommand;
@@ -93,7 +94,8 @@ public class DKBansPlugin extends MinecraftPlugin {
                 ,McNative.getInstance().getExecutorService()
                 ,McNative.getInstance().getLocal().getEventBus()
                 ,getRuntime().getRegistry().getService(ConfigurationProvider.class).getDatabase(this, true)
-                ,playerManager, new MinecraftJoinMeManager());
+                ,playerManager, new MinecraftJoinMeManager(),
+                new MinecraftBroadcastSender());
 
 
         DKBans.setInstance(dkBans);
@@ -139,6 +141,7 @@ public class DKBansPlugin extends MinecraftPlugin {
         getRuntime().getLocal().getCommandManager().registerCommand(new IpBlockCommand(this, CommandConfig.COMMAND_IP_BLOCK));
 
         getRuntime().getLocal().getCommandManager().registerCommand(new BroadcastCommand(this, CommandConfig.COMMAND_BROADCAST));
+        getRuntime().getLocal().getCommandManager().registerCommand(new BroadcastGroupCommand(this, CommandConfig.COMMAND_BROADCAST_GROUP));
 
         for (CommandConfig.PunishmentTypeConfiguration configuration : CommandConfig.COMMAND_PUNISH_DIRECT) {
             Command command;
@@ -241,7 +244,7 @@ public class DKBansPlugin extends MinecraftPlugin {
 
     private void initBroadcast() {
         McNative.getInstance().getScheduler().createTask(this)
-                .interval(1, TimeUnit.MINUTES)
+                .interval(5, TimeUnit.SECONDS)
                 .execute(new BroadcastTask().start())
                 .start();
     }

@@ -220,6 +220,25 @@ public class Messages {
     public static MessageComponent<?> COMMAND_IP_UNBLOCK_USAGE = Text.ofMessageKey("dkbans.command.ip.unblock.usage");
     public static MessageComponent<?> COMMAND_IP_UNBLOCK = Text.ofMessageKey("dkbans.command.ip.unblock");
 
+
+    public static MessageComponent<?> COMMAND_BROADCAST_NOT_FOUND = Text.ofMessageKey("dkbans.command.broadcast.notFound");
+    public static MessageComponent<?> COMMAND_BROADCAST_ALREADY_EXISTS = Text.ofMessageKey("dkbans.command.broadcast.alreadyExists");
+    public static MessageComponent<?> COMMAND_BROADCAST_GROUP_ALREADY_EXISTS = Text.ofMessageKey("dkbans.command.broadcast.group.alreadyExists");
+
+    public static MessageComponent<?> COMMAND_BROADCAST_GROUP_CREATE_HELP = Text.ofMessageKey("dkbans.command.broadcast.group.create.help");
+    public static MessageComponent<?> COMMAND_BROADCAST_GROUP_CREATED = Text.ofMessageKey("dkbans.command.broadcast.group.created");
+
+    public static MessageComponent<?> COMMAND_BROADCAST_GROUP_ASSIGNMENT_NOT_FOUND = Text.ofMessageKey("dkbans.command.broadcast.group.assignment.notFound");
+    public static MessageComponent<?> COMMAND_BROADCAST_GROUP_ASSIGNMENT_LIST = Text.ofMessageKey("dkbans.command.broadcast.group.assignment.list");
+    public static MessageComponent<?> COMMAND_BROADCAST_GROUP_ASSIGNMENT_INFO = Text.ofMessageKey("dkbans.command.broadcast.group.assignment.info");
+    public static MessageComponent<?> COMMAND_BROADCAST_GROUP_ASSIGNMENT_REMOVE = Text.ofMessageKey("dkbans.command.broadcast.group.assignment.remove");
+    public static MessageComponent<?> COMMAND_BROADCAST_GROUP_ASSIGNMENT_ADD = Text.ofMessageKey("dkbans.command.broadcast.group.assignment.add");
+
+    public static MessageComponent<?> COMMAND_BROADCAST_VISIBILITY_NOT_EXISTS = Text.ofMessageKey("dkbans.command.broadcast.visibility.notExists");
+    public static MessageComponent<?> COMMAND_BROADCAST_HELP = Text.ofMessageKey("dkbans.command.broadcast.create.help");
+    public static MessageComponent<?> COMMAND_BROADCAST_CREATED = Text.ofMessageKey("dkbans.command.broadcast.created");
+
+
     public static MessageComponent<?> getPunishmentMessage(PlayerHistoryEntrySnapshot snapshot){
         if(snapshot.getPunishmentType() == PunishmentType.BAN){
             return snapshot.isPermanently() ? PUNISH_BAN_MESSAGE_PERMANENTLY : PUNISH_BAN_MESSAGE_TEMPORARY;

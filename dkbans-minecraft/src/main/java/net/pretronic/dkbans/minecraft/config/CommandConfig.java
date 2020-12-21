@@ -140,6 +140,11 @@ public class CommandConfig {
             .permission("dkbans.command.broadcast")
             .create();
 
+    public static CommandConfiguration COMMAND_BROADCAST_GROUP = CommandConfiguration.newBuilder()
+            .name("broadcastgroup")
+            .permission("dkbans.command.broadcast.group")
+            .create();
+
     public static Collection<PunishmentTypeConfiguration> COMMAND_PUNISH_DIRECT = new ArrayList<>();
     public static Map<String,CommandConfiguration> COMMAND_PUNISH_TEMPLATE = new HashMap<>();
 

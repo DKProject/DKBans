@@ -2,7 +2,7 @@
  * (C) Copyright 2020 The DKBans Project (Davide Wietlisbach & Philipp Elvin Friedhoff)
  *
  * @author Philipp Elvin Friedhoff
- * @since 21.06.20, 17:26
+ * @since 21.12.20, 13:13
  * @web %web%
  *
  * The DKBans Project is under the Apache License, version 2.0 (the "License");
@@ -18,19 +18,17 @@
  * under the License.
  */
 
-package net.pretronic.dkbans.api.broadcast;
+package net.pretronic.dkbans.common.broadcast;
 
-public enum  BroadcastVisibility {
+import net.pretronic.dkbans.api.broadcast.Broadcast;
+import net.pretronic.dkbans.api.broadcast.BroadcastAssignment;
+import net.pretronic.dkbans.api.player.DKBansPlayer;
 
-    CHAT(),
-    TITLE(),
-    BOSSBAR(),
-    ACTIONBAR();
+import java.util.Collection;
 
-    public static BroadcastVisibility parse(String value) {
-        for (BroadcastVisibility visibility : BroadcastVisibility.values()) {
-            if(visibility.toString().equalsIgnoreCase(value)) return visibility;
-        }
-        return null;
-    }
+public interface BroadcastSender {
+
+    Collection<DKBansPlayer> sendBroadcast(Broadcast broadcast);
+
+    Collection<DKBansPlayer> sendBroadcast(BroadcastAssignment broadcast);
 }

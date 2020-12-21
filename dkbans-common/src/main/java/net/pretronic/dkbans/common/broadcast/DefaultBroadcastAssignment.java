@@ -23,22 +23,31 @@ package net.pretronic.dkbans.common.broadcast;
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.broadcast.Broadcast;
 import net.pretronic.dkbans.api.broadcast.BroadcastAssignment;
+import net.pretronic.dkbans.api.broadcast.BroadcastGroup;
+import net.pretronic.dkbans.common.DefaultDKBans;
 
 public class DefaultBroadcastAssignment implements BroadcastAssignment {
 
     private final int id;
     private final int broadcastId;
+    private final int groupId;
     private int position;
 
-    public DefaultBroadcastAssignment(int id, int broadcastId, int position) {
+    public DefaultBroadcastAssignment(int id, int broadcastId, int groupId, int position) {
         this.id = id;
         this.broadcastId = broadcastId;
+        this.groupId = groupId;
         this.position = position;
     }
 
     @Override
     public int getId() {
         return this.id;
+    }
+
+    @Override
+    public BroadcastGroup getGroup() {
+        return DKBans.getInstance().getBroadcastManager().getGroup(this.groupId);
     }
 
     @Override
@@ -54,6 +63,9 @@ public class DefaultBroadcastAssignment implements BroadcastAssignment {
     @Override
     public void setPosition(int position) {
         this.position = position;
-        //@Todo update in storage
+        DefaultDKBans.getInstance().getStorage().getBroadcastGroupAssignment().update()
+                .set("Position", position)
+                .where("Id", getId())
+                .execute();
     }
 }

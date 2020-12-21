@@ -20,15 +20,38 @@
 
 package net.pretronic.dkbans.minecraft.commands.broadcast;
 
-import net.pretronic.dkbans.minecraft.commands.broadcast.group.BroadcastGroupCommand;
+import net.pretronic.dkbans.api.broadcast.Broadcast;
 import net.pretronic.libraries.command.command.MainCommand;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
+import net.pretronic.libraries.command.command.object.MainObjectCommand;
+import net.pretronic.libraries.command.command.object.ObjectNotFindable;
+import net.pretronic.libraries.command.sender.CommandSender;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
 
-public class BroadcastCommand extends MainCommand {
+import java.util.Arrays;
+
+public class BroadcastCommand extends MainObjectCommand<Broadcast> implements ObjectNotFindable {
+
+    private final BroadcastCreateCommand createCommand;
 
     public BroadcastCommand(ObjectOwner owner, CommandConfiguration configuration) {
         super(owner, configuration);
-        registerCommand(new BroadcastGroupCommand(owner));
+        this.createCommand = new BroadcastCreateCommand(owner);
+    }
+
+    @Override
+    public Broadcast getObject(CommandSender commandSender, String s) {
+        return null;
+    }
+
+    @Override
+    public void objectNotFound(CommandSender commandSender, String command, String[] args) {
+        if(command.equalsIgnoreCase("list")) {
+
+        } else if(command.equalsIgnoreCase("help")) {
+
+        } else if(args.length > 0 && args[0].equalsIgnoreCase("create")) {
+            createCommand.execute(commandSender, command, Arrays.copyOfRange(args, 1, args.length));
+        }
     }
 }

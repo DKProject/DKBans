@@ -21,11 +21,11 @@
 package net.pretronic.dkbans.common.broadcast;
 
 import net.pretronic.databasequery.api.query.result.QueryResultEntry;
-import net.pretronic.databasequery.api.query.type.FindQuery;
 import net.pretronic.dkbans.api.DKBansScope;
 import net.pretronic.dkbans.api.broadcast.*;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.common.DefaultDKBans;
+import net.pretronic.libraries.utility.GeneralUtil;
 import net.pretronic.libraries.utility.Iterators;
 import net.pretronic.libraries.utility.Validate;
 
@@ -33,15 +33,19 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 public class DefaultBroadcastManager implements BroadcastManager {
 
     private final Collection<Broadcast> broadcasts;
     private final Collection<BroadcastGroup> groups;
 
-    public DefaultBroadcastManager() {
+    private final BroadcastSender broadcastSender;
+
+    public DefaultBroadcastManager(BroadcastSender broadcastSender) {
         this.broadcasts = new ArrayList<>();
         this.groups = new ArrayList<>();
+        this.broadcastSender = broadcastSender;
     }
 
     public void init() {
@@ -62,6 +66,20 @@ public class DefaultBroadcastManager implements BroadcastManager {
     @Override
     public Broadcast getBroadcast(String name) {
         return Iterators.findOne(this.broadcasts, broadcast -> broadcast.getName().equalsIgnoreCase(name));
+    }
+
+    @Override
+    public Broadcast searchBroadcast(Object search) {
+        return Iterators.findOne(this.broadcasts, broadcast -> {
+            if(search instanceof Integer) {
+                return broadcast.getId() == Integer.parseInt(search.toString());
+            } else {
+                if(GeneralUtil.isNaturalNumber(search.toString())) {
+                    return broadcast.getId() == Integer.parseInt(search.toString());
+                }
+                return broadcast.getName().equalsIgnoreCase(search.toString());
+            }
+        });
     }
 
     @Override
@@ -126,7 +144,12 @@ public class DefaultBroadcastManager implements BroadcastManager {
 
     @Override
     public Collection<DKBansPlayer> sendBroadcast(Broadcast broadcast) {
-        throw new UnsupportedOperationException();
+        return broadcastSender.sendBroadcast(broadcast);
+    }
+
+    @Override
+    public Collection<DKBansPlayer> sendBroadcast(BroadcastAssignment broadcast) {
+        return broadcastSender.sendBroadcast(broadcast);
     }
 
     private Collection<Broadcast> loadBroadcasts() {
@@ -145,7 +168,7 @@ public class DefaultBroadcastManager implements BroadcastManager {
                 assignmentsToGroup.put(groupId, new ArrayList<>());
             }
             Collection<BroadcastAssignment> assignments = assignmentsToGroup.get(groupId);
-            assignments.add(new DefaultBroadcastAssignment(result.getInt("Id"), result.getInt("BroadcastId"), result.getInt("Position")));
+            assignments.add(new DefaultBroadcastAssignment(result.getInt("Id"), result.getInt("BroadcastId"), groupId, result.getInt("Position")));
         }
 
         Collection<BroadcastGroup> groups = new ArrayList<>();
@@ -160,7 +183,7 @@ public class DefaultBroadcastManager implements BroadcastManager {
                     result.getBoolean("Enabled"),
                     result.getString("Permission"),
                     BroadcastOrder.valueOf(result.getString("Order")),
-                    result.getLong("Interval"),
+                    result.getInt("Interval"),
                     new DKBansScope(result.getString("ScopeType"), result.getString("ScopeName"), result.getUniqueId("ScopeId")),
                     assignments);
             return group;

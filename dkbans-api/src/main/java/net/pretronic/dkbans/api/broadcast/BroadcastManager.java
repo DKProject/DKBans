@@ -32,6 +32,8 @@ public interface BroadcastManager {
 
     Broadcast getBroadcast(String name);
 
+    Broadcast searchBroadcast(Object value);
+
     Broadcast createBroadcast(String name, String text,BroadcastVisibility visibility);
 
     void deleteBroadcast(int id);
@@ -50,4 +52,6 @@ public interface BroadcastManager {
     void deleteGroup(int id);
 
     Collection<DKBansPlayer> sendBroadcast(Broadcast broadcast);
+
+    Collection<DKBansPlayer> sendBroadcast(BroadcastAssignment broadcast);
 }

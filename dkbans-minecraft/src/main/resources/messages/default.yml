@@ -293,3 +293,31 @@ messages:
   dkbans.command.ip.block: '${dkbans.prefix} &7You have blocked the ip address 6e{block.address}'
   dkbans.command.ip.unblock.usage: '${dkbans.prefix} &cUsage&8: &7/ipunblock <address>'
   dkbans.command.ip.unblock: '${dkbans.prefix} &7You have unblocked the address &e{block.address}'
+
+
+  dkbans.command.broadcast.notFound: '${dkbans.prefix} &cNo broadcast found for &e{broadcast}'
+
+  dkbans.command.broadcast.group.create.help: '${dkbans.prefix} &cInvalid usage of &eBroadcast group create &ccommand&8:
+  &7/broadcast group <name> create <interval>'
+  dkbans.command.broadcast.group.created: '${dkbans.prefix} &7You have successfully created the broadcast group &e{group.name}'
+
+  dkbans.command.broadcast.group.alreadyExists: '${dkbans.prefix} &cA broadcast group with the name &e{name} already exists'
+  dkbans.command.broadcast.alreadyExists: '${dkbans.prefix} &cA broadcast with the name &e{name} already exists'
+
+  dkbans.command.broadcast.group.assignment.list: '${dkbans.prefix} &Assignments&8:
+  @for("assignment" in {assignments},{dkbans.command.broadcast.group.assignment.list.loop},"\n","\n")'
+  dkbans.command.broadcast.group.assignment.list.loop: '&8» &7Id&8: &e{assignment.id} &7Name&8: &e{assignment.broadcast.name} &7Position&8: &e {assignment.position}'
+
+  dkbans.command.broadcast.group.assignment.notFound: '${dkbans.prefix} &cNo assignment found for &e{assignment}'
+  dkbans.command.broadcast.group.assignment.info: '${dkbans.prefix} &6Assignment info
+  &8» &7Id&8: &e{assignment.id}
+  &8» &7Name&8: &e{assignment.broadcast.name}
+  &8» &7Position&8: &e{assignment.position}'
+
+  dkbans.command.broadcast.group.assignment.remove: '${dkbans.prefix} &7You have removed the assignment with id &e{assignment.id} &7from the group'
+  dkbans.command.broadcast.group.assignment.add: '${dkbans.prefix} &7You have added the broadcast with id &e{assignment.id} &to the group'
+
+  dkbans.command.broadcast.create.help: '${dkbans.prefix} &cInvalid usage of &eBroadcast create &ccommand&8:
+  &7/broadcast <name> create <visibility> <text>'
+  dkbans.command.broadcast.visibility.notExists: '${dkbans.prefix} &cThe broadcast visibility &e{name} &cdoes not exists'
+  dkbans.command.broadcast.created: '${dkbans.prefix} &7You have successfully created the broadcast &e{broadcast.name}'

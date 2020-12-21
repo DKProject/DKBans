@@ -25,6 +25,8 @@ import net.pretronic.dkbans.api.broadcast.Broadcast;
 import net.pretronic.dkbans.api.broadcast.BroadcastAssignment;
 import net.pretronic.dkbans.api.broadcast.BroadcastGroup;
 import net.pretronic.dkbans.api.broadcast.BroadcastOrder;
+import net.pretronic.dkbans.common.DefaultDKBans;
+import net.pretronic.libraries.utility.GeneralUtil;
 import net.pretronic.libraries.utility.Iterators;
 import net.pretronic.libraries.utility.Validate;
 
@@ -40,7 +42,7 @@ public class DefaultBroadcastGroup implements BroadcastGroup {
     private boolean enabled;
     private String permission;
     private BroadcastOrder order;
-    private long interval;
+    private int interval;
     private DKBansScope scope;
     private final Collection<BroadcastAssignment> assignments;
 
@@ -51,7 +53,7 @@ public class DefaultBroadcastGroup implements BroadcastGroup {
         this(id, name, true, null, BroadcastOrder.SORTED, interval, null, new ArrayList<>());
     }
 
-    public DefaultBroadcastGroup(int id, String name, boolean enabled, String permission, BroadcastOrder order, long interval,
+    public DefaultBroadcastGroup(int id, String name, boolean enabled, String permission, BroadcastOrder order, int interval,
                                  DKBansScope scope, Collection<BroadcastAssignment> assignments) {
         Validate.notNull(name, order, assignments);
         this.id = id;
@@ -80,7 +82,10 @@ public class DefaultBroadcastGroup implements BroadcastGroup {
     @Override
     public void setName(String name) {
         this.name = name;
-        //@Todo update in storage
+        DefaultDKBans.getInstance().getStorage().getBroadcastGroup().update()
+                .set("Name", name)
+                .where("Id", getId())
+                .execute();
     }
 
     @Override
@@ -91,7 +96,10 @@ public class DefaultBroadcastGroup implements BroadcastGroup {
     @Override
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
-        //@Todo update in storage
+        DefaultDKBans.getInstance().getStorage().getBroadcastGroup().update()
+                .set("Enabled", enabled)
+                .where("Id", getId())
+                .execute();
     }
 
     @Override
@@ -102,7 +110,10 @@ public class DefaultBroadcastGroup implements BroadcastGroup {
     @Override
     public void setPermission(String permission) {
         this.permission = permission;
-        //@Todo update in storage
+        DefaultDKBans.getInstance().getStorage().getBroadcastGroup().update()
+                .set("Permission", permission)
+                .where("Id", getId())
+                .execute();
     }
 
     @Override
@@ -113,18 +124,24 @@ public class DefaultBroadcastGroup implements BroadcastGroup {
     @Override
     public void setOrder(BroadcastOrder order) {
         this.order = order;
-        //@Todo update in storage
+        DefaultDKBans.getInstance().getStorage().getBroadcastGroup().update()
+                .set("Order", order)
+                .where("Id", getId())
+                .execute();
     }
 
     @Override
-    public long getInterval() {
+    public int getInterval() {
         return this.interval;
     }
 
     @Override
-    public void setInterval(long interval) {
+    public void setInterval(int interval) {
         this.interval = interval;
-        //@Todo update in storage
+        DefaultDKBans.getInstance().getStorage().getBroadcastGroup().update()
+                .set("Interval", interval)
+                .where("Id", getId())
+                .execute();
     }
 
     @Override
@@ -135,7 +152,12 @@ public class DefaultBroadcastGroup implements BroadcastGroup {
     @Override
     public void setScope(DKBansScope scope) {
         this.scope = scope;
-        //@Todo update in storage
+        DefaultDKBans.getInstance().getStorage().getBroadcastGroup().update()
+                .set("ScopeName", scope.getName())
+                .set("ScopeType", scope.getType())
+                .set("ScopeId", scope.getId())
+                .where("Id", getId())
+                .execute();
     }
 
     @Override
@@ -149,22 +171,57 @@ public class DefaultBroadcastGroup implements BroadcastGroup {
     }
 
     @Override
+    public BroadcastAssignment searchAssignment(Object search) {
+        return Iterators.findOne(this.assignments, assignment -> {
+            if(search instanceof Integer) {
+                return assignment.getId() == Integer.parseInt(search.toString());
+            } else {
+                if(GeneralUtil.isNaturalNumber(search.toString())) {
+                    return assignment.getId() == Integer.parseInt(search.toString());
+                }
+                return assignment.getBroadcast().getName().equalsIgnoreCase(search.toString());
+            }
+        });
+    }
+
+    @Override
     public List<Broadcast> getBroadcasts() {
         return Iterators.map(this.assignments, BroadcastAssignment::getBroadcast);
     }
 
     @Override
     public BroadcastAssignment addBroadcast(Broadcast broadcast, int position) {
-        throw new UnsupportedOperationException();
+        Validate.notNull(broadcast);
+        int id = DefaultDKBans.getInstance().getStorage().getBroadcastGroupAssignment().insert()
+                .set("BroadcastId", broadcast.getId())
+                .set("GroupId", getId())
+                .set("Position", position)
+                .executeAndGetGeneratedKeyAsInt("Id");
+        DefaultBroadcastAssignment assignment = new DefaultBroadcastAssignment(id, broadcast.getId(), getId(), position);
+        this.assignments.add(assignment);
+        return assignment;
     }
 
     @Override
     public void removeBroadcast(Broadcast broadcast) {
-        throw new UnsupportedOperationException();
+        Validate.notNull(broadcast);
+        DefaultDKBans.getInstance().getStorage().getBroadcastGroupAssignment().delete()
+                .where("BroadcastId", broadcast.getId())
+                .where("GroupId", getId())
+                .execute();
+        Iterators.remove(this.assignments, assignment -> assignment.getBroadcast().getId() == broadcast.getId());
+    }
+
+    @Override
+    public void removeAssignment(BroadcastAssignment assignment) {
+
     }
 
     @Override
     public BroadcastAssignment getNext(int position) {
+        if(getOrder() == BroadcastOrder.RANDOM) {
+            return new ArrayList<>(this.assignments).get(GeneralUtil.getDefaultRandom().nextInt(this.assignments.size()));
+        }
         BroadcastAssignment first = null;
         BroadcastAssignment next = null;
         for (BroadcastAssignment assignment : this.assignments) {

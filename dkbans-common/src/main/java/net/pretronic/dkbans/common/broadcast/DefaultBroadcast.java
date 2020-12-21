@@ -22,6 +22,7 @@ package net.pretronic.dkbans.common.broadcast;
 
 import net.pretronic.dkbans.api.broadcast.Broadcast;
 import net.pretronic.dkbans.api.broadcast.BroadcastVisibility;
+import net.pretronic.dkbans.common.DefaultDKBans;
 
 public class DefaultBroadcast implements Broadcast {
 
@@ -50,7 +51,10 @@ public class DefaultBroadcast implements Broadcast {
     @Override
     public void setName(String name) {
         this.name = name;
-        //@Todo update in storage
+        DefaultDKBans.getInstance().getStorage().getBroadcast().update()
+                .set("Name", name)
+                .where("Id", getId())
+                .execute();
     }
 
     @Override
@@ -61,7 +65,10 @@ public class DefaultBroadcast implements Broadcast {
     @Override
     public void setVisibility(BroadcastVisibility visibility) {
         this.visibility = visibility;
-        //@Todo update in storage
+        DefaultDKBans.getInstance().getStorage().getBroadcast().update()
+                .set("Visibility", visibility)
+                .where("Id", getId())
+                .execute();
     }
 
     @Override

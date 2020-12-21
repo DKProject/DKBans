@@ -2,7 +2,7 @@
  * (C) Copyright 2020 The DKBans Project (Davide Wietlisbach & Philipp Elvin Friedhoff)
  *
  * @author Philipp Elvin Friedhoff
- * @since 18.12.20, 17:07
+ * @since 21.12.20, 14:31
  * @web %web%
  *
  * The DKBans Project is under the Apache License, version 2.0 (the "License");
@@ -18,11 +18,10 @@
  * under the License.
  */
 
-package net.pretronic.dkbans.minecraft.commands.broadcast.group;
+package net.pretronic.dkbans.minecraft.commands.broadcastgroup;
 
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.broadcast.BroadcastGroup;
-import net.pretronic.libraries.command.command.MainCommand;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
 import net.pretronic.libraries.command.command.object.MainObjectCommand;
 import net.pretronic.libraries.command.command.object.ObjectNotFindable;
@@ -35,9 +34,10 @@ public class BroadcastGroupCommand extends MainObjectCommand<BroadcastGroup> imp
 
     private final BroadcastGroupCreateCommand createCommand;
 
-    public BroadcastGroupCommand(ObjectOwner owner) {
-        super(owner, CommandConfiguration.name("group"));
+    public BroadcastGroupCommand(ObjectOwner owner, CommandConfiguration configuration) {
+        super(owner, configuration);
         this.createCommand = new BroadcastGroupCreateCommand(owner);
+        registerCommand(new BroadcastGroupAssignmentCommand(owner));
     }
 
     @Override
