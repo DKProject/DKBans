@@ -29,6 +29,7 @@ import net.pretronic.libraries.command.command.object.ObjectCommand;
 import net.pretronic.libraries.command.sender.CommandSender;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
 import net.pretronic.libraries.utility.GeneralUtil;
+import net.pretronic.libraries.utility.duration.DurationProcessor;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
 
 public class BroadcastGroupCreateCommand extends ObjectCommand<String> {
@@ -53,8 +54,13 @@ public class BroadcastGroupCreateCommand extends ObjectCommand<String> {
             sender.sendMessage(Messages.ERROR_INVALID_NUMBER, VariableSet.create().add("number", rawInterval));
             return;
         }
-        int interval = Integer.parseInt(rawInterval);
-        BroadcastGroup group = DefaultDKBans.getInstance().getBroadcastManager().createGroup(name, interval);
-        sender.sendMessage(Messages.COMMAND_BROADCAST_GROUP_CREATED, VariableSet.create().addDescribed("group", group));
+
+        try {
+            long interval = DurationProcessor.getStandard().parse(rawInterval).getSeconds();
+            BroadcastGroup group = DefaultDKBans.getInstance().getBroadcastManager().createGroup(name, Math.toIntExact(interval));
+            sender.sendMessage(Messages.COMMAND_BROADCAST_GROUP_CREATED, VariableSet.create().addDescribed("group", group));
+        } catch (IllegalArgumentException exception) {
+            sender.sendMessage(Messages.ERROR_INVALID_DURATION_FORMAT, VariableSet.create().addDescribed("duration", rawInterval));
+        }
     }
 }

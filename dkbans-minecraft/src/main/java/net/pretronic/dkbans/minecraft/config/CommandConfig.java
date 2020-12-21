@@ -137,11 +137,13 @@ public class CommandConfig {
 
     public static CommandConfiguration COMMAND_BROADCAST = CommandConfiguration.newBuilder()
             .name("broadcast")
+            .aliases("bc")
             .permission("dkbans.command.broadcast")
             .create();
 
     public static CommandConfiguration COMMAND_BROADCAST_GROUP = CommandConfiguration.newBuilder()
             .name("broadcastgroup")
+            .aliases("bcg")
             .permission("dkbans.command.broadcast.group")
             .create();
 

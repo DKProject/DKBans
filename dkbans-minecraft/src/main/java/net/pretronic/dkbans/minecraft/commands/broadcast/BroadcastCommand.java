@@ -67,7 +67,9 @@ public class BroadcastCommand extends MainObjectCommand<Broadcast> implements Ob
     @Override
     public void commandNotFound(CommandSender commandSender, Broadcast broadcast, String command, String[] args) {
         if(broadcast != null) {
-            commandSender.sendMessage(Messages.COMMAND_BROADCAST_HELP);
+            if(command.equalsIgnoreCase("create")) {
+                commandSender.sendMessage(Messages.COMMAND_BROADCAST_ALREADY_EXISTS, VariableSet.create().add("name", broadcast.getName()));
+            } else commandSender.sendMessage(Messages.COMMAND_BROADCAST_HELP);
         } else {
             listCommand.execute(commandSender, args);
         }

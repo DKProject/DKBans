@@ -24,6 +24,7 @@ import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.DKBansScope;
 import net.pretronic.dkbans.api.broadcast.BroadcastGroup;
 import net.pretronic.dkbans.api.broadcast.BroadcastOrder;
+import net.pretronic.dkbans.common.DefaultDKBans;
 import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
 import net.pretronic.libraries.command.command.object.ObjectCommand;
@@ -31,6 +32,7 @@ import net.pretronic.libraries.command.sender.CommandSender;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
 import net.pretronic.libraries.utility.Convert;
 import net.pretronic.libraries.utility.GeneralUtil;
+import net.pretronic.libraries.utility.duration.DurationProcessor;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
 
 import java.util.UUID;
@@ -87,12 +89,14 @@ public class BroadcastGroupEditCommand extends ObjectCommand<BroadcastGroup> {
             }
             case "interval": {
                 String rawInterval = args[1];
-                if(!GeneralUtil.isNaturalNumber(rawInterval)) {
-                    commandSender.sendMessage(Messages.ERROR_INVALID_NUMBER, VariableSet.create().add("number", rawInterval));
-                    return;
+                try {
+                    long interval = DurationProcessor.getStandard().parse(rawInterval).getSeconds();
+                    group.setInterval(Math.toIntExact(interval));
+                    sendEditedMessage(commandSender, "interval", rawInterval);
+                } catch (IllegalArgumentException exception) {
+                    commandSender.sendMessage(Messages.ERROR_INVALID_DURATION_FORMAT, VariableSet.create().addDescribed("duration", rawInterval));
                 }
-                group.setInterval(Integer.parseInt(rawInterval));
-                sendEditedMessage(commandSender, "interval", rawInterval);
+
                 return;
             }
             case "scope": {
