@@ -44,6 +44,7 @@ public class BroadcastCommand extends MainObjectCommand<Broadcast> implements Ob
         this.listCommand = new BroadcastListCommand(owner);
         registerCommand(new BroadcastDirectCommand(owner));
         registerCommand(new BroadcastDeleteCommand(owner));
+        registerCommand(new BroadcastEditCommand(owner));
     }
 
     @Override

@@ -30,7 +30,6 @@ import net.pretronic.libraries.message.MessageProvider;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
 import org.mcnative.common.McNative;
 import org.mcnative.common.player.OnlineMinecraftPlayer;
-import org.mcnative.common.serviceprovider.message.ColoredString;
 import org.mcnative.common.text.Text;
 
 import java.util.ArrayList;
@@ -42,24 +41,46 @@ public class MinecraftBroadcastSender implements BroadcastSender {
     @Override
     public Collection<DKBansPlayer> sendBroadcast(Broadcast broadcast) {
         return sendBroadcast(onlinePlayer -> {
-            onlinePlayer.sendMessage(Messages.BROADCAST, VariableSet.create()
-                    .add("message", McNative.getInstance().getRegistry().getService(MessageProvider.class).getProcessor().parse(broadcast.getText()))
-                    .addDescribed("player", onlinePlayer));
+            sendMessage(onlinePlayer, broadcast);
             return true;
         });
     }
 
     @Override
-    public Collection<DKBansPlayer> sendBroadcast(BroadcastAssignment broadcast) {
+    public Collection<DKBansPlayer> sendBroadcast(BroadcastAssignment broadcastAssignment) {
         return sendBroadcast(onlinePlayer -> {
-            if(onlinePlayer.hasPermission(broadcast.getGroup().getPermission())) {
-                onlinePlayer.sendMessage(Messages.BROADCAST, VariableSet.create()
-                        .add("message", McNative.getInstance().getRegistry().getService(MessageProvider.class).getProcessor().parse(broadcast.getBroadcast().getText()))
-                        .addDescribed("player", onlinePlayer));
+            if(onlinePlayer.hasPermission(broadcastAssignment.getGroup().getPermission())) {
+                sendMessage(onlinePlayer, broadcastAssignment.getBroadcast());
                 return true;
             }
             return false;
         });
+    }
+
+    private void sendMessage(OnlineMinecraftPlayer onlinePlayer, Broadcast broadcast) {
+        switch (broadcast.getVisibility()) {
+            case TITLE: {
+                onlinePlayer.sendTitle(Messages.BROADCAST, Text.EMPTY, 10, buildVariableSet(broadcast, onlinePlayer));
+                return;
+            }
+            case ACTIONBAR: {
+                onlinePlayer.sendActionbar(Messages.BROADCAST, buildVariableSet(broadcast, onlinePlayer));
+                return;
+            }
+            case BOSSBAR: {
+                DKBans.getInstance().getLogger().warn("Bossbar broadcast is not implemented at the moment. Chat broadcast is used as fallback.");
+            }
+            default: {
+                onlinePlayer.sendMessage(Messages.BROADCAST, buildVariableSet(broadcast, onlinePlayer));
+            }
+        }
+
+    }
+
+    private VariableSet buildVariableSet(Broadcast broadcast, OnlineMinecraftPlayer onlinePlayer) {
+        return VariableSet.create()
+                .add("message", McNative.getInstance().getRegistry().getService(MessageProvider.class).getProcessor().parse(broadcast.getText()))
+                .addDescribed("player", onlinePlayer);
     }
 
     private Collection<DKBansPlayer> sendBroadcast(Predicate<OnlineMinecraftPlayer> playerConsumer) {

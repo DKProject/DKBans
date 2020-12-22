@@ -359,7 +359,7 @@ messages:
   dkbans.command.broadcast.created: '${dkbans.prefix} &7You have successfully created the broadcast &e{broadcast.name}'
   dkbans.command.broadcast.deleted: '${dkbans.prefix} &7You have successfully deleted the broadcast &e{broadcast.name}'
 
-  dkbans.command.broadcast.group.edit.help: '${dkbans.prefix} &cInvalid usage of &eassignment &ccommand&8:
+  dkbans.command.broadcast.group.edit.help: '${dkbans.prefix} &cInvalid usage of &eedit &ccommand&8:
   &7/broadcastgroup <name> edit
     &8- &7name <name>
     &8- &7enabled <true, false>
@@ -368,6 +368,7 @@ messages:
     &8- &7interval <interval>
     &8- &7scope <type:name:[id]>'
   dkbans.command.broadcast.group.edit.edited: '${dkbans.prefix} &7You have edited the property &e{property} &7to &e{value}'
+  dkbans.command.broadcast.edit.edited: '${dkbans.prefix} &7You have edited the property &e{property} &7to &e{value}'
 
   dkbans.command.broadcast.list: '${dkbans.prefix} &6Broadcasts&8:
   @for("broadcast" in {broadcasts}, ${dkbans.command.broadcast.list.loop},"\n","\n")'
@@ -382,3 +383,9 @@ messages:
   dkbans.broadcast: '&9
   ${dkbans.prefix.broadcast} {message}
   &a'
+
+  dkbans.command.broadcast.edit.help: '${dkbans.prefix} &cInvalid usage of &eedit &ccommand&8:
+  &7/broadcast <name> edit
+    &8- &7name <name>
+    &8- &7visibility <visibility>
+    &8- &7text <text>'
