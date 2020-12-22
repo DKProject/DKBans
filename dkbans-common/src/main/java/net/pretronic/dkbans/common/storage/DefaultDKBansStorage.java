@@ -638,7 +638,6 @@ public class DefaultDKBansStorage implements DKBansStorage {
 
     @Override
     public PlayerReportEntry createPlayerReportEntry(PlayerReport report, DKBansExecutor reporter,String reason, ReportTemplate template, String serverName, UUID serverId) {
-        Validate.notNull(report, reporter, template, serverName, serverId);
         long time = System.currentTimeMillis();
         int id = this.reportEntries.insert()
                 .set("ReportId", report.getId())
