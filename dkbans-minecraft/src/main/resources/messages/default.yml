@@ -378,6 +378,7 @@ messages:
   dkbans.command.broadcast.help: '${dkbans.prefix} &cInvalid usage of &eBroadcast group &ccommand&8:
   &7/broadcast <name> create <visibility> <text>
   &7/broadcast <name> delete
+  &7/broadcast <name> edit
   &7/broadcast <name> direct'
 
   dkbans.broadcast: '&9
