@@ -70,17 +70,17 @@ public class TemporaryPunishCommand extends BasicCommand {
 
         if(dkBansPlayer.hasActivePunish(punishmentType,scope)){
             if(override && CommandUtil.canOverridePunish(sender,dkBansPlayer,punishmentType)){
-             //   dkBansPlayer.unpunish(CommandUtil.getExecutor(sender),"Overriding punishment with a new one");@Todo update override
+                dkBansPlayer.unpunish(CommandUtil.getExecutor(sender),punishmentType,"Overriding punishment with a new one");
             }else{
-                String command = getConfiguration().getName()+arguments[0]+" "+arguments[1]+" --override "+reason;
+                String command = "/"+getConfiguration().getName()+" "+arguments[0]+" "+arguments[1]+" --override "+reason;
                 CommandUtil.sendAlreadyPunished(sender,dkBansPlayer,punishmentType,command);
+                return;
             }
-            return;
         }
 
         Duration duration = CommandUtil.parseDuration(sender,arguments[1]);
 
-        PlayerHistoryEntrySnapshot result = dkBansPlayer.punish()//@Todo configurable default history type
+        PlayerHistoryEntrySnapshot result = dkBansPlayer.punish()
                 .stuff(CommandUtil.getExecutor(sender))
                 .punishmentType(punishmentType)
                 .historyType(historyType)

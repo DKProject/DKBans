@@ -189,7 +189,7 @@ public class Messages {
     public static MessageComponent<?> COMMAND_MY_HISTORY_POINTS = Text.ofMessageKey("dkbans.command.myHistoryPoints");
 
 
-    public static MessageComponent<?> COMMAND_CHATLOG_USAGE = Text.ofMessageKey("dkbans.command.chatlog.player.usage");
+    public static MessageComponent<?> COMMAND_CHATLOG_USAGE = Text.ofMessageKey("dkbans.command.chatlog.usage");
     public static MessageComponent<?> COMMAND_CHATLOG_PLAYER_LIST = Text.ofMessageKey("dkbans.command.chatlog.player.list");
     public static MessageComponent<?> COMMAND_CHATLOG_SERVER_LIST = Text.ofMessageKey("dkbans.command.chatlog.server.list");
 

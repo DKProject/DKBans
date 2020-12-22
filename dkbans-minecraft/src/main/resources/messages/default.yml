@@ -160,15 +160,15 @@ messages:
 
   dkbans.command.report.help: '${dkbans.prefix} &cUsage&8: &7/report <player> <Reason>'
   dkbans.command.report.template.notExist: '${dkbans.prefix.report} &cThe report template &e{name} &cdoes not exist'
-  dkbans.command.report.already.reported: '${dkbans.prefix.report} &cYou have already &e{player.name} &creported'
-  dkbans.command.report.reported: '${dkbans.prefix.report} &7You have reported &e{player.name} &7for &e{reason}'
+  dkbans.command.report.already.reported: '${dkbans.prefix.report} &cYou have already &e{player.displayName} &creported'
+  dkbans.command.report.reported: '${dkbans.prefix.report} &7You have reported &e{player.displayName} &7for &e{reason}'
   dkbans.command.report.listTemplates: '${dkbans.prefix.report} &6Available report templates
   @for("template" in {templates}, ${dkbans.command.report.listTemplates.loop},"\n")'
   dkbans.command.report.listTemplates.loop: ' &8- &c{template.inGroupId} &8| &e{template.displayName}'
   dkbans.command.report.take.usage: '${dkbans.prefix.report} &cUse /report take <name>'
   dkbans.report.notFound: '${dkbans.prefix.report} &cA report for &e{player.name} &cwas not found'
-  dkbans.command.report.take: '${dkbans.prefix.report} &7You have took the report of &e{target.name}'
-  dkbans.command.report.take.already: '${dkbans.prefix.report} &cThe report of &e{target.name} has been already taken'
+  dkbans.command.report.take: '${dkbans.prefix.report} &7You have took the report of &e{target.displayName}'
+  dkbans.command.report.take.already: '${dkbans.prefix.report} &cThe report of &e{target.displayName} has been already taken'
   dkbans.command.report.accept.usage: '${dkbans.prefix.report} &cUse /report accept <name>'
   dkbans.command.report.accept.notWatching: '${dkbans.prefix.report} &cYou are not watching this player'
   dkbans.command.report.accept.listEntries: '${dkbans.prefix.report} &7Available reports&8: @for("entry" in {entries}, ${dkbans.command.report.listTemplates.loop},"\n","\n")'
@@ -251,23 +251,24 @@ messages:
   dkbans.command.playerNotes.help: '${dkbans.prefix} &cInvalid usage of dkbans command&8:
   &7/pnotes <player> [list]
   &7/pnotes <player> add <message>'
-  dkbans.command.playerNotes.list: '${dkbans.prefix} &7Notes of &e{player.displayName}&8:
-  @for("note" in {notes},{dkbans.command.playerNotes.list.loop},"\n","\n")'
+  dkbans.command.playerNotes.list: '${dkbans.prefix} &7Notes of &e{player.displayName}&8: @for("note" in {notes},${dkbans.command.playerNotes.list.loop},"\n","\n")'
   dkbans.command.playerNotes.list.loop: '&8» &e{note.formattedTime} &8- {note.creator.displayName} &8| &7Page&8: &7{page}
   &8> &7{note.message}'
   dkbans.command.playerNotes.added: '&8» &a+ &e{note.formattedTime} &8- {note.creator.displayName}&8:
   &8> &7{note.message}'
-  dkbans.command.chatLog.usage: '${dkbans.prefix.chat} &cInvalid usage of chatLog command&8:
+  dkbans.command.chatlog.usage: '${dkbans.prefix.chat} &cInvalid usage of chatLog command&8:
   &7/chatlog player <name> [page]
   &7/chatlog server <name, id> [page]'
 
   dkbans.command.chatlog.player.list: '${dkbans.prefix.chat} &7Chatlog of player {player.displayName} &8| &7Page&8: {page}
   @for("entry" in {entries}, ${dkbans.command.chatLog.player.list.loop},"\n")'
-  dkbans.command.chatlog.player.list.loop: '&8» {entry.serverName} &7on &e{entry.timeFormatted}&8: &f{entry.message}'
+  dkbans.command.chatlog.player.list.loop: '&8» {entry.serverName} &7on &e{entry.timeFormatted}&8:
+  &f{entry.message}'
 
   dkbans.command.chatlog.server.list: '${dkbans.prefix.chat} &7Chatlog of server {server.name} &8| &7Page&8: {page}
   @for("entry" in {entries}, ${dkbans.command.chatLog.server.list.loop},"\n")'
-  dkbans.command.chatlog.server.list.loop: '&8» {entry.player.displayName} &7on &e{entry.timeFormatted}&8: &f{entry.message}'
+  dkbans.command.chatlog.server.list.loop: '&8» {entry.player.displayName} &7on &e{entry.timeFormatted}&8:
+  &f{entry.message}'
 
   dkbans.command.dkbans.help: '${dkbans.prefix} &cInvalid usage of dkbans command&8:
   &7/dkbans info
@@ -290,7 +291,7 @@ messages:
   dkbans.command.ip.info.usage: '${dkbans.prefix} &cUsage&8: &7/ipinfo <address>'
   dkbans.command.ip.info.blocked: '${dkbans.prefix} &6Ip info of address &e{block.address}
   &8» &7Type&8: &e{block.type}
-  &8» &7Staff&8 &e{block.staff.name}
+  &8» &7Staff&8 &e{block.staff.displayName}
   &8» &7Reason&8: &e{block.reason}
   &8» &7Timeout&8: &e{block.timeout}
 

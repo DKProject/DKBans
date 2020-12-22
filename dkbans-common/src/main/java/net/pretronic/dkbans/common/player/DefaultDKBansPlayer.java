@@ -25,10 +25,7 @@ import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.DKBansScope;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.chatlog.PlayerChatLog;
-import net.pretronic.dkbans.api.player.history.PlayerHistory;
-import net.pretronic.dkbans.api.player.history.PlayerHistoryEntrySnapshot;
-import net.pretronic.dkbans.api.player.history.PlayerHistoryEntrySnapshotBuilder;
-import net.pretronic.dkbans.api.player.history.PunishmentType;
+import net.pretronic.dkbans.api.player.history.*;
 import net.pretronic.dkbans.api.player.note.PlayerNote;
 import net.pretronic.dkbans.api.player.note.PlayerNoteList;
 import net.pretronic.dkbans.api.player.note.PlayerNoteType;
@@ -121,24 +118,6 @@ public  class DefaultDKBansPlayer implements DKBansPlayer {
     }
 
     @Override
-    public boolean hasActivePunish(PunishmentType type) {
-        Validate.notNull(type);
-        return history.hasActivePunish(type);
-    }
-
-    @Override
-    public boolean hasActivePunish(PunishmentType type, DKBansScope scope) {
-        Validate.notNull(type,scope);
-        return history.hasActivePunish(type,scope);
-    }
-
-    @Override
-    public boolean hasActivePunish(PunishmentType type, Collection<DKBansScope> scopes) {
-        Validate.notNull(type,scopes);
-        return history.hasActivePunish(type,scopes);
-    }
-
-    @Override
     public PlayerHistoryEntrySnapshot punish(DKBansExecutor executor, PunishmentTemplate template) {
         Validate.notNull(executor,template);
         PlayerHistoryEntrySnapshotBuilder builder = punish();
@@ -149,6 +128,14 @@ public  class DefaultDKBansPlayer implements DKBansPlayer {
     @Override
     public PlayerHistoryEntrySnapshotBuilder punish() {
          return new DefaultPlayerHistoryEntrySnapshotBuilder(this,null);
+    }
+
+    @Override
+    public PlayerHistoryEntrySnapshot unpunish(DKBansExecutor executor, PunishmentType type, String message) {
+        Validate.notNull(executor,type,message);
+        PlayerHistoryEntry entry = getHistory().getActiveEntry(type);
+        if(entry == null) throw new IllegalArgumentException("Player is not punished for "+type.getName());
+        return entry.unpunish(executor,message);
     }
 
     @Override

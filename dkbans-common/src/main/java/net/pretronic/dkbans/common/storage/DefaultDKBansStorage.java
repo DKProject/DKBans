@@ -426,7 +426,11 @@ public class DefaultDKBansStorage implements DKBansStorage {
 
     private void readEntries(PlayerHistory playerHistory, List<PlayerHistoryEntry> result, QueryResult result0) {
         if(!result0.isEmpty()){
+            for (Map.Entry<String, Object> stringObjectEntry : result0.getProperties().entrySet()) {
+                System.out.println(stringObjectEntry.getKey() + ":" + stringObjectEntry.getValue());
+            }
             for (QueryResultEntry resultEntry : result0) {
+                System.out.println("HistoryId: "+resultEntry.getInt("HistoryId"));
                 DefaultPlayerHistoryEntrySnapshot snapshot = createSnapshot(resultEntry);
                 DefaultPlayerHistoryEntry entry = new DefaultPlayerHistoryEntry(playerHistory,
                         resultEntry.getInt("HistoryId"),

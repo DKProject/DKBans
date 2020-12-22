@@ -77,16 +77,28 @@ public interface DKBansPlayer extends DKBansExecutor {
 
 
 
-    boolean hasActivePunish(PunishmentType type);
+    default boolean hasActivePunish(PunishmentType type){
+        return getHistory().hasActivePunish(type);
+    }
 
-    boolean hasActivePunish(PunishmentType type,DKBansScope scope);
+    default boolean hasActivePunish(PunishmentType type,DKBansScope scope){
+        return getHistory().hasActivePunish(type,scope);
+    }
 
-    boolean hasActivePunish(PunishmentType type, Collection<DKBansScope> scopes);
+    default boolean hasActivePunish(PunishmentType type, Collection<DKBansScope> scopes){
+        return getHistory().hasActivePunish(type,scopes);
+    }
 
 
     PlayerHistoryEntrySnapshot punish(DKBansExecutor executor, PunishmentTemplate template);
 
     PlayerHistoryEntrySnapshotBuilder punish();
+
+    default PlayerHistoryEntrySnapshot unpunish(DKBansExecutor executor,PunishmentType type){
+        return unpunish(executor,type,null);
+    }
+
+    PlayerHistoryEntrySnapshot unpunish(DKBansExecutor executor,PunishmentType type,String message);
 
 
     boolean hasReport();

@@ -66,16 +66,16 @@ public class PermanentlyPunishCommand extends BasicCommand {
         String reason = CommandUtil.readStringFromArguments(arguments,override ? 2 : 1);
 
         if(dkBansPlayer.hasActivePunish(punishmentType,scope)){
-            if(override && CommandUtil.canOverridePunish(sender,dkBansPlayer,punishmentType)){//@Todo override
-               // dkBansPlayer.unpunish(CommandUtil.getExecutor(sender),punishmentType,"Overriding punishment with a new one");
+            if(override && CommandUtil.canOverridePunish(sender,dkBansPlayer,punishmentType)){
+                dkBansPlayer.unpunish(CommandUtil.getExecutor(sender),punishmentType,"Overriding punishment with a new one");
             }else{
-                String command = getConfiguration().getName()+arguments[0]+" --override "+reason;
+                String command = "/"+getConfiguration().getName()+" "+arguments[0]+" --override "+reason;
                 CommandUtil.sendAlreadyPunished(sender,dkBansPlayer,punishmentType,command);
+                return;
             }
-            return;
         }
 
-        PlayerHistoryEntrySnapshot result = dkBansPlayer.punish()//@Todo configurable default history type
+        PlayerHistoryEntrySnapshot result = dkBansPlayer.punish()
                 .stuff(CommandUtil.getExecutor(sender))
                 .punishmentType(punishmentType)
                 .historyType(historyType)
