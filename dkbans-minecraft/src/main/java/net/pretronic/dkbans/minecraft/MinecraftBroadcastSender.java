@@ -60,17 +60,15 @@ public class MinecraftBroadcastSender implements BroadcastSender {
     private void sendMessage(OnlineMinecraftPlayer onlinePlayer, Broadcast broadcast) {
         switch (broadcast.getVisibility()) {
             case TITLE: {
-                onlinePlayer.sendTitle(Messages.BROADCAST, Text.EMPTY, 10, buildVariableSet(broadcast, onlinePlayer));
-                return;
+                DKBans.getInstance().getLogger().warn("Title broadcast is not implemented at the moment. Chat broadcast is used as fallback.");
             }
             case ACTIONBAR: {
-                onlinePlayer.sendActionbar(Messages.BROADCAST, buildVariableSet(broadcast, onlinePlayer));
-                return;
+                DKBans.getInstance().getLogger().warn("Actionbar broadcast is not implemented at the moment. Chat broadcast is used as fallback.");
             }
             case BOSSBAR: {
                 DKBans.getInstance().getLogger().warn("Bossbar broadcast is not implemented at the moment. Chat broadcast is used as fallback.");
             }
-            default: {
+            case CHAT: {
                 onlinePlayer.sendMessage(Messages.BROADCAST, buildVariableSet(broadcast, onlinePlayer));
             }
         }
