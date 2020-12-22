@@ -47,7 +47,6 @@ import java.util.TreeMap;
 public class DefaultPunishmentTemplate extends DefaultTemplate implements PunishmentTemplate {
 
     private final Map<Integer, PunishmentTemplateEntry> durations;
-    private final Map<Integer, PunishmentTemplateEntry> points;
     private final int addedPoints;
     private double pointsDivider;
 
@@ -57,14 +56,8 @@ public class DefaultPunishmentTemplate extends DefaultTemplate implements Punish
         Validate.notNull(historyType, "History can't be null");
 
         Map<Integer, PunishmentTemplateEntry> durations = loadDurations(data.getDocument("durations"));
-        if(group.getCalculationType() == CalculationType.POINTS) {
-            this.durations = new HashMap<>();
-            this.points = durations;
-        }
-        else {
-            this.durations = durations;
-            this.points = new HashMap<>();
-        }
+
+        this.durations = new TreeMap<>(durations);
 
         Pair<Integer, Double> points = loadPoints(data.getDocument("points"));
 
@@ -75,11 +68,6 @@ public class DefaultPunishmentTemplate extends DefaultTemplate implements Punish
     @Override
     public Map<Integer, PunishmentTemplateEntry> getDurations() {
         return this.durations;
-    }
-
-    @Override
-    public Map<Integer, PunishmentTemplateEntry> getPoints() {
-        return this.points;
     }
 
     @Override
@@ -108,10 +96,6 @@ public class DefaultPunishmentTemplate extends DefaultTemplate implements Punish
 
     @Override
     public PunishmentTemplateEntry getNextEntry(DKBansPlayer player) {
-        Map<Integer, PunishmentTemplateEntry> data;
-        if(getGroup().getCalculationType() == CalculationType.AMOUNT) data = durations;
-        else data = points;
-
         int count = player.getHistory().calculate(getGroup().getCalculationType(), getHistoryType());
         if(getGroup().getCalculationType() == CalculationType.POINTS) {
             count = (int) Math.round(count/pointsDivider);
@@ -120,11 +104,9 @@ public class DefaultPunishmentTemplate extends DefaultTemplate implements Punish
         }
 
         PunishmentTemplateEntry punishmentTemplateEntry = null;
-
-        for (Map.Entry<Integer, PunishmentTemplateEntry> entry : data.entrySet()) {
-            if(count <= entry.getKey()) {
+        for (Map.Entry<Integer, PunishmentTemplateEntry> entry : durations.entrySet()) {
+            if(entry.getKey() <= count) {
                 punishmentTemplateEntry = entry.getValue();
-                break;
             }
         }
         return punishmentTemplateEntry;
@@ -137,11 +119,7 @@ public class DefaultPunishmentTemplate extends DefaultTemplate implements Punish
 
     @Override
     public PunishmentType getFirstType() {
-        if(getGroup().getCalculationType() == CalculationType.AMOUNT) {
-            return this.durations.values().iterator().next().getType();
-        }else {
-            return this.points.values().iterator().next().getType();
-        }
+        return this.durations.values().iterator().next().getType();
     }
 
     private Map<Integer, PunishmentTemplateEntry> loadDurations(Document data) {

@@ -26,7 +26,7 @@ templates:
       addedPoints: 7
       pointsDivider: 2.0
   2:
-    name: Provocation
+    name: Provocatanion
     display: Provocation
     permission: dkbans.ban.reason.provocation
     aliases:

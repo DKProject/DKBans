@@ -43,7 +43,7 @@ public class DefaultPlayerChatLog extends DefaultChatLog implements PlayerChatLo
 
     @Override
     public FindQuery getBaseQuery() {
-        return ((DefaultDKBans)DefaultDKBans.getInstance()).getStorage().getPlayerChatLog().find()
+        return DefaultDKBans.getInstance().getStorage().getPlayerChatLog().find()
                 .where("PlayerId", playerId);
     }
 }

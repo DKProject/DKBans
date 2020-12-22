@@ -86,6 +86,7 @@ public class ChatLogCommand extends BasicCommand {
         List<ChatLogEntry> entries = chatLog.getPage(page, 10);
         sender.sendMessage(message, VariableSet.create()
                 .add("page",page)
+                .add("prefix",Messages.PREFIX_CHAT)
                 .addDescribed("entries", entries));
     }
 }

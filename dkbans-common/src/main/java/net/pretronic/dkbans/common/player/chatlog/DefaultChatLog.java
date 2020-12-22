@@ -52,7 +52,7 @@ public abstract class DefaultChatLog implements ChatLog {
     @Override
     public List<ChatLogEntry> getFirst(int amount) {
         return getChatLogEntries(query -> query
-                .orderBy("Time", SearchOrder.ASC)
+                .orderBy("Time", SearchOrder.DESC)
                 .limit(amount));
     }
 
@@ -72,28 +72,28 @@ public abstract class DefaultChatLog implements ChatLog {
     public List<ChatLogEntry> getSince(long time) {
         return getChatLogEntries(query -> query
                 .whereHigher("Time", time)
-                .orderBy("Time", SearchOrder.ASC));
+                .orderBy("Time", SearchOrder.DESC));
     }
 
     @Override
     public List<ChatLogEntry> getUntil(long time) {
         return getChatLogEntries(query -> query
                 .whereLower("Time", time)
-                .orderBy("Time", SearchOrder.ASC));
+                .orderBy("Time", SearchOrder.DESC));
     }
 
     @Override
     public List<ChatLogEntry> getBetween(long startTime, long endTime) {
         return getChatLogEntries(query -> query
                 .whereBetween("Time", startTime, endTime)
-                .orderBy("Time", SearchOrder.ASC));
+                .orderBy("Time", SearchOrder.DESC));
     }
 
     @Override
     public List<ChatLogEntry> getPage(int page, int sizePerPage) {
         return getChatLogEntries(query -> query
                 .page(page, sizePerPage)
-                .orderBy("Time", SearchOrder.ASC));
+                .orderBy("Time", SearchOrder.DESC));
     }
 
     private List<ChatLogEntry> getChatLogEntries(Consumer<FindQuery> queryConsumer) {

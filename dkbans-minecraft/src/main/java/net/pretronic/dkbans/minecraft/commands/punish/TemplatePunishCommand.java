@@ -69,7 +69,7 @@ public class TemplatePunishCommand extends BasicCommand {
 
         PunishmentTemplateEntry entry = template.getNextEntry(dkBansPlayer);
         if(entry == null){
-            sender.sendMessage(Messages.ERROR_INTERNAL);
+            sender.sendMessage(Messages.ERROR_INTERNAL,VariableSet.create().add("prefix",Messages.PREFIX));
             return;
         }
 

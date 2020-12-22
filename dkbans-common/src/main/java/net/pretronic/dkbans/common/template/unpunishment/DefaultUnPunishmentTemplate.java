@@ -52,7 +52,6 @@ public class DefaultUnPunishmentTemplate extends DefaultTemplate implements UnPu
 
     private final Map<Integer, UnPunishmentTemplateEntry> durations;
 
-    private final Map<Integer, UnPunishmentTemplateEntry> points;
     private final int removedPoints;
     private final double pointsDivider;
 
@@ -65,15 +64,8 @@ public class DefaultUnPunishmentTemplate extends DefaultTemplate implements UnPu
         loadBlacklistedTemplates(data.getDocument("blacklisted"));
         this.scopes = loadScopes(data.getDocument("scopes"));
 
-
         Map<Integer, UnPunishmentTemplateEntry> durations = loadDurations(data.getDocument("durations"));
-        if(group.getCalculationType() == CalculationType.POINTS) {
-            this.durations = new HashMap<>();
-            this.points = durations;
-        } else {
-            this.durations = durations;
-            this.points = new HashMap<>();
-        }
+        this.durations = new TreeMap<>(durations);
 
         Pair<Integer, Double> points = loadPoints(data.getDocument("points"));
         this.removedPoints = points.getKey();
@@ -93,11 +85,6 @@ public class DefaultUnPunishmentTemplate extends DefaultTemplate implements UnPu
     @Override
     public Map<Integer, UnPunishmentTemplateEntry> getDurations() {
         return this.durations;
-    }
-
-    @Override
-    public Map<Integer, UnPunishmentTemplateEntry> getPoints() {
-        return this.points;
     }
 
     @Override

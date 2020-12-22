@@ -156,7 +156,7 @@ messages:
   dkbans.command.resetHistory.many: '${dkbans.prefix} &7The history from &8{player.displayName} &7was reset'
   dkbans.command.resetHistory.one: '${dkbans.prefix} &7The history entry &c{id} from {player.displayName} &7was reset'
 
-  dkbans.teamchat.messageFormat: '${dkbans.prefix.teamchat}&8{sender.displayName} &8» &7{message}'
+  dkbans.teamchat.messageFormat: '${dkbans.prefix.teamchat} &e{sender.displayName} &8» &7{message}'
 
   dkbans.command.report.help: '${dkbans.prefix} &cUsage&8: &7/report <player> <Reason>'
   dkbans.command.report.template.notExist: '${dkbans.prefix.report} &cThe report template &e{name} &cdoes not exist'
@@ -261,11 +261,11 @@ messages:
   &7/chatlog player <name> [page]
   &7/chatlog server <name, id> [page]'
 
-  dkbans.command.chatlog.player.list: '${dkbans.prefix.chat} &7Chatlog of player {player.displayName} &8| &7Page:8: {page}
+  dkbans.command.chatlog.player.list: '${dkbans.prefix.chat} &7Chatlog of player {player.displayName} &8| &7Page&8: {page}
   @for("entry" in {entries}, ${dkbans.command.chatLog.player.list.loop},"\n")'
   dkbans.command.chatlog.player.list.loop: '&8» {entry.serverName} &7on &e{entry.timeFormatted}&8: &f{entry.message}'
 
-  dkbans.command.chatlog.server.list: '${dkbans.prefix.chat} &7Chatlog of server {server.name} &8| &7Page:8: {page}
+  dkbans.command.chatlog.server.list: '${dkbans.prefix.chat} &7Chatlog of server {server.name} &8| &7Page&8: {page}
   @for("entry" in {entries}, ${dkbans.command.chatLog.server.list.loop},"\n")'
   dkbans.command.chatlog.server.list.loop: '&8» {entry.player.displayName} &7on &e{entry.timeFormatted}&8: &f{entry.message}'
 

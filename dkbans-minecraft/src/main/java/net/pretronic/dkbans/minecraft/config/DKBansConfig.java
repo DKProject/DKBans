@@ -57,6 +57,9 @@ public class DKBansConfig {
     public static boolean PLAYER_ON_JOIN_CLEAR_CHAT = true;
     @DocumentKey("player.onJoin.info.teamChat")
     public static boolean PLAYER_ON_JOIN_INFO_TEAMCHAT = true;
+
+    @DocumentKey("player.onJoin.info.punishNotify")
+    public static boolean PLAYER_ON_JOIN_PUNISH_NOTIFY = true;
     @DocumentKey("player.onJoin.info.report")
     public static boolean PLAYER_ON_JOIN_INFO_REPORT = true;
     @DocumentKey("player.onJoin.listReports")

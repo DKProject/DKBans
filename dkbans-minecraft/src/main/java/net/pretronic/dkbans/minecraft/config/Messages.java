@@ -31,6 +31,7 @@ public class Messages {
     public static MessageComponent<?> PREFIX_NETWORK  = Text.ofMessageKey("dkbans.prefix.network");
     public static MessageComponent<?> PREFIX_TEAMCHAT  = Text.ofMessageKey("dkbans.prefix.teamchat");
     public static MessageComponent<?> PREFIX_REPORT  = Text.ofMessageKey("dkbans.prefix.report");
+    public static MessageComponent<?> PREFIX_CHAT  = Text.ofMessageKey("dkbans.prefix.chat");
 
     public static MessageComponent<?> ERROR_INTERNAL  = Text.ofMessageKey("dkbans.error.internal");
     public static MessageComponent<?> ERROR_INVALID_DURATION_FORMAT  = Text.ofMessageKey("dkbans.error.invalid.durationFormat");

@@ -123,6 +123,14 @@ public class PlayerListener {
                     .add("statusFormatted", teamChat ? Messages.STAFF_STATUS_LOGIN :  Messages.STAFF_STATUS_LOGOUT));
         }
 
+        if(DKBansConfig.PLAYER_ON_JOIN_PUNISH_NOTIFY && player.hasPermission(Permissions.PUNISH_NOTIFY)){
+            boolean teamChat = event.getPlayer().hasSetting("DKBans",PlayerSettingsKey.PUNISH_NOTIFY_LOGIN,true);
+            player.sendMessage(Messages.STAFF_STATUS_NOW,VariableSet.create()
+                    .add("prefix",Messages.PREFIX)
+                    .add("status",teamChat)
+                    .add("statusFormatted", teamChat ? Messages.STAFF_STATUS_LOGIN :  Messages.STAFF_STATUS_LOGOUT));
+        }
+
         if(DKBansConfig.PLAYER_ON_JOIN_INFO_REPORT && player.hasPermission(Permissions.COMMAND_REPORT_STUFF)){
             boolean report = event.getPlayer().hasSetting("DKBans", PlayerSettingsKey.REPORT_CHAT_LOGIN,true);
             player.sendMessage(Messages.STAFF_STATUS_NOW,VariableSet.create()
@@ -161,7 +169,6 @@ public class PlayerListener {
         if(event.isCancelled()) return;
         DKBansPlayer player = event.getPlayer().getAs(DKBansPlayer.class);
         boolean bypass = event.getPlayer().hasPermission(Permissions.CHAT_BYPASS);
-
 
         if(DKBansConfig.CHAT_FILTER_ENABLED && !bypass && checkBasicFilters(event, player)) return;
 
