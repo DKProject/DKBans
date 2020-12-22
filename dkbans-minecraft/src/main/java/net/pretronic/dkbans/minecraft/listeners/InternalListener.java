@@ -32,7 +32,6 @@ import net.pretronic.libraries.message.bml.variable.VariableSet;
 import org.mcnative.common.McNative;
 import org.mcnative.common.player.ConnectedMinecraftPlayer;
 import org.mcnative.common.player.OnlineMinecraftPlayer;
-import org.mcnative.common.protocol.MinecraftProtocolVersion;
 import org.mcnative.common.text.components.MessageComponent;
 
 import java.util.List;
@@ -55,20 +54,22 @@ public class InternalListener {
     }
 
     @Listener
-    public void onPlayerReportTeleport(DKBansPlayerReportTeleportEvent event) {
-        OnlineMinecraftPlayer player = McNative.getInstance().getLocal().getOnlinePlayer(event.getPlayer().getUniqueId());
-        OnlineMinecraftPlayer target = McNative.getInstance().getLocal().getOnlinePlayer(event.getReport().getPlayer().getUniqueId());
-        player.connect(target.getServer());
-    }
-
-    @Listener
-    public void onPlayerReportSend(DKBansPlayerReportSendEvent event) {
+    public void onPlayerReportCreate(DKBansPlayerReportCreateEvent event) {
         for (ConnectedMinecraftPlayer player : McNative.getInstance().getLocal().getConnectedPlayers()) {
             if(player.hasPermission(Permissions.COMMAND_REPORT_STUFF)) {
                 player.sendMessage(Messages.COMMAND_REPORT_NOTFIY, VariableSet.create()
                         .addDescribed("player",event.getPlayer())
                         .addDescribed("report", event.getReportEntry()));
             }
+        }
+    }
+
+    @Listener
+    public void onPlayerReportTake(DKBansPlayerReportTakeEvent event) {
+        OnlineMinecraftPlayer player = McNative.getInstance().getLocal().getOnlinePlayer(event.getPlayer().getUniqueId());
+        OnlineMinecraftPlayer target = McNative.getInstance().getLocal().getOnlinePlayer(event.getReport().getPlayer().getUniqueId());
+        if(target != null && player.getServer().getName().equalsIgnoreCase(target.getName())){
+            player.connect(target.getServer());
         }
     }
 

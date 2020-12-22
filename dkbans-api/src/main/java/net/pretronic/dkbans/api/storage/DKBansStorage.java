@@ -154,10 +154,7 @@ public interface DKBansStorage {
 
     PlayerReport createPlayerReport(DKBansPlayer player, ReportState state);
 
-    PlayerReportEntry createPlayerReportEntry(PlayerReport report, DKBansExecutor reporter, ReportTemplate template, String serverName, UUID serverId);
-
-    PlayerReportEntry createPlayerReportEntry(PlayerReport report, DKBansExecutor reporter, String reason, String serverName, UUID serverId);
-
+    PlayerReportEntry createPlayerReportEntry(PlayerReport report, DKBansExecutor reporter,String reason, ReportTemplate template, String serverName, UUID serverId);
 
 
     //Chat log

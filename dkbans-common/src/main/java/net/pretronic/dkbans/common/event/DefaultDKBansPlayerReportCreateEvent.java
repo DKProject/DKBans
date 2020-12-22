@@ -2,7 +2,7 @@
  * (C) Copyright 2020 The DKBans Project (Davide Wietlisbach & Philipp Elvin Friedhoff)
  *
  * @author Philipp Elvin Friedhoff
- * @since 10.07.20, 16:21
+ * @since 11.07.20, 11:26
  * @web %web%
  *
  * The DKBans Project is under the Apache License, version 2.0 (the "License");
@@ -18,17 +18,21 @@
  * under the License.
  */
 
-package net.pretronic.dkbans.api.event;
+package net.pretronic.dkbans.common.event;
 
-import net.pretronic.dkbans.api.player.DKBansPlayer;
+import net.pretronic.dkbans.api.event.DKBansPlayerReportCreateEvent;
 import net.pretronic.dkbans.api.player.report.PlayerReportEntry;
 
-public interface DKBansPlayerReportSendEvent extends DKBansPlayerEvent {
+public class DefaultDKBansPlayerReportCreateEvent implements DKBansPlayerReportCreateEvent {
 
-    PlayerReportEntry getReportEntry();
+    private final PlayerReportEntry reportEntry;
+
+    public DefaultDKBansPlayerReportCreateEvent(PlayerReportEntry reportEntry) {
+        this.reportEntry = reportEntry;
+    }
 
     @Override
-    default DKBansPlayer getPlayer() {
-        return getReportEntry().getReport().getPlayer();
+    public PlayerReportEntry getReportEntry() {
+        return this.reportEntry;
     }
 }

@@ -98,7 +98,7 @@ public class ReportCommand extends MainCommand implements NotFindable {
             player.sendMessage(Messages.PLAYER_NOT_ONLINE,VariableSet.create()
                     .add("name",playerIdentifier)
                     .addDescribed("player",target0)
-                    .add("prefix",Messages.PREFIX));
+                    .add("prefix",Messages.PREFIX_REPORT));
             return;
         }
         if(args.length < 1) {

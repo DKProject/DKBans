@@ -21,14 +21,14 @@
 package net.pretronic.dkbans.common.player.report;
 
 import net.pretronic.dkbans.api.DKBans;
-import net.pretronic.dkbans.api.event.DKBansPlayerReportSendEvent;
+import net.pretronic.dkbans.api.event.DKBansPlayerReportCreateEvent;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.report.PlayerReport;
 import net.pretronic.dkbans.api.player.report.PlayerReportEntry;
 import net.pretronic.dkbans.api.player.report.ReportManager;
 import net.pretronic.dkbans.api.player.report.ReportState;
 import net.pretronic.dkbans.api.template.report.ReportTemplate;
-import net.pretronic.dkbans.common.event.DefaultDKBansPlayerReportSendEvent;
+import net.pretronic.dkbans.common.event.DefaultDKBansPlayerReportCreateEvent;
 import net.pretronic.libraries.utility.Iterators;
 import net.pretronic.libraries.utility.Validate;
 
@@ -57,25 +57,25 @@ public class DefaultReportManager implements ReportManager {
     @Override
     public PlayerReportEntry report(DKBansPlayer executor, DKBansPlayer target, ReportTemplate template, String serverName, UUID serverId) {
         Validate.notNull(executor, target, template);
-        DefaultPlayerReport report = getReportOrCreate(target);
-        if(report.getEntry(executor) != null) return null;
-        DefaultPlayerReportEntry entry = (DefaultPlayerReportEntry) DKBans.getInstance().getStorage()
-                .createPlayerReportEntry(report, executor, template, serverName, serverId);
-        report.addEntry(entry);
-
-        DefaultDKBansPlayerReportSendEvent event = new DefaultDKBansPlayerReportSendEvent(entry);
-        DKBans.getInstance().getEventBus().callEvent(DKBansPlayerReportSendEvent.class, event);
-        return entry;
+        return report(executor, target, template.getDisplayName(),template, serverName, serverId);
     }
 
     @Override
     public PlayerReportEntry report(DKBansPlayer executor, DKBansPlayer target, String reason, String serverName, UUID serverId) {
         Validate.notNull(executor, target);
+        return report(executor, target, reason,null, serverName, serverId);
+    }
+
+    public PlayerReportEntry report(DKBansPlayer executor, DKBansPlayer target,String reason, ReportTemplate template, String serverName, UUID serverId) {
+        Validate.notNull(executor, target, template);
         DefaultPlayerReport report = getReportOrCreate(target);
         if(report.getEntry(executor) != null) return null;
         DefaultPlayerReportEntry entry = (DefaultPlayerReportEntry) DKBans.getInstance().getStorage()
-                .createPlayerReportEntry(report, executor, reason, serverName, serverId);
+                .createPlayerReportEntry(report, executor,reason, template, serverName, serverId);
         report.addEntry(entry);
+
+        DefaultDKBansPlayerReportCreateEvent event = new DefaultDKBansPlayerReportCreateEvent(entry);
+        DKBans.getInstance().getEventBus().callEvent(DKBansPlayerReportCreateEvent.class, event);
         return entry;
     }
 

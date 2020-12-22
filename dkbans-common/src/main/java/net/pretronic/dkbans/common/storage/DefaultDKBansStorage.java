@@ -637,36 +637,20 @@ public class DefaultDKBansStorage implements DKBansStorage {
     }
 
     @Override
-    public PlayerReportEntry createPlayerReportEntry(PlayerReport report, DKBansExecutor reporter, ReportTemplate template, String serverName, UUID serverId) {
+    public PlayerReportEntry createPlayerReportEntry(PlayerReport report, DKBansExecutor reporter,String reason, ReportTemplate template, String serverName, UUID serverId) {
         Validate.notNull(report, reporter, template, serverName, serverId);
         long time = System.currentTimeMillis();
         int id = this.reportEntries.insert()
                 .set("ReportId", report.getId())
                 .set("ReporterId", reporter.getUniqueId())
-                .set("TemplateId", template.getId())
-                .set("Reason", template.getDisplayName())
-                .set("Time", time)
-                .set("ServerName", serverName)
-                .set("ServerId", serverId)
-                .set("Properties", "{}")
-                .executeAndGetGeneratedKeyAsInt("Id");
-        return new DefaultPlayerReportEntry(id, report, reporter, template, template.getDisplayName() , serverName, serverId, time, Document.newDocument());
-    }
-
-    @Override
-    public PlayerReportEntry createPlayerReportEntry(PlayerReport report, DKBansExecutor reporter, String reason, String serverName, UUID serverId) {
-        Validate.notNull(report, reporter, serverName, serverId);
-        long time = System.currentTimeMillis();
-        int id = this.reportEntries.insert()
-                .set("ReportId", report.getId())
-                .set("ReporterId", reporter.getUniqueId())
+                .set("TemplateId", template != null ? template.getId() : null)
                 .set("Reason", reason)
                 .set("Time", time)
                 .set("ServerName", serverName)
                 .set("ServerId", serverId)
                 .set("Properties", "{}")
                 .executeAndGetGeneratedKeyAsInt("Id");
-        return new DefaultPlayerReportEntry(id, report, reporter, null, reason , serverName, serverId, time, Document.newDocument());
+        return new DefaultPlayerReportEntry(id, report, reporter, template, reason , serverName, serverId, time, Document.newDocument());
     }
 
     @Override

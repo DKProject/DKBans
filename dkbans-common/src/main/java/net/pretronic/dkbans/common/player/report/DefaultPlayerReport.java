@@ -22,13 +22,13 @@ package net.pretronic.dkbans.common.player.report;
 
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.DKBansExecutor;
-import net.pretronic.dkbans.api.event.DKBansPlayerReportTeleportEvent;
+import net.pretronic.dkbans.api.event.DKBansPlayerReportTakeEvent;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryEntry;
 import net.pretronic.dkbans.api.player.report.PlayerReport;
 import net.pretronic.dkbans.api.player.report.PlayerReportEntry;
 import net.pretronic.dkbans.api.player.report.ReportState;
-import net.pretronic.dkbans.common.event.DefaultDKBansPlayerReportTeleportEvent;
+import net.pretronic.dkbans.common.event.DefaultDKBansPlayerReportTakeEvent;
 import net.pretronic.libraries.utility.Iterators;
 import net.pretronic.libraries.utility.Validate;
 import net.pretronic.libraries.utility.annonations.Internal;
@@ -101,8 +101,8 @@ public class DefaultPlayerReport implements PlayerReport {
     public void setWatcher(DKBansPlayer player) {
         this.watcher = player;
 
-        DKBansPlayerReportTeleportEvent event = new DefaultDKBansPlayerReportTeleportEvent(player, this);
-        DKBans.getInstance().getEventBus().callEvent(DKBansPlayerReportTeleportEvent.class, event);
+        DKBansPlayerReportTakeEvent event = new DefaultDKBansPlayerReportTakeEvent(player, this);
+        DKBans.getInstance().getEventBus().callEvent(DKBansPlayerReportTakeEvent.class, event);
     }
 
     @Override
