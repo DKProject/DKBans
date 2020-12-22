@@ -66,8 +66,7 @@ public class DefaultReportManager implements ReportManager {
         return report(executor, target, reason,null, serverName, serverId);
     }
 
-    public PlayerReportEntry report(DKBansPlayer executor, DKBansPlayer target,String reason, ReportTemplate template, String serverName, UUID serverId) {
-        Validate.notNull(executor, target, template);
+    private PlayerReportEntry report(DKBansPlayer executor, DKBansPlayer target,String reason, ReportTemplate template, String serverName, UUID serverId) {
         DefaultPlayerReport report = getReportOrCreate(target);
         if(report.getEntry(executor) != null) return null;
         DefaultPlayerReportEntry entry = (DefaultPlayerReportEntry) DKBans.getInstance().getStorage()
