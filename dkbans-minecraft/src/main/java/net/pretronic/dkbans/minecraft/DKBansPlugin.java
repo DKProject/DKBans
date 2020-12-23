@@ -228,9 +228,10 @@ public class DKBansPlugin extends MinecraftPlugin {
         snapshotDescriber.registerFunction("revoked", snapshot -> !snapshot.isActive());
         snapshotDescriber.registerFunction("active", DefaultPlayerHistoryEntrySnapshot::isActive);
         snapshotDescriber.registerFunction("modifiedTimeFormatted",snapshot -> DKBansConfig.FORMAT_DATE.format(snapshot.getModifiedTime()));
+        snapshotDescriber.registerFunction("timeoutFormatted",snapshot -> DKBansConfig.FORMAT_DATE.format(snapshot.getTimeout()));
         snapshotDescriber.registerFunction("remainingFormatted", snapshot -> {
             long duration = snapshot.getTimeout()-System.currentTimeMillis();
-            if(duration < 0) return DKBansConfig.FORMAT_DATE_ENDLESSLY;
+            if(duration < 0 || !snapshot.getEntry().isActive()) return DKBansConfig.FORMAT_DATE_ENDLESSLY;
             else return DurationProcessor.getStandard().formatShort(TimeUnit.MICROSECONDS.toSeconds(duration));
         });
         snapshotDescriber.registerFunction("durationFormatted", snapshot -> {
