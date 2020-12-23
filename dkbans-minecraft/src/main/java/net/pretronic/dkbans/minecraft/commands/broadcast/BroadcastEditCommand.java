@@ -30,6 +30,10 @@ import net.pretronic.libraries.command.command.object.ObjectCommand;
 import net.pretronic.libraries.command.sender.CommandSender;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
+import net.pretronic.libraries.utility.map.Pair;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class BroadcastEditCommand extends ObjectCommand<Broadcast> {
 
@@ -76,7 +80,11 @@ public class BroadcastEditCommand extends ObjectCommand<Broadcast> {
             }
             case "property": {
                 if(args.length < 2 || args[1].equalsIgnoreCase("list")) {
-                    commandSender.sendMessage(Messages.COMMAND_BROADCAST_EDIT_PROPERTY_LIST, VariableSet.create().addDescribed("properties", broadcast.getProperties()));
+                    Collection<Pair<String, Object>> properties = new ArrayList<>();
+                    broadcast.getProperties().forEach(property -> properties.add(new Pair<>(property.getKey(), property.toPrimitive().getAsObject())));
+
+                    commandSender.sendMessage(Messages.COMMAND_BROADCAST_EDIT_PROPERTY_LIST,
+                            VariableSet.create().addDescribed("properties", properties));
                     return;
                 }
                 if(args.length < 3) {
@@ -91,18 +99,18 @@ public class BroadcastEditCommand extends ObjectCommand<Broadcast> {
                         }
                         String key = args[2];
                         String value = args[3];
-                        BroadcastProperty property = broadcast.setProperty(key, value);
-                        commandSender.sendMessage(Messages.COMMAND_BROADCAST_EDIT_PROPERTY_ADD, VariableSet.create().addDescribed("property", property));
+                        broadcast.getProperties().set(key, value);
+                        broadcast.updateProperties();
+                        commandSender.sendMessage(Messages.COMMAND_BROADCAST_EDIT_PROPERTY_ADD, VariableSet.create()
+                                .add("key", key)
+                                .add("value", value));
                         return;
                     }
                     case "remove": {
                         String key = args[2];
-                        BroadcastProperty property = broadcast.removeProperty(key);
-                        if(property == null) {
-                            commandSender.sendMessage(Messages.COMMAND_BROADCAST_EDIT_PROPERTY_NOT_EXIST, VariableSet.create().add("key", key));
-                            return;
-                        }
-                        commandSender.sendMessage(Messages.COMMAND_BROADCAST_EDIT_PROPERTY_REMOVE, VariableSet.create().addDescribed("property", property));
+                        broadcast.getProperties().remove(key);
+                        broadcast.updateProperties();
+                        commandSender.sendMessage(Messages.COMMAND_BROADCAST_EDIT_PROPERTY_REMOVE, VariableSet.create().addDescribed("key", key));
                         return;
                     }
                     default: {

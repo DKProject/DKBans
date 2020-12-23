@@ -24,17 +24,13 @@ import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.broadcast.Broadcast;
 import net.pretronic.dkbans.api.broadcast.BroadcastProperty;
 import net.pretronic.dkbans.api.broadcast.BroadcastVisibility;
-import net.pretronic.dkbans.common.broadcast.DefaultBroadcastProperty;
 import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
 import net.pretronic.libraries.command.command.object.ObjectCommand;
 import net.pretronic.libraries.command.sender.CommandSender;
+import net.pretronic.libraries.document.Document;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
-import net.pretronic.libraries.utility.map.Maps;
-
-import java.util.Arrays;
-import java.util.Collections;
 
 public class BroadcastCreateCommand extends ObjectCommand<String> {
 
@@ -62,7 +58,7 @@ public class BroadcastCreateCommand extends ObjectCommand<String> {
             text.append(args[i]);
         }
         Broadcast broadcast = DKBans.getInstance().getBroadcastManager()
-                .createBroadcast(name, visibility, Collections.singletonList(new DefaultBroadcastProperty(BroadcastProperty.TEXT, text.toString())));
+                .createBroadcast(name, visibility, Document.newDocument().add(BroadcastProperty.TEXT, text.toString()));
         commandSender.sendMessage(Messages.COMMAND_BROADCAST_CREATED, VariableSet.create().addDescribed("broadcast", broadcast));
     }
 }

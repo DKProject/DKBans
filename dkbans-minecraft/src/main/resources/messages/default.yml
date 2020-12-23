@@ -446,8 +446,8 @@ messages:
 
   dkbans.command.broadcast.edit.property.list: '${dkbans.prefix} &6Properties&8:
   @for("property" in {properties}, ${dkbans.command.broadcast.edit.property.list.loop},"\n","\n")'
-  dkbans.command.broadcast.edit.property.list.loop: '&8» &e{property.key}&8:&e{property.value}'
+  dkbans.command.broadcast.edit.property.list.loop: '&8» &e{key}&8:&e{value}'
 
-  dkbans.command.broadcast.edit.property.add: '${dkbans.prefix} &7You have added the property &e{property.key} &7with the value &e{property.value}'
-  dkbans.command.broadcast.edit.property.remove: '${dkbans.prefix} &7You have removed the property &e{property.key}'
+  dkbans.command.broadcast.edit.property.add: '${dkbans.prefix} &7You have added the property &e{key} &7with the value &e{value}'
+  dkbans.command.broadcast.edit.property.remove: '${dkbans.prefix} &7You have removed the property &e{key}'
   dkbans.command.broadcast.edit.property.notExists: '${dkbans.prefix} &cThe property &e{key} &7does not exists'

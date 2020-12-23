@@ -28,19 +28,17 @@ import net.pretronic.libraries.document.Document;
 import net.pretronic.libraries.document.type.DocumentFileType;
 import net.pretronic.libraries.utility.Iterators;
 import net.pretronic.libraries.utility.Validate;
-import sun.tools.tree.Vset;
 
 import java.util.Collection;
-import java.util.Map;
 
 public class DefaultBroadcast implements Broadcast {
 
     private final int id;
     private String name;
     private BroadcastVisibility visibility;
-    private final Collection<BroadcastProperty> properties;
+    private final Document properties;
 
-    public DefaultBroadcast(int id, String name, BroadcastVisibility visibility, Collection<BroadcastProperty> properties) {
+    public DefaultBroadcast(int id, String name, BroadcastVisibility visibility, Document properties) {
         this.id = id;
         this.name = name;
         this.visibility = visibility;
@@ -81,38 +79,12 @@ public class DefaultBroadcast implements Broadcast {
     }
 
     @Override
-    public Collection<BroadcastProperty> getProperties() {
+    public Document getProperties() {
         return this.properties;
     }
 
     @Override
-    public BroadcastProperty getProperty(String key) {
-        Validate.notNull(key);
-        return Iterators.findOne(this.properties, property -> property.getKey().equalsIgnoreCase(key));
-    }
-
-    @Override
-    public BroadcastProperty setProperty(String key, Object value) {
-        Validate.notNull(key);
-        Iterators.remove(this.properties, property1 -> property1.getKey().equalsIgnoreCase(key));
-        BroadcastProperty property = new DefaultBroadcastProperty(key, value);
-        this.properties.add(property);
-        updatePropertiesToStorage();
-        return property;
-    }
-
-    @Override
-    public BroadcastProperty removeProperty(String key) {
-        BroadcastProperty property = getProperty(key);
-        if(property != null) {
-            this.properties.remove(property);
-            updatePropertiesToStorage();
-            return property;
-        }
-        return null;
-    }
-
-    private void updatePropertiesToStorage() {
+    public void updateProperties() {
         DefaultDKBans.getInstance().getStorage().getBroadcast().update()
                 .set("Properties", DocumentFileType.JSON.getWriter().write(Document.newDocument(this.properties), true))
                 .where("Id", getId())

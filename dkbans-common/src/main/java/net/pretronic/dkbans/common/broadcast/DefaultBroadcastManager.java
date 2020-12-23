@@ -85,12 +85,12 @@ public class DefaultBroadcastManager implements BroadcastManager {
     }
 
     @Override
-    public Broadcast createBroadcast(String name, BroadcastVisibility visibility, Collection<BroadcastProperty> properties) {
+    public Broadcast createBroadcast(String name, BroadcastVisibility visibility, Document properties) {
         Validate.notNull(name, visibility, properties);
         int id = DefaultDKBans.getInstance().getStorage().getBroadcast().insert()
                 .set("Name", name)
                 .set("visibility", visibility)
-                .set("Properties", DocumentFileType.JSON.getWriter().write(Document.newDocument(properties), false))
+                .set("Properties", DocumentFileType.JSON.getWriter().write(properties, false))
                 .executeAndGetGeneratedKeyAsInt("Id");
         Broadcast broadcast = new DefaultBroadcast(id, name, visibility, properties);
         this.broadcasts.add(broadcast);
@@ -176,7 +176,7 @@ public class DefaultBroadcastManager implements BroadcastManager {
         DefaultDKBans.getInstance().getStorage().getBroadcast().find().execute().loadIn(broadcasts, result ->
                 new DefaultBroadcast(result.getInt("Id"), result.getString("Name"),
                         BroadcastVisibility.valueOf(result.getString("Visibility")),
-                        DocumentFileType.JSON.getReader().read(result.getString("Properties")).getAsObject(new TypeReference<ArrayList<BroadcastProperty>>() {})));
+                        DocumentFileType.JSON.getReader().read(result.getString("Properties"))));
         return broadcasts;
     }
 

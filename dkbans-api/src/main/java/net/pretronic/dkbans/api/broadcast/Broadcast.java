@@ -20,7 +20,7 @@
 
 package net.pretronic.dkbans.api.broadcast;
 
-import java.util.Collection;
+import net.pretronic.libraries.document.Document;
 
 public interface Broadcast {
 
@@ -36,11 +36,7 @@ public interface Broadcast {
     void setVisibility(BroadcastVisibility visibility);
 
 
-    Collection<BroadcastProperty> getProperties();
+    Document getProperties();
 
-    BroadcastProperty getProperty(String key);
-
-    BroadcastProperty setProperty(String key, Object value);
-
-    BroadcastProperty removeProperty(String key);
+    void updateProperties();
 }
