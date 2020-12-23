@@ -145,11 +145,12 @@ messages:
 
   dkbans.command.history.help: '${dkbans.prefix} &cUsage&8: &7/history <player>'
   dkbans.command.history.list: '${dkbans.prefix} &7History of &8{player.displayName} @for("entry" in {entries}",${dkbans.command.history.list.loop},"\n","\n")'
-  dkbans.command.history.list.loop: '![" &8- &a{entry.punishmentType.color}{entry.punishmentType.name} &8| &7{entry.createdFormatted} - &7{entry.reason} @if({entry.revoked},"&8(&aUnbanned&8)")"("run:///history {player.name} {entry.id}")'
+  dkbans.command.history.list.loop: '![" &8- &a{entry.punishmentType.color}{entry.punishmentType.name} &8| &7{entry.createdFormatted} - &7{entry.reason} @if({entry.revoked},"&8(&aUnbanned&8)")"]("run:///history {player.name} {entry.id}")'
   dkbans.command.history.info: '${dkbans.prefix} &7History Entry of &e{player.displayName}
   &8» &7Id&8: &e{entry.id}
+  &8» &7Type&8: &e{entry.punishmentType.color}{entry.punishmentType.name}
   &8» &7Created&8: &e{entry.created}
-  &8» &7Active&8: &e@if({entry.active},"&cYes","&aNo")
+  &8» &7Active&8: &e@if({entry.active},"&cYes &8(&7{entry.revokeReason}&8)","&aNo")
   &8» &7Staff&8: &e{entry.staff.displayName}
   &8» &7Reason&8: &e{entry.reason}
   &8» &7Duration&8: &e{entry.durationFormatted}
@@ -157,8 +158,21 @@ messages:
   &8» &7Timeout&8: &e{entry.timeout}
 
   &8» !["&8[&eChanges&8]"]("run:///history {player.name} {entry.id} changes") &8[&cNotes&8]'
-  dkbans.command.history.version.list: '${dkbans.prefix} &7'
-  dkbans.command.history.version.info: '${dkbans.prefix} &7'
+  dkbans.command.history.version.list: '${dkbans.prefix} &7Versions of &e{player.displayName} &8| &e{entry.id} @for("snapshot" in {snapshots}",${dkbans.command.history.version.list.loop},"\n","\n")'
+  dkbans.command.history.version.list.loop: '![" &8- &e{snapshot.modifiedTimeFormatted} &8| &e{snapshot.modifiedBy.displayName}"]("run:///history {player.name} {entry.id} {snapshot.id}")'
+  dkbans.command.history.version.info: '${dkbans.prefix} &7History Entry of &e{player.displayName}
+  &8» &7Id&8: &e{entry.id} &8| &eV{snapshot.id}
+  &8» &7Type&8: &e{snapshot.punishmentType.color}{snapshot.punishmentType.name}
+  &8» &7Created&8: &e{snapshot.created}
+  &8» &7Active&8: &e@if({snapshot.active},"&cYes &8(&7{snapshot.revokeReason}&8)","&aNo")
+  &8» &7Staff&8: &e{snapshot.staff.displayName}
+  &8» &7Reason&8: &e{snapshot.reason}
+  &8» &7Duration&8: &e{snapshot.durationFormatted}
+  &8» &7Remaining&8: &e{snapshot.remainingFormatted}
+  &8» &7Timeout&8: &e{snapshot.timeout}
+
+  &8» &7Modified Time&8: &e{snapshot.modifiedTimeFormatted}
+  &8» &7Modified By&8: &e{snapshot.modifiedBy.displayName}'
   dkbans.command.history.notFound: '${dkbans.prefix} &cThe history entry does not exist'
 
   dkbans.command.resetHistory.help: '${dkbans.prefix} &7Reset history help
