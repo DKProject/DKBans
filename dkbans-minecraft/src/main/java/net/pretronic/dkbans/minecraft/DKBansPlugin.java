@@ -74,6 +74,7 @@ import net.pretronic.libraries.utility.annonations.Internal;
 import net.pretronic.libraries.utility.duration.DurationProcessor;
 import net.pretronic.libraries.utility.io.FileUtil;
 import org.mcnative.common.McNative;
+import org.mcnative.common.player.MinecraftPlayer;
 import org.mcnative.common.plugin.MinecraftPlugin;
 import org.mcnative.common.plugin.configuration.ConfigurationProvider;
 import org.mcnative.common.serviceprovider.message.ColoredString;
@@ -207,8 +208,15 @@ public class DKBansPlugin extends MinecraftPlugin {
         VariableDescriberRegistry.registerDescriber(DefaultIpAddressBlock.class);
 
         VariableDescriber<DefaultDKBansPlayer> playerDescriber = VariableDescriberRegistry.registerDescriber(DefaultDKBansPlayer.class);
-
         playerDescriber.setForwardFunction(player -> McNative.getInstance().getPlayerManager().getPlayer(player.getUniqueId()));
+        playerDescriber.registerFunction("firstLoginFormatted", player -> {
+            MinecraftPlayer mcPlayer = McNative.getInstance().getPlayerManager().getPlayer(player.getUniqueId());
+            return DKBansConfig.FORMAT_DATE.format(mcPlayer.getFirstPlayed());
+        });
+        playerDescriber.registerFunction("lastLoginFormatted", player -> {
+            MinecraftPlayer mcPlayer = McNative.getInstance().getPlayerManager().getPlayer(player.getUniqueId());
+            return DKBansConfig.FORMAT_DATE.format(mcPlayer.getLastPlayed());
+        });
 
         VariableDescriber<DefaultPlayerHistoryEntry> entryDescriber =  VariableDescriberRegistry.registerDescriber(DefaultPlayerHistoryEntry.class);
         entryDescriber.setForwardFunction(DefaultPlayerHistoryEntry::getCurrent);
