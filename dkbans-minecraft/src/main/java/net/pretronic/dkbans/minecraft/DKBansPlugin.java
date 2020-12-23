@@ -256,8 +256,6 @@ public class DKBansPlugin extends MinecraftPlugin {
             return "none";
         });
         groupDescriber.registerFunction("intervalFormatted", group -> DurationProcessor.getStandard().format(group.getInterval(), true));
-
-        VariableDescriberRegistry.registerDescriber(DefaultBroadcastProperty.class);
     }
 
     private void loadConfigs() {

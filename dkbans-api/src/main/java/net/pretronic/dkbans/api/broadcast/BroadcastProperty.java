@@ -20,24 +20,11 @@
 
 package net.pretronic.dkbans.api.broadcast;
 
-public interface BroadcastProperty {
+public class BroadcastProperty {
 
-    String TEXT = "text";
-    String SUBTITLE = "subtitle";
-    String STAY = "stay";
-    String FADE_IN = "fade-in";
-    String FADE_OUT = "fade-out";
-
-
-    String getKey();
-
-    Object getValue();
-
-    int getIntValue();
-
-    long getLongValue();
-
-    String getStringValue();
-
-    boolean getBooleanValue();
+    public static final String TEXT = "text";
+    public static final String SUBTITLE = "subtitle";
+    public static final String STAY = "stay";
+    public static final String FADE_IN = "fade-in";
+    public static final String FADE_OUT = "fade-out";
 }

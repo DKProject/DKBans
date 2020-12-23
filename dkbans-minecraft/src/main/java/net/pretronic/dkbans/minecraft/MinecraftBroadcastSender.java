@@ -74,37 +74,40 @@ public class MinecraftBroadcastSender implements BroadcastSender {
                 title.title(Messages.BROADCAST_TITLE);
 
                 VariableSet variableSet = VariableSet.create()
-                        .add("title", messageProcessor.parse(broadcast.getProperty(BroadcastProperty.TEXT).getStringValue()))
+                        .add("title", messageProcessor.parse(broadcast.getProperties().getString(BroadcastProperty.TEXT)))
                         .addDescribed("player", onlinePlayer);
 
                 title.variables(variableSet);
 
-                BroadcastProperty subTitle = broadcast.getProperty(BroadcastProperty.SUBTITLE);
-                if(subTitle != null) {
+
+                if(broadcast.getProperties().contains(BroadcastProperty.SUBTITLE)) {
+                    String subTitle = broadcast.getProperties().getString(BroadcastProperty.SUBTITLE);
                     title.subTitle(Messages.BROADCAST_TITLE_SUB);
                     title.getVariables().add(BroadcastProperty.SUBTITLE,
-                            messageProcessor.parse(broadcast.getProperty(BroadcastProperty.SUBTITLE).getStringValue()));
+                            messageProcessor.parse(subTitle));
                 }
-                BroadcastProperty fadeIn = broadcast.getProperty(BroadcastProperty.FADE_IN);
-                if(fadeIn != null) {
-                    title.fadeInTime(fadeIn.getIntValue());
+
+                if(broadcast.getProperties().contains(BroadcastProperty.FADE_IN)) {
+                    int fadeIn = broadcast.getProperties().getInt(BroadcastProperty.FADE_IN);
+                    title.fadeInTime(fadeIn);
                 }
-                BroadcastProperty fadeOut = broadcast.getProperty(BroadcastProperty.FADE_OUT);
-                if(fadeOut != null) {
-                    title.fadeInTime(fadeOut.getIntValue());
+
+                if(broadcast.getProperties().contains(BroadcastProperty.FADE_OUT)) {
+                    int fadeOut = broadcast.getProperties().getInt(BroadcastProperty.FADE_OUT);
+                    title.fadeInTime(fadeOut);
                 }
-                BroadcastProperty property = broadcast.getProperty(BroadcastProperty.STAY);
-                if(property != null) {
-                    title.stayTime(property.getIntValue());
+
+                if(broadcast.getProperties().contains(BroadcastProperty.STAY)) {
+                    int stay = broadcast.getProperties().getInt(BroadcastProperty.STAY);
+                    title.stayTime(stay);
                 }
                 onlinePlayer.sendTitle(title);
                 return;
             }
             case ACTIONBAR: {
                 long stayTime = 5;
-                BroadcastProperty property = broadcast.getProperty(BroadcastProperty.STAY);
-                if(property != null) {
-                    stayTime = property.getLongValue();
+                if(broadcast.getProperties().contains(BroadcastProperty.STAY)) {
+                    stayTime = broadcast.getProperties().getLong(BroadcastProperty.STAY);
                 }
                 onlinePlayer.sendActionbar(Messages.BROADCAST_ACTIONBAR, buildVariableSet(broadcast, onlinePlayer), stayTime);
                 return;
@@ -121,7 +124,7 @@ public class MinecraftBroadcastSender implements BroadcastSender {
 
     private VariableSet buildVariableSet(Broadcast broadcast, OnlineMinecraftPlayer onlinePlayer) {
         return VariableSet.create()
-                .add("message", messageProcessor.parse(broadcast.getProperty(BroadcastProperty.TEXT).getStringValue()))
+                .add("message", messageProcessor.parse(broadcast.getProperties().getString(BroadcastProperty.TEXT)))
                 .addDescribed("player", onlinePlayer);
     }
 
