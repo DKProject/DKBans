@@ -97,6 +97,8 @@ public class DefaultDKBansStorage implements DKBansStorage {
     private final DatabaseCollection broadcastGroupAssignment;
     private final DatabaseCollection broadcastGroup;
 
+    private final DatabaseCollection onlinetime;
+
     public DefaultDKBansStorage(DKBans dkBans, Database database) {
         this.dkBans = dkBans;
         this.database = database;
@@ -124,7 +126,9 @@ public class DefaultDKBansStorage implements DKBansStorage {
 
         this.broadcast = createBroadcastCollection();
         this.broadcastGroup = createBroadcastGroupCollection();
-        this.broadcastGroupAssignment = createBroadcastGroupAssignment();
+        this.broadcastGroupAssignment = createBroadcastGroupAssignmentCollection();
+
+        this.onlinetime = createOnlineTimeCollection();
     }
 
     @Override
@@ -462,7 +466,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 scope,
                 resultEntry.getInt("Points"),
                 resultEntry.getBoolean("Active"),
-                null/*@Todo add properties*/,
+                DocumentFileType.JSON.getReader().read("Properties"),
                 resultEntry.getString("RevokeReason"),
                 dkBans.getTemplateManager().getTemplate(resultEntry.getInt("RevokeTemplateId")),
                 resultEntry.getBoolean("ModifiedActive"),
@@ -610,6 +614,18 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 .page(page,pageSize)
                 .orderBy("DisconnectTime", SearchOrder.DESC)
                 .execute());
+    }
+
+    @Override
+    public long getOnlineTime(UUID playerId) {
+        Validate.notNull(playerId);
+        return this.onlinetime.find().get("OnlineTime").where("PlayerId", playerId).execute().first().getLong("OnlineTime");
+    }
+
+    @Override
+    public void updateOnlineTime(UUID playerId, long onlineTime) {
+        Validate.notNull(playerId);
+        this.onlinetime.update().add("OnlineTime", onlineTime).where("PlayerId", playerId).execute();
     }
 
     @Override
@@ -1108,12 +1124,21 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 .create();
     }
 
-    private DatabaseCollection createBroadcastGroupAssignment() {
+    private DatabaseCollection createBroadcastGroupAssignmentCollection() {
         return database.createCollection("dkbans_broadcast_group_assignment")
                 .field("Id", DataType.INTEGER, FieldOption.PRIMARY_KEY, FieldOption.AUTO_INCREMENT)
                 .field("BroadcastId", DataType.INTEGER, ForeignKey.of(this.broadcast, "Id"), FieldOption.NOT_NULL)
                 .field("GroupId", DataType.INTEGER, ForeignKey.of(this.broadcastGroup, "Id"), FieldOption.NOT_NULL)
                 .field("Position", DataType.INTEGER, FieldOption.NOT_NULL)
+                .create();
+    }
+
+    private DatabaseCollection createOnlineTimeCollection() {
+        return database.createCollection("dkbans_onlinetime")
+                .field("Id", DataType.INTEGER, FieldOption.PRIMARY_KEY, FieldOption.AUTO_INCREMENT)
+                .field("PlayerId", DataType.UUID, FieldOption.NOT_NULL)
+                .field("OnlineTime", DataType.LONG, FieldOption.NOT_NULL)
+                .field("AfkTime", DataType.LONG, FieldOption.NOT_NULL)
                 .create();
     }
 }

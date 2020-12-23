@@ -20,6 +20,7 @@
 
 package net.pretronic.dkbans.minecraft.player;
 
+import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.DKBansPlayerManager;
@@ -114,7 +115,7 @@ public class MinecraftPlayerManager implements DKBansPlayerManager {
             MinecraftPlayer player;
             if(identifier instanceof String) player = McNative.getInstance().getPlayerManager().getPlayer((String) identifier);
             else player = McNative.getInstance().getPlayerManager().getPlayer((UUID) identifier);
-            return new DefaultDKBansPlayer(player.getUniqueId(), player.getName());
+            return new DefaultDKBansPlayer(player.getUniqueId(), player.getName(), DKBans.getInstance().getStorage().getOnlineTime(player.getUniqueId()));
         }
     }
 }
