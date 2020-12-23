@@ -115,7 +115,7 @@ public class MinecraftPlayerManager implements DKBansPlayerManager {
             MinecraftPlayer player;
             if(identifier instanceof String) player = McNative.getInstance().getPlayerManager().getPlayer((String) identifier);
             else player = McNative.getInstance().getPlayerManager().getPlayer((UUID) identifier);
-            return new DefaultDKBansPlayer(player.getUniqueId(), player.getName(), DKBans.getInstance().getStorage().getOnlineTime(player.getUniqueId()));
+            return new DefaultDKBansPlayer(player.getUniqueId(), player.getName());
         }
     }
 }

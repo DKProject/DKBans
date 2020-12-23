@@ -126,7 +126,7 @@ public interface DKBansStorage {
 
     long getOnlineTime(UUID playerId);
 
-    void updateOnlineTime(UUID playerId, long onlineTime);
+    void addOnlineTime(UUID playerId, long onlineTime);
 
 
     List<PlayerNote> getPlayerNotes(DKBansPlayer player);

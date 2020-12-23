@@ -619,11 +619,20 @@ public class DefaultDKBansStorage implements DKBansStorage {
     @Override
     public long getOnlineTime(UUID playerId) {
         Validate.notNull(playerId);
-        return this.onlinetime.find().get("OnlineTime").where("PlayerId", playerId).execute().first().getLong("OnlineTime");
+        QueryResult result = this.onlinetime.find().get("OnlineTime").where("PlayerId", playerId).execute();
+        if(result.isEmpty()){
+            this.onlinetime.insert()
+                    .set("OnlineTime",0)
+                    .set("AfkTime",0)
+                    .execute();
+            return 0;
+        }else {
+            return result.first().getLong("OnlineTime");
+        }
     }
 
     @Override
-    public void updateOnlineTime(UUID playerId, long onlineTime) {
+    public void addOnlineTime(UUID playerId, long onlineTime) {
         Validate.notNull(playerId);
         this.onlinetime.update().add("OnlineTime", onlineTime).where("PlayerId", playerId).execute();
     }
