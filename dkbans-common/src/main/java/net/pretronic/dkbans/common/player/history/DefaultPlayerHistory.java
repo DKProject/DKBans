@@ -127,6 +127,11 @@ public class DefaultPlayerHistory implements PlayerHistory {
     }
 
     @Override
+    public List<PlayerHistoryEntry> getLoadedEntries() {
+        return entries;
+    }
+
+    @Override
     public List<PlayerHistoryEntry> getEntries(int page, int size) {
         throw new UnsupportedOperationException();
     }
