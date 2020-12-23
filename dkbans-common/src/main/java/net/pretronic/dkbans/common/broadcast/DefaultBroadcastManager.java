@@ -25,6 +25,8 @@ import net.pretronic.dkbans.api.DKBansScope;
 import net.pretronic.dkbans.api.broadcast.*;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.common.DefaultDKBans;
+import net.pretronic.libraries.document.Document;
+import net.pretronic.libraries.document.type.DocumentFileType;
 import net.pretronic.libraries.utility.GeneralUtil;
 import net.pretronic.libraries.utility.Iterators;
 import net.pretronic.libraries.utility.Validate;
@@ -82,15 +84,14 @@ public class DefaultBroadcastManager implements BroadcastManager {
     }
 
     @Override
-    public Broadcast createBroadcast(String name, String text, BroadcastVisibility visibility) {
-        Validate.notNull(name, visibility, text);
+    public Broadcast createBroadcast(String name, BroadcastVisibility visibility, Collection<BroadcastProperty> properties) {
+        Validate.notNull(name, visibility, properties);
         int id = DefaultDKBans.getInstance().getStorage().getBroadcast().insert()
                 .set("Name", name)
                 .set("visibility", visibility)
-                .set("text", text)
-                .set("Properties", "{}")
+                .set("Properties", DocumentFileType.JSON.getWriter().write(Document.newDocument(properties), false))
                 .executeAndGetGeneratedKeyAsInt("Id");
-        Broadcast broadcast = new DefaultBroadcast(id, name, visibility, text);
+        Broadcast broadcast = new DefaultBroadcast(id, name, visibility, properties);
         this.broadcasts.add(broadcast);
         return broadcast;
     }
@@ -173,7 +174,8 @@ public class DefaultBroadcastManager implements BroadcastManager {
         Collection<Broadcast> broadcasts = new ArrayList<>();
         DefaultDKBans.getInstance().getStorage().getBroadcast().find().execute().loadIn(broadcasts, result ->
                 new DefaultBroadcast(result.getInt("Id"), result.getString("Name"),
-                        BroadcastVisibility.valueOf(result.getString("Visibility")), result.getString("Text")));
+                        BroadcastVisibility.valueOf(result.getString("Visibility")),
+                        DocumentFileType.JSON.getReader().read(result.getString("Properties")).getAsCollection(BroadcastProperty.class)));
         return broadcasts;
     }
 

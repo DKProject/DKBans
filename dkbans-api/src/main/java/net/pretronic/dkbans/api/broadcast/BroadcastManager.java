@@ -23,6 +23,7 @@ package net.pretronic.dkbans.api.broadcast;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 
 import java.util.Collection;
+import java.util.Map;
 
 public interface BroadcastManager {
 
@@ -34,7 +35,7 @@ public interface BroadcastManager {
 
     Broadcast searchBroadcast(Object value);
 
-    Broadcast createBroadcast(String name, String text,BroadcastVisibility visibility);
+    Broadcast createBroadcast(String name, BroadcastVisibility visibility, Collection<BroadcastProperty> properties);
 
     void deleteBroadcast(int id);
 

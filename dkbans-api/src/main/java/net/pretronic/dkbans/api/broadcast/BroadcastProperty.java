@@ -2,7 +2,7 @@
  * (C) Copyright 2020 The DKBans Project (Davide Wietlisbach & Philipp Elvin Friedhoff)
  *
  * @author Philipp Elvin Friedhoff
- * @since 21.06.20, 17:26
+ * @since 23.12.20, 13:51
  * @web %web%
  *
  * The DKBans Project is under the Apache License, version 2.0 (the "License");
@@ -20,27 +20,24 @@
 
 package net.pretronic.dkbans.api.broadcast;
 
-import java.util.Collection;
+public interface BroadcastProperty {
 
-public interface Broadcast {
-
-    int getId();
-
-    String getName();
-
-    void setName(String name);
+    String TEXT = "text";
+    String SUBTITLE = "subtitle";
+    String STAY = "stay";
+    String FADE_IN = "fade-in";
+    String FADE_OUT = "fade-out";
 
 
-    BroadcastVisibility getVisibility();
+    String getKey();
 
-    void setVisibility(BroadcastVisibility visibility);
+    Object getValue();
 
+    int getIntValue();
 
-    Collection<BroadcastProperty> getProperties();
+    long getLongValue();
 
-    BroadcastProperty getProperty(String key);
+    String getStringValue();
 
-    BroadcastProperty setProperty(String key, Object value);
-
-    BroadcastProperty removeProperty(String key);
+    boolean getBooleanValue();
 }

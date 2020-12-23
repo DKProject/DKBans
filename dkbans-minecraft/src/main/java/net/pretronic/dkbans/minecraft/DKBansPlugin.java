@@ -25,10 +25,7 @@ import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.history.PunishmentType;
 import net.pretronic.dkbans.api.template.TemplateGroup;
 import net.pretronic.dkbans.common.DefaultDKBans;
-import net.pretronic.dkbans.common.broadcast.BroadcastTask;
-import net.pretronic.dkbans.common.broadcast.DefaultBroadcast;
-import net.pretronic.dkbans.common.broadcast.DefaultBroadcastAssignment;
-import net.pretronic.dkbans.common.broadcast.DefaultBroadcastGroup;
+import net.pretronic.dkbans.common.broadcast.*;
 import net.pretronic.dkbans.common.filter.DefaultFilter;
 import net.pretronic.dkbans.common.player.DefaultDKBansPlayer;
 import net.pretronic.dkbans.common.player.chatlog.DefaultChatLogEntry;
@@ -236,6 +233,8 @@ public class DKBansPlugin extends MinecraftPlugin {
             return "none";
         });
         groupDescriber.registerFunction("formattedInterval", group -> DurationProcessor.getStandard().format(group.getInterval(), true));
+
+        VariableDescriberRegistry.registerDescriber(DefaultBroadcastProperty.class);
     }
 
     private void loadConfigs() {

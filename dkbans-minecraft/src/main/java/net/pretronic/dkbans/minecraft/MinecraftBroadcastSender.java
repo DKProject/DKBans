@@ -23,10 +23,12 @@ package net.pretronic.dkbans.minecraft;
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.broadcast.Broadcast;
 import net.pretronic.dkbans.api.broadcast.BroadcastAssignment;
+import net.pretronic.dkbans.api.broadcast.BroadcastProperty;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.common.broadcast.BroadcastSender;
 import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.libraries.message.MessageProvider;
+import net.pretronic.libraries.message.bml.MessageProcessor;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
 import org.mcnative.common.McNative;
 import org.mcnative.common.player.OnlineMinecraftPlayer;
@@ -38,6 +40,13 @@ import java.util.Collection;
 import java.util.function.Predicate;
 
 public class MinecraftBroadcastSender implements BroadcastSender {
+
+    private final MessageProcessor messageProcessor;
+
+    public MinecraftBroadcastSender() {
+        this.messageProcessor = McNative.getInstance().getRegistry().getService(MessageProvider.class)
+                .getProcessor();
+    }
 
     @Override
     public Collection<DKBansPlayer> sendBroadcast(Broadcast broadcast) {
@@ -63,12 +72,41 @@ public class MinecraftBroadcastSender implements BroadcastSender {
             case TITLE: {
                 Title title = Title.newTitle();
                 title.title(Messages.BROADCAST_TITLE);
-                title.variables(buildVariableSet(broadcast, onlinePlayer));
+
+                VariableSet variableSet = VariableSet.create()
+                        .add("title", messageProcessor.parse(broadcast.getProperty(BroadcastProperty.TEXT).getStringValue()))
+                        .addDescribed("player", onlinePlayer);
+
+                title.variables(variableSet);
+
+                BroadcastProperty subTitle = broadcast.getProperty(BroadcastProperty.SUBTITLE);
+                if(subTitle != null) {
+                    title.subTitle(Messages.BROADCAST_TITLE_SUB);
+                    title.getVariables().add(BroadcastProperty.SUBTITLE,
+                            messageProcessor.parse(broadcast.getProperty(BroadcastProperty.SUBTITLE).getStringValue()));
+                }
+                BroadcastProperty fadeIn = broadcast.getProperty(BroadcastProperty.FADE_IN);
+                if(fadeIn != null) {
+                    title.fadeInTime(fadeIn.getIntValue());
+                }
+                BroadcastProperty fadeOut = broadcast.getProperty(BroadcastProperty.FADE_OUT);
+                if(fadeOut != null) {
+                    title.fadeInTime(fadeOut.getIntValue());
+                }
+                BroadcastProperty property = broadcast.getProperty(BroadcastProperty.STAY);
+                if(property != null) {
+                    title.stayTime(property.getIntValue());
+                }
                 onlinePlayer.sendTitle(title);
                 return;
             }
             case ACTIONBAR: {
-                onlinePlayer.sendActionbar(Messages.BROADCAST_ACTIONBAR, buildVariableSet(broadcast, onlinePlayer));
+                long stayTime = 5;
+                BroadcastProperty property = broadcast.getProperty(BroadcastProperty.STAY);
+                if(property != null) {
+                    stayTime = property.getLongValue();
+                }
+                onlinePlayer.sendActionbar(Messages.BROADCAST_ACTIONBAR, buildVariableSet(broadcast, onlinePlayer), stayTime);
                 return;
             }
             case BOSSBAR: {
@@ -83,7 +121,7 @@ public class MinecraftBroadcastSender implements BroadcastSender {
 
     private VariableSet buildVariableSet(Broadcast broadcast, OnlineMinecraftPlayer onlinePlayer) {
         return VariableSet.create()
-                .add("message", McNative.getInstance().getRegistry().getService(MessageProvider.class).getProcessor().parse(broadcast.getText()))
+                .add("message", messageProcessor.parse(broadcast.getProperty(BroadcastProperty.TEXT).getStringValue()))
                 .addDescribed("player", onlinePlayer);
     }
 
