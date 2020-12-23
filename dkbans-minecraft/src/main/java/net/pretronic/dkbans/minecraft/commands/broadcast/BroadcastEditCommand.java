@@ -22,6 +22,7 @@ package net.pretronic.dkbans.minecraft.commands.broadcast;
 
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.broadcast.Broadcast;
+import net.pretronic.dkbans.api.broadcast.BroadcastProperty;
 import net.pretronic.dkbans.api.broadcast.BroadcastVisibility;
 import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
@@ -36,14 +37,19 @@ public class BroadcastEditCommand extends ObjectCommand<Broadcast> {
         super(owner, CommandConfiguration.name("edit"));
     }
 
+    // edit property add key value
     @Override
     public void execute(CommandSender commandSender, Broadcast broadcast, String[] args) {
-        if(args.length < 2 || args[0].equalsIgnoreCase("help")) {
+        if(args.length < 1 || args[0].equalsIgnoreCase("help")) {
             commandSender.sendMessage(Messages.COMMAND_BROADCAST_EDIT_HELP);
             return;
         }
         switch (args[0].toLowerCase()) {
             case "name": {
+                if(args.length < 2) {
+                    commandSender.sendMessage(Messages.COMMAND_BROADCAST_EDIT_HELP);
+                    return;
+                }
                 String name = args[1];
                 if(DKBans.getInstance().getBroadcastManager().getBroadcast(name) != null) {
                     commandSender.sendMessage(Messages.COMMAND_BROADCAST_ALREADY_EXISTS, VariableSet.create().add("name", name));
@@ -54,6 +60,10 @@ public class BroadcastEditCommand extends ObjectCommand<Broadcast> {
                 return;
             }
             case "visibility": {
+                if(args.length < 2) {
+                    commandSender.sendMessage(Messages.COMMAND_BROADCAST_EDIT_HELP);
+                    return;
+                }
                 String visibility0 = args[1];
                 BroadcastVisibility visibility = BroadcastVisibility.parse(visibility0);
                 if(visibility == null) {
@@ -64,13 +74,41 @@ public class BroadcastEditCommand extends ObjectCommand<Broadcast> {
                 sendEditedMessage(commandSender, "visibility", visibility);
                 return;
             }
-            case "text": {
-                StringBuilder text = new StringBuilder();
-                for (int i = 1; i < args.length; i++) {
-                    text.append(args[i]);
+            case "property": {
+                if(args.length < 2 || args[1].equalsIgnoreCase("list")) {
+                    commandSender.sendMessage(Messages.COMMAND_BROADCAST_EDIT_PROPERTY_LIST, VariableSet.create().addDescribed("properties", broadcast.getProperties()));
+                    return;
                 }
-                broadcast.setText(text.toString());
-                sendEditedMessage(commandSender, "text", text.toString());
+                if(args.length < 3) {
+                    commandSender.sendMessage(Messages.COMMAND_BROADCAST_EDIT_PROPERTY_HELP);
+                    return;
+                }
+                switch (args[1].toLowerCase()) {
+                    case "add": {
+                        if(args.length < 4) {
+                            commandSender.sendMessage(Messages.COMMAND_BROADCAST_EDIT_PROPERTY_HELP);
+                            return;
+                        }
+                        String key = args[2];
+                        String value = args[3];
+                        BroadcastProperty property = broadcast.setProperty(key, value);
+                        commandSender.sendMessage(Messages.COMMAND_BROADCAST_EDIT_PROPERTY_ADD, VariableSet.create().addDescribed("property", property));
+                        return;
+                    }
+                    case "remove": {
+                        String key = args[2];
+                        BroadcastProperty property = broadcast.removeProperty(key);
+                        if(property == null) {
+                            commandSender.sendMessage(Messages.COMMAND_BROADCAST_EDIT_PROPERTY_NOT_EXIST, VariableSet.create().add("key", key));
+                            return;
+                        }
+                        commandSender.sendMessage(Messages.COMMAND_BROADCAST_EDIT_PROPERTY_REMOVE, VariableSet.create().addDescribed("property", property));
+                        return;
+                    }
+                    default: {
+                        commandSender.sendMessage(Messages.COMMAND_BROADCAST_EDIT_PROPERTY_HELP);
+                    }
+                }
                 return;
             }
             default: {

@@ -267,9 +267,18 @@ public class Messages {
     public static MessageComponent<?> BROADCAST_CHAT = Text.ofMessageKey("dkbans.broadcast.chat");
     public static MessageComponent<?> BROADCAST_ACTIONBAR = Text.ofMessageKey("dkbans.broadcast.actionbar");
     public static MessageComponent<?> BROADCAST_TITLE = Text.ofMessageKey("dkbans.broadcast.title");
+    public static MessageComponent<?> BROADCAST_TITLE_SUB = Text.ofMessageKey("dkbans.broadcast.title.sub");
 
     public static MessageComponent<?> COMMAND_BROADCAST_EDIT_HELP = Text.ofMessageKey("dkbans.command.broadcast.edit.help");
     public static MessageComponent<?> COMMAND_BROADCAST_EDIT_EDITED = Text.ofMessageKey("dkbans.command.broadcast.edit.edited");
+
+    public static MessageComponent<?> COMMAND_BROADCAST_EDIT_PROPERTY_LIST = Text.ofMessageKey("dkbans.command.broadcast.edit.property.list");
+    public static MessageComponent<?> COMMAND_BROADCAST_EDIT_PROPERTY_ADD = Text.ofMessageKey("dkbans.command.broadcast.edit.property.add");
+
+    public static MessageComponent<?> COMMAND_BROADCAST_EDIT_PROPERTY_REMOVE = Text.ofMessageKey("dkbans.command.broadcast.edit.property.remove");
+    public static MessageComponent<?> COMMAND_BROADCAST_EDIT_PROPERTY_NOT_EXIST = Text.ofMessageKey("dkbans.command.broadcast.edit.property.notExists");
+
+    public static MessageComponent<?> COMMAND_BROADCAST_EDIT_PROPERTY_HELP = Text.ofMessageKey("dkbans.command.broadcast.edit.property.help");
 
     public static MessageComponent<?> getPunishmentMessage(PlayerHistoryEntrySnapshot snapshot){
         if(snapshot.getPunishmentType() == PunishmentType.BAN){

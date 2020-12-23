@@ -408,10 +408,32 @@ messages:
   ${dkbans.prefix.broadcast} {message}
   &a'
   dkbans.broadcast.actionbar: '${dkbans.prefix.broadcast} {message}'
-  dkbans.broadcast.title: '{message}'
+  dkbans.broadcast.title: '{title}'
+  dkbans.broadcast.title.sub: '{subTitle}'
 
   dkbans.command.broadcast.edit.help: '${dkbans.prefix} &cInvalid usage of &eedit &ccommand&8:
   &7/broadcast <name> edit
     &8- &7name <name>
     &8- &7visibility <visibility>
-    &8- &7text <text>'
+    &8- &7property'
+
+  dkbans.command.broadcast.edit.property.help: '${dkbans.prefix} &cInvalid usage of &eproperty &ccommand&8:
+  &7/broadcast <name> edit property
+    &8- &7[list]
+    &8- &7add <key> <value>
+    &8- &7remove <key>
+
+  &7Default properties&8:
+    &8- &7text
+    &8- &7stay (actionbar, title)
+    &8- &7subtitle (title)
+    &8- &7fade-in (title)
+    &8- &7fade-out (title)'
+
+  dkbans.command.broadcast.edit.property.list: '${dkbans.prefix} &6Properties&8:
+  @for("property" in {properties}, ${dkbans.command.broadcast.edit.property.list.loop},"\n","\n")'
+  dkbans.command.broadcast.edit.property.list.loop: '&8» &e{property.key}&8:&e{property.value}'
+
+  dkbans.command.broadcast.edit.property.add: '${dkbans.prefix} &7You have added the property &e{property.key} &7with the value &e{property.value}'
+  dkbans.command.broadcast.edit.property.remove: '${dkbans.prefix} &7You have removed the property &e{property.key}'
+  dkbans.command.broadcast.edit.property.notExists: '${dkbans.prefix} &cThe property &e{key} &7does not exists'
