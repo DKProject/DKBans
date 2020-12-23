@@ -581,7 +581,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
         return getPlayerSessionsByResult(player, this.playerSessions.find()
                 .where("PlayerId", player.getUniqueId())
                 .whereHigher("DisconnectTime", time)
-                .orderBy("DisconnectTime", SearchOrder.ASC)
+                .orderBy("DisconnectTime", SearchOrder.DESC)
                 .execute());
     }
 
@@ -590,7 +590,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
         return getPlayerSessionsByResult(player, this.playerSessions.find()
                 .where("PlayerId", player.getUniqueId())
                 .whereLower("DisconnectTime", time)
-                .orderBy("DisconnectTime", SearchOrder.ASC)
+                .orderBy("DisconnectTime", SearchOrder.DESC)
                 .execute());
     }
 
@@ -599,7 +599,16 @@ public class DefaultDKBansStorage implements DKBansStorage {
         return getPlayerSessionsByResult(player, this.playerSessions.find()
                 .where("PlayerId", player.getUniqueId())
                 .whereBetween("DisconnectTime", startTime, endTime)
-                .orderBy("DisconnectTime", SearchOrder.ASC)
+                .orderBy("DisconnectTime", SearchOrder.DESC)
+                .execute());
+    }
+
+    @Override
+    public List<PlayerSession> getPageSessions(DKBansPlayer player, int page, int pageSize) {
+        return getPlayerSessionsByResult(player, this.playerSessions.find()
+                .where("PlayerId", player.getUniqueId())
+                .page(page,pageSize)
+                .orderBy("DisconnectTime", SearchOrder.DESC)
                 .execute());
     }
 

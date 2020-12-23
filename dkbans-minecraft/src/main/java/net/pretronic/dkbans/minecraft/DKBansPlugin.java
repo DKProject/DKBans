@@ -23,6 +23,7 @@ package net.pretronic.dkbans.minecraft;
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.history.PunishmentType;
+import net.pretronic.dkbans.api.player.session.PlayerSession;
 import net.pretronic.dkbans.api.template.TemplateGroup;
 import net.pretronic.dkbans.common.DefaultDKBans;
 import net.pretronic.dkbans.common.broadcast.*;
@@ -65,13 +66,11 @@ import net.pretronic.dkbans.minecraft.player.MinecraftPlayerManager;
 import net.pretronic.libraries.command.command.Command;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
 import net.pretronic.libraries.document.Document;
-import net.pretronic.libraries.document.simple.SimpleDocument;
 import net.pretronic.libraries.document.type.DocumentFileType;
 import net.pretronic.libraries.message.bml.variable.describer.VariableDescriber;
 import net.pretronic.libraries.message.bml.variable.describer.VariableDescriberRegistry;
 import net.pretronic.libraries.plugin.lifecycle.Lifecycle;
 import net.pretronic.libraries.plugin.lifecycle.LifecycleState;
-import net.pretronic.libraries.utility.annonations.Internal;
 import net.pretronic.libraries.utility.duration.DurationProcessor;
 import net.pretronic.libraries.utility.io.FileUtil;
 import net.pretronic.libraries.utility.map.Pair;
@@ -82,9 +81,6 @@ import org.mcnative.common.plugin.configuration.ConfigurationProvider;
 import org.mcnative.common.serviceprovider.message.ColoredString;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
-import java.time.Duration;
-import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -130,6 +126,7 @@ public class DKBansPlugin extends MinecraftPlugin {
         getRuntime().getLocal().getCommandManager().registerCommand(new OnlineTimeCommand(this, CommandConfig.COMMAND_ONLINE_TIME));
         getRuntime().getLocal().getCommandManager().registerCommand(new PingCommand(this, CommandConfig.COMMAND_PING));
         getRuntime().getLocal().getCommandManager().registerCommand(new PlayerInfoCommand(this, CommandConfig.COMMAND_PLAYER_INFO));
+        getRuntime().getLocal().getCommandManager().registerCommand(new PlayerSessionsCommand(this, CommandConfig.COMMAND_PLAYER_SESSIONS));
         getRuntime().getLocal().getCommandManager().registerCommand(new TeamChatCommand(this, CommandConfig.COMMAND_TEAMCHAT));
         getRuntime().getLocal().getCommandManager().registerCommand(new PlayerNoteCommand(this, CommandConfig.COMMAND_PLAYER_NOTES));
         getRuntime().getLocal().getCommandManager().registerCommand(new PunishNotifyCommand(this, CommandConfig.COMMAND_PUNISH_NOTIFY));
@@ -230,6 +227,7 @@ public class DKBansPlugin extends MinecraftPlugin {
         VariableDescriber<DefaultPlayerHistoryEntrySnapshot> snapshotDescriber = VariableDescriberRegistry.registerDescriber(DefaultPlayerHistoryEntrySnapshot.class);
         snapshotDescriber.registerFunction("revoked", snapshot -> !snapshot.isActive());
         snapshotDescriber.registerFunction("active", DefaultPlayerHistoryEntrySnapshot::isActive);
+        snapshotDescriber.registerFunction("revokedReason", snapshot -> snapshot.getRevokeReason() == null ? "" : snapshot.getRevokeReason());
         snapshotDescriber.registerFunction("modifiedTimeFormatted",snapshot -> DKBansConfig.FORMAT_DATE.format(snapshot.getModifiedTime()));
         snapshotDescriber.registerFunction("timeoutFormatted",snapshot -> DKBansConfig.FORMAT_DATE.format(snapshot.getTimeout()));
         snapshotDescriber.registerFunction("remainingFormatted", snapshot -> {
@@ -263,6 +261,9 @@ public class DKBansPlugin extends MinecraftPlugin {
             return "none";
         });
         groupDescriber.registerFunction("intervalFormatted", group -> DurationProcessor.getStandard().format(group.getInterval(), true));
+
+        VariableDescriber<PlayerSession> sessionDescriber = VariableDescriberRegistry.registerDescriber(PlayerSession.class);
+        sessionDescriber.registerFunction("durationFormatted", entry -> DurationProcessor.getStandard().formatShort(entry.getDuration()));
 
         VariableDescriberRegistry.registerDescriber(Pair.class);
 

@@ -121,6 +121,8 @@ public interface DKBansStorage {
 
     List<PlayerSession> getBetweenPlayerSessions(DKBansPlayer player, long startTime, long endTime);
 
+    List<PlayerSession> getPageSessions(DKBansPlayer player,int page, int pageSize);
+
 
     List<PlayerNote> getPlayerNotes(DKBansPlayer player);
 

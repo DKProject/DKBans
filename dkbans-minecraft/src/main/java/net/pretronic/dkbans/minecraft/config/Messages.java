@@ -137,7 +137,9 @@ public class Messages {
     public static MessageComponent<?> COMMAND_PLAYER_INFO_HELP = Text.ofMessageKey("dkbans.command.playerInfo.help");
     public static MessageComponent<?> COMMAND_PLAYER_INFO_OFFLINE = Text.ofMessageKey("dkbans.command.playerInfo.offline");
     public static MessageComponent<?> COMMAND_PLAYER_INFO_ONLINE = Text.ofMessageKey("dkbans.command.playerInfo.online");
-    public static MessageComponent<?> COMMAND_PLAYER_INFO_SESSIONS = Text.ofMessageKey("dkbans.command.playerInfo.sessions");
+
+    public static MessageComponent<?> COMMAND_PLAYER_SESSIONS_HELP = Text.ofMessageKey("dkbans.command.playerSessions.help");
+    public static MessageComponent<?> COMMAND_PLAYER_SESSIONS_INFO = Text.ofMessageKey("dkbans.command.playerSessions.info");
 
     public static MessageComponent<?> COMMAND_HELP = Text.ofMessageKey("dkbans.command.help");
 

@@ -60,6 +60,13 @@ public class CommandConfig {
             .permission("dkbans.command.playerInfo")
             .create();
 
+    @DocumentKey("command.playerSessions")
+    public static CommandConfiguration COMMAND_PLAYER_SESSIONS = CommandConfiguration.newBuilder()
+            .name("playerSessions")
+            .aliases("playerSession", "psession","psessions")
+            .permission("dkbans.command.playerSessions")
+            .create();
+
     public static CommandConfiguration COMMAND_TEAMCHAT = CommandConfiguration.newBuilder()
             .name("teamchat")
             .aliases("team","tc","sc","staffchat")
@@ -158,7 +165,7 @@ public class CommandConfig {
     @DocumentKey("command.punishInfo")
     public static CommandConfiguration COMMAND_PUNISH_INFO_CONFIGURATION = CommandConfiguration.newBuilder()
             .name("punishInfo")
-            .aliases("pinfo","baninfo","muteinfo","binfo","minfo")
+            .aliases("baninfo","muteinfo","binfo","minfo")
             .permission("dkbans.command.punishInfo")
             .create();
 
