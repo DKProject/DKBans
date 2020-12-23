@@ -124,7 +124,8 @@ public class Messages {
     public static MessageComponent<?> PUNISH_LIST_MUTE = Text.ofMessageKey("dkbans.punish.list.mute");
 
     public static MessageComponent<?> COMMAND_HISTORY_HELP = Text.ofMessageKey("dkbans.command.history.help");
-    public static MessageComponent<?> COMMAND_HISTORY_LIST = Text.ofMessageKey("dkbans.command.history.list");//&8» &eKick &8| &7[time] - &7[reason]
+    public static MessageComponent<?> COMMAND_HISTORY_LIST = Text.ofMessageKey("dkbans.command.history.list");
+    public static MessageComponent<?> COMMAND_HISTORY_INFO = Text.ofMessageKey("dkbans.command.history.list");
 
     public static MessageComponent<?> COMMAND_RESET_HISTORY_HELP = Text.ofMessageKey("dkbans.command.resetHistory.help");
     public static MessageComponent<?> COMMAND_RESET_HISTORY_MANY = Text.ofMessageKey("dkbans.command.resetHistory.many");
@@ -260,7 +261,9 @@ public class Messages {
 
     public static MessageComponent<?> COMMAND_BROADCAST_DELETED = Text.ofMessageKey("dkbans.command.broadcast.deleted");
 
-    public static MessageComponent<?> BROADCAST = Text.ofMessageKey("dkbans.broadcast");
+    public static MessageComponent<?> BROADCAST_CHAT = Text.ofMessageKey("dkbans.broadcast.chat");
+    public static MessageComponent<?> BROADCAST_ACTIONBAR = Text.ofMessageKey("dkbans.broadcast.actionbar");
+    public static MessageComponent<?> BROADCAST_TITLE = Text.ofMessageKey("dkbans.broadcast.title");
 
     public static MessageComponent<?> COMMAND_BROADCAST_EDIT_HELP = Text.ofMessageKey("dkbans.command.broadcast.edit.help");
     public static MessageComponent<?> COMMAND_BROADCAST_EDIT_EDITED = Text.ofMessageKey("dkbans.command.broadcast.edit.edited");

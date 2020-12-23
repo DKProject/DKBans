@@ -46,7 +46,7 @@ messages:
   dkbans.server.connecting: '${dkbans.prefix.network} &7Connecting to {server.name}...'
 
   dkbans.ping.self: '${dkbans.prefix.network} &7Your ping is &e{ping}&7ms'
-  dkbans.ping.other: '${dkbans.prefix.network} &7The ping of &e{player.displayName} &7is &a{ping}&7ms'
+  dkbans.ping.other: '${dkbans.prefix.network} &7The ping of &e{player.displayName} &7is &e{ping}&7ms'
 
   dkbans.onlineTime.self: '${dkbans.prefix.network} &7Your online time is &e{online-time-formatted-short}'
   dkbans.onlineTime.other: '${dkbans.prefix.network} &7The online time of &e{player.displayName} &7is &e{online-time-formatted-short}'
@@ -145,7 +145,7 @@ messages:
 
   dkbans.command.history.help: '${dkbans.prefix} &cUsage&8: &7/history <player>'
   dkbans.command.history.list: '${dkbans.prefix} &7History of &8{player.displayName} @for("entry" in {entries}",${dkbans.command.history.list.loop},"\n","\n")'
-  dkbans.command.history.list.loop: '&8» &a{entry.punishmentType.color}{entry.punishmentType.name} &8| &7{entry.createdFormatted} - &7{entry.reason}'
+  dkbans.command.history.list.loop: '&8» &a{entry.punishmentType.color}{entry.punishmentType.name} &8| &7{entry.createdFormatted} - &7{entry.reason} @if({entry.revoked},"&8(&aUnbanned&8)")'
 
   dkbans.command.resetHistory.help: '${dkbans.prefix} &7Reset history help
   &7/resethistory <player>
@@ -381,9 +381,11 @@ messages:
   &7/broadcast <name> edit
   &7/broadcast <name> direct'
 
-  dkbans.broadcast: '&9
+  dkbans.broadcast.chat: '&9
   ${dkbans.prefix.broadcast} {message}
   &a'
+  dkbans.broadcast.actionbar: '${dkbans.prefix.broadcast} {message}'
+  dkbans.broadcast.title: '${dkbans.prefix.broadcast} {message}'
 
   dkbans.command.broadcast.edit.help: '${dkbans.prefix} &cInvalid usage of &eedit &ccommand&8:
   &7/broadcast <name> edit

@@ -30,6 +30,7 @@ import net.pretronic.libraries.message.MessageProvider;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
 import org.mcnative.common.McNative;
 import org.mcnative.common.player.OnlineMinecraftPlayer;
+import org.mcnative.common.player.Title;
 import org.mcnative.common.text.Text;
 
 import java.util.ArrayList;
@@ -60,16 +61,21 @@ public class MinecraftBroadcastSender implements BroadcastSender {
     private void sendMessage(OnlineMinecraftPlayer onlinePlayer, Broadcast broadcast) {
         switch (broadcast.getVisibility()) {
             case TITLE: {
-                DKBans.getInstance().getLogger().warn("Title broadcast is not implemented at the moment. Chat broadcast is used as fallback.");
+                Title title = Title.newTitle();
+                title.title(Messages.BROADCAST_TITLE);
+                title.variables(buildVariableSet(broadcast, onlinePlayer));
+                onlinePlayer.sendTitle(title);
+                return;
             }
             case ACTIONBAR: {
-                DKBans.getInstance().getLogger().warn("Actionbar broadcast is not implemented at the moment. Chat broadcast is used as fallback.");
+                onlinePlayer.sendActionbar(Messages.BROADCAST_ACTIONBAR, buildVariableSet(broadcast, onlinePlayer));
+                return;
             }
             case BOSSBAR: {
                 DKBans.getInstance().getLogger().warn("Bossbar broadcast is not implemented at the moment. Chat broadcast is used as fallback.");
             }
             case CHAT: {
-                onlinePlayer.sendMessage(Messages.BROADCAST, buildVariableSet(broadcast, onlinePlayer));
+                onlinePlayer.sendMessage(Messages.BROADCAST_CHAT, buildVariableSet(broadcast, onlinePlayer));
             }
         }
 
@@ -84,8 +90,10 @@ public class MinecraftBroadcastSender implements BroadcastSender {
     private Collection<DKBansPlayer> sendBroadcast(Predicate<OnlineMinecraftPlayer> playerConsumer) {
         Collection<DKBansPlayer> sent = new ArrayList<>();
 
-        for (OnlineMinecraftPlayer onlinePlayer : McNative.getInstance().getNetwork().getOnlinePlayers()) {
-            if(playerConsumer.test(onlinePlayer)) sent.add(DKBans.getInstance().getPlayerManager().getPlayer(onlinePlayer.getUniqueId()));
+        for (OnlineMinecraftPlayer onlinePlayer : McNative.getInstance().getLocal().getOnlinePlayers()) {
+            if(playerConsumer.test(onlinePlayer)){
+                sent.add(onlinePlayer.getAs(DKBansPlayer.class));
+            }
         }
 
         return sent;

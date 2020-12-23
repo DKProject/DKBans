@@ -190,7 +190,6 @@ public class DKBansPlugin extends MinecraftPlugin {
     private void registerDescribers(){
         VariableDescriberRegistry.registerDescriber(DefaultPlayerHistory.class);
         VariableDescriberRegistry.registerDescriber(DefaultPlayerHistoryType.class);
-        VariableDescriberRegistry.registerDescriber(DefaultPlayerHistoryEntrySnapshot.class);
         VariableDescriberRegistry.registerDescriber(DefaultPlayerChatLog.class);
         VariableDescriberRegistry.registerDescriber(DefaultChatLogEntry.class);
         VariableDescriberRegistry.registerDescriber(DefaultFilter.class);
@@ -212,6 +211,10 @@ public class DKBansPlugin extends MinecraftPlugin {
 
         VariableDescriber<DefaultPlayerHistoryEntry> entryDescriber =  VariableDescriberRegistry.registerDescriber(DefaultPlayerHistoryEntry.class);
         entryDescriber.setForwardFunction(DefaultPlayerHistoryEntry::getCurrent);
+
+        VariableDescriber<DefaultPlayerHistoryEntrySnapshot> snapshotDescriber = VariableDescriberRegistry.registerDescriber(DefaultPlayerHistoryEntrySnapshot.class);
+        snapshotDescriber.registerFunction("revoked", snapshot -> !snapshot.isActive());
+        snapshotDescriber.registerFunction("active", DefaultPlayerHistoryEntrySnapshot::isActive);
 
         VariableDescriber<DefaultPlayerNote> notesDescriber =  VariableDescriberRegistry.registerDescriber(DefaultPlayerNote.class);
         notesDescriber.registerFunction("formattedTime", note -> DKBansConfig.FORMAT_DATE.format(note.getTime()));
