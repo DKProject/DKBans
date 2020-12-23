@@ -36,12 +36,12 @@ import org.mcnative.common.player.OnlineMinecraftPlayer;
 public class ReportAcceptCommand extends BasicCommand {
 
     public ReportAcceptCommand(ObjectOwner owner) {
-        super(owner, CommandConfiguration.newBuilder().name("accept").permission(Permissions.COMMAND_REPORT_STUFF).create());
+        super(owner, CommandConfiguration.newBuilder().name("accept")
+                .permission(Permissions.COMMAND_REPORT_STUFF).create());
     }
 
     @Override
     public void execute(CommandSender sender, String[] args) {
-
         if(args.length == 0) {
             sender.sendMessage(Messages.COMMAND_REPORT_ACCEPT_USAGE);
             return;

@@ -622,6 +622,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
         QueryResult result = this.onlinetime.find().get("OnlineTime").where("PlayerId", playerId).execute();
         if(result.isEmpty()){
             this.onlinetime.insert()
+                    .set("PlayerId",playerId)
                     .set("OnlineTime",0)
                     .set("AfkTime",0)
                     .execute();
@@ -1144,8 +1145,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
 
     private DatabaseCollection createOnlineTimeCollection() {
         return database.createCollection("dkbans_onlinetime")
-                .field("Id", DataType.INTEGER, FieldOption.PRIMARY_KEY, FieldOption.AUTO_INCREMENT)
-                .field("PlayerId", DataType.UUID, FieldOption.NOT_NULL)
+                .field("PlayerId", DataType.UUID, FieldOption.NOT_NULL,FieldOption.PRIMARY_KEY)
                 .field("OnlineTime", DataType.LONG, FieldOption.NOT_NULL)
                 .field("AfkTime", DataType.LONG, FieldOption.NOT_NULL)
                 .create();
