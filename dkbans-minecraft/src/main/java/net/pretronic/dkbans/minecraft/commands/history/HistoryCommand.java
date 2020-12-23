@@ -72,6 +72,7 @@ public class HistoryCommand extends BasicCommand {
             if(arguments.length > 2){
                 if(arguments[2].equalsIgnoreCase("changes")){
                     sender.sendMessage(Messages.COMMAND_HISTORY_VERSION_LIST,VariableSet.create()
+                            .addDescribed("player",player)
                             .addDescribed("snapshots",entry.getAll())
                             .addDescribed("entry",entry));
                 }else if(!GeneralUtil.isNaturalNumber(arguments[2])){
@@ -86,17 +87,19 @@ public class HistoryCommand extends BasicCommand {
                     }
 
                     sender.sendMessage(Messages.COMMAND_HISTORY_VERSION_INFO,VariableSet.create()
+                            .addDescribed("player",player)
                             .addDescribed("snapshot",snapshot)
                             .addDescribed("entry",entry));
                 }
             }else{
                 sender.sendMessage(Messages.COMMAND_HISTORY_INFO,VariableSet.create()
+                        .addDescribed("player",player)
                         .addDescribed("entry",entry));
             }
         }else{
             Collection<PlayerHistoryEntry> entries = history.getEntries();
             sender.sendMessage(Messages.COMMAND_HISTORY_LIST, VariableSet.create()
-                    .addDescribed("player",dkBansPlayer)
+                    .addDescribed("player",player)
                     .addDescribed("entries",entries));
         }
     }
