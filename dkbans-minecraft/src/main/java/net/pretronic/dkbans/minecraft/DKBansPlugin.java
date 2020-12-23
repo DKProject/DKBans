@@ -65,6 +65,7 @@ import net.pretronic.dkbans.minecraft.player.MinecraftPlayerManager;
 import net.pretronic.libraries.command.command.Command;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
 import net.pretronic.libraries.document.Document;
+import net.pretronic.libraries.document.simple.SimpleDocument;
 import net.pretronic.libraries.document.type.DocumentFileType;
 import net.pretronic.libraries.message.bml.variable.describer.VariableDescriber;
 import net.pretronic.libraries.message.bml.variable.describer.VariableDescriberRegistry;
@@ -73,6 +74,7 @@ import net.pretronic.libraries.plugin.lifecycle.LifecycleState;
 import net.pretronic.libraries.utility.annonations.Internal;
 import net.pretronic.libraries.utility.duration.DurationProcessor;
 import net.pretronic.libraries.utility.io.FileUtil;
+import net.pretronic.libraries.utility.map.Pair;
 import org.mcnative.common.McNative;
 import org.mcnative.common.player.MinecraftPlayer;
 import org.mcnative.common.plugin.MinecraftPlugin;
@@ -256,6 +258,9 @@ public class DKBansPlugin extends MinecraftPlugin {
             return "none";
         });
         groupDescriber.registerFunction("intervalFormatted", group -> DurationProcessor.getStandard().format(group.getInterval(), true));
+
+        VariableDescriberRegistry.registerDescriber(Pair.class);
+
     }
 
     private void loadConfigs() {

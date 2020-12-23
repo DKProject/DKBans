@@ -30,6 +30,10 @@ import net.pretronic.libraries.command.command.object.ObjectCommand;
 import net.pretronic.libraries.command.sender.CommandSender;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
+import net.pretronic.libraries.utility.map.Pair;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class BroadcastEditCommand extends ObjectCommand<Broadcast> {
 
@@ -76,8 +80,11 @@ public class BroadcastEditCommand extends ObjectCommand<Broadcast> {
             }
             case "property": {
                 if(args.length < 2 || args[1].equalsIgnoreCase("list")) {
+                    Collection<Pair<String, Object>> properties = new ArrayList<>();
+                    broadcast.getProperties().forEach(property -> properties.add(new Pair<>(property.getKey(), property.toPrimitive().getAsObject())));
+
                     commandSender.sendMessage(Messages.COMMAND_BROADCAST_EDIT_PROPERTY_LIST,
-                            VariableSet.create().addDescribed("properties", broadcast.getProperties()));
+                            VariableSet.create().addDescribed("properties", properties));
                     return;
                 }
                 if(args.length < 3) {
