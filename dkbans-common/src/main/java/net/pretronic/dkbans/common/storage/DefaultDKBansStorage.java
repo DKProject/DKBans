@@ -280,7 +280,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
     }
 
     @Override
-    public int insertHistoryEntrySnapshot(PlayerHistoryEntrySnapshot snapshot) {//@Todo optimize with group execution
+    public int insertHistoryEntrySnapshot(PlayerHistoryEntrySnapshot snapshot) {
         historyVersion.update()
                 .set("ModifiedActive",false)
                 .where("HistoryId",snapshot.getEntry().getId()).execute();

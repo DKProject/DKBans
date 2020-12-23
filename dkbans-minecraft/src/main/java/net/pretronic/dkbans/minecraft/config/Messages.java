@@ -152,6 +152,11 @@ public class Messages {
 
     public static MessageComponent<?> COMMAND_UNPUNISH_HELP = Text.ofMessageKey("dkbans.command.unpunish.help");
 
+    public static MessageComponent<?> COMMAND_PUNISH_INFO_HELP = Text.ofMessageKey("dkbans.command.punishinfo.help");
+    public static MessageComponent<?> COMMAND_PUNISH_INFO_NOT_FOUND = Text.ofMessageKey("dkbans.command.punishinfo.notFound");
+    public static MessageComponent<?> COMMAND_PUNISH_INFO_EMPTY = Text.ofMessageKey("dkbans.command.punishinfo.empty");
+    public static MessageComponent<?> COMMAND_PUNISH_INFO_MULTIPLE = Text.ofMessageKey("dkbans.command.punishinfo.multiple");
+
     public static MessageComponent<?> COMMAND_FILTER_HELP = Text.ofMessageKey("dkbans.command.filter.help");
     public static MessageComponent<?> COMMAND_FILTER_AFFILIATION_AREA_NOT_FOUND = Text.ofMessageKey("dkbans.command.filter.affiliationArea.notFound");
     public static MessageComponent<?> COMMAND_FILTER_OPERATION_NOT_FOUND = Text.ofMessageKey("dkbans.command.filter.operation.notFound");

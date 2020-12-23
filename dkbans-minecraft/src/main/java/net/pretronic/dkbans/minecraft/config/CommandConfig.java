@@ -150,10 +150,17 @@ public class CommandConfig {
     public static Collection<PunishmentTypeConfiguration> COMMAND_PUNISH_DIRECT = new ArrayList<>();
     public static Map<String,CommandConfiguration> COMMAND_PUNISH_TEMPLATE = new HashMap<>();
 
-    public static CommandConfiguration COMMAND_REPORT_CONFIGURATION = CommandConfiguration.newBuilder()
+    public static CommandConfiguration COMMAND_REPORT = CommandConfiguration.newBuilder()
             .name("report")
             .permission("dkbans.command.report")
             .create();
+
+    @DocumentKey("command.punishInfo")
+    public static CommandConfiguration COMMAND_PUNISH_INFO_CONFIGURATION = CommandConfiguration.newBuilder()
+            .name("report")
+            .permission("dkbans.command.report")
+            .create();
+
     public static String COMMAND_REPORT_TEMPLATE_NAME = "report";
 
     public static String COMMAND_REPORT_MODE = "NORMAL";

@@ -139,6 +139,7 @@ public class DKBansPlugin extends MinecraftPlugin {
         getRuntime().getLocal().getCommandManager().registerCommand(new HistoryCommand(this, CommandConfig.COMMAND_HISTORY));
         getRuntime().getLocal().getCommandManager().registerCommand(new ResetHistoryCommand(this, CommandConfig.COMMAND_RESET_HISTORY));
         getRuntime().getLocal().getCommandManager().registerCommand(new MyHistoryPointsCommand(this, CommandConfig.COMMAND_MY_HISTORY_POINTS));
+        getRuntime().getLocal().getCommandManager().registerCommand(new PunishInfoCommand(this, CommandConfig.COMMAND_PUNISH_INFO_CONFIGURATION));
 
         getRuntime().getLocal().getCommandManager().registerCommand(new HelpCommand(this, CommandConfig.COMMAND_HELP));
         getRuntime().getLocal().getCommandManager().registerCommand(new FilterCommand(this, CommandConfig.COMMAND_FILTER));
@@ -184,10 +185,10 @@ public class DKBansPlugin extends MinecraftPlugin {
         }
 
         if(CommandConfig.COMMAND_REPORT_MODE.equalsIgnoreCase("template") && CommandConfig.COMMAND_REPORT_TEMPLATE_NAME != null) {
-            getRuntime().getLocal().getCommandManager().registerCommand(new ReportCommand(this, CommandConfig.COMMAND_REPORT_CONFIGURATION,
+            getRuntime().getLocal().getCommandManager().registerCommand(new ReportCommand(this, CommandConfig.COMMAND_REPORT,
                     CommandConfig.COMMAND_REPORT_TEMPLATE_NAME));
         } else {
-            getRuntime().getLocal().getCommandManager().registerCommand(new ReportCommand(this, CommandConfig.COMMAND_REPORT_CONFIGURATION, null));
+            getRuntime().getLocal().getCommandManager().registerCommand(new ReportCommand(this, CommandConfig.COMMAND_REPORT, null));
         }
     }
 
@@ -195,7 +196,6 @@ public class DKBansPlugin extends MinecraftPlugin {
         VariableDescriberRegistry.registerDescriber(DefaultPlayerHistory.class);
         VariableDescriberRegistry.registerDescriber(DefaultPlayerHistoryType.class);
         VariableDescriberRegistry.registerDescriber(DefaultPlayerChatLog.class);
-        VariableDescriberRegistry.registerDescriber(DefaultChatLogEntry.class);
         VariableDescriberRegistry.registerDescriber(DefaultFilter.class);
         VariableDescriberRegistry.registerDescriber(DefaultPlayerReport.class);
         VariableDescriberRegistry.registerDescriber(DefaultPlayerReportEntry.class);
@@ -208,6 +208,9 @@ public class DKBansPlugin extends MinecraftPlugin {
         ColoredString.makeDescriberColored(punishmentDescriber);
 
         VariableDescriberRegistry.registerDescriber(DefaultIpAddressBlock.class);
+
+        VariableDescriber<DefaultChatLogEntry> chatEntryDescriber = VariableDescriberRegistry.registerDescriber(DefaultChatLogEntry.class);
+        chatEntryDescriber.registerFunction("timeFormatted", entry -> DKBansConfig.FORMAT_DATE.format(entry.getTime()));
 
         VariableDescriber<DefaultDKBansPlayer> playerDescriber = VariableDescriberRegistry.registerDescriber(DefaultDKBansPlayer.class);
         playerDescriber.setForwardFunction(player -> McNative.getInstance().getPlayerManager().getPlayer(player.getUniqueId()));

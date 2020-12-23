@@ -62,7 +62,6 @@ public class PlayerListener {
 
     @Listener(priority = EventPriority.HIGH)
     public void onPlayerLogin(MinecraftPlayerLoginEvent event){
-        //@Todo online mode check
         if(event.isCancelled()) return;
 
         if(DKBans.getInstance().getFilterManager().checkFilter(FilterAffiliationArea.PLAYER_NAME,event.getPlayer().getName())){

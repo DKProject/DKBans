@@ -36,11 +36,6 @@ public class DefaultPlayerHistoryManager implements PlayerHistoryManager {
     }
 
     @Override
-    public PunishmentList getActivePunishments() {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
     public PunishmentList getActivePunishments(PunishmentType type) {
         return new DefaultPunishmentList(type);
     }
@@ -51,7 +46,7 @@ public class DefaultPlayerHistoryManager implements PlayerHistoryManager {
     }
 
     @Override
-    public PlayerHistoryEntry getHistoryEntry(int id) {
+    public PlayerHistoryEntry getHistoryEntry(int id) {//@Todo optimize caching
         return DKBans.getInstance().getStorage().loadEntry(id);
     }
 

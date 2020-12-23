@@ -28,7 +28,6 @@ messages:
   dkbans.error.template.notExists: '{prefix} &e{template} &ctemplate does not exist'
   dkbans.error.ipBlock.notExists: '{prefix} &cAn ip block for address &e{address} &cdoes not exist'
 
-
   dkbans.player.notFound: '{prefix} &cThe player &e{name} &cwas not found'
   dkbans.player.notOnline: '{prefix} &cThe player &e{player.displayName} &cis not online'
   dkbans.player.notSelf: '{prefix} &cYou can''t interact with your self'
@@ -112,8 +111,7 @@ messages:
   &8» &3Reason&8: &4&l{warn.reason}
   &8» &3WarnID&8: &7{warn.id}
   &7'
-  dkbans.punish.warn.notify: '${dkbans.prefix} &9{player.displayName} &7has been &6warned s&7by &8{warn.staff.displayName} &7for &4{warn.reason}&7'
-
+  dkbans.punish.warn.notify: '${dkbans.prefix} &9{player.displayName} &7has been &6warned &7by &8{warn.staff.displayName} &7for &4{warn.reason}&7'
 
   dkbans.punish.success.ban: '${dkbans.prefix} &e{player.displayName} &7was banned'
   dkbans.punish.success.mute: '${dkbans.prefix} &e{player.displayName} &7was muted'
@@ -121,6 +119,7 @@ messages:
   dkbans.punish.success.warn: '${dkbans.prefix} &e{player.displayName} &7was warned'
 
   dkbans.report.countInfo: '${dkbans.prefix.report} &7Open reports&8: &e{openReports}'
+  dkbans.report.notFound: '${dkbans.prefix.report} &cA report for &e{player.name} &cwas not found'
 
   dkbans.punish.list.ban: '${dkbans.prefix} &6Banned players &8| &7{page} @for("punish" in {punishments},${dkbans.punish.list.loop},"\n","\n")'
   dkbans.punish.list.mute: '${dkbans.prefix} &6Muted players &8| &7{page} @for("punish" in {punishments},${dkbans.punish.list.loop},"\n","\n")'
@@ -134,13 +133,20 @@ messages:
   dkbans.punish.not.banned: '${dkbans.prefix} &e{player.displayName} &cis not banned'
   dkbans.punish.not.muted: '${dkbans.prefix} &e{player.displayName} &cis not muted'
 
-  dkbans.command.unpunish.help: '${dkbans.prefix} &cUsage&8: &7/{command} <player> [Reason]'
   dkbans.unpunish.success.ban: '${dkbans.prefix} &e{player.displayName} &7was unbanned'
   dkbans.unpunish.success.mute: '${dkbans.prefix} &e{player.displayName} &7was unmuted'
+
+  dkbans.command.unpunish.help: '${dkbans.prefix} &cUsage&8: &7/{command} <player> [Reason]'
 
   dkbans.command.punish.help.temporary: '${dkbans.prefix} &7/{command} <player> <duration> <reason>'
   dkbans.command.punish.help.permanently: '${dkbans.prefix} &7/{command} <player> <reason>'
   dkbans.command.punish.help.oneTime: '${dkbans.prefix} &7/{command} <player> <reason>'
+
+  dkbans.command.punishinfo.help: '${dkbans.prefix} &cUsage&8: &7/punishinfo <player/id>'
+  dkbans.command.punishinfo.notFound: '${dkbans.prefix} &cPunish entry {id} &cnot found'
+  dkbans.command.punishinfo.empty: '${dkbans.prefix} &cNo active punishments for &e{player.displayName} &cfound'
+  dkbans.command.punishinfo.multiple: '${dkbans.prefix} &e{player.displayName} &7has multiple active punishments: @for("entry" in {entries}",${dkbans.command.punishinfo.multiple.loop},"\n","\n")'
+  dkbans.command.punishinfo.multiple.loop: '![" &8- &a{entry.punishmentType.color}{entry.punishmentType.name} &8| &7{entry.createdFormatted} - &7{entry.reason}'
 
   dkbans.command.history.help: '${dkbans.prefix} &cUsage&8: &7/history <player>'
   dkbans.command.history.list: '${dkbans.prefix} &7History of &8{player.displayName} @for("entry" in {entries}",${dkbans.command.history.list.loop},"\n","\n")'
@@ -192,9 +198,8 @@ messages:
   @for("template" in {templates}, ${dkbans.command.report.listTemplates.loop},"\n")'
   dkbans.command.report.listTemplates.loop: ' &8- &c{template.inGroupId} &8| &e{template.displayName}'
   dkbans.command.report.take.usage: '${dkbans.prefix.report} &cUse /report take <name>'
-  dkbans.report.notFound: '${dkbans.prefix.report} &cA report for &e{player.name} &cwas not found'
   dkbans.command.report.take: '${dkbans.prefix.report} &7You have taken the report of &e{target.displayName}'
-  dkbans.command.report.take.already: '${dkbans.prefix.report} &cThe report of &e{target.displayName} &7has already been taken'
+  dkbans.command.report.take.already: '${dkbans.prefix.report} &cThe report of &e{target.displayName} &chas already been taken'
   dkbans.command.report.accept.usage: '${dkbans.prefix.report} &cUse /report accept <name>'
   dkbans.command.report.accept.notWatching: '${dkbans.prefix.report} &cYou are not watching this player'
   dkbans.command.report.accept.listEntries: '${dkbans.prefix.report} &7Available reports&8: @for("entry" in {entries}, ${dkbans.command.report.listTemplates.loop},"\n","\n")'

@@ -66,7 +66,7 @@ public class DKBansConfig {
     public static boolean PLAYER_ON_JOIN_LIST_REPORTS = true;
 
     public static boolean PLAYER_SESSION_LOGGING = true;
-    public static long PLAYER_SESSION_RETENTION = TimeUnit.DAYS.toMillis(180);//@Todo change to duration
+    public static String PLAYER_SESSION_RETENTION = "180d";
 
     public static boolean CHAT_FILTER_ENABLED = true;
 

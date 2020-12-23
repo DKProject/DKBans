@@ -68,7 +68,7 @@ public class InternalListener {
     public void onPlayerReportTake(DKBansPlayerReportTakeEvent event) {
         OnlineMinecraftPlayer player = McNative.getInstance().getLocal().getOnlinePlayer(event.getPlayer().getUniqueId());
         OnlineMinecraftPlayer target = McNative.getInstance().getLocal().getOnlinePlayer(event.getReport().getPlayer().getUniqueId());
-        if(target != null && player.getServer().getName().equalsIgnoreCase(target.getName())){
+        if(target != null && !player.getServer().getName().equalsIgnoreCase(target.getName())){
             player.connect(target.getServer());
         }
     }

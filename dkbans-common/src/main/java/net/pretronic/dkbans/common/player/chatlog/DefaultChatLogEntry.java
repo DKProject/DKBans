@@ -69,11 +69,6 @@ public class DefaultChatLogEntry implements ChatLogEntry {
     }
 
     @Override
-    public String getTimeFormatted() {
-        return new SimpleDateFormat("dd-MM-yyyy hh:mm").format(new Date(getTime()));//@Todo configurable date format
-    }
-
-    @Override
     public String getServerName() {
         return this.serverName;
     }
