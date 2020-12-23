@@ -161,11 +161,6 @@ messages:
   dkbans.command.history.version.info: '${dkbans.prefix} &7'
   dkbans.command.history.notFound: '${dkbans.prefix} &cThe history entry does not exist'
 
-  public static MessageComponent<?> COMMAND_HISTORY_INFO = Text.ofMessageKey("dkbans.command.history.info");
-  public static MessageComponent<?> COMMAND_HISTORY_VERSION_LIST = Text.ofMessageKey("dkbans.command.history.version.list");
-  public static MessageComponent<?> COMMAND_HISTORY_VERSION_INFO = Text.ofMessageKey("dkbans.command.history.version.info");
-  public static MessageComponent<?> COMMAND_HISTORY_ENTRY_NOT_FOUND = Text.ofMessageKey("dkbans.command.history.notFound");
-
   dkbans.command.resetHistory.help: '${dkbans.prefix} &7Reset history help
   &7/resethistory <player>
   &7/resethistory <player> <id>
