@@ -41,14 +41,11 @@ public class ReportTakeCommand extends BasicCommand {
 
     @Override
     public void execute(CommandSender sender, String[] args) {
-        if(!(sender instanceof OnlineMinecraftPlayer)) {
-            sender.sendMessage(Messages.ERROR_ONLY_PLAYER);
-            return;
-        }
         if(args.length == 0) {
             sender.sendMessage(Messages.COMMAND_REPORT_TAKE_USAGE);
             return;
         }
+
         Pair<OnlineMinecraftPlayer, PlayerReport> data = CommandUtil.checkAndGetTargetReport(sender, args[0]);
         if(data != null) {
             PlayerReport report = data.getValue();

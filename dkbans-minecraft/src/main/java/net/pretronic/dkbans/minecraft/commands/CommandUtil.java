@@ -175,11 +175,13 @@ public class CommandUtil {
         }
         OnlineMinecraftPlayer target = McNative.getInstance().getLocal().getOnlinePlayer(target0);
         if(target == null) {
-            sender.sendMessage(Messages.PLAYER_NOT_FOUND);
+            sender.sendMessage(Messages.PLAYER_NOT_FOUND,VariableSet.create()
+                    .add("prefix",Messages.PREFIX_REPORT)
+                    .add("player",target0));
             return null;
         }
 
-        PlayerReport report = DKBans.getInstance().getReportManager().getReport(target.getAs(DKBansPlayer.class));
+        PlayerReport report = DKBans.getInstance().getReportManager().getReport(target.getUniqueId());
         if(report == null) {
             sender.sendMessage(Messages.REPORT_NOT_FOUND, VariableSet.create().addDescribed("player", target));
             return null;

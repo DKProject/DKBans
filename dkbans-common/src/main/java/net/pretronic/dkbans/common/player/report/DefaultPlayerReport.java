@@ -28,6 +28,7 @@ import net.pretronic.dkbans.api.player.history.PlayerHistoryEntry;
 import net.pretronic.dkbans.api.player.report.PlayerReport;
 import net.pretronic.dkbans.api.player.report.PlayerReportEntry;
 import net.pretronic.dkbans.api.player.report.ReportState;
+import net.pretronic.dkbans.common.DefaultDKBans;
 import net.pretronic.dkbans.common.event.DefaultDKBansPlayerReportTakeEvent;
 import net.pretronic.libraries.utility.Iterators;
 import net.pretronic.libraries.utility.Validate;
@@ -99,6 +100,12 @@ public class DefaultPlayerReport implements PlayerReport {
 
     @Override
     public void setWatcher(DKBansPlayer player) {
+        Validate.notNull(player);
+
+        DefaultDKBans.getInstance().getStorage().getReports().update()
+                .set("WatcherId",player.getUniqueId()).where("Id",id)
+                .execute();
+
         this.watcher = player;
 
         DKBansPlayerReportTakeEvent event = new DefaultDKBansPlayerReportTakeEvent(player, this);

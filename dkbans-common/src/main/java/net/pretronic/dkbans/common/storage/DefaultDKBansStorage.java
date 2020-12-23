@@ -819,7 +819,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 PlayerNoteType.byId(entry.getInt("TypeId")),
                 entry.getLong("Time"),
                 entry.getString("Message"),
-                player);
+                entry.getUniqueId("CreatorId"));
     }
 
     public DatabaseCollection getPlayerSessions() {

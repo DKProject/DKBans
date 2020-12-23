@@ -20,9 +20,12 @@
 
 package net.pretronic.dkbans.common.player.note;
 
+import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.player.note.PlayerNote;
 import net.pretronic.dkbans.api.player.note.PlayerNoteType;
+
+import java.util.UUID;
 
 public class DefaultPlayerNote implements PlayerNote {
 
@@ -30,14 +33,14 @@ public class DefaultPlayerNote implements PlayerNote {
     private final PlayerNoteType type;
     private final long time;
     private final String message;
-    private final DKBansExecutor creator;
+    private final UUID creatorId;
 
-    public DefaultPlayerNote(int id, PlayerNoteType type, long time, String message, DKBansExecutor creator) {
+    public DefaultPlayerNote(int id, PlayerNoteType type, long time, String message, UUID creatorId) {
         this.id = id;
         this.type = type;
         this.time = time;
         this.message = message;
-        this.creator = creator;
+        this.creatorId = creatorId;
     }
 
     @Override
@@ -67,6 +70,6 @@ public class DefaultPlayerNote implements PlayerNote {
 
     @Override
     public DKBansExecutor getCreator() {
-        return creator;
+        return DKBans.getInstance().getPlayerManager().getExecutor(creatorId);
     }
 }
