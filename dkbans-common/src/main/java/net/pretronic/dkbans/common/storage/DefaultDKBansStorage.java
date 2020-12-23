@@ -466,7 +466,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 scope,
                 resultEntry.getInt("Points"),
                 resultEntry.getBoolean("Active"),
-                DocumentFileType.JSON.getReader().read("Properties"),
+                DocumentFileType.JSON.getReader().read(resultEntry.getString("Properties")),
                 resultEntry.getString("RevokeReason"),
                 dkBans.getTemplateManager().getTemplate(resultEntry.getInt("RevokeTemplateId")),
                 resultEntry.getBoolean("ModifiedActive"),
