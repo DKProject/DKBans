@@ -37,6 +37,7 @@ public class BroadcastCommand extends MainObjectCommand<Broadcast> implements Ob
 
     private final BroadcastCreateCommand createCommand;
     private final BroadcastListCommand listCommand;
+    private final BroadcastInfoCommand infoCommand;
 
     public BroadcastCommand(ObjectOwner owner, CommandConfiguration configuration) {
         super(owner, configuration);
@@ -45,6 +46,9 @@ public class BroadcastCommand extends MainObjectCommand<Broadcast> implements Ob
         registerCommand(new BroadcastDirectCommand(owner));
         registerCommand(new BroadcastDeleteCommand(owner));
         registerCommand(new BroadcastEditCommand(owner));
+
+        this.infoCommand = new BroadcastInfoCommand(owner);
+        registerCommand(infoCommand);
     }
 
     @Override
@@ -68,9 +72,8 @@ public class BroadcastCommand extends MainObjectCommand<Broadcast> implements Ob
     @Override
     public void commandNotFound(CommandSender commandSender, Broadcast broadcast, String command, String[] args) {
         if(broadcast != null) {
-            if(command.equalsIgnoreCase("create")) {
-                commandSender.sendMessage(Messages.COMMAND_BROADCAST_ALREADY_EXISTS, VariableSet.create().add("name", broadcast.getName()));
-            } else commandSender.sendMessage(Messages.COMMAND_BROADCAST_HELP);
+            if(command == null && (args == null || args.length == 0)) infoCommand.execute(commandSender, broadcast, args);
+            else commandSender.sendMessage(Messages.COMMAND_BROADCAST_HELP);
         } else {
             listCommand.execute(commandSender, args);
         }

@@ -34,9 +34,11 @@ import org.mcnative.common.McNative;
 import org.mcnative.common.player.OnlineMinecraftPlayer;
 import org.mcnative.common.player.Title;
 import org.mcnative.common.text.Text;
+import org.mcnative.common.utils.MinecraftTickConverter;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 
 public class MinecraftBroadcastSender implements BroadcastSender {
@@ -88,18 +90,18 @@ public class MinecraftBroadcastSender implements BroadcastSender {
                 }
 
                 if(broadcast.getProperties().contains(BroadcastProperty.FADE_IN)) {
-                    int fadeIn = broadcast.getProperties().getInt(BroadcastProperty.FADE_IN);
-                    title.fadeInTime(fadeIn);
+                    long fadeIn = MinecraftTickConverter.toTicks(broadcast.getProperties().getInt(BroadcastProperty.FADE_IN), TimeUnit.SECONDS);
+                    title.fadeInTime((int) fadeIn);
                 }
 
                 if(broadcast.getProperties().contains(BroadcastProperty.FADE_OUT)) {
-                    int fadeOut = broadcast.getProperties().getInt(BroadcastProperty.FADE_OUT);
-                    title.fadeInTime(fadeOut);
+                    long fadeOut = MinecraftTickConverter.toTicks(broadcast.getProperties().getInt(BroadcastProperty.FADE_OUT), TimeUnit.SECONDS);
+                    title.fadeInTime((int) fadeOut);
                 }
 
                 if(broadcast.getProperties().contains(BroadcastProperty.STAY)) {
-                    int stay = broadcast.getProperties().getInt(BroadcastProperty.STAY);
-                    title.stayTime(stay);
+                    long stay = MinecraftTickConverter.toTicks(broadcast.getProperties().getInt(BroadcastProperty.STAY), TimeUnit.SECONDS);
+                    title.stayTime((int) stay);
                 }
                 onlinePlayer.sendTitle(title);
                 return;
