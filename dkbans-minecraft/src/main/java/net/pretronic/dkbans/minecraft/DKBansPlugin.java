@@ -200,7 +200,6 @@ public class DKBansPlugin extends MinecraftPlugin {
         VariableDescriberRegistry.registerDescriber(DefaultTemplateCategory.class);
         VariableDescriberRegistry.registerDescriber(DefaultTemplateGroup.class);
         VariableDescriberRegistry.registerDescriber(DefaultPunishmentTemplate.class);
-        VariableDescriberRegistry.registerDescriber(DefaultPlayerSession.class);
         VariableDescriber<?> punishmentDescriber = VariableDescriberRegistry.registerDescriber(PunishmentType.class);
         ColoredString.makeDescriberColored(punishmentDescriber);
 
@@ -262,7 +261,9 @@ public class DKBansPlugin extends MinecraftPlugin {
         });
         groupDescriber.registerFunction("intervalFormatted", group -> DurationProcessor.getStandard().format(group.getInterval(), true));
 
-        VariableDescriber<PlayerSession> sessionDescriber = VariableDescriberRegistry.registerDescriber(PlayerSession.class);
+        VariableDescriber<DefaultPlayerSession> sessionDescriber = VariableDescriberRegistry.registerDescriber(DefaultPlayerSession.class);
+        sessionDescriber.registerFunction("connectedFormatted", entry -> DKBansConfig.FORMAT_DATE.format(entry.getConnectTime()));
+        sessionDescriber.registerFunction("disconnectedFormatted", entry -> DKBansConfig.FORMAT_DATE.format(entry.getDisconnectTime()));
         sessionDescriber.registerFunction("durationFormatted", entry -> DurationProcessor.getStandard().formatShort(entry.getDuration()));
 
         VariableDescriberRegistry.registerDescriber(Pair.class);
