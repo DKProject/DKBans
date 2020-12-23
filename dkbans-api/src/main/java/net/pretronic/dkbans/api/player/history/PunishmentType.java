@@ -31,22 +31,23 @@ public class PunishmentType implements VariableObjectToString {
 
     private static final Collection<PunishmentType> REGISTRY = new ArrayList<>();
 
+    public static final PunishmentType BAN = registerPunishmentType("BAN","&c",false);
 
-    public static final PunishmentType BAN = registerPunishmentType("BAN","&c");
+    public static final PunishmentType MUTE = registerPunishmentType("MUTE","&9",false);
 
-    public static final PunishmentType MUTE = registerPunishmentType("MUTE","&9");
+    public static final PunishmentType WARN = registerPunishmentType("WARN","&6",true);
 
-    public static final PunishmentType WARN = registerPunishmentType("WARN","&6");
-
-    public static final PunishmentType KICK = registerPunishmentType("KICK","&e");
+    public static final PunishmentType KICK = registerPunishmentType("KICK","&e",true);
 
 
     private final String name;
     private final String color;
+    private final boolean oneTime;
 
-    private PunishmentType(String name,String color) {
+    private PunishmentType(String name,String color,boolean oneTime) {
         this.name = name;
         this.color = color;
+        this.oneTime = oneTime;
     }
 
     public String getName() {
@@ -56,6 +57,11 @@ public class PunishmentType implements VariableObjectToString {
     public String getColor() {
         return color;
     }
+
+    public boolean isOneTime() {
+        return oneTime;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -74,8 +80,8 @@ public class PunishmentType implements VariableObjectToString {
         return punishmentType;
     }
 
-    public static PunishmentType registerPunishmentType(String name,String color) {
-        PunishmentType punishmentType = new PunishmentType(name,color);
+    public static PunishmentType registerPunishmentType(String name,String color,boolean oneTime) {
+        PunishmentType punishmentType = new PunishmentType(name,color,oneTime);
         REGISTRY.add(punishmentType);
         return punishmentType;
     }

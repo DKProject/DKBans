@@ -22,6 +22,7 @@ package net.pretronic.dkbans.api.player;
 
 import net.pretronic.dkbans.api.DKBansExecutor;
 
+import java.util.Collection;
 import java.util.UUID;
 
 public interface DKBansPlayerManager {
@@ -29,6 +30,8 @@ public interface DKBansPlayerManager {
     DKBansPlayer getPlayer(UUID uniqueId);
 
     DKBansPlayer getPlayer(String name);
+
+    Collection<DKBansPlayer> getLoadedPlayers();
 
 
     DKBansExecutor getExecutor(UUID uniqueId);

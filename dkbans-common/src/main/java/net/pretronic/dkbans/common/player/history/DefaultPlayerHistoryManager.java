@@ -22,6 +22,7 @@ package net.pretronic.dkbans.common.player.history;
 
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.DKBansScope;
+import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.history.*;
 import net.pretronic.libraries.utility.Iterators;
 
@@ -46,7 +47,15 @@ public class DefaultPlayerHistoryManager implements PlayerHistoryManager {
     }
 
     @Override
-    public PlayerHistoryEntry getHistoryEntry(int id) {//@Todo optimize caching
+    public PlayerHistoryEntry getHistoryEntry(int id) {
+        //Search cached objects
+        for (DKBansPlayer player : DKBans.getInstance().getPlayerManager().getLoadedPlayers()) {
+            for (PlayerHistoryEntry entry : player.getHistory().getLoadedEntries()) {
+                if(entry.getId() == id){
+                    return entry;
+                }
+            }
+        }
         return DKBans.getInstance().getStorage().loadEntry(id);
     }
 

@@ -169,6 +169,13 @@ public class CommandConfig {
             .permission("dkbans.command.punishInfo")
             .create();
 
+    @DocumentKey("command.punishEdit")
+    public static CommandConfiguration COMMAND_PUNISH_EDIT_CONFIGURATION = CommandConfiguration.newBuilder()
+            .name("punishedit")
+            .aliases("banedit","muteedit")
+            .permission("dkbans.command.punishEdit")
+            .create();
+
     public static String COMMAND_REPORT_TEMPLATE_NAME = "report";
 
     public static String COMMAND_REPORT_MODE = "NORMAL";

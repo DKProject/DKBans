@@ -123,6 +123,9 @@ public class Messages {
     public static MessageComponent<?> PUNISH_LIST_BAN = Text.ofMessageKey("dkbans.punish.list.ban");
     public static MessageComponent<?> PUNISH_LIST_MUTE = Text.ofMessageKey("dkbans.punish.list.mute");
 
+    public static MessageComponent<?> PUNISH_NOT_FOUND = Text.ofMessageKey("dkbans.punish.notFound");
+    public static MessageComponent<?> PUNISH_EMPTY = Text.ofMessageKey("dkbans.punish.empty");
+
     public static MessageComponent<?> COMMAND_HISTORY_HELP = Text.ofMessageKey("dkbans.command.history.help");
     public static MessageComponent<?> COMMAND_HISTORY_LIST = Text.ofMessageKey("dkbans.command.history.list");
     public static MessageComponent<?> COMMAND_HISTORY_INFO = Text.ofMessageKey("dkbans.command.history.info");
@@ -155,9 +158,11 @@ public class Messages {
     public static MessageComponent<?> COMMAND_UNPUNISH_HELP = Text.ofMessageKey("dkbans.command.unpunish.help");
 
     public static MessageComponent<?> COMMAND_PUNISH_INFO_HELP = Text.ofMessageKey("dkbans.command.punishinfo.help");
-    public static MessageComponent<?> COMMAND_PUNISH_INFO_NOT_FOUND = Text.ofMessageKey("dkbans.command.punishinfo.notFound");
-    public static MessageComponent<?> COMMAND_PUNISH_INFO_EMPTY = Text.ofMessageKey("dkbans.command.punishinfo.empty");
     public static MessageComponent<?> COMMAND_PUNISH_INFO_MULTIPLE = Text.ofMessageKey("dkbans.command.punishinfo.multiple");
+
+    public static MessageComponent<?> COMMAND_PUNISH_EDIT_HELP = Text.ofMessageKey("dkbans.command.punishedit.help");
+    public static MessageComponent<?> COMMAND_PUNISH_EDIT_MULTIPLE = Text.ofMessageKey("dkbans.command.punishedit.multiple");
+    public static MessageComponent<?> COMMAND_PUNISH_EDIT_DONE = Text.ofMessageKey("dkbans.command.punishedit.done");
 
     public static MessageComponent<?> COMMAND_FILTER_HELP = Text.ofMessageKey("dkbans.command.filter.help");
     public static MessageComponent<?> COMMAND_FILTER_AFFILIATION_AREA_NOT_FOUND = Text.ofMessageKey("dkbans.command.filter.affiliationArea.notFound");

@@ -180,6 +180,8 @@ public class DefaultPlayerHistoryEntrySnapshotBuilder implements PlayerHistoryEn
     public PlayerHistoryEntrySnapshot execute() {
         Validate.notNull(stuff,player,historyType,reason);
 
+        if(punishmentType.isOneTime()) this.active = false;
+
         if(modifier == null) modifier = stuff;
         if(modifiedTime <= 0) modifiedTime = System.currentTimeMillis();
         if(scope == null) scope = DKBansScope.GLOBAL;

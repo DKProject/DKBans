@@ -23,6 +23,9 @@ package net.pretronic.dkbans.minecraft.commands.punish;
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryEntry;
+import net.pretronic.dkbans.api.player.history.PlayerHistoryEntrySnapshot;
+import net.pretronic.dkbans.api.player.history.PlayerHistoryEntrySnapshotBuilder;
+import net.pretronic.dkbans.api.player.history.PunishmentType;
 import net.pretronic.dkbans.minecraft.commands.CommandUtil;
 import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.libraries.command.command.BasicCommand;
@@ -33,51 +36,86 @@ import net.pretronic.libraries.utility.GeneralUtil;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
 import org.mcnative.common.player.MinecraftPlayer;
 
+import java.time.Duration;
 import java.util.List;
 
-public class PunishInfoCommand extends BasicCommand {
+public class PunishEditCommand extends BasicCommand {
 
-    public PunishInfoCommand(ObjectOwner owner, CommandConfiguration configuration) {
+    public PunishEditCommand(ObjectOwner owner, CommandConfiguration configuration) {
         super(owner, configuration);
     }
 
     @Override
     public void execute(CommandSender sender, String[] arguments) {
-        if(arguments.length < 1){
-            sender.sendMessage(Messages.COMMAND_PUNISH_INFO_HELP, VariableSet.create());
+        if(arguments.length < 3){
+            sender.sendMessage(Messages.COMMAND_PUNISH_EDIT_HELP, VariableSet.create());
             return;
         }
+        PlayerHistoryEntry entry;
+
         if(GeneralUtil.isNaturalNumber(arguments[0])){
             int id = Integer.parseInt(arguments[0]);
-            PlayerHistoryEntry entry = DKBans.getInstance().getHistoryManager().getHistoryEntry(id);
+            entry = DKBans.getInstance().getHistoryManager().getHistoryEntry(id);
             if(entry == null || !entry.isActive()){
                 sender.sendMessage(Messages.PUNISH_NOT_FOUND,VariableSet.create()
                         .addDescribed("id",arguments[0]));
                 return;
             }
-            sender.sendMessage(Messages.COMMAND_HISTORY_INFO,VariableSet.create()
-                    .addDescribed("player",entry.getHistory().getPlayer())
-                    .addDescribed("entry",entry));
         }else{
             MinecraftPlayer player = CommandUtil.getPlayer(sender,arguments[0]);
             if(player == null) return;
             DKBansPlayer dkBansPlayer = player.getAs(DKBansPlayer.class);
 
             List<PlayerHistoryEntry> entries = dkBansPlayer.getHistory().getActiveEntries();
-
             if(entries.size() == 0){
                 sender.sendMessage(Messages.PUNISH_EMPTY,VariableSet.create()
                         .addDescribed("player",player));
+                return;
             }else if(entries.size() == 1){
-                PlayerHistoryEntry entry = entries.get(0);
-                sender.sendMessage(Messages.COMMAND_HISTORY_INFO,VariableSet.create()
-                        .addDescribed("player",player)
-                        .addDescribed("entry",entry));
+                entry = entries.get(0);
             }else{
                 sender.sendMessage(Messages.COMMAND_PUNISH_INFO_MULTIPLE,VariableSet.create()
                         .addDescribed("entries",entries)
                         .addDescribed("player",player));
+                return;
             }
         }
+
+        PlayerHistoryEntrySnapshotBuilder builder =  entry.newSnapshot(CommandUtil.getExecutor(sender));
+
+        String action = arguments[1];
+        if(action.equalsIgnoreCase("setType")){
+            builder.punishmentType(PunishmentType.getPunishmentType(arguments[2]));
+        }else if(action.equalsIgnoreCase("setHistory")){
+            builder.historyType(DKBans.getInstance().getHistoryManager().getHistoryType(arguments[2]));
+        }else if(action.equalsIgnoreCase("setReason")){
+            builder.reason(CommandUtil.readStringFromArguments(arguments,2));
+        }else if(action.equalsIgnoreCase("setDuration")){
+            Duration duration = CommandUtil.parseDuration(sender,arguments[2]);
+            if(duration == null) return;
+            builder.duration(duration);
+        }else if(action.equalsIgnoreCase("addDuration")){
+            Duration duration = CommandUtil.parseDuration(sender,arguments[2]);
+            if(duration == null) return;
+            Duration newDuration = entry.getCurrent().getDuration().plus(duration);
+            builder.duration(newDuration);
+        }else if(action.equalsIgnoreCase("removeDuration")){
+            Duration duration = CommandUtil.parseDuration(sender,arguments[2]);
+            if(duration == null) return;
+            Duration newDuration = entry.getCurrent().getDuration().minus(duration);
+            if(newDuration.isNegative()) builder.active(false);
+            else builder.duration(newDuration);
+        }else if(action.equalsIgnoreCase("setStuff")){
+            MinecraftPlayer player = CommandUtil.getPlayer(sender,arguments[2]);
+            if(player == null) return;
+            builder.stuff(player.getAs(DKBansPlayer.class));
+        }else{
+            sender.sendMessage(Messages.COMMAND_PUNISH_EDIT_HELP, VariableSet.create());
+            return;
+        }
+        PlayerHistoryEntrySnapshot result = builder.execute();
+        sender.sendMessage(Messages.COMMAND_PUNISH_EDIT_DONE, VariableSet.create()
+                .addDescribed("entry",entry)
+                .addDescribed("snapshot",result));
     }
 }

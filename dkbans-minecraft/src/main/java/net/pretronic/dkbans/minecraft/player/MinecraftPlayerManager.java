@@ -65,6 +65,11 @@ public class MinecraftPlayerManager implements DKBansPlayerManager {
         return this.players.get("get", name);
     }
 
+    @Override
+    public Collection<DKBansPlayer> getLoadedPlayers() {
+        return players.getCachedObjects();
+    }
+
 
     @Override
     public DKBansExecutor getExecutor(UUID uniqueId) {
