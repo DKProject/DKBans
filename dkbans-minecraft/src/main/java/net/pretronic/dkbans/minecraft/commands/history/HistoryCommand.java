@@ -80,6 +80,11 @@ public class HistoryCommand extends BasicCommand {
                 }else{
                     int snapshotId = Integer.parseInt(arguments[2]);
                     PlayerHistoryEntrySnapshot snapshot = entry.get(snapshotId);
+                    if(snapshot == null){
+                        sender.sendMessage(Messages.COMMAND_HISTORY_ENTRY_NOT_FOUND);
+                        return;
+                    }
+
                     sender.sendMessage(Messages.COMMAND_HISTORY_VERSION_INFO,VariableSet.create()
                             .addDescribed("snapshot",snapshot)
                             .addDescribed("entry",entry));
