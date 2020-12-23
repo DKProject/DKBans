@@ -233,12 +233,12 @@ public class DKBansPlugin extends MinecraftPlugin {
         snapshotDescriber.registerFunction("remainingFormatted", snapshot -> {
             long duration = snapshot.getTimeout()-System.currentTimeMillis();
             if(duration < 0 || !snapshot.getEntry().isActive()) return DKBansConfig.FORMAT_DATE_ENDLESSLY;
-            else return DurationProcessor.getStandard().formatShort(TimeUnit.MICROSECONDS.toSeconds(duration));
+            else return DurationProcessor.getStandard().formatShort(TimeUnit.MILLISECONDS.toSeconds(duration));
         });
         snapshotDescriber.registerFunction("durationFormatted", snapshot -> {
             long duration = snapshot.getTimeout()-snapshot.getEntry().getCreated();
             if(duration < 0) return DKBansConfig.FORMAT_DATE_ENDLESSLY;
-            else return DurationProcessor.getStandard().formatShort(TimeUnit.MICROSECONDS.toSeconds(duration));
+            else return DurationProcessor.getStandard().formatShort(TimeUnit.MILLISECONDS.toSeconds(duration));
         });
 
         VariableDescriber<DefaultPlayerNote> notesDescriber =  VariableDescriberRegistry.registerDescriber(DefaultPlayerNote.class);

@@ -30,10 +30,8 @@ import net.pretronic.dkbans.api.player.history.PunishmentType;
 import net.pretronic.dkbans.api.template.Template;
 import net.pretronic.libraries.document.Document;
 import net.pretronic.libraries.utility.annonations.Internal;
-import net.pretronic.libraries.utility.duration.DurationProcessor;
 import net.pretronic.libraries.utility.map.Pair;
 
-import java.time.Duration;
 import java.util.UUID;
 
 public class DefaultPlayerHistoryEntrySnapshot implements PlayerHistoryEntrySnapshot {
