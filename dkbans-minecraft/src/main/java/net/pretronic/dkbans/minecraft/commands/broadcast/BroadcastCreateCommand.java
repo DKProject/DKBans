@@ -24,6 +24,7 @@ import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.broadcast.Broadcast;
 import net.pretronic.dkbans.api.broadcast.BroadcastProperty;
 import net.pretronic.dkbans.api.broadcast.BroadcastVisibility;
+import net.pretronic.dkbans.common.broadcast.DefaultBroadcastProperty;
 import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
 import net.pretronic.libraries.command.command.object.ObjectCommand;
@@ -61,7 +62,7 @@ public class BroadcastCreateCommand extends ObjectCommand<String> {
             text.append(args[i]);
         }
         Broadcast broadcast = DKBans.getInstance().getBroadcastManager()
-                .createBroadcast(name, visibility, Collections.singletonList(BroadcastProperty.newProperty(BroadcastProperty.TEXT, text.toString())));
+                .createBroadcast(name, visibility, Collections.singletonList(new DefaultBroadcastProperty(BroadcastProperty.TEXT, text.toString())));
         commandSender.sendMessage(Messages.COMMAND_BROADCAST_CREATED, VariableSet.create().addDescribed("broadcast", broadcast));
     }
 }
