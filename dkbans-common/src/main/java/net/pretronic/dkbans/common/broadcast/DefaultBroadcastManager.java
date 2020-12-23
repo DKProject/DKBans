@@ -176,7 +176,7 @@ public class DefaultBroadcastManager implements BroadcastManager {
         DefaultDKBans.getInstance().getStorage().getBroadcast().find().execute().loadIn(broadcasts, result ->
                 new DefaultBroadcast(result.getInt("Id"), result.getString("Name"),
                         BroadcastVisibility.valueOf(result.getString("Visibility")),
-                        DocumentFileType.JSON.getReader().read(result.getString("Properties")).getAsObject(new TypeReference<Collection<BroadcastProperty>>() {})));
+                        DocumentFileType.JSON.getReader().read(result.getString("Properties")).getAsObject(new TypeReference<ArrayList<BroadcastProperty>>() {})));
         return broadcasts;
     }
 
