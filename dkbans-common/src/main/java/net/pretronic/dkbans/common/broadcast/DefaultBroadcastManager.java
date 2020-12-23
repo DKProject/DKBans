@@ -30,6 +30,7 @@ import net.pretronic.libraries.document.type.DocumentFileType;
 import net.pretronic.libraries.utility.GeneralUtil;
 import net.pretronic.libraries.utility.Iterators;
 import net.pretronic.libraries.utility.Validate;
+import net.pretronic.libraries.utility.reflect.TypeReference;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -175,7 +176,7 @@ public class DefaultBroadcastManager implements BroadcastManager {
         DefaultDKBans.getInstance().getStorage().getBroadcast().find().execute().loadIn(broadcasts, result ->
                 new DefaultBroadcast(result.getInt("Id"), result.getString("Name"),
                         BroadcastVisibility.valueOf(result.getString("Visibility")),
-                        DocumentFileType.JSON.getReader().read(result.getString("Properties")).getAsCollection(BroadcastProperty.class)));
+                        DocumentFileType.JSON.getReader().read(result.getString("Properties")).getAsObject(new TypeReference<ArrayList<BroadcastProperty>>() {})));
         return broadcasts;
     }
 
