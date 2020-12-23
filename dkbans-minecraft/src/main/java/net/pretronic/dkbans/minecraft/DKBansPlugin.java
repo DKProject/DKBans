@@ -70,6 +70,7 @@ import net.pretronic.libraries.message.bml.variable.describer.VariableDescriber;
 import net.pretronic.libraries.message.bml.variable.describer.VariableDescriberRegistry;
 import net.pretronic.libraries.plugin.lifecycle.Lifecycle;
 import net.pretronic.libraries.plugin.lifecycle.LifecycleState;
+import net.pretronic.libraries.utility.annonations.Internal;
 import net.pretronic.libraries.utility.duration.DurationProcessor;
 import net.pretronic.libraries.utility.io.FileUtil;
 import org.mcnative.common.McNative;
@@ -78,6 +79,9 @@ import org.mcnative.common.plugin.configuration.ConfigurationProvider;
 import org.mcnative.common.serviceprovider.message.ColoredString;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -208,19 +212,30 @@ public class DKBansPlugin extends MinecraftPlugin {
 
         VariableDescriber<DefaultPlayerHistoryEntry> entryDescriber =  VariableDescriberRegistry.registerDescriber(DefaultPlayerHistoryEntry.class);
         entryDescriber.setForwardFunction(DefaultPlayerHistoryEntry::getCurrent);
+        entryDescriber.registerFunction("createdFormatted", snapshot -> DKBansConfig.FORMAT_DATE.format(snapshot.getCreated()));
 
         VariableDescriber<DefaultPlayerHistoryEntrySnapshot> snapshotDescriber = VariableDescriberRegistry.registerDescriber(DefaultPlayerHistoryEntrySnapshot.class);
         snapshotDescriber.registerFunction("revoked", snapshot -> !snapshot.isActive());
         snapshotDescriber.registerFunction("active", DefaultPlayerHistoryEntrySnapshot::isActive);
+        snapshotDescriber.registerFunction("remainingFormatted", snapshot -> {
+            long duration = snapshot.getTimeout()-System.currentTimeMillis();
+            if(duration < 0) return DKBansConfig.FORMAT_DATE_ENDLESSLY;
+            else return DurationProcessor.getStandard().formatShort(TimeUnit.MICROSECONDS.toSeconds(duration));
+        });
+        snapshotDescriber.registerFunction("durationFormatted", snapshot -> {
+            long duration = snapshot.getTimeout()-snapshot.getEntry().getCreated();
+            if(duration < 0) return DKBansConfig.FORMAT_DATE_ENDLESSLY;
+            else return DurationProcessor.getStandard().formatShort(TimeUnit.MICROSECONDS.toSeconds(duration));
+        });
 
         VariableDescriber<DefaultPlayerNote> notesDescriber =  VariableDescriberRegistry.registerDescriber(DefaultPlayerNote.class);
-        notesDescriber.registerFunction("formattedTime", note -> DKBansConfig.FORMAT_DATE.format(note.getTime()));
+        notesDescriber.registerFunction("timeFormatted", note -> DKBansConfig.FORMAT_DATE.format(note.getTime()));
 
         VariableDescriberRegistry.registerDescriber(DefaultBroadcast.class);
         VariableDescriberRegistry.registerDescriber(DefaultBroadcastAssignment.class);
         VariableDescriber<DefaultBroadcastGroup> groupDescriber = VariableDescriberRegistry.registerDescriber(DefaultBroadcastGroup.class);
         groupDescriber.registerFunction("enabled", DefaultBroadcastGroup::isEnabled);
-        groupDescriber.registerFunction("formattedScope", group -> {
+        groupDescriber.registerFunction("scopeFormatted", group -> {
             if(group.getScope() != null) {
                 StringBuilder builder = new StringBuilder().append("[")
                         .append(group.getScope().getType())
@@ -232,7 +247,7 @@ public class DKBansPlugin extends MinecraftPlugin {
             }
             return "none";
         });
-        groupDescriber.registerFunction("formattedInterval", group -> DurationProcessor.getStandard().format(group.getInterval(), true));
+        groupDescriber.registerFunction("intervalFormatted", group -> DurationProcessor.getStandard().format(group.getInterval(), true));
 
         VariableDescriberRegistry.registerDescriber(DefaultBroadcastProperty.class);
     }

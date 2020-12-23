@@ -145,7 +145,7 @@ messages:
 
   dkbans.command.history.help: '${dkbans.prefix} &cUsage&8: &7/history <player>'
   dkbans.command.history.list: '${dkbans.prefix} &7History of &8{player.displayName} @for("entry" in {entries}",${dkbans.command.history.list.loop},"\n","\n")'
-  dkbans.command.history.list.loop: ' &8- &a{entry.punishmentType.color}{entry.punishmentType.name} &8| &7{entry.createdFormatted} - &7{entry.reason} @if({entry.revoked},"&8(&aUnbanned&8)")'
+  dkbans.command.history.list.loop: '![" &8- &a{entry.punishmentType.color}{entry.punishmentType.name} &8| &7{entry.createdFormatted} - &7{entry.reason} @if({entry.revoked},"&8(&aUnbanned&8)")"("run:///history {player.name} {entry.id} changes")'
   dkbans.command.history.info: '${dkbans.prefix} &7History Entry of &e{player.displayName}
   &8» &7Id&8: &e{entry.id}
   &8» &7Created&8: &e{entry.created}
@@ -269,9 +269,9 @@ messages:
   &7/pnotes <player> [list]
   &7/pnotes <player> add <message>'
   dkbans.command.playerNotes.list: '${dkbans.prefix} &7Notes of &e{player.displayName} &8| &7Page&8: &7{page} @for("note" in {notes},${dkbans.command.playerNotes.list.loop},"\n","\n")'
-  dkbans.command.playerNotes.list.loop: '&8» &e{note.formattedTime} &8- {note.creator.displayName}
+  dkbans.command.playerNotes.list.loop: '&8» &e{note.timeFormatted} &8- {note.creator.displayName}
   &7{note.message}'
-  dkbans.command.playerNotes.added: '&8» &a+ &e{note.formattedTime} &8- {note.creator.displayName}&8:
+  dkbans.command.playerNotes.added: '&8» &a+ &e{note.timeFormatted} &8- {note.creator.displayName}&8:
   &8> &7{note.message}'
   dkbans.command.chatlog.usage: '${dkbans.prefix.chat} &cInvalid usage of chatLog command&8:
   &7/chatlog player <name> [page]
@@ -349,8 +349,8 @@ messages:
   &8» &7Enabled&8: &e{group.enabled}
   &8» &7Permission&8: &e{group.permission}
   &8» &7Order&8: &e{group.order}
-  &8» &7Interval&8: &e{group.formattedInterval}
-  &8» &7Scope&8: &e{group.formattedScope}'
+  &8» &7Interval&8: &e{group.intervalFormatted}
+  &8» &7Scope&8: &e{group.scopeFormatted}'
 
   dkbans.command.broadcast.group.assignment.help: '${dkbans.prefix} &cInvalid usage of &eassignment &ccommand&8:
   &7/broadcastgroup <name> assignment <name>

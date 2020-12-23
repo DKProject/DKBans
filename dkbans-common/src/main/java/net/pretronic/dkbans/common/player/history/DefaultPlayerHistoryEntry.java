@@ -153,13 +153,4 @@ public class DefaultPlayerHistoryEntry implements PlayerHistoryEntry {
         this.current = current;
         if(snapshots != null) snapshots.add(current);
     }
-
-    @Internal
-    public String getRemainingFormatted(){//@Todo make configurable
-        return DurationProcessor.getStandard().formatShort(Duration.ofMillis(getCurrent().getTimeout()-System.currentTimeMillis()));
-    }
-    @Internal
-    public String getCreatedFormatted(){//@Todo make configurable
-        return new SimpleDateFormat("dd-MM-yyyy hh:mm").format(new Date(getCreated()));
-    }
 }

@@ -184,9 +184,4 @@ public class DefaultPlayerHistoryEntrySnapshot implements PlayerHistoryEntrySnap
     public void setEntry(PlayerHistoryEntry entry) {
         this.entry = entry;
     }
-
-    @Internal
-    public String getDurationFormatted(){//@Todo make configurable
-        return DurationProcessor.getStandard().formatShort(Duration.ofMillis(timeout-getEntry().getCreated()));
-    }
 }
