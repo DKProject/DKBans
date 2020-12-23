@@ -53,9 +53,9 @@ public class PlayerNoteCommand extends BasicCommand {
         String argument = arguments.length > 1 ? arguments[1] : "list";
         if(StringUtil.equalsOne(argument,"list","l")){
             int page = 1;
-            if(arguments.length > 2 && GeneralUtil.isNaturalNumber(arguments[2])){
+            if(arguments.length > 3 && GeneralUtil.isNaturalNumber(arguments[2])){
                 page = Integer.parseInt(arguments[2]);
-            }else if(arguments.length > 1 && GeneralUtil.isNaturalNumber(arguments[1])){
+            }else if(arguments.length > 2 && GeneralUtil.isNaturalNumber(arguments[1])){
                 page = Integer.parseInt(arguments[1]);
             }
 

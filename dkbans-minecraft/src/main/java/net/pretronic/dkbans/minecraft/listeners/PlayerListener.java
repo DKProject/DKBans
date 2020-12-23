@@ -115,18 +115,18 @@ public class PlayerListener {
         OnlineMinecraftPlayer player = event.getOnlinePlayer();
         DKBansPlayer dkBansPlayer = player.getAs(DKBansPlayer.class);
 
-        if(DKBansConfig.PLAYER_ON_JOIN_INFO_TEAMCHAT && player.hasPermission(Permissions.TEAM)){
-            boolean teamChat = event.getPlayer().hasSetting("DKBans",PlayerSettingsKey.TEAM_CHAT_LOGIN,true);
-            player.sendMessage(Messages.STAFF_STATUS_NOW,VariableSet.create()
-                    .add("prefix",Messages.PREFIX_TEAMCHAT)
-                    .add("status",teamChat)
-                    .add("statusFormatted", teamChat ? Messages.STAFF_STATUS_LOGIN :  Messages.STAFF_STATUS_LOGOUT));
-        }
-
         if(DKBansConfig.PLAYER_ON_JOIN_PUNISH_NOTIFY && player.hasPermission(Permissions.PUNISH_NOTIFY)){
             boolean teamChat = event.getPlayer().hasSetting("DKBans",PlayerSettingsKey.PUNISH_NOTIFY_LOGIN,true);
             player.sendMessage(Messages.STAFF_STATUS_NOW,VariableSet.create()
                     .add("prefix",Messages.PREFIX)
+                    .add("status",teamChat)
+                    .add("statusFormatted", teamChat ? Messages.STAFF_STATUS_LOGIN :  Messages.STAFF_STATUS_LOGOUT));
+        }
+
+        if(DKBansConfig.PLAYER_ON_JOIN_INFO_TEAMCHAT && player.hasPermission(Permissions.TEAM)){
+            boolean teamChat = event.getPlayer().hasSetting("DKBans",PlayerSettingsKey.TEAM_CHAT_LOGIN,true);
+            player.sendMessage(Messages.STAFF_STATUS_NOW,VariableSet.create()
+                    .add("prefix",Messages.PREFIX_TEAMCHAT)
                     .add("status",teamChat)
                     .add("statusFormatted", teamChat ? Messages.STAFF_STATUS_LOGIN :  Messages.STAFF_STATUS_LOGOUT));
         }

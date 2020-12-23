@@ -144,7 +144,7 @@ messages:
   dkbans.command.punish.help.oneTime: '${dkbans.prefix} &7/{command} <player> <reason>'
 
   dkbans.command.history.help: '${dkbans.prefix} &cUsage&8: &7/history <player>'
-  dkbans.command.history.list: '${dkbans.prefix} &7History from &8{player.displayName} @for("entry" in {entries}",${dkbans.command.history.list.loop},"\n","\n")'
+  dkbans.command.history.list: '${dkbans.prefix} &7History of &8{player.displayName} @for("entry" in {entries}",${dkbans.command.history.list.loop},"\n","\n")'
   dkbans.command.history.list.loop: '&8» &a{entry.punishmentType.color}{entry.punishmentType.name} &8| &7{entry.createdFormatted} - &7{entry.reason}'
 
   dkbans.command.resetHistory.help: '${dkbans.prefix} &7Reset history help
@@ -175,9 +175,8 @@ messages:
   dkbans.command.report.accept.listEntries.loop: ' &8- ![{entry.template.displayName}]("run://{entry.punishmentCommand}")'
   dkbans.command.report.decline.usage: '${dkbans.prefix.report} &cUsage&8: /report decline <name>'
   dkbans.command.report.decline: '${dkbans.prefix.report} &cYou have declined the report of &e${target.displayName}'
-  dkbans.command.report.list: '${dkbans.prefix.report} &7Open reports&8:
-  @for("report" in {reports}, ${dkbans.command.report.list.loop},"\n")'
-  dkbans.command.report.list.loop: ' &8- &e{report.player.displayName} &7Count&8: &e{report.count}'
+  dkbans.command.report.list: '${dkbans.prefix.report} &7Open reports&8: @for("report" in {reports}, ${dkbans.command.report.list.loop},"\n","\n")'
+  dkbans.command.report.list.loop: ' !["&8- &e{report.player.displayName} &7Count&8: &e{report.count}"]("run:///report take {report.player.uniqueId}")'
 
   dkbans.command.report.notify: '![${dkbans.command.report.notify.text};${dkbans.command.report.notify.hover}]("run:///report take {player.name}")'
   dkbans.command.report.notify.text: '${dkbans.prefix.report} &e{player.displayName} &8&l>> &e{report.reason} &8[&7Click&8]'
@@ -251,9 +250,9 @@ messages:
   dkbans.command.playerNotes.help: '${dkbans.prefix} &cInvalid usage of dkbans command&8:
   &7/pnotes <player> [list]
   &7/pnotes <player> add <message>'
-  dkbans.command.playerNotes.list: '${dkbans.prefix} &7Notes of &e{player.displayName}&8: @for("note" in {notes},${dkbans.command.playerNotes.list.loop},"\n","\n")'
-  dkbans.command.playerNotes.list.loop: '&8» &e{note.formattedTime} &8- {note.creator.displayName} &8| &7Page&8: &7{page}
-  &8> &7{note.message}'
+  dkbans.command.playerNotes.list: '${dkbans.prefix} &7Notes of &e{player.displayName} &8| &7Page&8: &7{page} @for("note" in {notes},${dkbans.command.playerNotes.list.loop},"\n","\n")'
+  dkbans.command.playerNotes.list.loop: '&8» &e{note.formattedTime} &8- {note.creator.displayName}
+  &7{note.message}'
   dkbans.command.playerNotes.added: '&8» &a+ &e{note.formattedTime} &8- {note.creator.displayName}&8:
   &8> &7{note.message}'
   dkbans.command.chatlog.usage: '${dkbans.prefix.chat} &cInvalid usage of chatLog command&8:
