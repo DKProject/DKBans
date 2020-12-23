@@ -1078,6 +1078,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 .field("Name", DataType.STRING, FieldOption.NOT_NULL, FieldOption.UNIQUE)
                 .field("Visibility", DataType.STRING, FieldOption.NOT_NULL)
                 .field("Text", DataType.STRING, 1024, FieldOption.NOT_NULL)
+                .field("Properties", DataType.LONG_TEXT, FieldOption.NOT_NULL)
                 .create();
     }
 
@@ -1092,6 +1093,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 .field("ScopeType", DataType.STRING)
                 .field("ScopeName", DataType.STRING)
                 .field("ScopeId", DataType.UUID)
+                .field("Properties", DataType.LONG_TEXT, FieldOption.NOT_NULL)
                 .create();
     }
 

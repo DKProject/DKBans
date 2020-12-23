@@ -88,6 +88,7 @@ public class DefaultBroadcastManager implements BroadcastManager {
                 .set("Name", name)
                 .set("visibility", visibility)
                 .set("text", text)
+                .set("Properties", "{}")
                 .executeAndGetGeneratedKeyAsInt("Id");
         Broadcast broadcast = new DefaultBroadcast(id, name, visibility, text);
         this.broadcasts.add(broadcast);
@@ -137,6 +138,7 @@ public class DefaultBroadcastManager implements BroadcastManager {
                 .set("Enabled", true)
                 .set("Interval", interval)
                 .set("Order", BroadcastOrder.SORTED)
+                .set("Properties", "{}")
                 .executeAndGetGeneratedKeyAsInt("Id");
         BroadcastGroup group = new DefaultBroadcastGroup(id, name, interval);
         this.groups.add(group);

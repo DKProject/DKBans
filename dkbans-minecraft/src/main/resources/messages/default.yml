@@ -9,9 +9,9 @@ messages:
   dkbans.prefix: '&8» &4DKBans &8|&f'
   dkbans.prefix.network: '&8» &4DKNetwork &8|&f'
   dkbans.prefix.report: '&8» &6DKReport &8|&f'
-  dkbans.prefix.teamchat: '&8» &eTeamChat &8|&f'
-  dkbans.prefix.chat: '&8» &eChat &8|&f'
-  dkbans.prefix.broadcast: '&8» &aBroadcast &8|&f'
+  dkbans.prefix.teamchat: '&8» &eDKTeamChat &8|&f'
+  dkbans.prefix.chat: '&8» &eDKChat &8|&f'
+  dkbans.prefix.broadcast: '&8» &aDKBroadcast &8|&f'
 
   dkbans.error.internal: '{prefix} &cAn internal server error occurred, please contact a network administrator"'
   dkbans.error.invalid.DurationFormat: '{prefix} &e{duration} &cis not a valid duration. Use for example 10m'
@@ -385,7 +385,7 @@ messages:
   ${dkbans.prefix.broadcast} {message}
   &a'
   dkbans.broadcast.actionbar: '${dkbans.prefix.broadcast} {message}'
-  dkbans.broadcast.title: '${dkbans.prefix.broadcast} {message}'
+  dkbans.broadcast.title: '{message}'
 
   dkbans.command.broadcast.edit.help: '${dkbans.prefix} &cInvalid usage of &eedit &ccommand&8:
   &7/broadcast <name> edit
