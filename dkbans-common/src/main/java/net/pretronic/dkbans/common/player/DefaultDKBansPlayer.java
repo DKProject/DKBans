@@ -58,13 +58,18 @@ public  class DefaultDKBansPlayer implements DKBansPlayer {
 
     private final DefaultPlayerNoteList noteList;
 
-    public DefaultDKBansPlayer(UUID uniqueId, String name) {
+    private long onlineTime;
+
+    public DefaultDKBansPlayer(UUID uniqueId, String name, long onlineTime) {
         this.uniqueId = uniqueId;
         this.name = name;
         this.history = new DefaultPlayerHistory(this);
 
+
         this.sessionList = new DefaultPlayerSessionList(this);
         this.noteList = new DefaultPlayerNoteList(this);
+
+        this.onlineTime = onlineTime;
     }
 
     @Override
@@ -89,7 +94,7 @@ public  class DefaultDKBansPlayer implements DKBansPlayer {
 
     @Override
     public long getOnlineTime() {
-        return 0;//@Todo calculate
+        return this.onlineTime;
     }
 
     @Override
@@ -181,6 +186,10 @@ public  class DefaultDKBansPlayer implements DKBansPlayer {
         session.setLastServerId(lastServerId);
 
         DKBans.getInstance().getStorage().completePlayerSession(session);
+
+        long newOnlineTime = session.getDisconnectTime()-session.getConnectTime();
+        DKBans.getInstance().getStorage().updateOnlineTime(getUniqueId(), newOnlineTime);
+        this.onlineTime+=newOnlineTime;
 
         this.sessionList.setActive(null);
     }
