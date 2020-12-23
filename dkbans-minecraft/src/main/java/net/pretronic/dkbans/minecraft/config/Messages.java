@@ -125,7 +125,10 @@ public class Messages {
 
     public static MessageComponent<?> COMMAND_HISTORY_HELP = Text.ofMessageKey("dkbans.command.history.help");
     public static MessageComponent<?> COMMAND_HISTORY_LIST = Text.ofMessageKey("dkbans.command.history.list");
-    public static MessageComponent<?> COMMAND_HISTORY_INFO = Text.ofMessageKey("dkbans.command.history.list");
+    public static MessageComponent<?> COMMAND_HISTORY_INFO = Text.ofMessageKey("dkbans.command.history.info");
+    public static MessageComponent<?> COMMAND_HISTORY_VERSION_LIST = Text.ofMessageKey("dkbans.command.history.version.list");
+    public static MessageComponent<?> COMMAND_HISTORY_VERSION_INFO = Text.ofMessageKey("dkbans.command.history.version.info");
+    public static MessageComponent<?> COMMAND_HISTORY_ENTRY_NOT_FOUND = Text.ofMessageKey("dkbans.command.history.notFound");
 
     public static MessageComponent<?> COMMAND_RESET_HISTORY_HELP = Text.ofMessageKey("dkbans.command.resetHistory.help");
     public static MessageComponent<?> COMMAND_RESET_HISTORY_MANY = Text.ofMessageKey("dkbans.command.resetHistory.many");

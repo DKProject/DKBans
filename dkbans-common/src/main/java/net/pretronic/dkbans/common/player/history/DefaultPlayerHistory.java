@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Predicate;
 
 public class DefaultPlayerHistory implements PlayerHistory {
 
@@ -67,6 +68,11 @@ public class DefaultPlayerHistory implements PlayerHistory {
     public PlayerHistoryEntry getActiveEntry(PunishmentType type, DKBansScope scope) {
         return Iterators.findOne(getActiveEntries(), entry -> entry.getCurrent().getPunishmentType() == type
                 && entry.getCurrent().getScope().matches(scope));
+    }
+
+    @Override
+    public PlayerHistoryEntry getEntry(int id) {
+        return Iterators.findOne(getEntries(), entry -> entry.getId() == id);
     }
 
     @Override

@@ -31,6 +31,7 @@ import net.pretronic.dkbans.api.player.note.PlayerNoteList;
 import net.pretronic.dkbans.api.player.note.PlayerNoteType;
 import net.pretronic.dkbans.api.player.session.PlayerSession;
 import net.pretronic.dkbans.api.template.unpunishment.UnPunishmentTemplate;
+import net.pretronic.libraries.utility.Iterators;
 import net.pretronic.libraries.utility.Validate;
 import net.pretronic.libraries.utility.annonations.Internal;
 import net.pretronic.libraries.utility.duration.DurationProcessor;
@@ -40,6 +41,7 @@ import java.time.Duration;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class DefaultPlayerHistoryEntry implements PlayerHistoryEntry {
 
@@ -96,6 +98,11 @@ public class DefaultPlayerHistoryEntry implements PlayerHistoryEntry {
     @Override
     public PlayerHistoryEntrySnapshot getFirst() {
         return getAll().get(0);
+    }
+
+    @Override
+    public PlayerHistoryEntrySnapshot get(int id) {
+        return Iterators.findOne(getAll(), snapshot -> snapshot.getId() == id);
     }
 
     @Override

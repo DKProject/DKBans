@@ -145,7 +145,26 @@ messages:
 
   dkbans.command.history.help: '${dkbans.prefix} &cUsage&8: &7/history <player>'
   dkbans.command.history.list: '${dkbans.prefix} &7History of &8{player.displayName} @for("entry" in {entries}",${dkbans.command.history.list.loop},"\n","\n")'
-  dkbans.command.history.list.loop: '&8» &a{entry.punishmentType.color}{entry.punishmentType.name} &8| &7{entry.createdFormatted} - &7{entry.reason} @if({entry.revoked},"&8(&aUnbanned&8)")'
+  dkbans.command.history.list.loop: ' &8- &a{entry.punishmentType.color}{entry.punishmentType.name} &8| &7{entry.createdFormatted} - &7{entry.reason} @if({entry.revoked},"&8(&aUnbanned&8)")'
+  dkbans.command.history.info: '${dkbans.prefix} &7History Entry of &e{player.displayName}
+  &8» &7Id&8: &e{entry.id}
+  &8» &7Created&8: &e{entry.created}
+  &8» &7Active&8: &e@if({entry.active},"&cYes","&aNo")
+  &8» &7Staff&8: &e{entry.staff.displayName}
+  &8» &7Reason&8: &e{entry.reason}
+  &8» &7Duration&8: &e{entry.durationFormatted}
+  &8» &7Remaining&8: &e{entry.remainingFormatted}
+  &8» &7Timeout&8: &e{entry.timeout}
+
+  &8» &8[&eChanges&8] &8[&cNotes&8]'
+  dkbans.command.history.version.list: '${dkbans.prefix} &7'
+  dkbans.command.history.version.info: '${dkbans.prefix} &7'
+  dkbans.command.history.notFound: '${dkbans.prefix} &cThe history entry does not exist'
+
+  public static MessageComponent<?> COMMAND_HISTORY_INFO = Text.ofMessageKey("dkbans.command.history.info");
+  public static MessageComponent<?> COMMAND_HISTORY_VERSION_LIST = Text.ofMessageKey("dkbans.command.history.version.list");
+  public static MessageComponent<?> COMMAND_HISTORY_VERSION_INFO = Text.ofMessageKey("dkbans.command.history.version.info");
+  public static MessageComponent<?> COMMAND_HISTORY_ENTRY_NOT_FOUND = Text.ofMessageKey("dkbans.command.history.notFound");
 
   dkbans.command.resetHistory.help: '${dkbans.prefix} &7Reset history help
   &7/resethistory <player>
@@ -167,8 +186,8 @@ messages:
   dkbans.command.report.listTemplates.loop: ' &8- &c{template.inGroupId} &8| &e{template.displayName}'
   dkbans.command.report.take.usage: '${dkbans.prefix.report} &cUse /report take <name>'
   dkbans.report.notFound: '${dkbans.prefix.report} &cA report for &e{player.name} &cwas not found'
-  dkbans.command.report.take: '${dkbans.prefix.report} &7You have took the report of &e{target.displayName}'
-  dkbans.command.report.take.already: '${dkbans.prefix.report} &cThe report of &e{target.displayName} has been already taken'
+  dkbans.command.report.take: '${dkbans.prefix.report} &7You have taken the report of &e{target.displayName}'
+  dkbans.command.report.take.already: '${dkbans.prefix.report} &cThe report of &e{target.displayName} &7has already been taken'
   dkbans.command.report.accept.usage: '${dkbans.prefix.report} &cUse /report accept <name>'
   dkbans.command.report.accept.notWatching: '${dkbans.prefix.report} &cYou are not watching this player'
   dkbans.command.report.accept.listEntries: '${dkbans.prefix.report} &7Available reports&8: @for("entry" in {entries}, ${dkbans.command.report.listTemplates.loop},"\n","\n")'
@@ -231,18 +250,22 @@ messages:
   dkbans.command.playerInfo.online: '${dkbans.prefix} &6Player Info
   &8» &7Name&8: &e{player.displayName} &8(&aOnline&8)
   &8» &7UniqueId&8: &e{player.uniqueId}
+
   &8» &7FirstLogin&8: &e{player.firstLogin}
   &8» &7Server&8: &e{player.server}
   &8» &7OnlineTime&8: &e{player.onlineTime}
+
   &8» &7Ip&8: &e{player.activeSession.HostName}
   &8» &7Country&8: &e{player.activeSession.country}
   &8» &7Region&8: &e{player.activeSession.region}'
   dkbans.command.playerInfo.offline: '${dkbans.prefix} &6Player Info
   &8» &7Name&8: &e{player.displayName} &8(&cOffline&8)
   &8» &7UniqueId&8: &e{player.uniqueId}
+
   &8» &7FirstLogin&8: &e{player.firstLogin}
   &8» &7LastLogin&8: &e{player.lastLogin}
   &8» &7OnlineTime&8: &e{player.onlineTime}
+
   &8» &7Ip&8: &e{player.lastSession.hostName}
   &8» &7Country&8: &e{player.lastSession.country}
   &8» &7Region&8: &e{player.lastSession.region}'
