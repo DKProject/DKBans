@@ -157,8 +157,9 @@ public class CommandConfig {
 
     @DocumentKey("command.punishInfo")
     public static CommandConfiguration COMMAND_PUNISH_INFO_CONFIGURATION = CommandConfiguration.newBuilder()
-            .name("report")
-            .permission("dkbans.command.report")
+            .name("punishInfo")
+            .aliases("pinfo","baninfo","muteinfo","binfo","minfo")
+            .permission("dkbans.command.punishInfo")
             .create();
 
     public static String COMMAND_REPORT_TEMPLATE_NAME = "report";
