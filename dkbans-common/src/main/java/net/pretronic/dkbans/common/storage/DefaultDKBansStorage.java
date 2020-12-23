@@ -407,7 +407,10 @@ public class DefaultDKBansStorage implements DKBansStorage {
     @Override
     public List<PlayerHistoryEntrySnapshot> loadSnapshots(PlayerHistoryEntry historyEntry) {
         List<PlayerHistoryEntrySnapshot> snapshots = new ArrayList<>();
-        QueryResult result = this.historyVersion.find().where("HistoryId",historyEntry.getId()).execute();
+        QueryResult result = this.historyVersion.find()
+                .get("*")
+                .getAs("Id","SnapshotId")
+                .where("HistoryId",historyEntry.getId()).execute();
         for (QueryResultEntry entry : result) snapshots.add(createSnapshot(entry,historyEntry));
         return snapshots;
     }
