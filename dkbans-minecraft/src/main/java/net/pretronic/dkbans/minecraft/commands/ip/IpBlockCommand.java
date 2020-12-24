@@ -94,6 +94,6 @@ public class IpBlockCommand extends BasicCommand {
         }else{
             result = DKBans.getInstance().getIpAddressManager().blockIpAddress(address,reason,duration,CommandUtil.getExecutor(sender));
         }
-        sender.sendMessage(Messages.COMMAND_IP_BLOCK, VariableSet.create().add("block", result));
+        sender.sendMessage(Messages.COMMAND_IP_BLOCK, VariableSet.create().addDescribed("block", result));
     }
 }

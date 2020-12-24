@@ -90,7 +90,8 @@ public class PlayerListener {
         if(ipAddressBlock != null) {
             if(ipAddressBlock.getType() == IpAddressBlockType.BLOCK){
                 event.setCancelReason(Messages.PUNISH_ADDRESS_BLOCK,VariableSet.create()
-                        .addDescribed("ipAddressBlock",ipAddressBlock));
+                        .addDescribed("ban",ipAddressBlock)
+                        .addDescribed("block",ipAddressBlock));
                 event.setCancelled(true);
             }else if(ipAddressBlock.getType() == IpAddressBlockType.BAN){
                 banPlayer(event,player,ipAddressBlock);

@@ -142,6 +142,12 @@ public class CommandConfig {
             .permission("dkbans.command.ipBlock")
             .create();
 
+    @DocumentKey("command.ipUnblock")
+    public static CommandConfiguration COMMAND_IP_UNBLOCK = CommandConfiguration.newBuilder()
+            .name("ipUnblock")
+            .permission("dkbans.command.ipUnblock")
+            .create();
+
     @DocumentKey("command.chatClear")
     public static CommandConfiguration COMMAND_CHAT_CLEAR = CommandConfiguration.newBuilder()
             .name("chatClear")
