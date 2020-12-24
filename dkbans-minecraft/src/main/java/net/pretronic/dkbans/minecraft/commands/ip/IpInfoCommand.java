@@ -20,14 +20,15 @@
 
 package net.pretronic.dkbans.minecraft.commands.ip;
 
-import net.pretronic.dkbans.api.DKBans;
-import net.pretronic.dkbans.api.player.ipblacklist.IpAddressBlock;
+import net.pretronic.dkbans.api.player.DKBansPlayer;
+import net.pretronic.dkbans.minecraft.commands.CommandUtil;
 import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.libraries.command.command.BasicCommand;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
 import net.pretronic.libraries.command.sender.CommandSender;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
+import org.mcnative.common.player.MinecraftPlayer;
 
 public class IpInfoCommand extends BasicCommand {
 
@@ -36,19 +37,23 @@ public class IpInfoCommand extends BasicCommand {
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args) {
-        if(args.length != 1) {
-            sender.sendMessage(Messages.COMMAND_IP_INFO_USAGE);
+    public void execute(CommandSender sender, String[] arguments) {
+        if(arguments.length != 1) {
+            sender.sendMessage(Messages.COMMAND_IP_INFO_HELP);
             return;
         }
-        String ipAddress = args[0];
-        IpAddressBlock ipAddressBlock = DKBans.getInstance().getIpAddressBlacklistManager().getIpAddressBlock(ipAddress);
-        if(ipAddressBlock == null) {
-            sender.sendMessage(Messages.COMMAND_IP_INFO_NOT_BLOCKED, VariableSet.create()
-                    .add("address", ipAddress));
-            return;
+
+        if(CommandUtil.IPADDRESS_PATTERN.matcher(arguments[0]).matches()){
+            String address = arguments[0];
+            sender.sendMessage(Messages.COMMAND_IP_INFO_PLAYER, VariableSet.create()
+                    .add("address", address));
+        }else{
+            MinecraftPlayer player = CommandUtil.getPlayer(sender,arguments[0]);
+            if(player == null) return;
+            DKBansPlayer dkbansPlayer = player.getAs(DKBansPlayer.class);
+            sender.sendMessage(Messages.COMMAND_IP_INFO_PLAYER, VariableSet.create()
+                    .add("addresses", dkbansPlayer.getIpAddresses())
+                    .add("player", player));
         }
-        sender.sendMessage(Messages.COMMAND_IP_INFO_BLOCKED, VariableSet.create()
-                .addDescribed("block", ipAddressBlock));
     }
 }

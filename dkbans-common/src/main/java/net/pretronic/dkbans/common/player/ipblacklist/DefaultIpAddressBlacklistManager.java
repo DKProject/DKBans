@@ -31,6 +31,7 @@ import net.pretronic.libraries.caching.Cache;
 import net.pretronic.libraries.caching.CacheQuery;
 import net.pretronic.libraries.utility.Validate;
 
+import java.net.InetAddress;
 import java.util.concurrent.TimeUnit;
 
 public class DefaultIpAddressBlacklistManager implements IpAddressBlacklistManager {
@@ -56,6 +57,16 @@ public class DefaultIpAddressBlacklistManager implements IpAddressBlacklistManag
             }
         }
         return null;
+    }
+
+    @Override
+    public boolean isIpAddressBlocked(InetAddress address) {
+        return getIpAddressBlock(address.getHostAddress()) != null;
+    }
+
+    @Override
+    public boolean isIpAddressBlocked(String ipAddress) {
+        return getIpAddressBlock(ipAddress) != null;
     }
 
     @Override

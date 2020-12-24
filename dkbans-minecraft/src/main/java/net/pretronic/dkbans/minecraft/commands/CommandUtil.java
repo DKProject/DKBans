@@ -38,8 +38,14 @@ import org.mcnative.common.player.OnlineMinecraftPlayer;
 import org.mcnative.common.text.components.MessageComponent;
 
 import java.time.Duration;
+import java.util.regex.Pattern;
 
 public class CommandUtil {
+
+    public static final Pattern IPADDRESS_PATTERN = Pattern.compile("^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
+            "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
+            "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
+            "([01]?\\d\\d?|2[0-4]\\d|25[0-5])$");
 
     public static DKBansExecutor getExecutor(CommandSender sender){
         if(sender instanceof MinecraftPlayer){

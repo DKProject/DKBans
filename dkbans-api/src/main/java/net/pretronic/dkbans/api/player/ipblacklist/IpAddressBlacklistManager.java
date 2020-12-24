@@ -24,10 +24,16 @@ import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.template.punishment.PunishmentTemplate;
 import net.pretronic.libraries.utility.annonations.Nullable;
 
+import java.net.InetAddress;
+
 public interface IpAddressBlacklistManager {
 
     @Nullable
     IpAddressBlock getIpAddressBlock(String ipAddress);
+
+    boolean isIpAddressBlocked(InetAddress address);
+
+    boolean isIpAddressBlocked(String ipAddress);
 
     IpAddressBlock blockIpAddress(String ipAddress, IpAddressBlockType type, DKBansExecutor staff, String reason, long timeout, String forReason, long forDuration);
 

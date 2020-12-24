@@ -20,6 +20,9 @@
 
 package net.pretronic.dkbans.common.player;
 
+import net.pretronic.databasequery.api.query.Aggregation;
+import net.pretronic.databasequery.api.query.result.QueryResult;
+import net.pretronic.databasequery.api.query.result.QueryResultEntry;
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.DKBansScope;
@@ -31,19 +34,23 @@ import net.pretronic.dkbans.api.player.note.PlayerNoteList;
 import net.pretronic.dkbans.api.player.note.PlayerNoteType;
 import net.pretronic.dkbans.api.player.report.PlayerReport;
 import net.pretronic.dkbans.api.player.report.PlayerReportEntry;
+import net.pretronic.dkbans.api.player.session.IpAddressInfo;
 import net.pretronic.dkbans.api.player.session.PlayerSession;
 import net.pretronic.dkbans.api.player.session.PlayerSessionList;
 import net.pretronic.dkbans.api.template.punishment.PunishmentTemplate;
 import net.pretronic.dkbans.api.template.report.ReportTemplate;
+import net.pretronic.dkbans.common.DefaultDKBans;
 import net.pretronic.dkbans.common.player.history.DefaultPlayerHistory;
 import net.pretronic.dkbans.common.player.history.DefaultPlayerHistoryEntrySnapshotBuilder;
 import net.pretronic.dkbans.common.player.note.DefaultPlayerNoteList;
+import net.pretronic.dkbans.common.player.session.DefaultIpAddressInfo;
 import net.pretronic.dkbans.common.player.session.DefaultPlayerSession;
 import net.pretronic.dkbans.common.player.session.DefaultPlayerSessionList;
 import net.pretronic.libraries.utility.Iterators;
 import net.pretronic.libraries.utility.Validate;
 
 import java.net.InetAddress;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.UUID;
 
@@ -80,6 +87,22 @@ public  class DefaultDKBansPlayer implements DKBansPlayer {
     @Override
     public PlayerSessionList getSessions() {
         return this.sessionList;
+    }
+
+    @Override
+    public Collection<IpAddressInfo> getIpAddresses() {
+        QueryResult result = DefaultDKBans.getInstance().getStorage().getPlayerSessions().find()
+                .get("IpAddress")
+                .getAs(Aggregation.MIN,"Country","Country")
+                .getAs(Aggregation.MIN,"Region","Region")
+                .where("PlayerId",this.uniqueId).groupBy("IpAddress").execute();
+
+        Collection<IpAddressInfo> addresses = new ArrayList<>();
+        for (QueryResultEntry entry : result) {
+            addresses.add(new DefaultIpAddressInfo(entry.getObject("IpAddress",InetAddress.class)
+                    ,entry.getString("Country"),entry.getString("Region")));
+        }
+        return addresses;
     }
 
     @Override
