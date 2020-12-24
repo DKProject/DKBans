@@ -45,6 +45,11 @@ public class DefaultReportManager implements ReportManager {
     }
 
     @Override
+    public int getReportCount() {
+        return getOpenReports().size();
+    }
+
+    @Override
     public List<PlayerReport> getOpenReports() {
         return this.openReports;
     }
