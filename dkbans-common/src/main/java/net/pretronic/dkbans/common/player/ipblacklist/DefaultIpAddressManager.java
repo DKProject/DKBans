@@ -56,7 +56,7 @@ public class DefaultIpAddressManager implements IpAddressManager {
     @Override
     public IpAddressInfo getIpAddressInfo(String ipAddress) {
         QueryResult result = DefaultDKBans.getInstance().getStorage().getPlayerSessions().find().where("ipAddress",ipAddress)
-                .limit(0).orderBy("ConnectTime", SearchOrder.DESC).execute();
+                .limit(1).orderBy("ConnectTime", SearchOrder.DESC).execute();
         if(result.isEmpty()){
             try {
                 return new DefaultIpAddressInfo(InetAddress.getByName(ipAddress),"Unknown","Unknown");

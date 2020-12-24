@@ -375,7 +375,7 @@ messages:
   &8» &7For timeout&8: &e{block.forTimeout}'
 
   dkbans.command.ip.info.player: '${dkbans.prefix} &7Address information of player &e{player.displayName} @for("address" in {addresses},${dkbans.command.ip.info.player.loop},"\n","\n")'
-  dkbans.command.ip.info.player.loop: '![" &8- &e{address.address} &8(&7Country&8: &e{address.county} &7Region&8: &e{address.region} &7Blocked&8: &e@if({address.blocked},"&cYes","&aNo")"]("run:///ipinfo {address.address}")'
+  dkbans.command.ip.info.player.loop: '![" &8- &e{address.address} &8(&7Country&8: &e{address.country} &7Region&8: &e{address.region} &7Blocked&8: &e@if({address.blocked},"&cYes","&aNo")"]("run:///ipinfo {address.address}")'
 
   dkbans.command.ip.info.blocked: '${dkbans.prefix} &6Ip info of address &e{block.address}
   &8» &7Type&8: &e{block.type}

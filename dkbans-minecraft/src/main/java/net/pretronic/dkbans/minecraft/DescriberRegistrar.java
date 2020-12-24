@@ -63,6 +63,7 @@ public class DescriberRegistrar {
 
         VariableDescriber<DefaultIpAddressInfo> addressDescriber = VariableDescriberRegistry.registerDescriber(DefaultIpAddressInfo.class);
         addressDescriber.registerFunction("blocked", DefaultIpAddressInfo::isBlocked);
+        addressDescriber.registerFunction("address", entry -> entry.getAddress().getHostAddress());
 
         VariableDescriber<DefaultChatLogEntry> chatEntryDescriber = VariableDescriberRegistry.registerDescriber(DefaultChatLogEntry.class);
         chatEntryDescriber.registerFunction("timeFormatted", entry -> DKBansConfig.FORMAT_DATE.format(entry.getTime()));
