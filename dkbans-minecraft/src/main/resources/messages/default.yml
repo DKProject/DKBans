@@ -359,7 +359,7 @@ messages:
 
   dkbans.command.ip.info.help: '${dkbans.prefix} &cUsage&8: &7/ipinfo <player/address>'
   dkbans.command.ip.info.player: '${dkbans.prefix} &7Address information of player &e{player.displayName}&8: @for("address" in {addresses},${dkbans.command.ip.info.player.loop},"\n","\n")'
-  dkbans.command.ip.info.player.loop: '![" &8- &e{address.address} &8(&7Country&8: &e{address.county} &7Region&8: &e{region} &7Blocked&8: &e@if({entry.blocked},"&cYes","&aNo")"]("run:///ipinfo {address.address}")'
+  dkbans.command.ip.info.player.loop: '![" &8- &e{address.address} &8(&7Country&8: &e{address.county} &7Region&8: &e{address.region} &7Blocked&8: &e@if({entry.blocked},"&cYes","&aNo")"]("run:///ipinfo {address.address}")'
 
   dkbans.command.ip.info.blocked: '${dkbans.prefix} &6Ip info of address &e{block.address}
   &8» &7Type&8: &e{block.type}

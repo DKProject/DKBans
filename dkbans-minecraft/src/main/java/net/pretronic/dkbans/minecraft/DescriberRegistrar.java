@@ -26,6 +26,7 @@ import net.pretronic.dkbans.common.player.ipblacklist.DefaultIpAddressBlock;
 import net.pretronic.dkbans.common.player.note.DefaultPlayerNote;
 import net.pretronic.dkbans.common.player.report.DefaultPlayerReport;
 import net.pretronic.dkbans.common.player.report.DefaultPlayerReportEntry;
+import net.pretronic.dkbans.common.player.session.DefaultIpAddressInfo;
 import net.pretronic.dkbans.common.player.session.DefaultPlayerSession;
 import net.pretronic.dkbans.common.template.DefaultTemplate;
 import net.pretronic.dkbans.common.template.DefaultTemplateCategory;
@@ -59,6 +60,9 @@ public class DescriberRegistrar {
         ColoredString.makeDescriberColored(punishmentDescriber);
 
         VariableDescriberRegistry.registerDescriber(DefaultIpAddressBlock.class);
+
+        VariableDescriber<DefaultIpAddressInfo> addressDescriber = VariableDescriberRegistry.registerDescriber(DefaultIpAddressInfo.class);
+        addressDescriber.registerFunction("blocked", DefaultIpAddressInfo::isBlocked);
 
         VariableDescriber<DefaultChatLogEntry> chatEntryDescriber = VariableDescriberRegistry.registerDescriber(DefaultChatLogEntry.class);
         chatEntryDescriber.registerFunction("timeFormatted", entry -> DKBansConfig.FORMAT_DATE.format(entry.getTime()));
