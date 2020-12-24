@@ -26,6 +26,7 @@ import net.pretronic.dkbans.api.filter.FilterAffiliationArea;
 import net.pretronic.dkbans.api.filter.FilterManager;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryEntry;
+import net.pretronic.dkbans.api.player.history.PlayerHistoryEntrySnapshot;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryEntrySnapshotBuilder;
 import net.pretronic.dkbans.api.player.history.PunishmentType;
 import net.pretronic.dkbans.api.player.ipaddress.IpAddressBlock;
@@ -87,19 +88,38 @@ public class PlayerListener {
         }
         IpAddressBlock ipAddressBlock = DKBans.getInstance().getIpAddressManager().getIpAddressBlock(event.getOnlinePlayer().getAddress().getAddress().getHostAddress());
         if(ipAddressBlock != null) {
-            long minOnlineTime = DKBansConfig.IP_ADDRESS_BLOCK_ALT_MIN_PLAYTIME_TIME;
-            if(ipAddressBlock.getType() == IpAddressBlockType.BLOCK
-                    || (ipAddressBlock.getType() == IpAddressBlockType.ALT && event.getPlayer().getFirstPlayed()+minOnlineTime < System.currentTimeMillis())) {
-                PlayerHistoryEntrySnapshotBuilder builder = player.punish().stuff(DKBansExecutor.IP_ADDRESS_BLOCK);
-                if(ipAddressBlock.getForTemplate() != null) {
-                    builder.template(ipAddressBlock.getForTemplate());
-                } else {
-                    builder.reason(ipAddressBlock.getForReason())
-                            .timeout(System.currentTimeMillis()+ipAddressBlock.getForDuration());
+            if(ipAddressBlock.getType() == IpAddressBlockType.BLOCK){
+                event.setCancelReason(Messages.PUNISH_ADDRESS_BLOCK,VariableSet.create()
+                        .addDescribed("ipAddressBlock",ipAddressBlock));
+                event.setCancelled(true);
+            }else if(ipAddressBlock.getType() == IpAddressBlockType.BAN){
+                banPlayer(event,player,ipAddressBlock);
+                event.setCancelled(true);
+            }else if(ipAddressBlock.getType() == IpAddressBlockType.ALT_ACCOUNT){
+                long minOnlineTime = DKBansConfig.IP_ADDRESS_BLOCK_ALT_MIN_PLAYTIME_TIME;
+                if(event.getPlayer().getFirstPlayed()+minOnlineTime < System.currentTimeMillis()){
+                    banPlayer(event,player,ipAddressBlock);
+                    event.setCancelled(true);
                 }
-                builder.execute();
             }
         }
+    }
+
+    private void banPlayer(MinecraftPlayerLoginEvent event,DKBansPlayer player,IpAddressBlock ipAddressBlock){
+        PlayerHistoryEntrySnapshotBuilder builder = player.punish().stuff(DKBansExecutor.IP_ADDRESS_BLOCK);
+        if(ipAddressBlock.getForTemplate() != null) {
+            builder.template(ipAddressBlock.getForTemplate());
+        } else {
+            builder.reason(ipAddressBlock.getForReason())
+                    .timeout(System.currentTimeMillis()+ipAddressBlock.getForDuration());
+        }
+        PlayerHistoryEntrySnapshot result = builder.execute();
+        MessageComponent<?> message = result.isPermanently()
+                ? Messages.PUNISH_BAN_MESSAGE_PERMANENTLY : Messages.PUNISH_BAN_MESSAGE_TEMPORARY;
+        event.setCancelReason(message,VariableSet.create()
+                .addDescribed("ban",result)
+                .addDescribed("punish",result)
+                .addDescribed("player",event.getPlayer()));
     }
 
     @Listener(priority = EventPriority.LOWEST)

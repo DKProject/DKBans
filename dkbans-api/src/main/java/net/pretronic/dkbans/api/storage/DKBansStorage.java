@@ -176,9 +176,7 @@ public interface DKBansStorage {
 
     IpAddressBlock getIpAddressBlock(String ipAddress);
 
-    IpAddressBlock blockIpAddress(String ipAddress, IpAddressBlockType type, DKBansExecutor staff, String reason, long timeout, String forReason, long forDuration);
-
-    IpAddressBlock blockIpAddress(String ipAddress, IpAddressBlockType type, DKBansExecutor staff, String reason, long timeout, PunishmentTemplate forTemplate);
+    int blockIpAddress(IpAddressBlock block);
 
     void unblockIpAddress(IpAddressBlock addressBlock);
 

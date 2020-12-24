@@ -44,7 +44,6 @@ public class Messages {
     public static MessageComponent<?> ERROR_INVALID_TEMPLATE_SPECIFIER_FORMAT = Text.ofMessageKey("dkbans.error.invalid.templateSpecifierFormat");
     public static MessageComponent<?> ERROR_TEMPLATE_GROUP_NOT_EXISTS = Text.ofMessageKey("dkbans.error.templateGroup.notExists");
     public static MessageComponent<?> ERROR_TEMPLATE_NOT_EXISTS = Text.ofMessageKey("dkbans.error.template.notExists");
-    public static MessageComponent<?> ERROR_IP_BLOCK_NOT_EXISTS = Text.ofMessageKey("dkbans.error.ipBlock.notExists");
     public static MessageComponent<?> ERROR_INVALID_BROADCAST_ORDER = Text.ofMessageKey("dkbans.error.invalidBroadcastOrder");
     public static MessageComponent<?> ERROR_INVALID_SCOPE = Text.ofMessageKey("dkbans.error.invalidScope");
 
@@ -125,6 +124,8 @@ public class Messages {
 
     public static MessageComponent<?> PUNISH_NOT_FOUND = Text.ofMessageKey("dkbans.punish.notFound");
     public static MessageComponent<?> PUNISH_EMPTY = Text.ofMessageKey("dkbans.punish.empty");
+
+    public static MessageComponent<?> PUNISH_ADDRESS_BLOCK = Text.ofMessageKey("dkbans.punish.addressBlock");
 
     public static MessageComponent<?> COMMAND_HISTORY_HELP = Text.ofMessageKey("dkbans.command.history.help");
     public static MessageComponent<?> COMMAND_HISTORY_LIST = Text.ofMessageKey("dkbans.command.history.list");
@@ -234,11 +235,11 @@ public class Messages {
     public static MessageComponent<?> COMMAND_IP_INFO_PLAYER = Text.ofMessageKey("dkbans.command.ip.info.player");
     public static MessageComponent<?> COMMAND_IP_INFO_NOT_BLOCKED = Text.ofMessageKey("dkbans.command.ip.info.notBlocked");
 
-    public static MessageComponent<?> COMMAND_IP_BLOCK_USAGE = Text.ofMessageKey("dkbans.command.ip.block.usage");
+    public static MessageComponent<?> COMMAND_IP_BLOCK_HELP = Text.ofMessageKey("dkbans.command.ip.block.help");
     public static MessageComponent<?> COMMAND_IP_BlOCK_INVALID_TYPE = Text.ofMessageKey("dkbans.command.ip.block.invalid.type");
     public static MessageComponent<?> COMMAND_IP_BLOCK = Text.ofMessageKey("dkbans.command.ip.block");
 
-    public static MessageComponent<?> COMMAND_IP_UNBLOCK_USAGE = Text.ofMessageKey("dkbans.command.ip.unblock.usage");
+    public static MessageComponent<?> COMMAND_IP_UNBLOCK_HELP = Text.ofMessageKey("dkbans.command.ip.unblock.help");
     public static MessageComponent<?> COMMAND_IP_UNBLOCK = Text.ofMessageKey("dkbans.command.ip.unblock");
 
     public static MessageComponent<?> COMMAND_CHAT_CLEAR_HELP = Text.ofMessageKey("dkbans.command.cheatClear.help");

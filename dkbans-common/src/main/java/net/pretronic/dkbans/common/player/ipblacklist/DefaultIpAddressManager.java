@@ -94,19 +94,22 @@ public class DefaultIpAddressManager implements IpAddressManager {
     }
 
     @Override
-    public IpAddressBlock blockIpAddress(String ipAddress, IpAddressBlockType type, DKBansExecutor staff, String reason, long timeout, String forReason, long forDuration) {
-        IpAddressBlock addressBlock = DKBans.getInstance().getStorage().blockIpAddress(ipAddress, type, staff, reason, timeout, forReason, forDuration);
-        this.ipAddressBlockCache.insert(addressBlock);
-        return addressBlock;
+    public IpAddressBlock blockIpAddress(IpAddressBlockType type, String ipAddress, String reason, long timeout, DKBansExecutor staff, String forReason, long forDuration) {
+        DefaultIpAddressBlock result = new DefaultIpAddressBlock(-1,ipAddress,type,staff.getUniqueId(),reason,timeout,forReason,forDuration,-1);
+        int id = DKBans.getInstance().getStorage().blockIpAddress(result);
+        result.setId(id);
+        this.ipAddressBlockCache.insert(result);
+        return result;
     }
 
     @Override
-    public IpAddressBlock blockIpAddress(String ipAddress, IpAddressBlockType type, DKBansExecutor staff, String reason, long timeout, PunishmentTemplate forTemplate) {
-        IpAddressBlock addressBlock = DKBans.getInstance().getStorage().blockIpAddress(ipAddress, type, staff, reason, timeout, forTemplate);
-        this.ipAddressBlockCache.insert(addressBlock);
-        return addressBlock;
+    public IpAddressBlock blockIpAddress(IpAddressBlockType type, String ipAddress, String reason, long timeout, DKBansExecutor staff, PunishmentTemplate forTemplate) {
+        DefaultIpAddressBlock result = new DefaultIpAddressBlock(-1,ipAddress,type,staff.getUniqueId(),reason,timeout,null,0,forTemplate.getId());
+        int id = DKBans.getInstance().getStorage().blockIpAddress(result);
+        result.setId(id);
+        this.ipAddressBlockCache.insert(result);
+        return result;
     }
-
 
     @Override
     public void unblockIpAddress(IpAddressBlock addressBlock) {

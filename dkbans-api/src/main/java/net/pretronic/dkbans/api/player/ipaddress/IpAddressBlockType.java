@@ -23,7 +23,8 @@ package net.pretronic.dkbans.api.player.ipaddress;
 public enum IpAddressBlockType {
 
     BLOCK,
-    ALT;
+    BAN,
+    ALT_ACCOUNT;
 
     public static IpAddressBlockType parse(String value) {
         for (IpAddressBlockType blockType : values()) {

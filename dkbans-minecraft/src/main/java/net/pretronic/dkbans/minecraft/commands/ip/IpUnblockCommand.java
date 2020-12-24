@@ -29,9 +29,6 @@ import net.pretronic.libraries.command.sender.CommandSender;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
 
-/*
-/ipunblock <address>
- */
 public class IpUnblockCommand extends BasicCommand {
 
     public IpUnblockCommand(ObjectOwner owner, CommandConfiguration configuration) {
@@ -41,16 +38,19 @@ public class IpUnblockCommand extends BasicCommand {
     @Override
     public void execute(CommandSender sender, String[] args) {
         if(args.length != 1) {
-            sender.sendMessage(Messages.COMMAND_IP_UNBLOCK_USAGE);
+            sender.sendMessage(Messages.COMMAND_IP_UNBLOCK_HELP);
             return;
         }
         String address = args[0];
         IpAddressBlock addressBlock = DKBans.getInstance().getIpAddressManager().getIpAddressBlock(address);
         if(addressBlock == null) {
-            sender.sendMessage(Messages.ERROR_IP_BLOCK_NOT_EXISTS, VariableSet.create().add("prefix", Messages.PREFIX).add("address", address));
+            sender.sendMessage(Messages.COMMAND_IP_INFO_NOT_BLOCKED, VariableSet.create()
+                    .add("prefix", Messages.PREFIX)
+                    .add("address", address));
             return;
         }
         DKBans.getInstance().getIpAddressManager().unblockIpAddress(addressBlock);
-        sender.sendMessage(Messages.COMMAND_IP_UNBLOCK, VariableSet.create().add("block", addressBlock));
+        sender.sendMessage(Messages.COMMAND_IP_UNBLOCK, VariableSet.create()
+                .addDescribed("block", addressBlock));
     }
 }

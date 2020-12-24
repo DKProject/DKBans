@@ -25,6 +25,8 @@ import net.pretronic.dkbans.api.template.punishment.PunishmentTemplate;
 import net.pretronic.libraries.utility.annonations.Nullable;
 
 import java.net.InetAddress;
+import java.time.Duration;
+import java.util.concurrent.TimeUnit;
 
 public interface IpAddressManager {
 
@@ -37,9 +39,33 @@ public interface IpAddressManager {
 
     boolean isIpAddressBlocked(String ipAddress);
 
-    IpAddressBlock blockIpAddress(String ipAddress, IpAddressBlockType type, DKBansExecutor staff, String reason, long timeout, String forReason, long forDuration);
+    default IpAddressBlock blockIpAddress(String ipAddress, String reason, long timeout, DKBansExecutor staff){
+        return blockIpAddress(IpAddressBlockType.BLOCK,ipAddress,reason,timeout,staff, (String) null);
+    }
 
-    IpAddressBlock blockIpAddress(String ipAddress, IpAddressBlockType type, DKBansExecutor staff, String reason, long timeout, PunishmentTemplate forTemplate);
+    default IpAddressBlock blockIpAddress(String ipAddress, String reason, Duration duration, DKBansExecutor staff){
+        return blockIpAddress(ipAddress,reason,System.currentTimeMillis()+ TimeUnit.MILLISECONDS.toMillis(duration.getSeconds()),staff);
+    }
+
+    default IpAddressBlock blockIpAddress(IpAddressBlockType type, String ipAddress, String reason, long timeout, DKBansExecutor staff, String forReason){
+        return blockIpAddress(type,ipAddress,reason,timeout,staff,forReason,-1);
+    }
+
+    default IpAddressBlock blockIpAddress(IpAddressBlockType type, String ipAddress, String reason, Duration duration, DKBansExecutor staff, String forReason){
+        return blockIpAddress(type,ipAddress,reason,System.currentTimeMillis()+ TimeUnit.MILLISECONDS.toMillis(duration.getSeconds()),staff,forReason,-1);
+    }
+
+    IpAddressBlock blockIpAddress(IpAddressBlockType type, String ipAddress, String reason, long timeout, DKBansExecutor staff, String forReason, long forDuration);
+    default IpAddressBlock blockIpAddress(IpAddressBlockType type, String ipAddress, String reason, Duration duration, DKBansExecutor staff, String forReason, Duration forDuration){
+        return blockIpAddress(type,ipAddress,reason,System.currentTimeMillis()+ TimeUnit.MILLISECONDS.toMillis(duration.getSeconds())
+                ,staff,forReason,TimeUnit.MILLISECONDS.toMillis(forDuration.getSeconds()));
+    }
+
+    default IpAddressBlock blockIpAddress(IpAddressBlockType type,String ipAddress, String reason, Duration duration, DKBansExecutor staff, PunishmentTemplate forTemplate){
+        return blockIpAddress(type,ipAddress,reason,System.currentTimeMillis()+ TimeUnit.MILLISECONDS.toMillis(duration.getSeconds()),staff,forTemplate);
+    }
+
+    IpAddressBlock blockIpAddress(IpAddressBlockType type,String ipAddress, String reason, long timeout, DKBansExecutor staff, PunishmentTemplate forTemplate);
 
 
     void unblockIpAddress(IpAddressBlock addressBlock);

@@ -724,13 +724,17 @@ public class DefaultDKBansStorage implements DKBansStorage {
     }
 
     @Override
-    public IpAddressBlock blockIpAddress(String ipAddress, IpAddressBlockType type, DKBansExecutor staff, String reason, long timeout, String forReason, long forDuration) {
-        return null;
-    }
-
-    @Override
-    public IpAddressBlock blockIpAddress(String ipAddress, IpAddressBlockType type, DKBansExecutor staff, String reason, long timeout, PunishmentTemplate forTemplate) {
-        return null;
+    public int blockIpAddress(IpAddressBlock block) {
+        return this.ipAddressBlacklist.insert()
+                .set("Address",block.getAddress())
+                .set("Type",block.getType())
+                .set("StaffId",block.getStaff().getUniqueId())
+                .set("Reason",block.getReason())
+                .set("Timeout",block.getTimeout())
+                .set("ForReason",block.getForReason())
+                .set("ForDuration",block.getForDuration())
+                .set("ForTemplateId",block.getForTemplate() != null ? block.getForTemplate().getId() : null)
+                .executeAndGetGeneratedKeyAsInt("Id");
     }
 
     @Override
@@ -1044,7 +1048,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 .field("Id", DataType.INTEGER, FieldOption.PRIMARY_KEY, FieldOption.AUTO_INCREMENT)
                 .field("Address", DataType.STRING, FieldOption.NOT_NULL,FieldOption.INDEX)
                 .field("Type", DataType.STRING, FieldOption.NOT_NULL)
-                .field("StaffId", DataType.UUID, FieldOption.NOT_NULL)
+                .field("StaffId", DataType.UUID)
                 .field("Reason", DataType.STRING, FieldOption.NOT_NULL)
                 .field("Timeout", DataType.LONG, FieldOption.NOT_NULL)
                 .field("ForReason", DataType.STRING)

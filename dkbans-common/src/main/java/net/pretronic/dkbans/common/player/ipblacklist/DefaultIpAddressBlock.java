@@ -30,7 +30,7 @@ import java.util.UUID;
 
 public class DefaultIpAddressBlock implements IpAddressBlock {
 
-    private final int id;
+    private int id;
     private final String address;
     private final IpAddressBlockType type;
     private final UUID staffId;
@@ -95,5 +95,9 @@ public class DefaultIpAddressBlock implements IpAddressBlock {
     @Override
     public PunishmentTemplate getForTemplate() {
         return (PunishmentTemplate) DKBans.getInstance().getTemplateManager().getTemplate(this.forTemplateId);
+    }
+
+    public void setId(int id ){
+        this.id = id;
     }
 }

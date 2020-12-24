@@ -32,7 +32,7 @@ import net.pretronic.dkbans.minecraft.commands.dkbans.DKBansCommand;
 import net.pretronic.dkbans.minecraft.commands.history.HistoryCommand;
 import net.pretronic.dkbans.minecraft.commands.history.MyHistoryPointsCommand;
 import net.pretronic.dkbans.minecraft.commands.history.ResetHistoryCommand;
-import net.pretronic.dkbans.minecraft.commands.ip.IpBlockCommandX;
+import net.pretronic.dkbans.minecraft.commands.ip.IpBlockCommand;
 import net.pretronic.dkbans.minecraft.commands.ip.IpInfoCommand;
 import net.pretronic.dkbans.minecraft.commands.punish.*;
 import net.pretronic.dkbans.minecraft.commands.report.ReportCommand;
@@ -122,7 +122,7 @@ public class DKBansPlugin extends MinecraftPlugin {
         getRuntime().getLocal().getCommandManager().registerCommand(new ChatClearCommand(this, CommandConfig.COMMAND_CHAT_CLEAR));
 
         getRuntime().getLocal().getCommandManager().registerCommand(new IpInfoCommand(this, CommandConfig.COMMAND_IP_INFO));
-        getRuntime().getLocal().getCommandManager().registerCommand(new IpBlockCommandX(this, CommandConfig.COMMAND_IP_BLOCK));
+        getRuntime().getLocal().getCommandManager().registerCommand(new IpBlockCommand(this, CommandConfig.COMMAND_IP_BLOCK));
 
         getRuntime().getLocal().getCommandManager().registerCommand(new BroadcastCommand(this, CommandConfig.COMMAND_BROADCAST));
         getRuntime().getLocal().getCommandManager().registerCommand(new BroadcastGroupCommand(this, CommandConfig.COMMAND_BROADCAST_GROUP));
