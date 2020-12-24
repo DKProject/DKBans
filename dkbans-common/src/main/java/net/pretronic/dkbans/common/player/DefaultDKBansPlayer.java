@@ -95,7 +95,8 @@ public  class DefaultDKBansPlayer implements DKBansPlayer {
                 .get("IpAddress")
                 .getAs(Aggregation.MIN,"Country","Country")
                 .getAs(Aggregation.MIN,"Region","Region")
-                .where("PlayerId",this.uniqueId).groupBy("IpAddress").execute();
+                .where("PlayerId",this.uniqueId)
+                .groupBy("IpAddress").execute();
 
         Collection<IpAddressInfo> addresses = new ArrayList<>();
         for (QueryResultEntry entry : result) {

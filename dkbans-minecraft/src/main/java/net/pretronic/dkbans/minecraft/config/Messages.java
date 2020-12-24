@@ -228,7 +228,7 @@ public class Messages {
     public static MessageComponent<?> COMMAND_JOINME_LINE_10 = Text.ofMessageKey("dkbans.command.joinme.line10");
 
 
-    public static MessageComponent<?> COMMAND_IP_INFO_HELP = Text.ofMessageKey("dkbans.command.ip.info.usage");
+    public static MessageComponent<?> COMMAND_IP_INFO_HELP = Text.ofMessageKey("dkbans.command.ip.info.help");
     public static MessageComponent<?> COMMAND_IP_INFO_ADDRESS = Text.ofMessageKey("dkbans.command.ip.info.address");
     public static MessageComponent<?> COMMAND_IP_INFO_PLAYER = Text.ofMessageKey("dkbans.command.ip.info.player");
 

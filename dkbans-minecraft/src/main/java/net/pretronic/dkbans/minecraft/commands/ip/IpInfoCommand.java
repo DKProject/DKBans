@@ -52,8 +52,8 @@ public class IpInfoCommand extends BasicCommand {
             if(player == null) return;
             DKBansPlayer dkbansPlayer = player.getAs(DKBansPlayer.class);
             sender.sendMessage(Messages.COMMAND_IP_INFO_PLAYER, VariableSet.create()
-                    .add("addresses", dkbansPlayer.getIpAddresses())
-                    .add("player", player));
+                    .addDescribed("addresses", dkbansPlayer.getIpAddresses())
+                    .addDescribed("player", player));
         }
     }
 }
