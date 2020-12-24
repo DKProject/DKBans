@@ -10,6 +10,7 @@
 
 package net.pretronic.dkbans.minecraft;
 
+import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.player.history.PunishmentType;
 import net.pretronic.dkbans.common.broadcast.DefaultBroadcast;
 import net.pretronic.dkbans.common.broadcast.DefaultBroadcastAssignment;
@@ -60,6 +61,9 @@ public class DescriberRegistrar {
         ColoredString.makeDescriberColored(punishmentDescriber);
 
         VariableDescriberRegistry.registerDescriber(DefaultIpAddressBlock.class);
+
+        VariableDescriber<DKBansExecutor.SpecialExecutor> executorDescriber = VariableDescriberRegistry.registerDescriber(DKBansExecutor.SpecialExecutor.class);
+        executorDescriber.registerFunction("displayName",  executor -> new ColoredString("&4"+executor.getName()));
 
         VariableDescriber<DefaultIpAddressInfo> addressDescriber = VariableDescriberRegistry.registerDescriber(DefaultIpAddressInfo.class);
         addressDescriber.registerFunction("blocked", DefaultIpAddressInfo::isBlocked);
