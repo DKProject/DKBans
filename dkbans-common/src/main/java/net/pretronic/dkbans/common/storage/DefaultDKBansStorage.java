@@ -669,7 +669,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 .set("PlayerId", player.getUniqueId())
                 .set("State", state.toString())
                 .executeAndGetGeneratedKeyAsInt("Id");
-        return new DefaultPlayerReport(id, player, state);
+        return new DefaultPlayerReport(id,state, player);
     }
 
     @Override

@@ -54,7 +54,7 @@ public class IpInfoCommand extends BasicCommand {
             if(arguments.length > 1 && arguments[1].equalsIgnoreCase("details")){
                 IpAddressBlock block = DKBans.getInstance().getIpAddressManager().getIpAddressBlock(address);
                 if(block == null){
-                    sender.sendMessage(Messages.ERROR_INVALID_IP_ADDRESS, VariableSet.create()
+                    sender.sendMessage(Messages.COMMAND_IP_INFO_NOT_BLOCKED, VariableSet.create()
                             .add("address",address)
                             .addDescribed("prefix", Messages.PREFIX));
                     return;

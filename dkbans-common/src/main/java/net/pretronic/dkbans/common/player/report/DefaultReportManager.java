@@ -20,6 +20,8 @@
 
 package net.pretronic.dkbans.common.player.report;
 
+import net.pretronic.databasequery.api.query.result.QueryResult;
+import net.pretronic.databasequery.api.query.result.QueryResultEntry;
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.event.DKBansPlayerReportCreateEvent;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
@@ -28,6 +30,7 @@ import net.pretronic.dkbans.api.player.report.PlayerReportEntry;
 import net.pretronic.dkbans.api.player.report.ReportManager;
 import net.pretronic.dkbans.api.player.report.ReportState;
 import net.pretronic.dkbans.api.template.report.ReportTemplate;
+import net.pretronic.dkbans.common.DefaultDKBans;
 import net.pretronic.dkbans.common.event.DefaultDKBansPlayerReportCreateEvent;
 import net.pretronic.libraries.utility.Iterators;
 import net.pretronic.libraries.utility.Validate;
@@ -38,7 +41,7 @@ import java.util.UUID;
 
 public class DefaultReportManager implements ReportManager {
 
-    private final List<PlayerReport> openReports;
+    private List<PlayerReport> openReports;
 
     public DefaultReportManager() {
         this.openReports = new ArrayList<>();
@@ -51,6 +54,16 @@ public class DefaultReportManager implements ReportManager {
 
     @Override
     public List<PlayerReport> getOpenReports() {
+        if(this.openReports == null){
+            QueryResult result = DefaultDKBans.getInstance().getStorage().getReports()
+                    .find().where("State",ReportState.OPEN).execute();
+            this.openReports = new ArrayList<>();
+            for (QueryResultEntry entry : result) {
+                this.openReports.add(new DefaultPlayerReport(entry.getInt("Id")
+                        ,ReportState.valueOf(entry.getString("State"))
+                        ,entry.getUniqueId("PlayerId"),entry.getUniqueId("WatcherId")));
+            }
+        }
         return this.openReports;
     }
 

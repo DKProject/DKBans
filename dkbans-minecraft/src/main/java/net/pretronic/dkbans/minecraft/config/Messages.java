@@ -232,6 +232,7 @@ public class Messages {
     public static MessageComponent<?> COMMAND_IP_INFO_ADDRESS = Text.ofMessageKey("dkbans.command.ip.info.address");
     public static MessageComponent<?> COMMAND_IP_INFO_ADDRESS_DETAILS = Text.ofMessageKey("dkbans.command.ip.info.address.details");
     public static MessageComponent<?> COMMAND_IP_INFO_PLAYER = Text.ofMessageKey("dkbans.command.ip.info.player");
+    public static MessageComponent<?> COMMAND_IP_INFO_NOT_BLOCKED = Text.ofMessageKey("dkbans.command.ip.info.notBlocked");
 
     public static MessageComponent<?> COMMAND_IP_BLOCK_USAGE = Text.ofMessageKey("dkbans.command.ip.block.usage");
     public static MessageComponent<?> COMMAND_IP_BlOCK_INVALID_TYPE = Text.ofMessageKey("dkbans.command.ip.block.invalid.type");

@@ -36,25 +36,33 @@ import net.pretronic.libraries.utility.annonations.Internal;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class DefaultPlayerReport implements PlayerReport {
 
     private final int id;
-    private final DKBansPlayer player;
+    private final UUID playerId;
+    private final UUID watcherId;
+    private DKBansPlayer player;
     private ReportState state;
-    private final List<PlayerReportEntry> entries;
+    private List<PlayerReportEntry> entries;
     private DKBansPlayer watcher;
 
-    public DefaultPlayerReport(int id, DKBansPlayer player, ReportState state, List<PlayerReportEntry> entries, DKBansPlayer watcher) {
+    public DefaultPlayerReport(int id, ReportState state, UUID playerId, UUID watcherId) {
         this.id = id;
-        this.player = player;
         this.state = state;
-        this.entries = entries;
+        this.playerId = playerId;
+        this.watcherId = watcherId;
+    }
+
+    public DefaultPlayerReport(int id, ReportState state, DKBansPlayer player, DKBansPlayer watcher) {
+        this(id,state,player.getUniqueId(),watcher != null ? watcher.getUniqueId() : null);
+        this.player = player;
         this.watcher = watcher;
     }
 
-    public DefaultPlayerReport(int id, DKBansPlayer player, ReportState state) {
-        this(id, player, state, new ArrayList<>(), null);
+    public DefaultPlayerReport(int id, ReportState state, DKBansPlayer player) {
+        this(id,state,player,null);
     }
 
     @Override
@@ -64,6 +72,9 @@ public class DefaultPlayerReport implements PlayerReport {
 
     @Override
     public DKBansPlayer getPlayer() {
+        if(player == null){
+            this.player = DKBans.getInstance().getPlayerManager().getPlayer(this.playerId);
+        }
         return this.player;
     }
 
@@ -80,6 +91,9 @@ public class DefaultPlayerReport implements PlayerReport {
 
     @Override
     public List<PlayerReportEntry> getEntries() {
+        if(this.entries == null){
+            this.entries = new ArrayList<>();
+        }
         return this.entries;
     }
 
@@ -90,11 +104,14 @@ public class DefaultPlayerReport implements PlayerReport {
 
     @Override
     public boolean isWatched() {
-        return this.watcher != null;
+        return this.watcherId != null;
     }
 
     @Override
     public DKBansPlayer getWatcher() {
+        if(watcher == null){
+            this.watcher = DKBans.getInstance().getPlayerManager().getPlayer(this.watcherId);
+        }
         return this.watcher;
     }
 
