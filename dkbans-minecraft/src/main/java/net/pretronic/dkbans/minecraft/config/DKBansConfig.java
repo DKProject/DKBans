@@ -49,7 +49,7 @@ import java.util.concurrent.TimeUnit;
 public class DKBansConfig {
 
     @DocumentKey("format.date.pattern")
-    public static String FORMAT_DATE_PATTERN = "dd.MM.yyyy hh:mm";
+    public static String FORMAT_DATE_PATTERN = "dd-MM-yyyy HH:mm";
 
     public static String FORMAT_DATE_ENDLESSLY = "-";
 
@@ -92,6 +92,7 @@ public class DKBansConfig {
     public static long IP_ADDRESS_BLOCK_ALT_MIN_PLAYTIME_TIME = 0;
 
     public static transient SimpleDateFormat FORMAT_DATE;
+
 
     public static void load() {
         FORMAT_DATE = new SimpleDateFormat(FORMAT_DATE_PATTERN);

@@ -374,6 +374,9 @@ messages:
   dkbans.command.ip.unblock.usage: '${dkbans.prefix} &cUsage&8: &7/ipunblock <address>'
   dkbans.command.ip.unblock: '${dkbans.prefix} &7You have unblocked the address &e{block.address}'
 
+  dkbans.command.cheatClear.help: '${dkbans.prefix.network} &cUsage&8: &7/cheatclear [local/global]'
+  dkbans.command.cheatClear.my: '${dkbans.prefix.network} &7Your chat has been cleared'
+  dkbans.command.cheatClear.all: '${dkbans.prefix.network} &7The chat has been cleared'
 
   dkbans.command.broadcast.notFound: '${dkbans.prefix} &cNo broadcast found for &e{broadcast}'
   dkbans.command.broadcast.group.notFound: '${dkbans.prefix} &cNo broadcast group found for &e{group}'

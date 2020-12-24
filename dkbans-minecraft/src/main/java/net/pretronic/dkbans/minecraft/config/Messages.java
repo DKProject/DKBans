@@ -195,8 +195,6 @@ public class Messages {
 
     public static MessageComponent<?> COMMAND_REPORT_NOTFIY = Text.ofMessageKey("dkbans.command.report.notify");
 
-
-
     public static MessageComponent<?> COMMAND_PLAYER_NOTES_HELP = Text.ofMessageKey("dkbans.command.playerNotes.help");
     public static MessageComponent<?> COMMAND_PLAYER_NOTES_LIST = Text.ofMessageKey("dkbans.command.playerNotes.list");
     public static MessageComponent<?> COMMAND_PLAYER_NOTES_ADDED = Text.ofMessageKey("dkbans.command.playerNotes.added");
@@ -240,6 +238,10 @@ public class Messages {
 
     public static MessageComponent<?> COMMAND_IP_UNBLOCK_USAGE = Text.ofMessageKey("dkbans.command.ip.unblock.usage");
     public static MessageComponent<?> COMMAND_IP_UNBLOCK = Text.ofMessageKey("dkbans.command.ip.unblock");
+
+    public static MessageComponent<?> COMMAND_CHAT_CLEAR_HELP = Text.ofMessageKey("dkbans.command.cheatClear.help");
+    public static MessageComponent<?> COMMAND_CHAT_CLEAR_MY = Text.ofMessageKey("dkbans.command.cheatClear.my");
+    public static MessageComponent<?> COMMAND_CHAT_CLEAR_ALL = Text.ofMessageKey("dkbans.command.cheatClear.all");
 
 
     public static MessageComponent<?> COMMAND_BROADCAST_NOT_FOUND = Text.ofMessageKey("dkbans.command.broadcast.notFound");

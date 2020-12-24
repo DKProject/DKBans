@@ -28,6 +28,8 @@ import java.util.UUID;
 
 public interface ReportManager {
 
+    int getReportCount();
+
     List<PlayerReport> getOpenReports();
 
     PlayerReport getReport(DKBansPlayer player);

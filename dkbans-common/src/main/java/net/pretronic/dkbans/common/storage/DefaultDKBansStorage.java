@@ -78,7 +78,6 @@ public class DefaultDKBansStorage implements DKBansStorage {
 
     private final DatabaseCollection playerSessions;
     private final DatabaseCollection playerChatLog;
-    private final DatabaseCollection playerSettings;
     private final DatabaseCollection playerNotes;
     private final DatabaseCollection historyType;
     private final DatabaseCollection history;
@@ -103,7 +102,6 @@ public class DefaultDKBansStorage implements DKBansStorage {
         this.dkBans = dkBans;
         this.database = database;
         this.playerSessions = createPlayerSessionsCollection();
-        this.playerSettings = createPlayerSettingsCollection();
         this.playerNotes = createPlayerNotesCollection();
 
         this.historyType = createHistoryTypeCollection();
@@ -865,10 +863,6 @@ public class DefaultDKBansStorage implements DKBansStorage {
         return playerChatLog;
     }
 
-    public DatabaseCollection getPlayerSettings() {
-        return playerSettings;
-    }
-
     public DatabaseCollection getPlayerNotes() {
         return playerNotes;
     }
@@ -932,7 +926,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
     private DatabaseCollection createPlayerSessionsCollection() {
         return database.createCollection("dkbans_player_sessions")
                 .field("Id", DataType.INTEGER, FieldOption.PRIMARY_KEY, FieldOption.AUTO_INCREMENT)
-                .field("PlayerId", DataType.UUID, FieldOption.NOT_NULL)
+                .field("PlayerId", DataType.UUID, FieldOption.NOT_NULL,FieldOption.INDEX)
                 .field("PlayerSessionName", DataType.STRING, FieldOption.NOT_NULL)
                 .field("IpAddress", DataType.STRING, FieldOption.NOT_NULL)
                 .field("Country", DataType.STRING, FieldOption.NOT_NULL)
@@ -951,28 +945,19 @@ public class DefaultDKBansStorage implements DKBansStorage {
     private DatabaseCollection createPlayerChatLogCollection() {
         return database.createCollection("dkbans_player_chatlog")
                 .field("Id", DataType.INTEGER, FieldOption.PRIMARY_KEY, FieldOption.AUTO_INCREMENT)
-                .field("PlayerId", DataType.UUID, FieldOption.NOT_NULL)
+                .field("PlayerId", DataType.UUID, FieldOption.NOT_NULL,FieldOption.INDEX)
                 .field("Message", DataType.STRING, FieldOption.NOT_NULL)
                 .field("Time", DataType.LONG, FieldOption.NOT_NULL)
-                .field("ServerName", DataType.STRING, FieldOption.NOT_NULL)
-                .field("ServerId", DataType.UUID, FieldOption.NOT_NULL)
+                .field("ServerName", DataType.STRING, FieldOption.NOT_NULL,FieldOption.INDEX)
+                .field("ServerId", DataType.UUID, FieldOption.NOT_NULL,FieldOption.INDEX)
                 .field("FilterAffiliationArea", DataType.STRING)
-                .create();
-    }
-
-    private DatabaseCollection createPlayerSettingsCollection() {
-        return database.createCollection("dkbans_player_settings")
-                .field("Id", DataType.INTEGER, FieldOption.PRIMARY_KEY, FieldOption.AUTO_INCREMENT)
-                .field("PlayerId", DataType.UUID, FieldOption.NOT_NULL)
-                .field("Key", DataType.STRING, FieldOption.NOT_NULL)
-                .field("Value", DataType.STRING, FieldOption.NOT_NULL)
                 .create();
     }
 
     private DatabaseCollection createPlayerNotesCollection() {
         return database.createCollection("dkbans_player_notes")
                 .field("Id", DataType.INTEGER, FieldOption.PRIMARY_KEY, FieldOption.AUTO_INCREMENT)
-                .field("PlayerId", DataType.UUID, FieldOption.NOT_NULL)
+                .field("PlayerId", DataType.UUID, FieldOption.NOT_NULL,FieldOption.INDEX)
                 .field("CreatorId", DataType.UUID, FieldOption.NOT_NULL)
                 .field("Time", DataType.LONG, FieldOption.NOT_NULL)
                 .field("Message", DataType.STRING, FieldOption.NOT_NULL)
@@ -990,7 +975,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
     private DatabaseCollection createHistoryCollection() {
         return database.createCollection("dkbans_history")
                 .field("Id", DataType.INTEGER, FieldOption.PRIMARY_KEY, FieldOption.AUTO_INCREMENT)
-                .field("PlayerId", DataType.UUID, FieldOption.NOT_NULL)
+                .field("PlayerId", DataType.UUID, FieldOption.NOT_NULL,FieldOption.INDEX)
                 .field("SessionId", DataType.INTEGER, ForeignKey.of(this.playerSessions, "Id"))
                 .field("Created", DataType.LONG, FieldOption.NOT_NULL)
                 .create();
@@ -999,7 +984,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
     private DatabaseCollection createHistoryVersionCollection() {
         return database.createCollection("dkbans_history_version")
                 .field("Id", DataType.INTEGER, FieldOption.PRIMARY_KEY, FieldOption.AUTO_INCREMENT)
-                .field("HistoryId", DataType.INTEGER, ForeignKey.of(this.history, "Id", ForeignKey.Option.CASCADE), FieldOption.NOT_NULL)
+                .field("HistoryId", DataType.INTEGER, ForeignKey.of(this.history, "Id", ForeignKey.Option.CASCADE), FieldOption.NOT_NULL,FieldOption.INDEX)
                 .field("Reason", DataType.STRING, FieldOption.NOT_NULL)
                 .field("Timeout", DataType.LONG, FieldOption.NOT_NULL)
                 .field("StaffId", DataType.UUID, FieldOption.NOT_NULL)
@@ -1007,7 +992,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 .field("ScopeName", DataType.STRING)
                 .field("ScopeId", DataType.UUID)
                 .field("Points", DataType.INTEGER)
-                .field("Active", DataType.BOOLEAN, FieldOption.NOT_NULL)
+                .field("Active", DataType.BOOLEAN, FieldOption.NOT_NULL,FieldOption.INDEX)
                 .field("Properties", DataType.LONG_TEXT, -1, FieldOption.NOT_NULL)
                 .field("HistoryTypeId", DataType.INTEGER, ForeignKey.of(this.historyType, "Id"))
                 .field("PunishmentType", DataType.STRING, FieldOption.NOT_NULL)
@@ -1016,14 +1001,14 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 .field("RevokeReason", DataType.STRING)
                 .field("ModifiedTime", DataType.LONG, FieldOption.NOT_NULL)
                 .field("ModifiedBy", DataType.UUID, FieldOption.NOT_NULL)
-                .field("ModifiedActive", DataType.BOOLEAN)
+                .field("ModifiedActive", DataType.BOOLEAN,FieldOption.INDEX)
                 .create();
     }
 
     private DatabaseCollection createHistoryNotesCollection() {
         return database.createCollection("dkbans_history_notes")
                 .field("Id", DataType.INTEGER, FieldOption.PRIMARY_KEY, FieldOption.AUTO_INCREMENT)
-                .field("HistoryId", DataType.INTEGER, ForeignKey.of(this.history, "Id"), FieldOption.NOT_NULL)
+                .field("HistoryId", DataType.INTEGER, ForeignKey.of(this.history, "Id"), FieldOption.NOT_NULL,FieldOption.INDEX)
                 .field("SenderId", DataType.UUID, FieldOption.NOT_NULL)
                 .field("Time", DataType.LONG, FieldOption.NOT_NULL)
                 .field("Message", DataType.STRING, FieldOption.NOT_NULL)
@@ -1034,7 +1019,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
     private DatabaseCollection createReportsCollection() {
         return database.createCollection("dkbans_report")
                 .field("Id", DataType.INTEGER, FieldOption.PRIMARY_KEY, FieldOption.AUTO_INCREMENT)
-                .field("PlayerId", DataType.UUID, FieldOption.NOT_NULL)
+                .field("PlayerId", DataType.UUID, FieldOption.NOT_NULL,FieldOption.INDEX)
                 .field("WatcherId", DataType.UUID)
                 .field("State", DataType.STRING, FieldOption.NOT_NULL)
                 .create();
@@ -1043,7 +1028,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
     private DatabaseCollection createReportEntriesCollection() {
         return database.createCollection("dkbans_report_entries")
                 .field("Id", DataType.INTEGER, FieldOption.PRIMARY_KEY, FieldOption.AUTO_INCREMENT)
-                .field("ReportId", DataType.INTEGER, ForeignKey.of(this.reports, "Id"))
+                .field("ReportId", DataType.INTEGER, ForeignKey.of(this.reports, "Id"),FieldOption.INDEX)
                 .field("ReporterId", DataType.UUID, FieldOption.NOT_NULL)
                 .field("TemplateId", DataType.INTEGER, ForeignKey.of(this.template, "Id"))
                 .field("Reason", DataType.STRING)
@@ -1057,7 +1042,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
     private DatabaseCollection createIpAddressBlacklistCollection() {
         return database.createCollection("dkbans_ipaddress_blacklist")
                 .field("Id", DataType.INTEGER, FieldOption.PRIMARY_KEY, FieldOption.AUTO_INCREMENT)
-                .field("Address", DataType.STRING, FieldOption.NOT_NULL)
+                .field("Address", DataType.STRING, FieldOption.NOT_NULL,FieldOption.INDEX)
                 .field("Type", DataType.STRING, FieldOption.NOT_NULL)
                 .field("StaffId", DataType.UUID, FieldOption.NOT_NULL)
                 .field("Reason", DataType.STRING, FieldOption.NOT_NULL)
@@ -1145,7 +1130,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
 
     private DatabaseCollection createOnlineTimeCollection() {
         return database.createCollection("dkbans_onlinetime")
-                .field("PlayerId", DataType.UUID, FieldOption.NOT_NULL,FieldOption.PRIMARY_KEY)
+                .field("PlayerId", DataType.UUID, FieldOption.NOT_NULL,FieldOption.PRIMARY_KEY,FieldOption.INDEX)
                 .field("OnlineTime", DataType.LONG, FieldOption.NOT_NULL)
                 .field("AfkTime", DataType.LONG, FieldOption.NOT_NULL)
                 .create();

@@ -142,6 +142,13 @@ public class CommandConfig {
             .permission("dkbans.command.ipBlock")
             .create();
 
+    @DocumentKey("command.chatClear")
+    public static CommandConfiguration COMMAND_CHAT_CLEAR = CommandConfiguration.newBuilder()
+            .name("chatClear")
+            .aliases("cc","ccheat")
+            .permission("dkbans.command.chatclear")
+            .create();
+
     public static CommandConfiguration COMMAND_BROADCAST = CommandConfiguration.newBuilder()
             .name("broadcast")
             .aliases("bc")
