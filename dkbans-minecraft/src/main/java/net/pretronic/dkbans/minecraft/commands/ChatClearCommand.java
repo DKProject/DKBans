@@ -21,6 +21,7 @@
 package net.pretronic.dkbans.minecraft.commands;
 
 import net.pretronic.dkbans.minecraft.config.Messages;
+import net.pretronic.dkbans.minecraft.config.Permissions;
 import net.pretronic.libraries.command.command.BasicCommand;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
 import net.pretronic.libraries.command.sender.CommandSender;
@@ -38,7 +39,7 @@ public class ChatClearCommand extends BasicCommand {
 
     @Override
     public void execute(CommandSender sender, String[] arguments) {
-        if(arguments.length > 1 && sender.hasPermission("")){
+        if(arguments.length > 0 && sender.hasPermission(Permissions.COMMAND_CHAT_CLEAR)){
             if(arguments[0].equalsIgnoreCase("local")){
                 if(sender instanceof OnlineMinecraftPlayer){
                     OnlineMinecraftPlayer player = (OnlineMinecraftPlayer) sender;
