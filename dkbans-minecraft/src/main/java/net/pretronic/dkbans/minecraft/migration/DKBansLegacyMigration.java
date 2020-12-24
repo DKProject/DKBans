@@ -73,7 +73,7 @@ public class DKBansLegacyMigration extends Migration {
             new BanSystem();
         }
         MigrationResultBuilder resultBuilder = new MigrationResultBuilder();
-        //migrateReasons(resultBuilder);
+        migrateReasons(resultBuilder);
         migratePlayers(resultBuilder);
 
         long end = System.currentTimeMillis();
@@ -242,6 +242,7 @@ public class DKBansLegacyMigration extends Migration {
                         Document.newDocument());
                 DefaultWarnPunishmentTemplateEntry entry = new DefaultWarnPunishmentTemplateEntry(DKBansScope.GLOBAL, true,
                         "ban", null, reason.getForBan());
+                template.getDurations().put(reason.getID(), entry);
                 templateGroup.addTemplateInternal(template);
                 amount++;
             }
@@ -327,6 +328,7 @@ public class DKBansLegacyMigration extends Migration {
             } else if(version instanceof Ban.MessageBanEdit) {
                 Ban.MessageBanEdit edit = ((Ban.MessageBanEdit) version);
                 //@Todo add note
+
             } else if(version instanceof Ban.TimeOutBanEdit) {
                 Ban.TimeOutBanEdit edit = ((Ban.TimeOutBanEdit) version);
                 builder.timeout(edit.getTimeOut());
@@ -340,8 +342,9 @@ public class DKBansLegacyMigration extends Migration {
     }
 
     private void migrateKickEntry(PlayerHistoryEntrySnapshotBuilder builder, Kick kick) {
-        builder.scope(new DKBansScope(DKBansScope.DEFAULT_SERVER, kick.getServer(), null));
-        builder.execute();
+        builder.punishmentType(PunishmentType.KICK)
+                .scope(new DKBansScope(DKBansScope.DEFAULT_SERVER, kick.getServer(), null))
+                .execute();
     }
 
     private void migrateUnbanEntry(PlayerHistoryEntrySnapshotBuilder builder, Map<BanType, PlayerHistoryEntry> tempHistory, Unban unban) {
@@ -352,7 +355,8 @@ public class DKBansLegacyMigration extends Migration {
     }
 
     private void migrateWarnEntry(PlayerHistoryEntrySnapshotBuilder builder, Warn warn) {
-        builder.punishmentType(PunishmentType.WARN).execute(); //@Todo map warn kick
+        builder.punishmentType(PunishmentType.WARN)
+                .execute();
     }
 
     private DKBansExecutor getStuff(HistoryEntry entry) {
