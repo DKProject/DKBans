@@ -21,7 +21,7 @@
 package net.pretronic.dkbans.minecraft.commands.ip;
 
 import net.pretronic.dkbans.api.DKBans;
-import net.pretronic.dkbans.api.player.ipblacklist.IpAddressBlock;
+import net.pretronic.dkbans.api.player.ipaddress.IpAddressBlock;
 import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.libraries.command.command.BasicCommand;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
@@ -45,12 +45,12 @@ public class IpUnblockCommand extends BasicCommand {
             return;
         }
         String address = args[0];
-        IpAddressBlock addressBlock = DKBans.getInstance().getIpAddressBlacklistManager().getIpAddressBlock(address);
+        IpAddressBlock addressBlock = DKBans.getInstance().getIpAddressManager().getIpAddressBlock(address);
         if(addressBlock == null) {
             sender.sendMessage(Messages.ERROR_IP_BLOCK_NOT_EXISTS, VariableSet.create().add("prefix", Messages.PREFIX).add("address", address));
             return;
         }
-        DKBans.getInstance().getIpAddressBlacklistManager().unblockIpAddress(addressBlock);
+        DKBans.getInstance().getIpAddressManager().unblockIpAddress(addressBlock);
         sender.sendMessage(Messages.COMMAND_IP_UNBLOCK, VariableSet.create().add("block", addressBlock));
     }
 }

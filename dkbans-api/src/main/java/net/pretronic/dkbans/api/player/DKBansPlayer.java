@@ -32,7 +32,7 @@ import net.pretronic.dkbans.api.player.note.PlayerNoteList;
 import net.pretronic.dkbans.api.player.note.PlayerNoteType;
 import net.pretronic.dkbans.api.player.report.PlayerReport;
 import net.pretronic.dkbans.api.player.report.PlayerReportEntry;
-import net.pretronic.dkbans.api.player.session.IpAddressInfo;
+import net.pretronic.dkbans.api.player.ipaddress.IpAddressInfo;
 import net.pretronic.dkbans.api.player.session.PlayerSession;
 import net.pretronic.dkbans.api.player.session.PlayerSessionList;
 import net.pretronic.dkbans.api.template.punishment.PunishmentTemplate;

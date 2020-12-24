@@ -20,9 +20,12 @@
 
 package net.pretronic.dkbans.minecraft.player;
 
+import net.pretronic.databasequery.api.query.result.QueryResult;
+import net.pretronic.databasequery.api.query.result.QueryResultEntry;
 import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.DKBansPlayerManager;
+import net.pretronic.dkbans.common.DefaultDKBans;
 import net.pretronic.dkbans.common.player.DefaultDKBansPlayer;
 import net.pretronic.libraries.caching.ArrayCache;
 import net.pretronic.libraries.caching.Cache;
@@ -63,6 +66,21 @@ public class MinecraftPlayerManager implements DKBansPlayerManager {
     public DKBansPlayer getPlayer(String name) {
         Validate.notNull(name);
         return this.players.get("get", name);
+    }
+
+    @Override
+    public Collection<DKBansPlayer> getPlayers(String address) {
+        QueryResult result = DefaultDKBans.getInstance().getStorage().getPlayerSessions().find()
+                .get("PlayerId")
+                .where("ipAddress",address)
+                .groupBy("PlayerId").execute();
+        Collection<DKBansPlayer> players = new ArrayList<>();
+
+        for (QueryResultEntry entry : result) {
+            players.add(getPlayer(entry.getUniqueId("PlayerId")));
+        }
+
+        return players;
     }
 
     @Override

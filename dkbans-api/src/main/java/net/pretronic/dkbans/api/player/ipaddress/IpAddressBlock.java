@@ -2,7 +2,7 @@
  * (C) Copyright 2020 The DKBans Project (Davide Wietlisbach & Philipp Elvin Friedhoff)
  *
  * @author Philipp Elvin Friedhoff
- * @since 20.07.20, 21:04
+ * @since 20.07.20, 21:05
  * @web %web%
  *
  * The DKBans Project is under the Apache License, version 2.0 (the "License");
@@ -18,17 +18,29 @@
  * under the License.
  */
 
-package net.pretronic.dkbans.api.player.ipblacklist;
+package net.pretronic.dkbans.api.player.ipaddress;
 
-public enum IpAddressBlockType {
+import net.pretronic.dkbans.api.DKBansExecutor;
+import net.pretronic.dkbans.api.template.punishment.PunishmentTemplate;
 
-    BLOCK,
-    ALT;
+public interface IpAddressBlock {
 
-    public static IpAddressBlockType parse(String value) {
-        for (IpAddressBlockType blockType : values()) {
-            if(blockType.name().equalsIgnoreCase(value)) return blockType;
-        }
-        return null;
-    }
+    int getId();
+
+    String getAddress();
+
+    IpAddressBlockType getType();
+
+    DKBansExecutor getStaff();
+
+    String getReason();
+
+    long getTimeout();
+
+
+    String getForReason();
+
+    long getForDuration();
+
+    PunishmentTemplate getForTemplate();
 }

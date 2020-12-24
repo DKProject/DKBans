@@ -23,8 +23,8 @@ package net.pretronic.dkbans.minecraft.commands.ip;
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
-import net.pretronic.dkbans.api.player.ipblacklist.IpAddressBlock;
-import net.pretronic.dkbans.api.player.ipblacklist.IpAddressBlockType;
+import net.pretronic.dkbans.api.player.ipaddress.IpAddressBlock;
+import net.pretronic.dkbans.api.player.ipaddress.IpAddressBlockType;
 import net.pretronic.dkbans.api.template.Template;
 import net.pretronic.dkbans.api.template.TemplateGroup;
 import net.pretronic.dkbans.api.template.punishment.PunishmentTemplate;
@@ -106,7 +106,7 @@ public class IpBlockCommandX extends BasicCommand {
                     sender.sendMessage(Messages.ERROR_TEMPLATE_NOT_EXISTS, VariableSet.create().add("template", templateSpecifierSplit[1]));
                     return;
                 }
-                IpAddressBlock block = DKBans.getInstance().getIpAddressBlacklistManager().blockIpAddress(address, blockType, executor, reason,
+                IpAddressBlock block = DKBans.getInstance().getIpAddressManager().blockIpAddress(address, blockType, executor, reason,
                         System.currentTimeMillis()+duration, (PunishmentTemplate) template);
                 sender.sendMessage(Messages.COMMAND_IP_BLOCK, VariableSet.create().add("block", block));
             } else {
@@ -119,7 +119,7 @@ public class IpBlockCommandX extends BasicCommand {
                     sender.sendMessage(Messages.ERROR_INVALID_DURATION_FORMAT, VariableSet.create().add("prefix", Messages.PREFIX).add("duration", forDuration0));
                     return;
                 }
-                IpAddressBlock block = DKBans.getInstance().getIpAddressBlacklistManager().blockIpAddress(address, blockType, executor, reason,
+                IpAddressBlock block = DKBans.getInstance().getIpAddressManager().blockIpAddress(address, blockType, executor, reason,
                         System.currentTimeMillis()+duration, forReason, forDuration);
                 sender.sendMessage(Messages.COMMAND_IP_BLOCK, VariableSet.create().add("block", block));
             }

@@ -20,23 +20,10 @@
 
 package net.pretronic.dkbans.minecraft.commands.ip;
 
-import net.pretronic.dkbans.api.DKBans;
-import net.pretronic.dkbans.api.DKBansExecutor;
-import net.pretronic.dkbans.api.player.DKBansPlayer;
-import net.pretronic.dkbans.api.player.ipblacklist.IpAddressBlock;
-import net.pretronic.dkbans.api.player.ipblacklist.IpAddressBlockType;
-import net.pretronic.dkbans.api.template.Template;
-import net.pretronic.dkbans.api.template.TemplateGroup;
-import net.pretronic.dkbans.api.template.punishment.PunishmentTemplate;
-import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.libraries.command.command.BasicCommand;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
 import net.pretronic.libraries.command.sender.CommandSender;
-import net.pretronic.libraries.message.bml.variable.VariableSet;
-import net.pretronic.libraries.utility.duration.DurationProcessor;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
-import org.mcnative.common.McNative;
-import org.mcnative.common.player.MinecraftPlayer;
 
 import java.util.regex.Pattern;
 

@@ -20,29 +20,53 @@
 
 package net.pretronic.dkbans.common.player.ipblacklist;
 
+import net.pretronic.databasequery.api.query.SearchOrder;
+import net.pretronic.databasequery.api.query.result.QueryResult;
+import net.pretronic.databasequery.api.query.result.QueryResultEntry;
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.DKBansExecutor;
-import net.pretronic.dkbans.api.player.ipblacklist.IpAddressBlacklistManager;
-import net.pretronic.dkbans.api.player.ipblacklist.IpAddressBlock;
-import net.pretronic.dkbans.api.player.ipblacklist.IpAddressBlockType;
+import net.pretronic.dkbans.api.player.ipaddress.IpAddressInfo;
+import net.pretronic.dkbans.api.player.ipaddress.IpAddressManager;
+import net.pretronic.dkbans.api.player.ipaddress.IpAddressBlock;
+import net.pretronic.dkbans.api.player.ipaddress.IpAddressBlockType;
 import net.pretronic.dkbans.api.template.punishment.PunishmentTemplate;
+import net.pretronic.dkbans.common.DefaultDKBans;
+import net.pretronic.dkbans.common.player.session.DefaultIpAddressInfo;
 import net.pretronic.libraries.caching.ArrayCache;
 import net.pretronic.libraries.caching.Cache;
 import net.pretronic.libraries.caching.CacheQuery;
 import net.pretronic.libraries.utility.Validate;
+import net.pretronic.libraries.utility.exception.OperationFailedException;
 
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.concurrent.TimeUnit;
 
-public class DefaultIpAddressBlacklistManager implements IpAddressBlacklistManager {
+public class DefaultIpAddressManager implements IpAddressManager {
 
     private final Cache<IpAddressBlock> ipAddressBlockCache;
 
-    public DefaultIpAddressBlacklistManager() {
+    public DefaultIpAddressManager() {
         this.ipAddressBlockCache = new ArrayCache<>();
         this.ipAddressBlockCache.setExpireAfterAccess(10, TimeUnit.MINUTES)
                 .setMaxSize(100)
                 .registerQuery("ipAddress", new IpAddressQuery());
+    }
+
+    @Override
+    public IpAddressInfo getIpAddressInfo(String ipAddress) {
+        QueryResult result = DefaultDKBans.getInstance().getStorage().getPlayerSessions().find().where("ipAddress",ipAddress)
+                .limit(0).orderBy("ConnectTime", SearchOrder.DESC).execute();
+        if(result.isEmpty()){
+            try {
+                return new DefaultIpAddressInfo(InetAddress.getByName(ipAddress),"Unknown","Unknown");
+            } catch (UnknownHostException e) {
+                throw new OperationFailedException(e);
+            }
+        }
+        QueryResultEntry entry = result.first();
+        return new DefaultIpAddressInfo(entry.getObject("ipAddress",InetAddress.class)
+                ,entry.getString("Country"),entry.getString("Region"));
     }
 
     @Override

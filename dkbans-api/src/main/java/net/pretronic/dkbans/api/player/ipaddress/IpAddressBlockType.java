@@ -2,7 +2,7 @@
  * (C) Copyright 2020 The DKBans Project (Davide Wietlisbach & Philipp Elvin Friedhoff)
  *
  * @author Philipp Elvin Friedhoff
- * @since 21.06.20, 17:26
+ * @since 20.07.20, 21:04
  * @web %web%
  *
  * The DKBans Project is under the Apache License, version 2.0 (the "License");
@@ -18,28 +18,17 @@
  * under the License.
  */
 
-package net.pretronic.dkbans.api.player;
+package net.pretronic.dkbans.api.player.ipaddress;
 
-import net.pretronic.dkbans.api.DKBansExecutor;
+public enum IpAddressBlockType {
 
-import java.util.Collection;
-import java.util.UUID;
+    BLOCK,
+    ALT;
 
-public interface DKBansPlayerManager {
-
-    DKBansPlayer getPlayer(UUID uniqueId);
-
-    DKBansPlayer getPlayer(String name);
-
-    Collection<DKBansPlayer> getPlayers(String address);
-
-    Collection<DKBansPlayer> getLoadedPlayers();
-
-
-    DKBansExecutor getExecutor(UUID uniqueId);
-
-    DKBansExecutor getExecutor(String name);
-
-
-    void registerSpecialExecutor(DKBansExecutor executor);
+    public static IpAddressBlockType parse(String value) {
+        for (IpAddressBlockType blockType : values()) {
+            if(blockType.name().equalsIgnoreCase(value)) return blockType;
+        }
+        return null;
+    }
 }

@@ -28,8 +28,8 @@ import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryEntry;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryEntrySnapshotBuilder;
 import net.pretronic.dkbans.api.player.history.PunishmentType;
-import net.pretronic.dkbans.api.player.ipblacklist.IpAddressBlock;
-import net.pretronic.dkbans.api.player.ipblacklist.IpAddressBlockType;
+import net.pretronic.dkbans.api.player.ipaddress.IpAddressBlock;
+import net.pretronic.dkbans.api.player.ipaddress.IpAddressBlockType;
 import net.pretronic.dkbans.common.DKBansUtil;
 import net.pretronic.dkbans.minecraft.PlayerSettingsKey;
 import net.pretronic.dkbans.minecraft.config.DKBansConfig;
@@ -85,7 +85,7 @@ public class PlayerListener {
                     .addDescribed("player",event.getPlayer()));
             return;
         }
-        IpAddressBlock ipAddressBlock = DKBans.getInstance().getIpAddressBlacklistManager().getIpAddressBlock(event.getOnlinePlayer().getAddress().getAddress().getHostAddress());
+        IpAddressBlock ipAddressBlock = DKBans.getInstance().getIpAddressManager().getIpAddressBlock(event.getOnlinePlayer().getAddress().getAddress().getHostAddress());
         if(ipAddressBlock != null) {
             long minOnlineTime = DKBansConfig.IP_ADDRESS_BLOCK_ALT_MIN_PLAYTIME_TIME;
             if(ipAddressBlock.getType() == IpAddressBlockType.BLOCK

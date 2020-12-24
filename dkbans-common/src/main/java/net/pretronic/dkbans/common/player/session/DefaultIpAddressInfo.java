@@ -20,7 +20,7 @@
 package net.pretronic.dkbans.common.player.session;
 
 import net.pretronic.dkbans.api.DKBans;
-import net.pretronic.dkbans.api.player.session.IpAddressInfo;
+import net.pretronic.dkbans.api.player.ipaddress.IpAddressInfo;
 
 import java.net.InetAddress;
 
@@ -53,6 +53,6 @@ public class DefaultIpAddressInfo implements IpAddressInfo {
 
     @Override
     public boolean isBlocked() {
-        return DKBans.getInstance().getIpAddressBlacklistManager().isIpAddressBlocked(address);
+        return DKBans.getInstance().getIpAddressManager().isIpAddressBlocked(address);
     }
 }

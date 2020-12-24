@@ -23,16 +23,13 @@ package net.pretronic.dkbans.common;
 import net.pretronic.databasequery.api.Database;
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.DKBansExecutor;
-import net.pretronic.dkbans.api.broadcast.Broadcast;
-import net.pretronic.dkbans.api.broadcast.BroadcastManager;
 import net.pretronic.dkbans.api.event.DKBansChannelBroadcastMessageReceiveEvent;
 import net.pretronic.dkbans.api.joinme.JoinMeManager;
 import net.pretronic.dkbans.api.migration.MigrationManager;
-import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.DKBansPlayerManager;
 import net.pretronic.dkbans.api.player.chatlog.ChatLogManager;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryManager;
-import net.pretronic.dkbans.api.player.ipblacklist.IpAddressBlacklistManager;
+import net.pretronic.dkbans.api.player.ipaddress.IpAddressManager;
 import net.pretronic.dkbans.api.player.report.ReportManager;
 import net.pretronic.dkbans.api.support.SupportTicketManager;
 import net.pretronic.dkbans.common.broadcast.BroadcastSender;
@@ -42,16 +39,14 @@ import net.pretronic.dkbans.common.filter.DefaultFilterManager;
 import net.pretronic.dkbans.common.migration.DefaultMigrationManager;
 import net.pretronic.dkbans.common.player.chatlog.DefaultChatLogManager;
 import net.pretronic.dkbans.common.player.history.DefaultPlayerHistoryManager;
-import net.pretronic.dkbans.common.player.ipblacklist.DefaultIpAddressBlacklistManager;
+import net.pretronic.dkbans.common.player.ipblacklist.DefaultIpAddressManager;
 import net.pretronic.dkbans.common.player.report.DefaultReportManager;
 import net.pretronic.dkbans.common.storage.DefaultDKBansStorage;
 import net.pretronic.dkbans.common.template.DefaultTemplateManager;
 import net.pretronic.libraries.event.EventBus;
 import net.pretronic.libraries.logging.PretronicLogger;
 
-import java.util.Collection;
 import java.util.concurrent.ExecutorService;
-import java.util.function.Function;
 
 public class DefaultDKBans extends DKBans {
 
@@ -70,7 +65,7 @@ public class DefaultDKBans extends DKBans {
     private final DKBansPlayerManager playerManager;
     private final MigrationManager migrationManager;
     private final JoinMeManager joinMeManager;
-    private final IpAddressBlacklistManager ipAddressBlacklistManager;
+    private final IpAddressManager ipAddressBlacklistManager;
 
     public DefaultDKBans(String version, PretronicLogger logger, ExecutorService executorService, EventBus eventBus, Database database, DKBansPlayerManager playerManager, JoinMeManager joinMeManager, BroadcastSender broadcastSender) {
         this.version =version;
@@ -88,7 +83,7 @@ public class DefaultDKBans extends DKBans {
         this.chatLogManager = new DefaultChatLogManager();
         this.playerManager = playerManager;
         this.migrationManager = new DefaultMigrationManager();
-        this.ipAddressBlacklistManager = new DefaultIpAddressBlacklistManager();
+        this.ipAddressBlacklistManager = new DefaultIpAddressManager();
     }
 
     @Override
@@ -167,7 +162,7 @@ public class DefaultDKBans extends DKBans {
     }
 
     @Override
-    public IpAddressBlacklistManager getIpAddressBlacklistManager() {
+    public IpAddressManager getIpAddressManager() {
         return this.ipAddressBlacklistManager;
     }
 
