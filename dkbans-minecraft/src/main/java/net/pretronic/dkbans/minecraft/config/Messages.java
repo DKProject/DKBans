@@ -242,9 +242,9 @@ public class Messages {
     public static MessageComponent<?> COMMAND_IP_UNBLOCK_HELP = Text.ofMessageKey("dkbans.command.ip.unblock.help");
     public static MessageComponent<?> COMMAND_IP_UNBLOCK = Text.ofMessageKey("dkbans.command.ip.unblock");
 
-    public static MessageComponent<?> COMMAND_CHAT_CLEAR_HELP = Text.ofMessageKey("dkbans.command.cheatClear.help");
-    public static MessageComponent<?> COMMAND_CHAT_CLEAR_MY = Text.ofMessageKey("dkbans.command.cheatClear.my");
-    public static MessageComponent<?> COMMAND_CHAT_CLEAR_ALL = Text.ofMessageKey("dkbans.command.cheatClear.all");
+    public static MessageComponent<?> COMMAND_CHAT_CLEAR_HELP = Text.ofMessageKey("dkbans.command.chatClear.help");
+    public static MessageComponent<?> COMMAND_CHAT_CLEAR_MY = Text.ofMessageKey("dkbans.command.chatClear.my");
+    public static MessageComponent<?> COMMAND_CHAT_CLEAR_ALL = Text.ofMessageKey("dkbans.command.chatClear.all");
 
 
     public static MessageComponent<?> COMMAND_BROADCAST_NOT_FOUND = Text.ofMessageKey("dkbans.command.broadcast.notFound");

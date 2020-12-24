@@ -401,13 +401,13 @@ messages:
    &8- &7permanently <reason>'
 
   dkbans.command.ip.block.invalid.type: '${dkbans.prefix} &e{type} &cis an invalid block type'
-  dkbans.command.ip.block: '${dkbans.prefix} &7You have blocked the ip address 6e{block.address}'
+  dkbans.command.ip.block: '${dkbans.prefix} &7You have blocked the ip address 6{block.address}'
   dkbans.command.ip.unblock.help: '${dkbans.prefix} &cUsage&8: &7/ipunblock <address>'
   dkbans.command.ip.unblock: '${dkbans.prefix} &7You have unblocked the address &e{block.address}'
 
-  dkbans.command.cheatClear.help: '${dkbans.prefix.network} &cUsage&8: &7/cheatclear [local/global]'
-  dkbans.command.cheatClear.my: '${dkbans.prefix.network} &7Your chat has been cleared'
-  dkbans.command.cheatClear.all: '${dkbans.prefix.network} &7The chat has been cleared'
+  dkbans.command.chatClear.help: '${dkbans.prefix.network} &cUsage&8: &7/chatclear [local/global]'
+  dkbans.command.chatClear.my: '${dkbans.prefix.network} &7Your chat has been cleared'
+  dkbans.command.chatClear.all: '${dkbans.prefix.network} &7The chat has been cleared'
 
   dkbans.command.broadcast.notFound: '${dkbans.prefix} &cNo broadcast found for &e{broadcast}'
   dkbans.command.broadcast.group.notFound: '${dkbans.prefix} &cNo broadcast group found for &e{group}'

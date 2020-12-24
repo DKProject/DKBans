@@ -25,10 +25,7 @@ import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.filter.FilterAffiliationArea;
 import net.pretronic.dkbans.api.filter.FilterManager;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
-import net.pretronic.dkbans.api.player.history.PlayerHistoryEntry;
-import net.pretronic.dkbans.api.player.history.PlayerHistoryEntrySnapshot;
-import net.pretronic.dkbans.api.player.history.PlayerHistoryEntrySnapshotBuilder;
-import net.pretronic.dkbans.api.player.history.PunishmentType;
+import net.pretronic.dkbans.api.player.history.*;
 import net.pretronic.dkbans.api.player.ipaddress.IpAddressBlock;
 import net.pretronic.dkbans.api.player.ipaddress.IpAddressBlockType;
 import net.pretronic.dkbans.common.DKBansUtil;
@@ -107,14 +104,17 @@ public class PlayerListener {
     }
 
     private void banPlayer(MinecraftPlayerLoginEvent event,DKBansPlayer player,IpAddressBlock ipAddressBlock){
-        PlayerHistoryEntrySnapshotBuilder builder = player.punish().stuff(DKBansExecutor.IP_ADDRESS_BLOCK);
+        PlayerHistoryEntrySnapshot result;
         if(ipAddressBlock.getForTemplate() != null) {
-            builder.template(ipAddressBlock.getForTemplate());
+            result = player.punish(DKBansExecutor.IP_ADDRESS_BLOCK,ipAddressBlock.getForTemplate());
         } else {
+            PlayerHistoryEntrySnapshotBuilder builder = player.punish().stuff(DKBansExecutor.IP_ADDRESS_BLOCK);
             builder.reason(ipAddressBlock.getForReason())
+                    .stuff(DKBansExecutor.IP_ADDRESS_BLOCK)
+                    .historyType(DKBans.getInstance().getHistoryManager().getHistoryType(DKBansConfig.IP_ADDRESS_BLOCK_HISTORY_TYPE_NAME))
                     .timeout(System.currentTimeMillis()+ipAddressBlock.getForDuration());
+            result = builder.execute();
         }
-        PlayerHistoryEntrySnapshot result = builder.execute();
         MessageComponent<?> message = result.isPermanently()
                 ? Messages.PUNISH_BAN_MESSAGE_PERMANENTLY : Messages.PUNISH_BAN_MESSAGE_TEMPORARY;
         event.setCancelReason(message,VariableSet.create()

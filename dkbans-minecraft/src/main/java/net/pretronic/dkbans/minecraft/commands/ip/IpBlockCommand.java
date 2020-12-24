@@ -59,7 +59,7 @@ public class IpBlockCommand extends BasicCommand {
         IpAddressBlock result = null;
         if(arguments.length > 3){
             String action = arguments[3];
-            if(action.equalsIgnoreCase("template") && arguments.length > 5){
+            if(action.equalsIgnoreCase("template") && arguments.length > 4){
 
                 if(!arguments[4].contains("@")) {
                     sender.sendMessage(Messages.ERROR_INVALID_TEMPLATE_SPECIFIER_FORMAT, VariableSet.create().add("prefix", Messages.PREFIX));
@@ -79,12 +79,12 @@ public class IpBlockCommand extends BasicCommand {
 
                 result = DKBans.getInstance().getIpAddressManager().blockIpAddress(IpAddressBlockType.BAN,address,reason
                         ,duration,CommandUtil.getExecutor(sender), (PunishmentTemplate) template);
-            }else if(action.equalsIgnoreCase("temporary") && arguments.length > 6){
+            }else if(action.equalsIgnoreCase("temporary") && arguments.length > 5){
                 Duration forDuration = CommandUtil.parseDuration(sender,arguments[5]);
                 if(forDuration == null) return;
                 result = DKBans.getInstance().getIpAddressManager().blockIpAddress(IpAddressBlockType.BAN,address,reason
                         ,duration,CommandUtil.getExecutor(sender), CommandUtil.readStringFromArguments(arguments,6),forDuration);
-            }else if(action.equalsIgnoreCase("permanently") && arguments.length > 5){
+            }else if(action.equalsIgnoreCase("permanently") && arguments.length > 4){
                 result = DKBans.getInstance().getIpAddressManager().blockIpAddress(IpAddressBlockType.BAN,address,reason
                         ,duration,CommandUtil.getExecutor(sender), CommandUtil.readStringFromArguments(arguments,5));
             }else{

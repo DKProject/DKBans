@@ -88,6 +88,9 @@ public class DKBansConfig {
     @DocumentKey("ipAddress.blockAltMinPlaytime")
     public static String IP_ADDRESS_BLOCK_ALT_MIN_PLAYTIME = DurationProcessor.getStandard().formatShort(Duration.ofMinutes(3));
 
+    @DocumentKey("ipAddress.historyType")
+    public static String IP_ADDRESS_BLOCK_HISTORY_TYPE_NAME = "NETWORK";
+
     @DocumentIgnored
     public static long IP_ADDRESS_BLOCK_ALT_MIN_PLAYTIME_TIME = 0;
 
