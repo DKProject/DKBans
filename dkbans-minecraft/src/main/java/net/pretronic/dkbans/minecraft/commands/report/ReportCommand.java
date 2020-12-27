@@ -70,10 +70,8 @@ public class ReportCommand extends MainCommand implements NotFindable {
         registerCommand(new ReportLogoutCommand(owner));
         registerCommand(new ReportToggleCommand(owner));
         registerCommand(new ReportTakeCommand(owner));
-        if(templateGroup != null) {
-            registerCommand(new ReportAcceptCommand(owner));
-            registerCommand(new ReportDeclineCommand(owner));
-        }
+        registerCommand(new ReportAcceptCommand(owner));
+        registerCommand(new ReportDeclineCommand(owner));
         registerCommand(new ReportListCommand(owner));
     }
 

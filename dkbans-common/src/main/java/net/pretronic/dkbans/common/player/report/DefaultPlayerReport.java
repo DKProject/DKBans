@@ -22,6 +22,8 @@ package net.pretronic.dkbans.common.player.report;
 
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.DKBansExecutor;
+import net.pretronic.dkbans.api.event.report.DKBansPlayerReportAcceptEvent;
+import net.pretronic.dkbans.api.event.report.DKBansPlayerReportDeclineEvent;
 import net.pretronic.dkbans.api.event.report.DKBansPlayerReportTakeEvent;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.report.PlayerReport;
@@ -148,7 +150,7 @@ public class DefaultPlayerReport implements PlayerReport {
                 .set("State",ReportState.ACCEPTED)
                 .execute();
         DefaultDKBans.getInstance().getReportManager().removeReport(this);
-        DKBans.getInstance().getEventBus().callEvent(new DefaultDKBansPlayerReportAcceptEvent(this));
+        DKBans.getInstance().getEventBus().callEvent(DKBansPlayerReportAcceptEvent.class,new DefaultDKBansPlayerReportAcceptEvent(this));
     }
 
     @Override
@@ -159,7 +161,7 @@ public class DefaultPlayerReport implements PlayerReport {
                 .set("State",ReportState.DECLINED)
                 .execute();
         DefaultDKBans.getInstance().getReportManager().removeReport(this);
-        DKBans.getInstance().getEventBus().callEvent(new DefaultDKBansPlayerReportDeclineEvent(this));
+        DKBans.getInstance().getEventBus().callEvent(DKBansPlayerReportDeclineEvent.class,new DefaultDKBansPlayerReportDeclineEvent(this));
     }
 
     @Internal

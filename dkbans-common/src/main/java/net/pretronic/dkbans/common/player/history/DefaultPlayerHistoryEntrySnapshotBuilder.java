@@ -197,7 +197,7 @@ public class DefaultPlayerHistoryEntrySnapshotBuilder implements PlayerHistoryEn
             DKBans.getInstance().getEventBus().callEvent(DKBansPlayerPunishEvent.class,new DefaultDKBansPlayerPunishEvent(player,snapshot));
             ((DefaultPlayerHistory)history).push(result.getKey());
             if(player.getReport() != null){
-                player.getReport().decline(this.stuff);
+                player.getReport().accept(this.stuff);
             }
         }else{
             PlayerHistoryEntrySnapshot old = entry.getCurrent();
