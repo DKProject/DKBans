@@ -88,7 +88,7 @@ public class DescriberRegistrar {
         entryDescriber.registerFunction("createdFormatted", snapshot -> DKBansConfig.FORMAT_DATE.format(snapshot.getCreated()));
 
         VariableDescriber<DefaultPlayerHistoryEntrySnapshot> snapshotDescriber = VariableDescriberRegistry.registerDescriber(DefaultPlayerHistoryEntrySnapshot.class);
-        snapshotDescriber.registerFunction("revoked", snapshot -> !snapshot.isActive());
+        snapshotDescriber.registerFunction("revoked", snapshot -> !snapshot.isActive() || snapshot.getTimeout() <= System.currentTimeMillis());
         snapshotDescriber.registerFunction("active", DefaultPlayerHistoryEntrySnapshot::isActive);
         snapshotDescriber.registerFunction("revokedReason", snapshot -> snapshot.getRevokeReason() == null ? "" : snapshot.getRevokeReason());
         snapshotDescriber.registerFunction("modifiedTimeFormatted",snapshot -> DKBansConfig.FORMAT_DATE.format(snapshot.getModifiedTime()));
