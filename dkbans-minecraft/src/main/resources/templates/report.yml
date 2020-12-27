@@ -13,7 +13,7 @@ templates:
     targetPunishment: ban@Hacking
   2:
     name: Provocation
-    display: Hacking
+    display: Provocation
     permission: dkbans.report
     aliases:
       - hacking
