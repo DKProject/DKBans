@@ -45,7 +45,7 @@ public class DefaultReportManager implements ReportManager {
     private List<PlayerReport> openReports;
 
     public DefaultReportManager() {
-        this.openReports = new ArrayList<>();
+        this.openReports = null;
     }
 
     @Override
@@ -70,17 +70,17 @@ public class DefaultReportManager implements ReportManager {
 
     @Override
     public PlayerReport getReport(DKBansPlayer player) {
-        return Iterators.findOne(this.openReports, report -> report.getPlayer().equals(player));
+        return Iterators.findOne(getOpenReports(), report -> report.getPlayer().equals(player));
     }
 
     @Override
     public PlayerReport getReport(UUID uniqueId) {
-        return Iterators.findOne(this.openReports, report -> report.getPlayerId().equals(uniqueId));
+        return Iterators.findOne(getOpenReports(), report -> report.getPlayerId().equals(uniqueId));
     }
 
     @Override
     public PlayerReport getReportByWatcher(UUID uniqueId) {
-        return Iterators.findOne(this.openReports, report -> report.getWatcherId() != null && report.getWatcherId().equals(uniqueId));
+        return Iterators.findOne(getOpenReports(), report -> report.getWatcherId() != null && report.getWatcherId().equals(uniqueId));
     }
 
     @Override
@@ -108,7 +108,7 @@ public class DefaultReportManager implements ReportManager {
     }
 
     private DefaultPlayerReport getReportOrCreate(DKBansPlayer target) {
-        PlayerReport report0 = Iterators.findOne(this.openReports, target0 -> target0.getPlayer().equals(target));
+        PlayerReport report0 = Iterators.findOne(getOpenReports(), target0 -> target0.getPlayer().equals(target));
         if(report0 == null) {
             report0 = DKBans.getInstance().getStorage().createPlayerReport(target, ReportState.OPEN);
             this.openReports.add(report0);
@@ -118,6 +118,7 @@ public class DefaultReportManager implements ReportManager {
 
     @Internal
     public void removeReport(PlayerReport report){
+        if(openReports == null) return;
         this.openReports.remove(report);
     }
 }
