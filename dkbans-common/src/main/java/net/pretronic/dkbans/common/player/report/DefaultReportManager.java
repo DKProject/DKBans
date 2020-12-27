@@ -80,7 +80,7 @@ public class DefaultReportManager implements ReportManager {
 
     @Override
     public PlayerReport getReportByWatcher(UUID uniqueId) {
-        return Iterators.findOne(this.openReports, report -> report.getWatcherId().equals(uniqueId));
+        return Iterators.findOne(this.openReports, report -> report.getWatcherId() != null && report.getWatcherId().equals(uniqueId));
     }
 
     @Override

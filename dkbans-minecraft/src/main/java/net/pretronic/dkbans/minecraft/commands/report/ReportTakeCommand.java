@@ -31,6 +31,7 @@ import net.pretronic.libraries.command.sender.CommandSender;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
 import net.pretronic.libraries.utility.map.Pair;
+import org.mcnative.common.player.MinecraftPlayer;
 import org.mcnative.common.player.OnlineMinecraftPlayer;
 
 public class ReportTakeCommand extends BasicCommand {
@@ -40,24 +41,38 @@ public class ReportTakeCommand extends BasicCommand {
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args) {
-        if(args.length == 0) {
+    public void execute(CommandSender sender, String[] arguments) {
+        if(!(sender instanceof OnlineMinecraftPlayer)) {
+            sender.sendMessage(Messages.ERROR_ONLY_PLAYER);
+            return;
+        }
+        if(arguments.length == 0) {
             sender.sendMessage(Messages.COMMAND_REPORT_TAKE_USAGE);
             return;
         }
+        DKBansPlayer staff = ((OnlineMinecraftPlayer) sender).getAs(DKBansPlayer.class);
 
-        Pair<OnlineMinecraftPlayer, PlayerReport> data = CommandUtil.checkAndGetTargetReport(sender, args[0]);
-        if(data != null) {
-            PlayerReport report = data.getValue();
-            OnlineMinecraftPlayer target = data.getKey();
-            DKBansPlayer player = ((OnlineMinecraftPlayer)sender).getAs(DKBansPlayer.class);
-            if(report.isWatched()) {
-                sender.sendMessage(Messages.COMMAND_REPORT_TAKE_ALREADY, VariableSet.create().addDescribed("target", target));
-            } else {
-                report.setWatcher(player);
-                sender.sendMessage(Messages.COMMAND_REPORT_TAKE, VariableSet.create()
-                        .addDescribed("target", target));
-            }
+        MinecraftPlayer player = CommandUtil.getPlayer(sender,arguments[0]);
+        if(player == null) return;
+
+        DKBansPlayer dkBansPlayer = player.getAs(DKBansPlayer.class);
+
+        PlayerReport report = dkBansPlayer.getReport();
+        if(report == null){
+            sender.sendMessage(Messages.COMMAND_REPORT_NOT_REPORTED, VariableSet.create()
+                    .addDescribed("target", player));
+            return;
+        }
+
+        if(report.isWatched()) {
+            sender.sendMessage(Messages.COMMAND_REPORT_TAKE_ALREADY, VariableSet.create()
+                    .addDescribed("target", player)
+                    .addDescribed("report", report));
+        } else {
+            report.setWatcher(staff);
+            sender.sendMessage(Messages.COMMAND_REPORT_TAKE, VariableSet.create()
+                    .addDescribed("target", player)
+                    .addDescribed("report", report));
         }
     }
 }

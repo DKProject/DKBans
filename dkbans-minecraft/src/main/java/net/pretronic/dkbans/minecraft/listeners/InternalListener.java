@@ -64,7 +64,7 @@ public class InternalListener {
     public void onPlayerReportCreate(DKBansPlayerReportCreateEvent event) {
         for (ConnectedMinecraftPlayer player : McNative.getInstance().getLocal().getConnectedPlayers()) {
             if(player.hasPermission(Permissions.COMMAND_REPORT_STUFF)) {
-                player.sendMessage(Messages.COMMAND_REPORT_NOTFIY, VariableSet.create()
+                player.sendMessage(Messages.REPORT_NOTIFY, VariableSet.create()
                         .addDescribed("player",event.getPlayer())
                         .addDescribed("report", event.getReportEntry()));
             }

@@ -46,7 +46,7 @@ public class TemplatePunishCommand extends BasicCommand {
     @Override
     public void execute(CommandSender sender, String[] arguments) {
         if(arguments.length <= 1){
-            sendTemplates(sender);
+            sendTemplates(sender,arguments.length == 1 ? arguments[0] : "-");
             return;
         }
         MinecraftPlayer player = CommandUtil.getPlayer(sender, arguments[0],true);
@@ -56,7 +56,7 @@ public class TemplatePunishCommand extends BasicCommand {
 
         PunishmentTemplate template = (PunishmentTemplate) templates.getTemplate(arguments[1]);
         if(template == null){
-            sendTemplates(sender);
+            sendTemplates(sender,arguments[0]);
             return;
         }
         if(!sender.hasPermission(template.getPermission())){
@@ -97,8 +97,10 @@ public class TemplatePunishCommand extends BasicCommand {
         CommandUtil.sendPunishResultMessage(sender,dkBansPlayer,result);
     }
 
-    private void sendTemplates(CommandSender sender){
+    private void sendTemplates(CommandSender sender,String selectedPlayer){
         sender.sendMessage(Messages.PUNISH_TEMPLATE_LIST,VariableSet.create()
+                .add("command",getConfiguration().getName())
+                .add("selectedPlayer",selectedPlayer)
                 .add("prefix",Messages.PREFIX)
                 .add("templates",templates.getTemplates())
                 .add("command",getConfiguration().getName()));

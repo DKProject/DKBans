@@ -685,7 +685,8 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 .set("ServerId", serverId)
                 .set("Properties", "{}")
                 .executeAndGetGeneratedKeyAsInt("Id");
-        return new DefaultPlayerReportEntry(id, report, reporter, template, reason , serverName, serverId, time, Document.newDocument());
+        return new DefaultPlayerReportEntry(id, report, reporter.getUniqueId(),template != null ? template.getId() : 0
+                , reason , serverName, serverId, time, Document.newDocument());
     }
 
     @Override

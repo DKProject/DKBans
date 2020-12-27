@@ -20,6 +20,8 @@
 
 package net.pretronic.dkbans.common.player.report;
 
+import net.pretronic.databasequery.api.query.result.QueryResult;
+import net.pretronic.databasequery.api.query.result.QueryResultEntry;
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.event.report.DKBansPlayerReportAcceptEvent;
@@ -33,6 +35,7 @@ import net.pretronic.dkbans.common.DefaultDKBans;
 import net.pretronic.dkbans.common.event.DefaultDKBansPlayerReportAcceptEvent;
 import net.pretronic.dkbans.common.event.DefaultDKBansPlayerReportDeclineEvent;
 import net.pretronic.dkbans.common.event.DefaultDKBansPlayerReportTakeEvent;
+import net.pretronic.libraries.document.type.DocumentFileType;
 import net.pretronic.libraries.utility.Iterators;
 import net.pretronic.libraries.utility.Validate;
 import net.pretronic.libraries.utility.annonations.Internal;
@@ -45,7 +48,7 @@ public class DefaultPlayerReport implements PlayerReport {
 
     private final int id;
     private final UUID playerId;
-    private final UUID watcherId;
+    private UUID watcherId;
     private DKBansPlayer player;
     private ReportState state;
     private List<PlayerReportEntry> entries;
@@ -62,6 +65,7 @@ public class DefaultPlayerReport implements PlayerReport {
         this(id,state,player.getUniqueId(),watcher != null ? watcher.getUniqueId() : null);
         this.player = player;
         this.watcher = watcher;
+        this.entries = new ArrayList<>();
     }
 
     public DefaultPlayerReport(int id, ReportState state, DKBansPlayer player) {
@@ -101,6 +105,19 @@ public class DefaultPlayerReport implements PlayerReport {
     public List<PlayerReportEntry> getEntries() {
         if(this.entries == null){
             this.entries = new ArrayList<>();
+            QueryResult result = DefaultDKBans.getInstance().getStorage().getReportEntries()
+                    .find().where("ReportId",id).execute();
+            for (QueryResultEntry entry : result) {
+
+                this.entries.add(new DefaultPlayerReportEntry(entry.getInt("Id"),this
+                        ,entry.getUniqueId("ReporterId")
+                        ,entry.getInt("TemplateId")
+                        ,entry.getString("Reason")
+                        ,entry.getString("SererName")
+                        ,entry.getUniqueId("ServerId")
+                        ,entry.getLong("Time")
+                        ,DocumentFileType.JSON.getReader().read(entry.getString("Properties"))));
+            }
         }
         return this.entries;
     }
@@ -137,6 +154,7 @@ public class DefaultPlayerReport implements PlayerReport {
                 .execute();
 
         this.watcher = player;
+        this.watcherId = player.getUniqueId();
 
         DKBansPlayerReportTakeEvent event = new DefaultDKBansPlayerReportTakeEvent(this);
         DKBans.getInstance().getEventBus().callEvent(DKBansPlayerReportTakeEvent.class, event);
@@ -166,7 +184,8 @@ public class DefaultPlayerReport implements PlayerReport {
 
     @Internal
     public void addEntry(DefaultPlayerReportEntry entry) {
-        if(this.entries == null) this.entries = new ArrayList<>();
-        this.entries.add(entry);
+        if(this.entries != null) {
+            this.entries.add(entry);
+        }
     }
 }

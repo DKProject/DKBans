@@ -174,24 +174,4 @@ public class CommandUtil {
         }
     }
 
-    public static Pair<OnlineMinecraftPlayer, PlayerReport> checkAndGetTargetReport(CommandSender sender, String target0) {
-        if(!(sender instanceof OnlineMinecraftPlayer)) {
-            sender.sendMessage(Messages.ERROR_ONLY_PLAYER);
-            return null;
-        }
-        OnlineMinecraftPlayer target = McNative.getInstance().getLocal().getOnlinePlayer(target0);
-        if(target == null) {
-            sender.sendMessage(Messages.PLAYER_NOT_FOUND,VariableSet.create()
-                    .add("prefix",Messages.PREFIX_REPORT)
-                    .add("player",target0));
-            return null;
-        }
-
-        PlayerReport report = DKBans.getInstance().getReportManager().getReport(target.getUniqueId());
-        if(report == null) {
-            sender.sendMessage(Messages.REPORT_NOT_FOUND, VariableSet.create().addDescribed("player", target));
-            return null;
-        }
-        return new Pair<>(target, report);
-    }
 }

@@ -65,7 +65,7 @@ messages:
   dkbans.punish.template.noPermission: '{prefix} &cYou are not allowed to use this reason'
   dkbans.punish.template.list: '{prefix} &7Available reasons&8:
   @for("template" in {templates},${dkbans.punish.template.list.loop},"\n")'
-  dkbans.punish.template.list.loop: ' &8- &c{template.inGroupId} &8| &c{template.displayName} &8» &4&l{template.firstType.name}'
+  dkbans.punish.template.list.loop: '![" &8- &c{template.inGroupId} &8| &c{template.displayName} &8» &4&l{template.firstType.name}"]("run:///{command} {selectedPlayer} {template.inGroupId}")'
 
   dkbans.punish.ban.message.permanently: '&e&lexample.net
   &e
@@ -118,11 +118,18 @@ messages:
   dkbans.punish.success.kick: '${dkbans.prefix} &e{player.displayName} &7was kicked'
   dkbans.punish.success.warn: '${dkbans.prefix} &e{player.displayName} &7was warned'
 
-  dkbans.report.countInfo: '${dkbans.prefix.report} &7Open reports&8: &e{openReports}'
+  dkbans.report.countInfo: '${dkbans.prefix.report} !["&7Open reports&8: &e{openReports}"]("run:///report list")'
   dkbans.report.notFound: '${dkbans.prefix.report} &cA report for &e{player.name} &cwas not found'
 
   dkbans.report.accepted: '${dkbans.prefix.report} &aThe report about &e{report.player.displayName} &awas accepted'
   dkbans.report.declined: '${dkbans.prefix.report} &cThe report about &e{report.player.displayName} &cwas declined'
+
+  dkbans.report.notify: '![${dkbans.command.report.notify.text};${dkbans.command.report.notify.hover}]("run:///report take {player.name}")'
+  dkbans.report.notify.text: '${dkbans.prefix.report} &e{player.displayName} &8&l>> &e{report.reason} &8[&7Click&8]'
+  dkbans.report.notify.hover: '&8» &7Player&8: &c{player.displayName}
+  &8» &7Reporter&8: &c{report.reporter.displayName}
+  &8» &7Reason&8: &c{report.reason}
+  &8» &7Server&8: &c{report.serverName}'
 
   dkbans.punish.list.ban: '${dkbans.prefix} &6Banned players &8| &7{page} @for("punish" in {punishments},${dkbans.punish.list.loop},"\n","\n")'
   dkbans.punish.list.mute: '${dkbans.prefix} &6Muted players &8| &7{page} @for("punish" in {punishments},${dkbans.punish.list.loop},"\n","\n")'
@@ -235,13 +242,13 @@ messages:
   dkbans.command.report.listTemplates.loop: ' &8- &c{template.inGroupId} &8| &e{template.displayName}'
 
   dkbans.command.report.take.usage: '${dkbans.prefix.report} &cUsage&8: &7/report take <name>'
-  dkbans.command.report.take: '${dkbans.prefix.report} &7You have taken the report of &e{target.displayName}'
-  dkbans.command.report.take.action: '${dkbans.prefix.report} &7Action&8: &7&8[&aACCEPT REASON&8] &8[&cDENY&8]'
+  dkbans.command.report.take: '${dkbans.prefix.report} &7You have taken the report of &e{target.displayName}
+  ${dkbans.prefix.report} &7Action&8: !["&8[&aACCEPT&8]"]("run:///ban {target.name}") !["&8[&cDECLINE&8]"]("run:///report decline")'
+  dkbans.command.report.take.notReported: '${dkbans.prefix.report} &cThe player &e{target.displayName} &cis not reported'
   dkbans.command.report.take.already: '${dkbans.prefix.report} &cThe report of &e{target.displayName} &chas already been taken'
 
-  dkbans.command.report.decline.usage: '${dkbans.prefix.report} &cUsage&8: /report decline <name>'
-  dkbans.command.report.decline: '${dkbans.prefix.report} &cYou have declined the report of &e${target.displayName}'
-
+  dkbans.command.report.decline: '${dkbans.prefix.report} &7You have declined the report of &e${target.displayName}'
+  dkbans.command.report.accept: '${dkbans.prefix.report} &7You have accepted the report of &e${target.displayName}'
 
   dkbans.command.report.accept.listEntries: '${dkbans.prefix.report} &7Available reports&8: @for("entry" in {entries}, ${dkbans.command.report.listTemplates.loop},"\n","\n")'
   dkbans.command.report.accept.listEntries.loop: ' &8- ![{entry.template.displayName}]("run://{entry.punishmentCommand}")'
@@ -249,13 +256,6 @@ messages:
 
   dkbans.command.report.list: '${dkbans.prefix.report} &7Open reports&8: @for("report" in {reports}, ${dkbans.command.report.list.loop},"\n","\n")'
   dkbans.command.report.list.loop: ' !["&8- &e{report.player.displayName} &7Count&8: &e{report.count}"]("run:///report take {report.player.name}")'
-
-  dkbans.command.report.notify: '![${dkbans.command.report.notify.text};${dkbans.command.report.notify.hover}]("run:///report take {player.name}")'
-  dkbans.command.report.notify.text: '${dkbans.prefix.report} &e{player.displayName} &8&l>> &e{report.reason} &8[&7Click&8]'
-  dkbans.command.report.notify.hover: '&8» &7Player&8: &c{player.displayName}
-  &8» &7Reporter&8: &c{report.reporter.displayName}
-  &8» &7Reason&8: &c{report.reason}
-  &8» &7Server&8: &c{report.serverName}'
 
   dkbans.command.filter.help: '${dkbans.prefix.chat} &6Filter help
   &7/filter list [area]

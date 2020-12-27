@@ -20,6 +20,7 @@
 
 package net.pretronic.dkbans.common.player.report;
 
+import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.player.report.PlayerReport;
 import net.pretronic.dkbans.api.player.report.PlayerReportEntry;
@@ -33,21 +34,23 @@ public class DefaultPlayerReportEntry implements PlayerReportEntry {
 
     private final int id;
     private final PlayerReport report;
-    private final DKBansExecutor reporter;
-    private final ReportTemplate template;
+    private final UUID reporterId;
+    private final int tempalteId;
     private final String reason;
     private final String serverName;
     private final UUID serverId;
     private final long time;
     private final Document properties;
 
-    public DefaultPlayerReportEntry(int id, PlayerReport report, DKBansExecutor reporter, ReportTemplate template, String reason,
+    private DKBansExecutor reporter;
+
+    public DefaultPlayerReportEntry(int id, PlayerReport report, UUID reporterId, int tempalteId, String reason,
                                     String serverName, UUID serverId, long time, Document properties) {
-        Validate.notNull(report, reporter);
+        Validate.notNull(report, reporterId);
         this.id = id;
         this.report = report;
-        this.reporter = reporter;
-        this.template = template;
+        this.reporterId = reporterId;
+        this.tempalteId = tempalteId;
         this.reason = reason;
         this.serverName = serverName;
         this.serverId = serverId;
@@ -67,17 +70,20 @@ public class DefaultPlayerReportEntry implements PlayerReportEntry {
 
     @Override
     public UUID getReporterId() {
-        return reporter.getUniqueId();
+        return reporterId;
     }
 
     @Override
     public DKBansExecutor getReporter() {
+        if(reporter == null){
+            reporter = DKBans.getInstance().getPlayerManager().getPlayer(this.reporterId);
+        }
         return this.reporter;
     }
 
     @Override
     public ReportTemplate getTemplate() {
-        return this.template;
+        return (ReportTemplate) DKBans.getInstance().getTemplateManager().getTemplate(tempalteId);
     }
 
     @Override
@@ -98,11 +104,6 @@ public class DefaultPlayerReportEntry implements PlayerReportEntry {
     @Override
     public long getTime() {
         return this.time;
-    }
-
-    @Override
-    public String getPunishmentCommand(String target, int id) {
-        return String.format("/%s %s %s", template.getGroup(), target, id);
     }
 
     @Override
