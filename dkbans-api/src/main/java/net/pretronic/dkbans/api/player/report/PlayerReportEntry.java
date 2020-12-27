@@ -32,6 +32,8 @@ public interface PlayerReportEntry {
 
     PlayerReport getReport();
 
+    UUID getReporterId();
+
     DKBansExecutor getReporter();
 
     ReportTemplate getTemplate();

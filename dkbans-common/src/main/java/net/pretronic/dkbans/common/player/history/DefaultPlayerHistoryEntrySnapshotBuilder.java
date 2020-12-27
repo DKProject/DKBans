@@ -23,8 +23,8 @@ package net.pretronic.dkbans.common.player.history;
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.DKBansScope;
-import net.pretronic.dkbans.api.event.DKBansPlayerPunishEvent;
-import net.pretronic.dkbans.api.event.DKBansPlayerPunishUpdateEvent;
+import net.pretronic.dkbans.api.event.punish.DKBansPlayerPunishEvent;
+import net.pretronic.dkbans.api.event.punish.DKBansPlayerPunishUpdateEvent;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.history.*;
 import net.pretronic.dkbans.api.template.Template;
@@ -196,6 +196,9 @@ public class DefaultPlayerHistoryEntrySnapshotBuilder implements PlayerHistoryEn
             snapshot.setInsertResult(result);
             DKBans.getInstance().getEventBus().callEvent(DKBansPlayerPunishEvent.class,new DefaultDKBansPlayerPunishEvent(player,snapshot));
             ((DefaultPlayerHistory)history).push(result.getKey());
+            if(player.getReport() != null){
+                player.getReport().decline(this.stuff);
+            }
         }else{
             PlayerHistoryEntrySnapshot old = entry.getCurrent();
             snapshot = new DefaultPlayerHistoryEntrySnapshot(entry, -1, historyType,

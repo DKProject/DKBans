@@ -23,7 +23,7 @@ package net.pretronic.dkbans.common.player.report;
 import net.pretronic.databasequery.api.query.result.QueryResult;
 import net.pretronic.databasequery.api.query.result.QueryResultEntry;
 import net.pretronic.dkbans.api.DKBans;
-import net.pretronic.dkbans.api.event.DKBansPlayerReportCreateEvent;
+import net.pretronic.dkbans.api.event.report.DKBansPlayerReportCreateEvent;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.report.PlayerReport;
 import net.pretronic.dkbans.api.player.report.PlayerReportEntry;
@@ -34,6 +34,7 @@ import net.pretronic.dkbans.common.DefaultDKBans;
 import net.pretronic.dkbans.common.event.DefaultDKBansPlayerReportCreateEvent;
 import net.pretronic.libraries.utility.Iterators;
 import net.pretronic.libraries.utility.Validate;
+import net.pretronic.libraries.utility.annonations.Internal;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,7 +75,12 @@ public class DefaultReportManager implements ReportManager {
 
     @Override
     public PlayerReport getReport(UUID uniqueId) {
-        return Iterators.findOne(this.openReports, report -> report.getPlayer().getUniqueId().equals(uniqueId));
+        return Iterators.findOne(this.openReports, report -> report.getPlayerId().equals(uniqueId));
+    }
+
+    @Override
+    public PlayerReport getReportByWatcher(UUID uniqueId) {
+        return Iterators.findOne(this.openReports, report -> report.getWatcherId().equals(uniqueId));
     }
 
     @Override
@@ -108,5 +114,10 @@ public class DefaultReportManager implements ReportManager {
             this.openReports.add(report0);
         }
         return (DefaultPlayerReport) report0;
+    }
+
+    @Internal
+    public void removeReport(PlayerReport report){
+        this.openReports.remove(report);
     }
 }

@@ -127,6 +127,9 @@ public class Messages {
 
     public static MessageComponent<?> PUNISH_ADDRESS_BLOCK = Text.ofMessageKey("dkbans.punish.addressBlock");
 
+    public static MessageComponent<?> REPORT_ACCEPTED = Text.ofMessageKey("dkbans.report.accepted");
+    public static MessageComponent<?> REPORT_DECLINED = Text.ofMessageKey("dkbans.report.accepted");
+
     public static MessageComponent<?> COMMAND_HISTORY_HELP = Text.ofMessageKey("dkbans.command.history.help");
     public static MessageComponent<?> COMMAND_HISTORY_LIST = Text.ofMessageKey("dkbans.command.history.list");
     public static MessageComponent<?> COMMAND_HISTORY_INFO = Text.ofMessageKey("dkbans.command.history.info");
@@ -185,8 +188,9 @@ public class Messages {
     public static MessageComponent<?> COMMAND_REPORT_TAKE = Text.ofMessageKey("dkbans.command.report.take");
     public static MessageComponent<?> COMMAND_REPORT_TAKE_ALREADY = Text.ofMessageKey("dkbans.command.report.take.already");
 
+    public static MessageComponent<?> COMMAND_REPORT_NOT_WATCHING = Text.ofMessageKey("dkbans.command.report.notWatching");
+
     public static MessageComponent<?> COMMAND_REPORT_ACCEPT_USAGE = Text.ofMessageKey("dkbans.command.report.accept.usage");
-    public static MessageComponent<?> COMMAND_REPORT_ACCEPT_NOT_WATCHING = Text.ofMessageKey("dkbans.command.report.accept.notWatching");
     public static MessageComponent<?> COMMAND_REPORT_ACCEPT_LIST_ENTRIES = Text.ofMessageKey("dkbans.command.report.accept.listEntries");
 
     public static MessageComponent<?> COMMAND_REPORT_DECLINE_USAGE = Text.ofMessageKey("dkbans.command.report.decline.usage");

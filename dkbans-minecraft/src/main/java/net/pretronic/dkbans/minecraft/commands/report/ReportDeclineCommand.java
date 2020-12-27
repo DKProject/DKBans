@@ -38,8 +38,7 @@ public class ReportDeclineCommand extends BasicCommand {
 
     public ReportDeclineCommand(ObjectOwner owner) {
         super(owner, CommandConfiguration.newBuilder()
-                .name("decline")
-                .aliases("deny")
+                .name("decline").aliases("deny")
                 .permission(Permissions.COMMAND_REPORT_STUFF).create());
     }
 
@@ -49,15 +48,16 @@ public class ReportDeclineCommand extends BasicCommand {
             sender.sendMessage(Messages.ERROR_ONLY_PLAYER);
             return;
         }
-        if(args.length == 0) {
-            sender.sendMessage(Messages.COMMAND_REPORT_DECLINE_USAGE);
+        DKBansPlayer player = ((OnlineMinecraftPlayer) sender).getAs(DKBansPlayer.class);
+
+        PlayerReport report = player.getWatchingReport();
+        if(report == null){
+            sender.sendMessage(Messages.COMMAND_REPORT_NOT_WATCHING, VariableSet.create());
             return;
         }
-        Pair<OnlineMinecraftPlayer, PlayerReport> data = CommandUtil.checkAndGetTargetReport(sender, args[0]);
 
-        if(data != null) {
-            data.getValue().decline(((MinecraftPlayer)sender).getAs(DKBansPlayer.class));
-            sender.sendMessage(Messages.COMMAND_REPORT_DECLINE, VariableSet.create().addDescribed("target", data.getKey()));
-        }
+        report.decline(CommandUtil.getExecutor(sender));
+        sender.sendMessage(Messages.COMMAND_REPORT_DECLINE, VariableSet.create()
+                .addDescribed("report", report));
     }
 }

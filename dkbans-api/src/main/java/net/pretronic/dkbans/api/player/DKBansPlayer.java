@@ -107,6 +107,7 @@ public interface DKBansPlayer extends DKBansExecutor {
 
     PlayerReport getReport();
 
+    PlayerReport getWatchingReport();
 
 
     PlayerReportEntry report(DKBansPlayer executor, ReportTemplate template);

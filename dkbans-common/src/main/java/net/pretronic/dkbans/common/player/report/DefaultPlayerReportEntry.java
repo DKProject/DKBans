@@ -66,6 +66,11 @@ public class DefaultPlayerReportEntry implements PlayerReportEntry {
     }
 
     @Override
+    public UUID getReporterId() {
+        return reporter.getUniqueId();
+    }
+
+    @Override
     public DKBansExecutor getReporter() {
         return this.reporter;
     }

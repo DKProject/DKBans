@@ -2,7 +2,7 @@
  * (C) Copyright 2020 The DKBans Project (Davide Wietlisbach & Philipp Elvin Friedhoff)
  *
  * @author Davide Wietlisbach
- * @since 30.06.20, 17:45
+ * @since 27.12.20, 12:51
  *
  * The DKBans Project is under the Apache License, version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,35 +17,19 @@
  * under the License.
  */
 
-package net.pretronic.dkbans.common.event;
+package net.pretronic.dkbans.api.event.punish;
 
-import net.pretronic.dkbans.api.event.punish.DKBansPlayerPunishEvent;
+import net.pretronic.dkbans.api.event.DKBansEvent;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryEntry;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryEntrySnapshot;
 
-public class DefaultDKBansPlayerPunishEvent implements DKBansPlayerPunishEvent {
+public interface DKBansPlayerPunishEvent extends DKBansEvent {
 
-    private final DKBansPlayer player;
-    private final PlayerHistoryEntrySnapshot snapshot;
+    DKBansPlayer getPlayer();
 
-    public DefaultDKBansPlayerPunishEvent(DKBansPlayer player, PlayerHistoryEntrySnapshot snapshot) {
-        this.player = player;
-        this.snapshot = snapshot;
-    }
+    PlayerHistoryEntry getEntry();
 
-    @Override
-    public DKBansPlayer getPlayer() {
-        return player;
-    }
+    PlayerHistoryEntrySnapshot getSnapshot();
 
-    @Override
-    public PlayerHistoryEntry getEntry() {
-        return snapshot.getEntry();
-    }
-
-    @Override
-    public PlayerHistoryEntrySnapshot getSnapshot() {
-        return snapshot;
-    }
 }

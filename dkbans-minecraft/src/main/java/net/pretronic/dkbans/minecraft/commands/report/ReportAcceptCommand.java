@@ -46,18 +46,14 @@ public class ReportAcceptCommand extends BasicCommand {
             sender.sendMessage(Messages.COMMAND_REPORT_ACCEPT_USAGE);
             return;
         }
+        DKBansPlayer player = ((OnlineMinecraftPlayer) sender).getAs(DKBansPlayer.class);
 
-        Pair<OnlineMinecraftPlayer, PlayerReport> data = CommandUtil.checkAndGetTargetReport(sender, args[0]);
-        if(data != null) {
-            PlayerReport report = data.getValue();
-            DKBansPlayer player = ((OnlineMinecraftPlayer)sender).getAs(DKBansPlayer.class);
-
-            if(!player.equals(report.getWatcher())) {
-                sender.sendMessage(Messages.COMMAND_REPORT_ACCEPT_NOT_WATCHING);
-                return;
-            }
-            sender.sendMessage(Messages.COMMAND_REPORT_ACCEPT_LIST_ENTRIES, VariableSet.create()
-                    .addDescribed("entries", report.getEntries()));
+        PlayerReport report = player.getWatchingReport();
+        if(report == null){
+            sender.sendMessage(Messages.COMMAND_REPORT_NOT_WATCHING, VariableSet.create());
+            return;
         }
+
+        report.accept(CommandUtil.getExecutor(sender));
     }
 }

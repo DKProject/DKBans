@@ -56,7 +56,7 @@ public class DefaultDKBans extends DKBans {
     private final EventBus eventBus;
     private final DefaultDKBansStorage storage;
     private final PlayerHistoryManager historyManager;
-    private final ReportManager reportManager;
+    private final DefaultReportManager reportManager;
     private final SupportTicketManager ticketManager;
     private final DefaultBroadcastManager broadcastManager;
     private final DefaultFilterManager filterManager;
@@ -117,7 +117,7 @@ public class DefaultDKBans extends DKBans {
     }
 
     @Override
-    public ReportManager getReportManager() {
+    public DefaultReportManager getReportManager() {
         return this.reportManager;
     }
 
