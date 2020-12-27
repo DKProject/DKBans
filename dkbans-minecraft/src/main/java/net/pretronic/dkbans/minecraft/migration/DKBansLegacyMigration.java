@@ -55,10 +55,7 @@ import org.mcnative.common.player.data.PlayerDataProvider;
 
 import java.io.File;
 import java.time.Duration;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class DKBansLegacyMigration extends Migration {
 
@@ -271,7 +268,8 @@ public class DKBansLegacyMigration extends Migration {
 
         int mcNativeCount = 0;
         int players = 0;
-        for (NetworkPlayer player : BanSystem.getInstance().getStorage().getPlayers()) {
+        Collection<NetworkPlayer> legacyPlayers = BanSystem.getInstance().getStorage().getPlayers();
+        for (NetworkPlayer player : legacyPlayers) {
             if(McNative.getInstance().getPlayerManager().getPlayer(player.getUUID()) == null
                     && McNative.getInstance().getPlayerManager().getPlayer(player.getName()) == null) {
 
@@ -279,6 +277,11 @@ public class DKBansLegacyMigration extends Migration {
                         , player.getLastLogin(), null);
                 mcNativeCount++;
             }
+
+            players++;
+        }
+
+        for (NetworkPlayer player : legacyPlayers) {
             Map<BanType, PlayerHistoryEntry> tempHistory = new HashMap<>();
 
             DKBansPlayer dkBansPlayer = DKBans.getInstance().getPlayerManager().getPlayer(player.getUUID());
@@ -308,8 +311,8 @@ public class DKBansLegacyMigration extends Migration {
                     //Not included in new dkbans
                 }
             }
-            players++;
         }
+
         resultBuilder.addMigrated("McNativePlayers", mcNativeCount);
         resultBuilder.addMigrated("Players", players);
     }
