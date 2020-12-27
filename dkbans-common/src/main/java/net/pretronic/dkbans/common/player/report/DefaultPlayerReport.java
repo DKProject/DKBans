@@ -150,6 +150,7 @@ public class DefaultPlayerReport implements PlayerReport {
         Validate.notNull(player);
 
         DefaultDKBans.getInstance().getStorage().getReports().update()
+                .set("State",ReportState.PROCESSING)
                 .set("WatcherId",player.getUniqueId())
                 .where("Id",id)
                 .execute();

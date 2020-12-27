@@ -39,13 +39,14 @@ import net.pretronic.libraries.utility.annonations.Internal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Predicate;
 
 public class DefaultReportManager implements ReportManager {
 
-    private List<PlayerReport> openReports;
+    private List<PlayerReport> reports;
 
     public DefaultReportManager() {
-        this.openReports = null;
+        this.reports = null;
     }
 
     @Override
@@ -53,34 +54,39 @@ public class DefaultReportManager implements ReportManager {
         return getOpenReports().size();
     }
 
-    @Override
-    public List<PlayerReport> getOpenReports() {
-        if(this.openReports == null){
+    public List<PlayerReport> getReports(){
+        if(this.reports == null){
             QueryResult result = DefaultDKBans.getInstance().getStorage().getReports()
-                    .find().where("State",ReportState.OPEN).execute();
-            this.openReports = new ArrayList<>();
+                    .find().where("State",ReportState.OPEN)
+                    .or(query -> query.where("State",ReportState.PROCESSING)).execute();
+            this.reports = new ArrayList<>();
             for (QueryResultEntry entry : result) {
-                this.openReports.add(new DefaultPlayerReport(entry.getInt("Id")
+                this.reports.add(new DefaultPlayerReport(entry.getInt("Id")
                         ,ReportState.valueOf(entry.getString("State"))
                         ,entry.getUniqueId("PlayerId"),entry.getUniqueId("WatcherId")));
             }
         }
-        return this.openReports;
+        return this.reports;
+    }
+
+    @Override
+    public List<PlayerReport> getOpenReports() {
+        return Iterators.filter(getReports(), report -> report.getState() == ReportState.OPEN);
     }
 
     @Override
     public PlayerReport getReport(DKBansPlayer player) {
-        return Iterators.findOne(getOpenReports(), report -> report.getPlayer().equals(player));
+        return Iterators.findOne(getReports(), report -> report.getPlayer().equals(player));
     }
 
     @Override
     public PlayerReport getReport(UUID uniqueId) {
-        return Iterators.findOne(getOpenReports(), report -> report.getPlayerId().equals(uniqueId));
+        return Iterators.findOne(getReports(), report -> report.getPlayerId().equals(uniqueId));
     }
 
     @Override
     public PlayerReport getReportByWatcher(UUID uniqueId) {
-        return Iterators.findOne(getOpenReports(), report -> report.getWatcherId() != null && report.getWatcherId().equals(uniqueId));
+        return Iterators.findOne(getReports(), report -> report.getWatcherId() != null && report.getWatcherId().equals(uniqueId));
     }
 
     @Override
@@ -108,17 +114,17 @@ public class DefaultReportManager implements ReportManager {
     }
 
     private DefaultPlayerReport getReportOrCreate(DKBansPlayer target) {
-        PlayerReport report0 = Iterators.findOne(getOpenReports(), target0 -> target0.getPlayer().equals(target));
+        PlayerReport report0 = Iterators.findOne(getReports(), target0 -> target0.getPlayer().equals(target));
         if(report0 == null) {
             report0 = DKBans.getInstance().getStorage().createPlayerReport(target, ReportState.OPEN);
-            this.openReports.add(report0);
+            this.reports.add(report0);
         }
         return (DefaultPlayerReport) report0;
     }
 
     @Internal
     public void removeReport(PlayerReport report){
-        if(openReports == null) return;
-        this.openReports.remove(report);
+        if(report == null) return;
+        this.reports.remove(report);
     }
 }
