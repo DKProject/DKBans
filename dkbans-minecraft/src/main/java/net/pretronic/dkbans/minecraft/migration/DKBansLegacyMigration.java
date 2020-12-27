@@ -73,7 +73,7 @@ public class DKBansLegacyMigration extends Migration {
             new BanSystem();
         }
         MigrationResultBuilder resultBuilder = new MigrationResultBuilder();
-        migrateReasons(resultBuilder);
+        //migrateReasons(resultBuilder);
         migratePlayers(resultBuilder);
 
         long end = System.currentTimeMillis();
