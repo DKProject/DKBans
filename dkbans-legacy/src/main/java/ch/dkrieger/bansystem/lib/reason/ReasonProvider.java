@@ -53,11 +53,11 @@ public class ReasonProvider {
         this.reportReasons = new ArrayList<>();
         this.unbanReasons = new ArrayList<>();
         this.warnReasons = new ArrayList<>();
-        loadBanReasons();
+        /*loadBanReasons();
         loadUnbanReasons();
         loadReportReasons();
         loadKickReasons();
-        loadWarnReasons();
+        loadWarnReasons();*/
     }
     public ReasonProvider(DKBansPlatform platform,List<KickReason> kickReasons, List<BanReason> banReasons, List<ReportReason> reportReasons, List<UnbanReason> unbanReasons) {
         this.platform = platform;
