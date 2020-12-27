@@ -99,7 +99,7 @@ public class DefaultPlayerReport implements PlayerReport {
 
     @Override
     public PlayerReportEntry getEntry(DKBansExecutor reporter) {
-        return Iterators.findOne(this.entries, entry -> entry.getReporter().equals(reporter));
+        return Iterators.findOne(getEntries(), entry -> entry.getReporter().equals(reporter));
     }
 
     @Override
@@ -146,6 +146,7 @@ public class DefaultPlayerReport implements PlayerReport {
 
     @Internal
     public void addEntry(DefaultPlayerReportEntry entry) {
+        if(this.entries == null) this.entries = new ArrayList<>();
         this.entries.add(entry);
     }
 }

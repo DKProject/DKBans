@@ -55,9 +55,9 @@ public class ReportTakeCommand extends BasicCommand {
                 sender.sendMessage(Messages.COMMAND_REPORT_TAKE_ALREADY, VariableSet.create().addDescribed("target", target));
             } else {
                 report.setWatcher(player);
-                sender.sendMessage(Messages.COMMAND_REPORT_TAKE, VariableSet.create().addDescribed("target", target));
+                sender.sendMessage(Messages.COMMAND_REPORT_TAKE, VariableSet.create()
+                        .addDescribed("target", target));
             }
         }
-
     }
 }
