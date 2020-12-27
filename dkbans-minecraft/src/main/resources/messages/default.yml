@@ -124,7 +124,7 @@ messages:
   dkbans.report.accepted: '${dkbans.prefix.report} &aThe report about &e{report.player.displayName} &awas accepted'
   dkbans.report.declined: '${dkbans.prefix.report} &cThe report about &e{report.player.displayName} &cwas declined'
 
-  dkbans.report.notify: '![${dkbans.command.report.notify.text};${dkbans.command.report.notify.hover}]("run:///report take {player.name}")'
+  dkbans.report.notify: '![${dkbans.report.notify.text};${dkbans.report.notify.hover}]("run:///report take {player.name}")'
   dkbans.report.notify.text: '${dkbans.prefix.report} &e{player.displayName} &8&l>> &e{report.reason} &8[&7Click&8]'
   dkbans.report.notify.hover: '&8» &7Player&8: &c{player.displayName}
   &8» &7Reporter&8: &c{report.reporter.displayName}
