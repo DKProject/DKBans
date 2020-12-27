@@ -191,7 +191,7 @@ public class CommandConfig {
 
     public static String COMMAND_REPORT_TEMPLATE_NAME = "report";
 
-    public static String COMMAND_REPORT_MODE = "NORMAL";
+    public static String COMMAND_REPORT_MODE = "TEMPLATE";
 
     static {
 

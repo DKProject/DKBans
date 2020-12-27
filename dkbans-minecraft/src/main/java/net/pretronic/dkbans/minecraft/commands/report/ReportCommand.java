@@ -107,7 +107,8 @@ public class ReportCommand extends MainCommand implements NotFindable {
         if(this.templateGroup != null) {
             Template template = this.templateGroup.getTemplate(reason);
             if(!(template instanceof ReportTemplate)) {
-                player.sendMessage(Messages.COMMAND_REPORT_TEMPLATE_NOT_EXIST, VariableSet.create().add("name", reason));
+                player.sendMessage(Messages.COMMAND_REPORT_TEMPLATE_NOT_EXIST, VariableSet.create()
+                        .add("name", reason));
                 return;
             }
             PlayerReportEntry reportEntry = target.getAs(DKBansPlayer.class).report(player.getAs(DKBansPlayer.class), (ReportTemplate) template);

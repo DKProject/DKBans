@@ -32,6 +32,6 @@ templates:
   4:
     name: Other
     display: Other
-    permission: dkbans.ban.reason.reportTest
+    permission: dkbans.report
     hidden: false
     category: Reports

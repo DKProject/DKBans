@@ -235,7 +235,7 @@ messages:
 
   dkbans.command.report.help: '${dkbans.prefix} &cUsage&8: &7/report <player> <Reason>'
   dkbans.command.report.template.notExist: '${dkbans.prefix.report} &cThe report template &e{name} &cdoes not exist'
-  dkbans.command.report.already.reported: '${dkbans.prefix.report} &cYou have already &e{player.displayName} &creported'
+  dkbans.command.report.already.reported: '${dkbans.prefix.report} &cYou have &e{player.displayName} &calready reported'
   dkbans.command.report.reported: '${dkbans.prefix.report} &7You have reported &e{player.displayName} &7for &e{reason}'
   dkbans.command.report.listTemplates: '${dkbans.prefix.report} &6Available report templates
   @for("template" in {templates}, ${dkbans.command.report.listTemplates.loop},"\n")'
@@ -247,11 +247,8 @@ messages:
   dkbans.command.report.take.notReported: '${dkbans.prefix.report} &cThe player &e{target.displayName} &cis not reported'
   dkbans.command.report.take.already: '${dkbans.prefix.report} &cThe report of &e{target.displayName} &chas already been taken'
 
-  dkbans.command.report.decline: '${dkbans.prefix.report} &7You have declined the report of &e${target.displayName}'
-  dkbans.command.report.accept: '${dkbans.prefix.report} &7You have accepted the report of &e${target.displayName}'
-
-  dkbans.command.report.accept.listEntries: '${dkbans.prefix.report} &7Available reports&8: @for("entry" in {entries}, ${dkbans.command.report.listTemplates.loop},"\n","\n")'
-  dkbans.command.report.accept.listEntries.loop: ' &8- ![{entry.template.displayName}]("run://{entry.punishmentCommand}")'
+  dkbans.command.report.decline: '${dkbans.prefix.report} &7You have declined the report about &e{target.displayName}'
+  dkbans.command.report.accept: '${dkbans.prefix.report} &7You have accepted the report about &e{target.displayName}'
 
   dkbans.command.report.notWatching: '${dkbans.prefix.report} &7You are not watching a report'
 
