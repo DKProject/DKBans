@@ -150,7 +150,8 @@ public class DefaultPlayerReport implements PlayerReport {
         Validate.notNull(player);
 
         DefaultDKBans.getInstance().getStorage().getReports().update()
-                .set("WatcherId",player.getUniqueId()).where("Id",id)
+                .set("WatcherId",player.getUniqueId())
+                .where("Id",id)
                 .execute();
 
         this.watcher = player;
@@ -166,6 +167,7 @@ public class DefaultPlayerReport implements PlayerReport {
         this.state = ReportState.ACCEPTED;
         DefaultDKBans.getInstance().getStorage().getReports().update()
                 .set("State",ReportState.ACCEPTED)
+                .where("Id",id)
                 .execute();
         DefaultDKBans.getInstance().getReportManager().removeReport(this);
         DKBans.getInstance().getEventBus().callEvent(DKBansPlayerReportAcceptEvent.class,new DefaultDKBansPlayerReportAcceptEvent(this));
@@ -177,6 +179,7 @@ public class DefaultPlayerReport implements PlayerReport {
         this.state = ReportState.DECLINED;
         DefaultDKBans.getInstance().getStorage().getReports().update()
                 .set("State",ReportState.DECLINED)
+                .where("Id",id)
                 .execute();
         DefaultDKBans.getInstance().getReportManager().removeReport(this);
         DKBans.getInstance().getEventBus().callEvent(DKBansPlayerReportDeclineEvent.class,new DefaultDKBansPlayerReportDeclineEvent(this));
