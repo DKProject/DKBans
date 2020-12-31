@@ -22,8 +22,8 @@ package net.pretronic.dkbans.minecraft.config;
 
 import net.pretronic.dkbans.api.player.history.PlayerHistoryEntrySnapshot;
 import net.pretronic.dkbans.api.player.history.PunishmentType;
-import org.mcnative.common.text.Text;
-import org.mcnative.common.text.components.MessageComponent;
+import org.mcnative.runtime.api.text.Text;
+import org.mcnative.runtime.api.text.components.MessageComponent;
 
 public class Messages {
 

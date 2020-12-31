@@ -26,9 +26,9 @@ import net.pretronic.libraries.command.command.configuration.CommandConfiguratio
 import net.pretronic.libraries.command.sender.CommandSender;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
-import org.mcnative.common.network.component.server.MinecraftServer;
-import org.mcnative.common.player.MinecraftPlayer;
-import org.mcnative.common.player.OnlineMinecraftPlayer;
+import org.mcnative.runtime.api.network.component.server.MinecraftServer;
+import org.mcnative.runtime.api.player.MinecraftPlayer;
+import org.mcnative.runtime.api.player.OnlineMinecraftPlayer;
 
 public class JumptoCommand extends BasicCommand {
 

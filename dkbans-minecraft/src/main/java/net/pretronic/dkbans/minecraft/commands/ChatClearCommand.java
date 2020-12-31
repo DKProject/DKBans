@@ -26,10 +26,10 @@ import net.pretronic.libraries.command.command.BasicCommand;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
 import net.pretronic.libraries.command.sender.CommandSender;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
-import org.mcnative.common.McNative;
-import org.mcnative.common.network.component.server.MinecraftServer;
-import org.mcnative.common.player.OnlineMinecraftPlayer;
-import org.mcnative.common.text.Text;
+import org.mcnative.runtime.api.McNative;
+import org.mcnative.runtime.api.network.component.server.MinecraftServer;
+import org.mcnative.runtime.api.player.OnlineMinecraftPlayer;
+import org.mcnative.runtime.api.text.Text;
 
 public class ChatClearCommand extends BasicCommand {
 

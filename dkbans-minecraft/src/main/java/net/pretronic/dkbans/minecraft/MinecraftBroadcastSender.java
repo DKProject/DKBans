@@ -30,11 +30,11 @@ import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.libraries.message.MessageProvider;
 import net.pretronic.libraries.message.bml.MessageProcessor;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
-import org.mcnative.common.McNative;
-import org.mcnative.common.player.OnlineMinecraftPlayer;
-import org.mcnative.common.player.Title;
-import org.mcnative.common.text.Text;
-import org.mcnative.common.utils.MinecraftTickConverter;
+import org.mcnative.runtime.api.McNative;
+import org.mcnative.runtime.api.player.OnlineMinecraftPlayer;
+import org.mcnative.runtime.api.player.Title;
+import org.mcnative.runtime.api.text.Text;
+import org.mcnative.runtime.api.utils.MinecraftTickConverter;
 
 import java.util.ArrayList;
 import java.util.Collection;

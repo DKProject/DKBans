@@ -31,8 +31,8 @@ import net.pretronic.libraries.command.sender.CommandSender;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
 import net.pretronic.libraries.utility.map.Pair;
-import org.mcnative.common.player.MinecraftPlayer;
-import org.mcnative.common.player.OnlineMinecraftPlayer;
+import org.mcnative.runtime.api.player.MinecraftPlayer;
+import org.mcnative.runtime.api.player.OnlineMinecraftPlayer;
 
 public class ReportDeclineCommand extends BasicCommand {
 

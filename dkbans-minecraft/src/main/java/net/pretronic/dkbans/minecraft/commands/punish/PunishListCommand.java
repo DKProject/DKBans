@@ -31,7 +31,7 @@ import net.pretronic.libraries.command.sender.CommandSender;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
 import net.pretronic.libraries.utility.GeneralUtil;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
-import org.mcnative.common.text.components.MessageComponent;
+import org.mcnative.runtime.api.text.components.MessageComponent;
 
 import java.util.List;
 

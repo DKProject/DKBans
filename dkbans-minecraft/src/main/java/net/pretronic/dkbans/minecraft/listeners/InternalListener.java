@@ -36,10 +36,10 @@ import net.pretronic.dkbans.minecraft.config.Permissions;
 import net.pretronic.dkbans.minecraft.joinme.MinecraftJoinMe;
 import net.pretronic.libraries.event.Listener;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
-import org.mcnative.common.McNative;
-import org.mcnative.common.player.ConnectedMinecraftPlayer;
-import org.mcnative.common.player.OnlineMinecraftPlayer;
-import org.mcnative.common.text.components.MessageComponent;
+import org.mcnative.runtime.api.McNative;
+import org.mcnative.runtime.api.player.ConnectedMinecraftPlayer;
+import org.mcnative.runtime.api.player.OnlineMinecraftPlayer;
+import org.mcnative.runtime.api.text.components.MessageComponent;
 
 import java.util.List;
 

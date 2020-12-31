@@ -32,8 +32,8 @@ import net.pretronic.libraries.caching.Cache;
 import net.pretronic.libraries.caching.CacheQuery;
 import net.pretronic.libraries.utility.Iterators;
 import net.pretronic.libraries.utility.Validate;
-import org.mcnative.common.McNative;
-import org.mcnative.common.player.MinecraftPlayer;
+import org.mcnative.runtime.api.McNative;
+import org.mcnative.runtime.api.player.MinecraftPlayer;
 
 import java.util.ArrayList;
 import java.util.Collection;

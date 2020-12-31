@@ -53,10 +53,10 @@ import net.pretronic.libraries.document.type.DocumentFileType;
 import net.pretronic.libraries.plugin.lifecycle.Lifecycle;
 import net.pretronic.libraries.plugin.lifecycle.LifecycleState;
 import net.pretronic.libraries.utility.io.FileUtil;
-import org.mcnative.common.McNative;
-import org.mcnative.common.plugin.MinecraftPlugin;
-import org.mcnative.common.plugin.configuration.ConfigurationProvider;
-import org.mcnative.common.serviceprovider.placeholder.PlaceholderProvider;
+import org.mcnative.runtime.api.McNative;
+import org.mcnative.runtime.api.plugin.MinecraftPlugin;
+import org.mcnative.runtime.api.plugin.configuration.ConfigurationProvider;
+import org.mcnative.runtime.api.serviceprovider.placeholder.PlaceholderProvider;
 
 import java.io.File;
 import java.util.Map;

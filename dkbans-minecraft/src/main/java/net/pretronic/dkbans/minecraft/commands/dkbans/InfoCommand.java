@@ -14,9 +14,9 @@ import net.pretronic.libraries.command.command.BasicCommand;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
 import net.pretronic.libraries.command.sender.CommandSender;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
-import org.mcnative.common.plugin.MinecraftPlugin;
-import org.mcnative.common.text.Text;
-import org.mcnative.common.text.format.TextColor;
+import org.mcnative.runtime.api.plugin.MinecraftPlugin;
+import org.mcnative.runtime.api.text.Text;
+import org.mcnative.runtime.api.text.format.TextColor;
 
 public class InfoCommand extends BasicCommand {
 

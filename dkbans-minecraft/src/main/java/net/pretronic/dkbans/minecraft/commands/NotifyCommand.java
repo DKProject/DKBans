@@ -26,9 +26,9 @@ import net.pretronic.libraries.command.command.configuration.CommandConfiguratio
 import net.pretronic.libraries.command.sender.CommandSender;
 import net.pretronic.libraries.utility.StringUtil;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
-import org.mcnative.common.player.MinecraftPlayer;
-import org.mcnative.common.player.OnlineMinecraftPlayer;
-import org.mcnative.common.text.components.MessageComponent;
+import org.mcnative.runtime.api.player.MinecraftPlayer;
+import org.mcnative.runtime.api.player.OnlineMinecraftPlayer;
+import org.mcnative.runtime.api.text.components.MessageComponent;
 
 import java.util.HashMap;
 import java.util.Map;

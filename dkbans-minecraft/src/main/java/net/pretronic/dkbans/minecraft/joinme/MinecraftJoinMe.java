@@ -27,11 +27,11 @@ import net.pretronic.dkbans.minecraft.config.CommandConfig;
 import net.pretronic.dkbans.minecraft.config.DKBansConfig;
 import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.libraries.utility.exception.OperationFailedException;
-import org.mcnative.common.text.ImageText;
-import org.mcnative.common.text.components.MessageComponent;
-import org.mcnative.common.text.components.TextComponent;
-import org.mcnative.common.text.event.ClickAction;
-import org.mcnative.common.text.event.TextEvent;
+import org.mcnative.runtime.api.text.ImageText;
+import org.mcnative.runtime.api.text.components.MessageComponent;
+import org.mcnative.runtime.api.text.components.TextComponent;
+import org.mcnative.runtime.api.text.event.ClickAction;
+import org.mcnative.runtime.api.text.event.TextEvent;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;

@@ -38,9 +38,9 @@ import net.pretronic.libraries.message.bml.variable.describer.VariableDescriber;
 import net.pretronic.libraries.message.bml.variable.describer.VariableDescriberRegistry;
 import net.pretronic.libraries.utility.duration.DurationProcessor;
 import net.pretronic.libraries.utility.map.Pair;
-import org.mcnative.common.McNative;
-import org.mcnative.common.player.MinecraftPlayer;
-import org.mcnative.common.serviceprovider.message.ColoredString;
+import org.mcnative.runtime.api.McNative;
+import org.mcnative.runtime.api.player.MinecraftPlayer;
+import org.mcnative.runtime.api.text.format.ColoredString;
 
 import java.util.concurrent.TimeUnit;
 

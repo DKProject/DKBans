@@ -43,9 +43,9 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.mcnative</groupId>
+                <groupId>org.mcnative.buildtool</groupId>
                 <artifactId>mcnative-buildtool-maven</artifactId>
-                <version>${dependency.mcnative.version}</version>
+                <version>1.0.0.5</version>
                 <executions>
                     <execution>
                         <goals>
@@ -55,7 +55,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <mcnative-loader-version>${dependency.mcnative.version}</mcnative-loader-version>
+                    <mcnative-loader-version>${dependency.mcnative.loader}</mcnative-loader-version>
                     <resource-loader-version>${dependency.pretronic.libraries}</resource-loader-version>
                     <manifest>
                         <name>DKBans</name>
@@ -111,9 +111,15 @@
         </dependency>
 
         <dependency>
-            <groupId>org.mcnative</groupId>
-            <artifactId>mcnative-build</artifactId>
-            <version>${dependency.mcnative.version}</version>
+            <groupId>org.mcnative.runtime</groupId>
+            <artifactId>mcnative-runtime-build</artifactId>
+            <version>${dependency.mcnative.runtime}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mcnative.runtime.api</groupId>
+            <artifactId>mcnative-runtime-api-service</artifactId>
+            <version>${dependency.mcnative.api}</version>
             <scope>provided</scope>
         </dependency>
 

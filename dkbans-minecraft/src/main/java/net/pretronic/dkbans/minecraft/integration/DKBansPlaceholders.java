@@ -15,10 +15,10 @@ import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.session.PlayerSession;
 import net.pretronic.dkbans.minecraft.PlayerSettingsKey;
 import net.pretronic.libraries.utility.duration.DurationProcessor;
-import org.mcnative.common.player.MinecraftPlayer;
-import org.mcnative.common.protocol.MinecraftEdition;
-import org.mcnative.common.protocol.MinecraftProtocolVersion;
-import org.mcnative.common.serviceprovider.placeholder.PlaceholderHook;
+import org.mcnative.runtime.api.player.MinecraftPlayer;
+import org.mcnative.runtime.api.protocol.MinecraftEdition;
+import org.mcnative.runtime.api.protocol.MinecraftProtocolVersion;
+import org.mcnative.runtime.api.serviceprovider.placeholder.PlaceholderHook;
 
 import java.util.concurrent.TimeUnit;
 

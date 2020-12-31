@@ -32,10 +32,10 @@ import net.pretronic.libraries.command.sender.CommandSender;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
 import net.pretronic.libraries.utility.duration.DurationProcessor;
 import net.pretronic.libraries.utility.map.Pair;
-import org.mcnative.common.McNative;
-import org.mcnative.common.player.MinecraftPlayer;
-import org.mcnative.common.player.OnlineMinecraftPlayer;
-import org.mcnative.common.text.components.MessageComponent;
+import org.mcnative.runtime.api.McNative;
+import org.mcnative.runtime.api.player.MinecraftPlayer;
+import org.mcnative.runtime.api.player.OnlineMinecraftPlayer;
+import org.mcnative.runtime.api.text.components.MessageComponent;
 
 import java.time.Duration;
 import java.util.regex.Pattern;

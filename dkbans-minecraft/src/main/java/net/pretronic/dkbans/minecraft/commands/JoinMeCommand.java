@@ -31,10 +31,10 @@ import net.pretronic.libraries.command.command.configuration.CommandConfiguratio
 import net.pretronic.libraries.command.sender.CommandSender;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
-import org.mcnative.common.McNative;
-import org.mcnative.common.network.component.server.MinecraftServer;
-import org.mcnative.common.player.OnlineMinecraftPlayer;
-import org.mcnative.common.player.PlayerSetting;
+import org.mcnative.runtime.api.McNative;
+import org.mcnative.runtime.api.network.component.server.MinecraftServer;
+import org.mcnative.runtime.api.player.OnlineMinecraftPlayer;
+import org.mcnative.runtime.api.player.PlayerSetting;
 
 import java.util.UUID;
 
