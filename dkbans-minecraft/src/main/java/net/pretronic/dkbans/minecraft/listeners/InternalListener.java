@@ -21,7 +21,14 @@
 package net.pretronic.dkbans.minecraft.listeners;
 
 import net.pretronic.dkbans.api.event.*;
+import net.pretronic.dkbans.api.event.punish.DKBansPlayerPunishEvent;
+import net.pretronic.dkbans.api.event.punish.DKBansPlayerPunishUpdateEvent;
+import net.pretronic.dkbans.api.event.report.DKBansPlayerReportAcceptEvent;
+import net.pretronic.dkbans.api.event.report.DKBansPlayerReportCreateEvent;
+import net.pretronic.dkbans.api.event.report.DKBansPlayerReportDeclineEvent;
+import net.pretronic.dkbans.api.event.report.DKBansPlayerReportTakeEvent;
 import net.pretronic.dkbans.api.player.history.PunishmentType;
+import net.pretronic.dkbans.api.player.report.PlayerReportEntry;
 import net.pretronic.dkbans.minecraft.BroadcastMessageChannels;
 import net.pretronic.dkbans.minecraft.PlayerSettingsKey;
 import net.pretronic.dkbans.minecraft.config.Messages;
@@ -29,11 +36,10 @@ import net.pretronic.dkbans.minecraft.config.Permissions;
 import net.pretronic.dkbans.minecraft.joinme.MinecraftJoinMe;
 import net.pretronic.libraries.event.Listener;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
-import org.mcnative.common.McNative;
-import org.mcnative.common.player.ConnectedMinecraftPlayer;
-import org.mcnative.common.player.OnlineMinecraftPlayer;
-import org.mcnative.common.protocol.MinecraftProtocolVersion;
-import org.mcnative.common.text.components.MessageComponent;
+import org.mcnative.runtime.api.McNative;
+import org.mcnative.runtime.api.player.ConnectedMinecraftPlayer;
+import org.mcnative.runtime.api.player.OnlineMinecraftPlayer;
+import org.mcnative.runtime.api.text.components.MessageComponent;
 
 import java.util.List;
 
@@ -55,17 +61,10 @@ public class InternalListener {
     }
 
     @Listener
-    public void onPlayerReportTeleport(DKBansPlayerReportTeleportEvent event) {
-        OnlineMinecraftPlayer player = McNative.getInstance().getLocal().getOnlinePlayer(event.getPlayer().getUniqueId());
-        OnlineMinecraftPlayer target = McNative.getInstance().getLocal().getOnlinePlayer(event.getReport().getPlayer().getUniqueId());
-        player.connect(target.getServer());
-    }
-
-    @Listener
-    public void onPlayerReportSend(DKBansPlayerReportSendEvent event) {
+    public void onPlayerReportCreate(DKBansPlayerReportCreateEvent event) {
         for (ConnectedMinecraftPlayer player : McNative.getInstance().getLocal().getConnectedPlayers()) {
             if(player.hasPermission(Permissions.COMMAND_REPORT_STUFF)) {
-                player.sendMessage(Messages.COMMAND_REPORT_NOTFIY, VariableSet.create()
+                player.sendMessage(Messages.REPORT_NOTIFY, VariableSet.create()
                         .addDescribed("player",event.getPlayer())
                         .addDescribed("report", event.getReportEntry()));
             }
@@ -73,12 +72,60 @@ public class InternalListener {
     }
 
     @Listener
+    public void onPlayerReportTake(DKBansPlayerReportTakeEvent event) {
+        OnlineMinecraftPlayer watcher = McNative.getInstance().getLocal().getOnlinePlayer(event.getReport().getWatcherId());
+        if(watcher == null) return;
+        OnlineMinecraftPlayer target = McNative.getInstance().getNetwork().getOnlinePlayer(event.getReport().getPlayerId());
+        if(target != null && !watcher.getServer().getName().equalsIgnoreCase(target.getName())){
+            watcher.connect(target.getServer());
+        }
+    }
+
+    @Listener
+    public void onPlayerReportAccept(DKBansPlayerReportAcceptEvent event) {
+        for (PlayerReportEntry entry : event.getReport().getEntries()) {
+            OnlineMinecraftPlayer player = McNative.getInstance().getLocal().getOnlinePlayer(entry.getReporterId());
+            if(player != null){
+                player.sendMessage(Messages.REPORT_ACCEPTED,VariableSet.create()
+                        .addDescribed("report",event.getReport()));
+            }
+        }
+    }
+
+    @Listener
+    public void onPlayerReportDecline(DKBansPlayerReportDeclineEvent event) {
+        for (PlayerReportEntry entry : event.getReport().getEntries()) {
+            OnlineMinecraftPlayer player = McNative.getInstance().getLocal().getOnlinePlayer(entry.getReporterId());
+            if(player != null){
+                player.sendMessage(Messages.REPORT_DECLINED,VariableSet.create()
+                        .addDescribed("report",event.getReport()));
+            }
+        }
+    }
+
+    @Listener
     public void onPlayerPunish(DKBansPlayerPunishEvent event){
         OnlineMinecraftPlayer player = McNative.getInstance().getLocal().getConnectedPlayer(event.getPlayer().getUniqueId());
+        if(player == null) return;
         if(event.getSnapshot().getPunishmentType() == PunishmentType.BAN) handleBan(event, player);
         else if(event.getSnapshot().getPunishmentType() == PunishmentType.MUTE) handleMute(event, player);
         else if(event.getSnapshot().getPunishmentType() == PunishmentType.KICK) handleKick(event, player);
         else if(event.getSnapshot().getPunishmentType() == PunishmentType.WARN) handleWarn(event, player);
+    }
+
+    @Listener
+    public void onPlayerPunishUpdate(DKBansPlayerPunishUpdateEvent event){
+        OnlineMinecraftPlayer player = McNative.getInstance().getLocal().getConnectedPlayer(event.getPlayer().getUniqueId());
+        if(player == null) return;
+        if(event.getNewSnapshot().getPunishmentType() == PunishmentType.BAN){
+            MessageComponent<?> message = event.getNewSnapshot().isPermanently()
+                    ? Messages.PUNISH_BAN_MESSAGE_PERMANENTLY : Messages.PUNISH_BAN_MESSAGE_TEMPORARY;
+
+            player.kick(message, VariableSet.create()
+                    .addDescribed("ban", event.getEntry())
+                    .addDescribed("punish", event.getEntry())
+                    .addDescribed("player", event.getPlayer()));
+        }
     }
 
     @Listener
@@ -124,7 +171,7 @@ public class InternalListener {
     private void handleKick(DKBansPlayerPunishEvent event, OnlineMinecraftPlayer player) {
         if (player != null) {
             player.kick(Messages.PUNISH_KICK_MESSAGE, VariableSet.create()
-                    .addDescribed("mute", event.getEntry())
+                    .addDescribed("kick", event.getEntry())
                     .addDescribed("punish", event.getEntry())
                     .addDescribed("player", event.getPlayer()));
         }

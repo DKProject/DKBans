@@ -20,7 +20,7 @@
 
 package net.pretronic.dkbans.api.broadcast;
 
-import net.pretronic.dkbans.api.DKBansExecutor;
+import net.pretronic.libraries.document.Document;
 
 public interface Broadcast {
 
@@ -36,15 +36,7 @@ public interface Broadcast {
     void setVisibility(BroadcastVisibility visibility);
 
 
-    String getText();
+    Document getProperties();
 
-    void setText(String text);
-
-
-    void send();
-
-    void send(Iterable<DKBansExecutor> executors);
-
-    void delete();
-
+    void updateProperties();
 }

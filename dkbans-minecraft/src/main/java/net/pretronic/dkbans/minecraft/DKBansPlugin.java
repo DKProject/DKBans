@@ -22,38 +22,25 @@ package net.pretronic.dkbans.minecraft;
 
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
-import net.pretronic.dkbans.api.player.history.PunishmentType;
 import net.pretronic.dkbans.api.template.TemplateGroup;
 import net.pretronic.dkbans.common.DefaultDKBans;
-import net.pretronic.dkbans.common.filter.DefaultFilter;
-import net.pretronic.dkbans.common.player.DefaultDKBansPlayer;
-import net.pretronic.dkbans.common.player.chatlog.DefaultChatLogEntry;
-import net.pretronic.dkbans.common.player.chatlog.DefaultPlayerChatLog;
-import net.pretronic.dkbans.common.player.history.DefaultPlayerHistory;
-import net.pretronic.dkbans.common.player.history.DefaultPlayerHistoryEntry;
-import net.pretronic.dkbans.common.player.history.DefaultPlayerHistoryEntrySnapshot;
-import net.pretronic.dkbans.common.player.history.DefaultPlayerHistoryType;
-import net.pretronic.dkbans.common.player.ipblacklist.DefaultIpAddressBlock;
-import net.pretronic.dkbans.common.player.note.DefaultPlayerNote;
-import net.pretronic.dkbans.common.player.report.DefaultPlayerReport;
-import net.pretronic.dkbans.common.player.report.DefaultPlayerReportEntry;
-import net.pretronic.dkbans.common.player.session.DefaultPlayerSession;
-import net.pretronic.dkbans.common.template.DefaultTemplate;
-import net.pretronic.dkbans.common.template.DefaultTemplateCategory;
-import net.pretronic.dkbans.common.template.DefaultTemplateGroup;
-import net.pretronic.dkbans.common.template.punishment.DefaultPunishmentTemplate;
+import net.pretronic.dkbans.common.broadcast.*;
 import net.pretronic.dkbans.minecraft.commands.*;
+import net.pretronic.dkbans.minecraft.commands.broadcast.BroadcastCommand;
+import net.pretronic.dkbans.minecraft.commands.broadcastgroup.BroadcastGroupCommand;
 import net.pretronic.dkbans.minecraft.commands.dkbans.DKBansCommand;
 import net.pretronic.dkbans.minecraft.commands.history.HistoryCommand;
 import net.pretronic.dkbans.minecraft.commands.history.MyHistoryPointsCommand;
 import net.pretronic.dkbans.minecraft.commands.history.ResetHistoryCommand;
 import net.pretronic.dkbans.minecraft.commands.ip.IpBlockCommand;
 import net.pretronic.dkbans.minecraft.commands.ip.IpInfoCommand;
+import net.pretronic.dkbans.minecraft.commands.ip.IpUnblockCommand;
 import net.pretronic.dkbans.minecraft.commands.punish.*;
 import net.pretronic.dkbans.minecraft.commands.report.ReportCommand;
 import net.pretronic.dkbans.minecraft.commands.unpunish.UnpunishCommand;
 import net.pretronic.dkbans.minecraft.config.CommandConfig;
 import net.pretronic.dkbans.minecraft.config.DKBansConfig;
+import net.pretronic.dkbans.minecraft.integration.DKBansPlaceholders;
 import net.pretronic.dkbans.minecraft.joinme.MinecraftJoinMeManager;
 import net.pretronic.dkbans.minecraft.listeners.InternalListener;
 import net.pretronic.dkbans.minecraft.listeners.PlayerListener;
@@ -63,18 +50,17 @@ import net.pretronic.libraries.command.command.Command;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
 import net.pretronic.libraries.document.Document;
 import net.pretronic.libraries.document.type.DocumentFileType;
-import net.pretronic.libraries.message.bml.variable.describer.VariableDescriber;
-import net.pretronic.libraries.message.bml.variable.describer.VariableDescriberRegistry;
 import net.pretronic.libraries.plugin.lifecycle.Lifecycle;
 import net.pretronic.libraries.plugin.lifecycle.LifecycleState;
 import net.pretronic.libraries.utility.io.FileUtil;
-import org.mcnative.common.McNative;
-import org.mcnative.common.plugin.MinecraftPlugin;
-import org.mcnative.common.plugin.configuration.ConfigurationProvider;
-import org.mcnative.common.serviceprovider.message.ColoredString;
+import org.mcnative.runtime.api.McNative;
+import org.mcnative.runtime.api.plugin.MinecraftPlugin;
+import org.mcnative.runtime.api.plugin.configuration.ConfigurationProvider;
+import org.mcnative.runtime.api.serviceprovider.placeholder.PlaceholderProvider;
 
 import java.io.File;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class DKBansPlugin extends MinecraftPlugin {
 
@@ -85,30 +71,29 @@ public class DKBansPlugin extends MinecraftPlugin {
         getLogger().info("DKBans is starting, please wait..");
 
         MinecraftPlayerManager playerManager = new MinecraftPlayerManager();
-        this.dkBans = new DefaultDKBans(getDescription().getVersion().getName()
-                , getLogger()
-                , McNative.getInstance().getExecutorService()
+        this.dkBans = new DefaultDKBans(getDescription().getVersion().getName(),getLogger()
+                ,McNative.getInstance().getExecutorService()
                 ,McNative.getInstance().getLocal().getEventBus()
                 ,getRuntime().getRegistry().getService(ConfigurationProvider.class).getDatabase(this, true)
-                ,playerManager, new MinecraftJoinMeManager());
+                ,playerManager, new MinecraftJoinMeManager(),
+                new MinecraftBroadcastSender());
 
         DKBans.setInstance(dkBans);
-
+        dkBans.getBroadcastManager().init();
         dkBans.getTemplateManager().initialize();
 
         loadConfigs();
-
         registerCommands();
-        registerDescribers();
 
         dkBans.getFilterManager().initialize();
+        dkBans.getMigrationManager().registerMigration(new DKBansLegacyMigration());
+        initBroadcast();
 
         getRuntime().getLocal().getEventBus().subscribe(this,new PlayerListener());
         getRuntime().getLocal().getEventBus().subscribe(this,new InternalListener());
-
         getRuntime().getPlayerManager().registerPlayerAdapter(DKBansPlayer.class, player -> playerManager.getPlayer(player.getUniqueId()));
-
-        dkBans.getMigrationManager().registerMigration(new DKBansLegacyMigration());
+        getRuntime().getRegistry().getService(PlaceholderProvider.class).registerPlaceHolders(this,"dkbans",new DKBansPlaceholders());
+        DescriberRegistrar.register();
 
         getLogger().info("DKBans started successfully");
     }
@@ -118,6 +103,7 @@ public class DKBansPlugin extends MinecraftPlugin {
         getRuntime().getLocal().getCommandManager().registerCommand(new OnlineTimeCommand(this, CommandConfig.COMMAND_ONLINE_TIME));
         getRuntime().getLocal().getCommandManager().registerCommand(new PingCommand(this, CommandConfig.COMMAND_PING));
         getRuntime().getLocal().getCommandManager().registerCommand(new PlayerInfoCommand(this, CommandConfig.COMMAND_PLAYER_INFO));
+        getRuntime().getLocal().getCommandManager().registerCommand(new PlayerSessionsCommand(this, CommandConfig.COMMAND_PLAYER_SESSIONS));
         getRuntime().getLocal().getCommandManager().registerCommand(new TeamChatCommand(this, CommandConfig.COMMAND_TEAMCHAT));
         getRuntime().getLocal().getCommandManager().registerCommand(new PlayerNoteCommand(this, CommandConfig.COMMAND_PLAYER_NOTES));
         getRuntime().getLocal().getCommandManager().registerCommand(new PunishNotifyCommand(this, CommandConfig.COMMAND_PUNISH_NOTIFY));
@@ -127,35 +113,38 @@ public class DKBansPlugin extends MinecraftPlugin {
         getRuntime().getLocal().getCommandManager().registerCommand(new HistoryCommand(this, CommandConfig.COMMAND_HISTORY));
         getRuntime().getLocal().getCommandManager().registerCommand(new ResetHistoryCommand(this, CommandConfig.COMMAND_RESET_HISTORY));
         getRuntime().getLocal().getCommandManager().registerCommand(new MyHistoryPointsCommand(this, CommandConfig.COMMAND_MY_HISTORY_POINTS));
+        getRuntime().getLocal().getCommandManager().registerCommand(new PunishInfoCommand(this, CommandConfig.COMMAND_PUNISH_INFO_CONFIGURATION));
+        getRuntime().getLocal().getCommandManager().registerCommand(new PunishEditCommand(this, CommandConfig.COMMAND_PUNISH_EDIT_CONFIGURATION));
 
         getRuntime().getLocal().getCommandManager().registerCommand(new HelpCommand(this, CommandConfig.COMMAND_HELP));
         getRuntime().getLocal().getCommandManager().registerCommand(new FilterCommand(this, CommandConfig.COMMAND_FILTER));
         getRuntime().getLocal().getCommandManager().registerCommand(new DKBansCommand(this));
         getRuntime().getLocal().getCommandManager().registerCommand(new JoinMeCommand(this, CommandConfig.COMMAND_JOINME));
+        getRuntime().getLocal().getCommandManager().registerCommand(new ChatClearCommand(this, CommandConfig.COMMAND_CHAT_CLEAR));
 
         getRuntime().getLocal().getCommandManager().registerCommand(new IpInfoCommand(this, CommandConfig.COMMAND_IP_INFO));
         getRuntime().getLocal().getCommandManager().registerCommand(new IpBlockCommand(this, CommandConfig.COMMAND_IP_BLOCK));
+        getRuntime().getLocal().getCommandManager().registerCommand(new IpUnblockCommand(this, CommandConfig.COMMAND_IP_UNBLOCK));
+
+        getRuntime().getLocal().getCommandManager().registerCommand(new BroadcastCommand(this, CommandConfig.COMMAND_BROADCAST));
+        getRuntime().getLocal().getCommandManager().registerCommand(new BroadcastGroupCommand(this, CommandConfig.COMMAND_BROADCAST_GROUP));
 
         for (CommandConfig.PunishmentTypeConfiguration configuration : CommandConfig.COMMAND_PUNISH_DIRECT) {
             Command command;
-
-            if(configuration.getCommandType().equalsIgnoreCase("COMMAND_PERMANENTLY")){
-                command = new PermanentlyPunishCommand(this,configuration,configuration.getPunishmentType()
-                        ,configuration.getHistoryType(),configuration.getScope());
-            }else if(configuration.getCommandType().equalsIgnoreCase("COMMAND_TEMPORARY")){
-                command = new TemporaryPunishCommand(this,configuration,configuration.getPunishmentType()
-                        ,configuration.getHistoryType(),configuration.getScope());
-            }else  if(configuration.getCommandType().equalsIgnoreCase("COMMAND_ONE_TIME")){
-                command = new OneTimePunishCommand(this,configuration,configuration.getPunishmentType()
-                        ,configuration.getHistoryType(),configuration.getScope());
-            }else  if(configuration.getCommandType().equalsIgnoreCase("COMMAND_LIST")){
+            String type = configuration.getCommandType();
+            if(type.equalsIgnoreCase("COMMAND_PERMANENTLY")){
+                command = new PermanentlyPunishCommand(this,configuration,configuration.getPunishmentType(),configuration.getHistoryType(),configuration.getScope());
+            }else if(type.equalsIgnoreCase("COMMAND_TEMPORARY")){
+                command = new TemporaryPunishCommand(this,configuration,configuration.getPunishmentType(),configuration.getHistoryType(),configuration.getScope());
+            }else  if(type.equalsIgnoreCase("COMMAND_ONE_TIME")){
+                command = new OneTimePunishCommand(this,configuration,configuration.getPunishmentType(),configuration.getHistoryType(),configuration.getScope());
+            }else  if(type.equalsIgnoreCase("COMMAND_LIST")){
                 command = new PunishListCommand(this,configuration,configuration.getPunishmentType(),configuration.getScope());
-            }else  if(configuration.getCommandType().equalsIgnoreCase("COMMAND_REVOKE")){
+            }else  if(type.equalsIgnoreCase("COMMAND_REVOKE")){
                 command = new UnpunishCommand(this,configuration,configuration.getPunishmentType(),configuration.getScope());
             }else{
                 throw new IllegalArgumentException("Invalid command type "+configuration.getCommandType());
             }
-
             getRuntime().getLocal().getCommandManager().registerCommand(command);
         }
 
@@ -169,39 +158,10 @@ public class DKBansPlugin extends MinecraftPlugin {
         }
 
         if(CommandConfig.COMMAND_REPORT_MODE.equalsIgnoreCase("template") && CommandConfig.COMMAND_REPORT_TEMPLATE_NAME != null) {
-            getRuntime().getLocal().getCommandManager().registerCommand(new ReportCommand(this, CommandConfig.COMMAND_REPORT_CONFIGURATION,
-                    CommandConfig.COMMAND_REPORT_TEMPLATE_NAME));
+            getRuntime().getLocal().getCommandManager().registerCommand(new ReportCommand(this, CommandConfig.COMMAND_REPORT, CommandConfig.COMMAND_REPORT_TEMPLATE_NAME));
         } else {
-            getRuntime().getLocal().getCommandManager().registerCommand(new ReportCommand(this, CommandConfig.COMMAND_REPORT_CONFIGURATION, null));
+            getRuntime().getLocal().getCommandManager().registerCommand(new ReportCommand(this, CommandConfig.COMMAND_REPORT, null));
         }
-    }
-
-    private void registerDescribers(){
-        VariableDescriberRegistry.registerDescriber(DefaultPlayerHistory.class);
-        VariableDescriberRegistry.registerDescriber(DefaultPlayerHistoryEntrySnapshot.class);
-        VariableDescriberRegistry.registerDescriber(DefaultPlayerHistoryType.class);
-        VariableDescriberRegistry.registerDescriber(DefaultPlayerNote.class);
-        VariableDescriberRegistry.registerDescriber(DefaultPlayerChatLog.class);
-        VariableDescriberRegistry.registerDescriber(DefaultChatLogEntry.class);
-        VariableDescriberRegistry.registerDescriber(DefaultFilter.class);
-        VariableDescriberRegistry.registerDescriber(DefaultPlayerReport.class);
-        VariableDescriberRegistry.registerDescriber(DefaultPlayerReportEntry.class);
-
-        VariableDescriberRegistry.registerDescriber(DefaultTemplate.class);
-        VariableDescriberRegistry.registerDescriber(DefaultTemplateCategory.class);
-        VariableDescriberRegistry.registerDescriber(DefaultTemplateGroup.class);
-        VariableDescriberRegistry.registerDescriber(DefaultPunishmentTemplate.class);
-        VariableDescriberRegistry.registerDescriber(DefaultPlayerSession.class);
-        VariableDescriber<?> punishmentDescriber = VariableDescriberRegistry.registerDescriber(PunishmentType.class);
-        ColoredString.makeDescriberColored(punishmentDescriber);
-
-        VariableDescriberRegistry.registerDescriber(DefaultIpAddressBlock.class);
-
-        VariableDescriber<DefaultDKBansPlayer> playerDescriber = VariableDescriberRegistry.registerDescriber(DefaultDKBansPlayer.class);
-        playerDescriber.setForwardFunction(player -> McNative.getInstance().getPlayerManager().getPlayer(player.getUniqueId()));
-
-        VariableDescriber<DefaultPlayerHistoryEntry> entryDescriber =  VariableDescriberRegistry.registerDescriber(DefaultPlayerHistoryEntry.class);
-        entryDescriber.setForwardFunction(DefaultPlayerHistoryEntry::getCurrent);
     }
 
     private void loadConfigs() {
@@ -231,5 +191,12 @@ public class DKBansPlugin extends MinecraftPlugin {
 
         DKBansConfig.load();
         getLogger().info("DKBans config loaded");
+    }
+
+    private void initBroadcast() {
+        McNative.getInstance().getScheduler().createTask(this)
+                .delay(5, TimeUnit.SECONDS)
+                .interval(1, TimeUnit.SECONDS)
+                .execute(new BroadcastTask().start());
     }
 }

@@ -20,9 +20,16 @@
 
 package net.pretronic.dkbans.api.broadcast;
 
-public enum  BroadcastOrder {
+public enum BroadcastOrder {
 
     SORTED(),
-    RANDOM()
+    RANDOM();
+
+    public static BroadcastOrder parse(String value) {
+        for (BroadcastOrder order : BroadcastOrder.values()) {
+            if(order.toString().equalsIgnoreCase(value)) return order;
+        }
+        return null;
+    }
 
 }

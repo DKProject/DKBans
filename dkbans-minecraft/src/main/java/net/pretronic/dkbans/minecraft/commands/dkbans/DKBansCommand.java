@@ -20,31 +20,38 @@
 
 package net.pretronic.dkbans.minecraft.commands.dkbans;
 
-import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.minecraft.commands.dkbans.template.TemplateCommand;
 import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.dkbans.minecraft.config.Permissions;
+import net.pretronic.libraries.command.NoPermissionAble;
 import net.pretronic.libraries.command.NotFindable;
 import net.pretronic.libraries.command.command.MainCommand;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
 import net.pretronic.libraries.command.sender.CommandSender;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
 
-public class DKBansCommand extends MainCommand implements NotFindable {
+public class DKBansCommand extends MainCommand implements NotFindable, NoPermissionAble {
+
+    private final InfoCommand infoCommand;
 
     public DKBansCommand(ObjectOwner owner) {
-        super(owner, CommandConfiguration.name("dkbans"));
-        registerCommand(new DKBansMigrateCommand(owner));
+        super(owner,  CommandConfiguration.newBuilder()
+                .name("dkbans")
+                .permission(Permissions.ADMIN)
+                .create());
+        infoCommand = new InfoCommand(owner);
+        registerCommand(new MigrationCommand(owner));
         registerCommand(new TemplateCommand(owner));
+        registerCommand(infoCommand);
     }
 
     @Override
     public void commandNotFound(CommandSender sender, String s, String[] strings) {
-        if(sender.hasPermission(Permissions.ADMIN)) {
-            sender.sendMessage(Messages.COMMAND_DKBANS_HELP);
-        } else {
-            sender.sendMessage(String.format("DKBans v%s was programmed by Pretronic (https://pretronic.net)",
-                    DKBans.getInstance().getVersion()));
-        }
+        sender.sendMessage(Messages.COMMAND_DKBANS_HELP);
+    }
+
+    @Override
+    public void noPermission(CommandSender sender, String s, String s1, String[] arguments) {
+        infoCommand.execute(sender,arguments);
     }
 }

@@ -25,6 +25,12 @@ public enum  BroadcastVisibility {
     CHAT(),
     TITLE(),
     BOSSBAR(),
-    ACTIONBAR()
+    ACTIONBAR();
 
+    public static BroadcastVisibility parse(String value) {
+        for (BroadcastVisibility visibility : BroadcastVisibility.values()) {
+            if(visibility.toString().equalsIgnoreCase(value)) return visibility;
+        }
+        return null;
+    }
 }

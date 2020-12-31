@@ -36,6 +36,8 @@ public interface PlayerHistory {
 
     PlayerHistoryEntry getActiveEntry(PunishmentType type,DKBansScope scope);
 
+    PlayerHistoryEntry getEntry(int id);
+
     List<PlayerHistoryEntry> getEntries();
 
     List<PlayerHistoryEntry> getEntries(int page, int size);
@@ -54,6 +56,8 @@ public interface PlayerHistory {
     List<PlayerHistoryEntry> getActiveEntries(PlayerHistoryType historyType);
 
     List<PlayerHistoryEntry> getActiveEntries(PlayerHistoryType historyType,DKBansScope scope);
+
+    List<PlayerHistoryEntry> getLoadedEntries();
 
 
     default boolean hasActivePunish(PunishmentType type){

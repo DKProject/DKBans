@@ -20,40 +20,56 @@
 
 package net.pretronic.dkbans.common.player.report;
 
+import net.pretronic.databasequery.api.query.result.QueryResult;
+import net.pretronic.databasequery.api.query.result.QueryResultEntry;
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.DKBansExecutor;
-import net.pretronic.dkbans.api.event.DKBansPlayerReportTeleportEvent;
+import net.pretronic.dkbans.api.event.report.DKBansPlayerReportAcceptEvent;
+import net.pretronic.dkbans.api.event.report.DKBansPlayerReportDeclineEvent;
+import net.pretronic.dkbans.api.event.report.DKBansPlayerReportTakeEvent;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
-import net.pretronic.dkbans.api.player.history.PlayerHistoryEntry;
 import net.pretronic.dkbans.api.player.report.PlayerReport;
 import net.pretronic.dkbans.api.player.report.PlayerReportEntry;
 import net.pretronic.dkbans.api.player.report.ReportState;
-import net.pretronic.dkbans.common.event.DefaultDKBansPlayerReportTeleportEvent;
+import net.pretronic.dkbans.common.DefaultDKBans;
+import net.pretronic.dkbans.common.event.DefaultDKBansPlayerReportAcceptEvent;
+import net.pretronic.dkbans.common.event.DefaultDKBansPlayerReportDeclineEvent;
+import net.pretronic.dkbans.common.event.DefaultDKBansPlayerReportTakeEvent;
+import net.pretronic.libraries.document.type.DocumentFileType;
 import net.pretronic.libraries.utility.Iterators;
 import net.pretronic.libraries.utility.Validate;
 import net.pretronic.libraries.utility.annonations.Internal;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class DefaultPlayerReport implements PlayerReport {
 
     private final int id;
-    private final DKBansPlayer player;
+    private final UUID playerId;
+    private UUID watcherId;
+    private DKBansPlayer player;
     private ReportState state;
-    private final List<PlayerReportEntry> entries;
+    private List<PlayerReportEntry> entries;
     private DKBansPlayer watcher;
 
-    public DefaultPlayerReport(int id, DKBansPlayer player, ReportState state, List<PlayerReportEntry> entries, DKBansPlayer watcher) {
+    public DefaultPlayerReport(int id, ReportState state, UUID playerId, UUID watcherId) {
         this.id = id;
-        this.player = player;
         this.state = state;
-        this.entries = entries;
-        this.watcher = watcher;
+        this.playerId = playerId;
+        this.watcherId = watcherId;
     }
 
-    public DefaultPlayerReport(int id, DKBansPlayer player, ReportState state) {
-        this(id, player, state, new ArrayList<>(), null);
+    public DefaultPlayerReport(int id, ReportState state, DKBansPlayer player, DKBansPlayer watcher) {
+        this(id,state,player.getUniqueId(),watcher != null ? watcher.getUniqueId() : null);
+        this.player = player;
+        this.watcher = watcher;
+        this.entries = new ArrayList<>();
+    }
+
+    public DefaultPlayerReport(int id, ReportState state, DKBansPlayer player) {
+        this(id,state,player,null);
     }
 
     @Override
@@ -62,7 +78,15 @@ public class DefaultPlayerReport implements PlayerReport {
     }
 
     @Override
+    public UUID getPlayerId() {
+        return playerId;
+    }
+
+    @Override
     public DKBansPlayer getPlayer() {
+        if(player == null){
+            this.player = DKBans.getInstance().getPlayerManager().getPlayer(this.playerId);
+        }
         return this.player;
     }
 
@@ -79,49 +103,93 @@ public class DefaultPlayerReport implements PlayerReport {
 
     @Override
     public List<PlayerReportEntry> getEntries() {
+        if(this.entries == null){
+            this.entries = new ArrayList<>();
+            QueryResult result = DefaultDKBans.getInstance().getStorage().getReportEntries()
+                    .find().where("ReportId",id).execute();
+            for (QueryResultEntry entry : result) {
+
+                this.entries.add(new DefaultPlayerReportEntry(entry.getInt("Id"),this
+                        ,entry.getUniqueId("ReporterId")
+                        ,entry.getInt("TemplateId")
+                        ,entry.getString("Reason")
+                        ,entry.getString("SererName")
+                        ,entry.getUniqueId("ServerId")
+                        ,entry.getLong("Time")
+                        ,DocumentFileType.JSON.getReader().read(entry.getString("Properties"))));
+            }
+        }
         return this.entries;
     }
 
     @Override
     public PlayerReportEntry getEntry(DKBansExecutor reporter) {
-        return Iterators.findOne(this.entries, entry -> entry.getReporter().equals(reporter));
+        return Iterators.findOne(getEntries(), entry -> entry.getReporter().equals(reporter));
     }
 
     @Override
     public boolean isWatched() {
-        return this.watcher != null;
+        return this.watcherId != null;
+    }
+
+    @Override
+    public UUID getWatcherId() {
+        return watcherId;
     }
 
     @Override
     public DKBansPlayer getWatcher() {
+        if(watcher == null){
+            this.watcher = DKBans.getInstance().getPlayerManager().getPlayer(this.watcherId);
+        }
         return this.watcher;
     }
 
     @Override
     public void setWatcher(DKBansPlayer player) {
+        Validate.notNull(player);
+
+        DefaultDKBans.getInstance().getStorage().getReports().update()
+                .set("State",ReportState.PROCESSING)
+                .set("WatcherId",player.getUniqueId())
+                .where("Id",id)
+                .execute();
+
         this.watcher = player;
+        this.watcherId = player.getUniqueId();
 
-        DKBansPlayerReportTeleportEvent event = new DefaultDKBansPlayerReportTeleportEvent(player, this);
-        DKBans.getInstance().getEventBus().callEvent(DKBansPlayerReportTeleportEvent.class, event);
+        DKBansPlayerReportTakeEvent event = new DefaultDKBansPlayerReportTakeEvent(this);
+        DKBans.getInstance().getEventBus().callEvent(DKBansPlayerReportTakeEvent.class, event);
     }
 
     @Override
-    public PlayerHistoryEntry accept(DKBansExecutor executor, String reason) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public PlayerHistoryEntry accept(DKBansExecutor executor) {
-        throw new UnsupportedOperationException();
+    public void accept(DKBansExecutor executor) {
+        Validate.notNull(executor);
+        this.state = ReportState.ACCEPTED;
+        DefaultDKBans.getInstance().getStorage().getReports().update()
+                .set("State",ReportState.ACCEPTED)
+                .where("Id",id)
+                .execute();
+        DefaultDKBans.getInstance().getReportManager().removeReport(this);
+        DKBans.getInstance().getEventBus().callEvent(DKBansPlayerReportAcceptEvent.class,new DefaultDKBansPlayerReportAcceptEvent(this));
     }
 
     @Override
     public void decline(DKBansExecutor executor) {
-        throw new UnsupportedOperationException();
+        Validate.notNull(executor);
+        this.state = ReportState.DECLINED;
+        DefaultDKBans.getInstance().getStorage().getReports().update()
+                .set("State",ReportState.DECLINED)
+                .where("Id",id)
+                .execute();
+        DefaultDKBans.getInstance().getReportManager().removeReport(this);
+        DKBans.getInstance().getEventBus().callEvent(DKBansPlayerReportDeclineEvent.class,new DefaultDKBansPlayerReportDeclineEvent(this));
     }
 
     @Internal
     public void addEntry(DefaultPlayerReportEntry entry) {
-        this.entries.add(entry);
+        if(this.entries != null) {
+            this.entries.add(entry);
+        }
     }
 }

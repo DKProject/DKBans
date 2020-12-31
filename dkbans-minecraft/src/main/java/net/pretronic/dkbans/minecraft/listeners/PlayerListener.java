@@ -25,11 +25,9 @@ import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.filter.FilterAffiliationArea;
 import net.pretronic.dkbans.api.filter.FilterManager;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
-import net.pretronic.dkbans.api.player.history.PlayerHistoryEntry;
-import net.pretronic.dkbans.api.player.history.PlayerHistoryEntrySnapshotBuilder;
-import net.pretronic.dkbans.api.player.history.PunishmentType;
-import net.pretronic.dkbans.api.player.ipblacklist.IpAddressBlock;
-import net.pretronic.dkbans.api.player.ipblacklist.IpAddressBlockType;
+import net.pretronic.dkbans.api.player.history.*;
+import net.pretronic.dkbans.api.player.ipaddress.IpAddressBlock;
+import net.pretronic.dkbans.api.player.ipaddress.IpAddressBlockType;
 import net.pretronic.dkbans.common.DKBansUtil;
 import net.pretronic.dkbans.minecraft.PlayerSettingsKey;
 import net.pretronic.dkbans.minecraft.config.DKBansConfig;
@@ -39,16 +37,17 @@ import net.pretronic.libraries.event.EventPriority;
 import net.pretronic.libraries.event.Listener;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
 import net.pretronic.libraries.utility.map.Pair;
-import org.mcnative.common.McNative;
-import org.mcnative.common.event.player.MinecraftPlayerChatEvent;
-import org.mcnative.common.event.player.MinecraftPlayerCommandPreprocessEvent;
-import org.mcnative.common.event.player.MinecraftPlayerLogoutEvent;
-import org.mcnative.common.event.player.login.MinecraftPlayerLoginEvent;
-import org.mcnative.common.event.player.login.MinecraftPlayerPostLoginEvent;
-import org.mcnative.common.player.ConnectedMinecraftPlayer;
-import org.mcnative.common.player.OnlineMinecraftPlayer;
-import org.mcnative.common.text.Text;
-import org.mcnative.common.text.components.MessageComponent;
+import org.mcnative.runtime.api.McNative;
+import org.mcnative.runtime.api.event.player.MinecraftPlayerChatEvent;
+import org.mcnative.runtime.api.event.player.MinecraftPlayerCommandPreprocessEvent;
+import org.mcnative.runtime.api.event.player.MinecraftPlayerLogoutEvent;
+import org.mcnative.runtime.api.event.player.login.MinecraftPlayerLoginEvent;
+import org.mcnative.runtime.api.event.player.login.MinecraftPlayerPostLoginEvent;
+import org.mcnative.runtime.api.network.component.server.ProxyServer;
+import org.mcnative.runtime.api.player.ConnectedMinecraftPlayer;
+import org.mcnative.runtime.api.player.OnlineMinecraftPlayer;
+import org.mcnative.runtime.api.text.Text;
+import org.mcnative.runtime.api.text.components.MessageComponent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -61,7 +60,6 @@ public class PlayerListener {
 
     @Listener(priority = EventPriority.HIGH)
     public void onPlayerLogin(MinecraftPlayerLoginEvent event){
-        //@Todo online mode check
         if(event.isCancelled()) return;
 
         if(DKBans.getInstance().getFilterManager().checkFilter(FilterAffiliationArea.PLAYER_NAME,event.getPlayer().getName())){
@@ -85,21 +83,44 @@ public class PlayerListener {
                     .addDescribed("player",event.getPlayer()));
             return;
         }
-        IpAddressBlock ipAddressBlock = DKBans.getInstance().getIpAddressBlacklistManager().getIpAddressBlock(event.getOnlinePlayer().getAddress().getAddress().getHostAddress());
+        IpAddressBlock ipAddressBlock = DKBans.getInstance().getIpAddressManager().getIpAddressBlock(event.getOnlinePlayer().getAddress().getAddress().getHostAddress());
         if(ipAddressBlock != null) {
-            long minOnlineTime = DKBansConfig.IP_ADDRESS_BLOCK_ALT_MIN_PLAYTIME_TIME;
-            if(ipAddressBlock.getType() == IpAddressBlockType.BLOCK
-                    || (ipAddressBlock.getType() == IpAddressBlockType.ALT && event.getPlayer().getFirstPlayed()+minOnlineTime < System.currentTimeMillis())) {
-                PlayerHistoryEntrySnapshotBuilder builder = player.punish().stuff(DKBansExecutor.IP_ADDRESS_BLOCK);
-                if(ipAddressBlock.getForTemplate() != null) {
-                    builder.template(ipAddressBlock.getForTemplate());
-                } else {
-                    builder.reason(ipAddressBlock.getForReason())
-                            .timeout(System.currentTimeMillis()+ipAddressBlock.getForDuration());
+            if(ipAddressBlock.getType() == IpAddressBlockType.BLOCK){
+                event.setCancelReason(Messages.PUNISH_ADDRESS_BLOCK,VariableSet.create()
+                        .addDescribed("ban",ipAddressBlock)
+                        .addDescribed("block",ipAddressBlock));
+                event.setCancelled(true);
+            }else if(ipAddressBlock.getType() == IpAddressBlockType.BAN){
+                banPlayer(event,player,ipAddressBlock);
+                event.setCancelled(true);
+            }else if(ipAddressBlock.getType() == IpAddressBlockType.ALT_ACCOUNT){
+                long minOnlineTime = DKBansConfig.IP_ADDRESS_BLOCK_ALT_MIN_PLAYTIME_TIME;
+                if(event.getPlayer().getFirstPlayed()+minOnlineTime < System.currentTimeMillis()){
+                    banPlayer(event,player,ipAddressBlock);
+                    event.setCancelled(true);
                 }
-                builder.execute();
             }
         }
+    }
+
+    private void banPlayer(MinecraftPlayerLoginEvent event,DKBansPlayer player,IpAddressBlock ipAddressBlock){
+        PlayerHistoryEntrySnapshot result;
+        if(ipAddressBlock.getForTemplate() != null) {
+            result = player.punish(DKBansExecutor.IP_ADDRESS_BLOCK,ipAddressBlock.getForTemplate());
+        } else {
+            PlayerHistoryEntrySnapshotBuilder builder = player.punish().stuff(DKBansExecutor.IP_ADDRESS_BLOCK);
+            builder.reason(ipAddressBlock.getForReason())
+                    .stuff(DKBansExecutor.IP_ADDRESS_BLOCK)
+                    .historyType(DKBans.getInstance().getHistoryManager().getHistoryType(DKBansConfig.IP_ADDRESS_BLOCK_HISTORY_TYPE_NAME))
+                    .timeout(System.currentTimeMillis()+ipAddressBlock.getForDuration());
+            result = builder.execute();
+        }
+        MessageComponent<?> message = result.isPermanently()
+                ? Messages.PUNISH_BAN_MESSAGE_PERMANENTLY : Messages.PUNISH_BAN_MESSAGE_TEMPORARY;
+        event.setCancelReason(message,VariableSet.create()
+                .addDescribed("ban",result)
+                .addDescribed("punish",result)
+                .addDescribed("player",event.getPlayer()));
     }
 
     @Listener(priority = EventPriority.LOWEST)
@@ -113,6 +134,14 @@ public class PlayerListener {
     public void onPlayerPostLogin(MinecraftPlayerPostLoginEvent event){
         OnlineMinecraftPlayer player = event.getOnlinePlayer();
         DKBansPlayer dkBansPlayer = player.getAs(DKBansPlayer.class);
+
+        if(DKBansConfig.PLAYER_ON_JOIN_PUNISH_NOTIFY && player.hasPermission(Permissions.PUNISH_NOTIFY)){
+            boolean teamChat = event.getPlayer().hasSetting("DKBans",PlayerSettingsKey.PUNISH_NOTIFY_LOGIN,true);
+            player.sendMessage(Messages.STAFF_STATUS_NOW,VariableSet.create()
+                    .add("prefix",Messages.PREFIX)
+                    .add("status",teamChat)
+                    .add("statusFormatted", teamChat ? Messages.STAFF_STATUS_LOGIN :  Messages.STAFF_STATUS_LOGOUT));
+        }
 
         if(DKBansConfig.PLAYER_ON_JOIN_INFO_TEAMCHAT && player.hasPermission(Permissions.TEAM)){
             boolean teamChat = event.getPlayer().hasSetting("DKBans",PlayerSettingsKey.TEAM_CHAT_LOGIN,true);
@@ -140,27 +169,28 @@ public class PlayerListener {
 
             Pair<String,String> locationLookup = DKBansUtil.lookupLocation(player.getAddress().getAddress().getHostAddress());
 
+            ProxyServer proxy = player.getProxy();
+
             dkBansPlayer.startSession(player.getName(),player.getAddress().getAddress(), locationLookup.getKey(), locationLookup.getValue(),
-                    "none", UUID.randomUUID(), connectedPlayer.getProtocolVersion().getEdition().getName(),
-                    connectedPlayer.getProtocolVersion().getNumber());
+                    proxy != null ? proxy.getName() : null, proxy != null ? proxy.getUniqueId() : null
+                    ,connectedPlayer.getProtocolVersion().getEdition().getName()
+                    ,connectedPlayer.getProtocolVersion().getNumber());
         }
     }
 
     @Listener//@Todo async
     public void onPlayerDisconnect(MinecraftPlayerLogoutEvent event) {
         event.getPlayer().getAs(DKBansPlayer.class).finishSession(event.getOnlinePlayer().getServer().getName(),
-                UUID.randomUUID());//event.getOnlinePlayer().getServer().getIdentifier().getUniqueId() @Todo change if method is implemented
+                event.getOnlinePlayer().getServer().getIdentifier().getUniqueId());
     }
 
-    @Listener(priority = EventPriority.HIGHEST)//@Todo async
+    @Listener(priority = EventPriority.HIGHEST)
     public void onPlayerChat(MinecraftPlayerChatEvent event){
         if(event.isCancelled()) return;
         DKBansPlayer player = event.getPlayer().getAs(DKBansPlayer.class);
         boolean bypass = event.getPlayer().hasPermission(Permissions.CHAT_BYPASS);
 
-        if(DKBansConfig.CHAT_FILTER_ENABLED
-                && !bypass
-                && checkBasicFilters(event, player)) return;
+        if(DKBansConfig.CHAT_FILTER_ENABLED && !bypass && checkBasicFilters(event, player)) return;
 
         PlayerHistoryEntry mute = player.getHistory().getActiveEntry(PunishmentType.MUTE);
         if(mute != null){

@@ -20,33 +20,37 @@
 
 package net.pretronic.dkbans.common.player;
 
+import net.pretronic.databasequery.api.query.Aggregation;
+import net.pretronic.databasequery.api.query.result.QueryResult;
+import net.pretronic.databasequery.api.query.result.QueryResultEntry;
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.DKBansScope;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.chatlog.PlayerChatLog;
-import net.pretronic.dkbans.api.player.history.PlayerHistory;
-import net.pretronic.dkbans.api.player.history.PlayerHistoryEntrySnapshot;
-import net.pretronic.dkbans.api.player.history.PlayerHistoryEntrySnapshotBuilder;
-import net.pretronic.dkbans.api.player.history.PunishmentType;
+import net.pretronic.dkbans.api.player.history.*;
 import net.pretronic.dkbans.api.player.note.PlayerNote;
 import net.pretronic.dkbans.api.player.note.PlayerNoteList;
 import net.pretronic.dkbans.api.player.note.PlayerNoteType;
 import net.pretronic.dkbans.api.player.report.PlayerReport;
 import net.pretronic.dkbans.api.player.report.PlayerReportEntry;
+import net.pretronic.dkbans.api.player.ipaddress.IpAddressInfo;
 import net.pretronic.dkbans.api.player.session.PlayerSession;
 import net.pretronic.dkbans.api.player.session.PlayerSessionList;
 import net.pretronic.dkbans.api.template.punishment.PunishmentTemplate;
 import net.pretronic.dkbans.api.template.report.ReportTemplate;
+import net.pretronic.dkbans.common.DefaultDKBans;
 import net.pretronic.dkbans.common.player.history.DefaultPlayerHistory;
 import net.pretronic.dkbans.common.player.history.DefaultPlayerHistoryEntrySnapshotBuilder;
 import net.pretronic.dkbans.common.player.note.DefaultPlayerNoteList;
+import net.pretronic.dkbans.common.player.session.DefaultIpAddressInfo;
 import net.pretronic.dkbans.common.player.session.DefaultPlayerSession;
 import net.pretronic.dkbans.common.player.session.DefaultPlayerSessionList;
 import net.pretronic.libraries.utility.Iterators;
 import net.pretronic.libraries.utility.Validate;
 
 import java.net.InetAddress;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.UUID;
 
@@ -61,13 +65,18 @@ public  class DefaultDKBansPlayer implements DKBansPlayer {
 
     private final DefaultPlayerNoteList noteList;
 
+    private long onlineTime;
+
     public DefaultDKBansPlayer(UUID uniqueId, String name) {
         this.uniqueId = uniqueId;
         this.name = name;
         this.history = new DefaultPlayerHistory(this);
 
+
         this.sessionList = new DefaultPlayerSessionList(this);
         this.noteList = new DefaultPlayerNoteList(this);
+
+        this.onlineTime = -1;
     }
 
     @Override
@@ -78,6 +87,23 @@ public  class DefaultDKBansPlayer implements DKBansPlayer {
     @Override
     public PlayerSessionList getSessions() {
         return this.sessionList;
+    }
+
+    @Override
+    public Collection<IpAddressInfo> getIpAddresses() {
+        QueryResult result = DefaultDKBans.getInstance().getStorage().getPlayerSessions().find()
+                .get("IpAddress")
+                .getAs(Aggregation.MIN,"Country","Country")
+                .getAs(Aggregation.MIN,"Region","Region")
+                .where("PlayerId",this.uniqueId)
+                .groupBy("IpAddress").execute();
+
+        Collection<IpAddressInfo> addresses = new ArrayList<>();
+        for (QueryResultEntry entry : result) {
+            addresses.add(new DefaultIpAddressInfo(entry.getObject("IpAddress",InetAddress.class)
+                    ,entry.getString("Country"),entry.getString("Region")));
+        }
+        return addresses;
     }
 
     @Override
@@ -92,7 +118,10 @@ public  class DefaultDKBansPlayer implements DKBansPlayer {
 
     @Override
     public long getOnlineTime() {
-        return 0;//@Todo calculate
+        if(onlineTime == -1){
+            this.onlineTime = DKBans.getInstance().getStorage().getOnlineTime(uniqueId);
+        }
+        return this.onlineTime;
     }
 
     @Override
@@ -121,24 +150,6 @@ public  class DefaultDKBansPlayer implements DKBansPlayer {
     }
 
     @Override
-    public boolean hasActivePunish(PunishmentType type) {
-        Validate.notNull(type);
-        return history.hasActivePunish(type);
-    }
-
-    @Override
-    public boolean hasActivePunish(PunishmentType type, DKBansScope scope) {
-        Validate.notNull(type,scope);
-        return history.hasActivePunish(type,scope);
-    }
-
-    @Override
-    public boolean hasActivePunish(PunishmentType type, Collection<DKBansScope> scopes) {
-        Validate.notNull(type,scopes);
-        return history.hasActivePunish(type,scopes);
-    }
-
-    @Override
     public PlayerHistoryEntrySnapshot punish(DKBansExecutor executor, PunishmentTemplate template) {
         Validate.notNull(executor,template);
         PlayerHistoryEntrySnapshotBuilder builder = punish();
@@ -152,13 +163,26 @@ public  class DefaultDKBansPlayer implements DKBansPlayer {
     }
 
     @Override
+    public PlayerHistoryEntrySnapshot unpunish(DKBansExecutor executor, PunishmentType type, String message) {
+        Validate.notNull(executor,type,message);
+        PlayerHistoryEntry entry = getHistory().getActiveEntry(type);
+        if(entry == null) throw new IllegalArgumentException("Player is not punished for "+type.getName());
+        return entry.unpunish(executor,message);
+    }
+
+    @Override
     public boolean hasReport() {
         return getReport() != null;
     }
 
     @Override
     public PlayerReport getReport() {
-        return Iterators.findOne(DKBans.getInstance().getReportManager().getOpenReports(), report -> report.getPlayer().getUniqueId().equals(getUniqueId()));
+        return DKBans.getInstance().getReportManager().getReport(this.uniqueId);
+    }
+
+    @Override
+    public PlayerReport getWatchingReport() {
+        return DKBans.getInstance().getReportManager().getReportByWatcher(this.uniqueId);
     }
 
     @Override
@@ -194,6 +218,11 @@ public  class DefaultDKBansPlayer implements DKBansPlayer {
         session.setLastServerId(lastServerId);
 
         DKBans.getInstance().getStorage().completePlayerSession(session);
+
+        long newOnlineTime = session.getDisconnectTime()-session.getConnectTime();
+        long local = getOnlineTime();
+        DKBans.getInstance().getStorage().addOnlineTime(getUniqueId(), newOnlineTime);
+        this.onlineTime = local+newOnlineTime;
 
         this.sessionList.setActive(null);
     }

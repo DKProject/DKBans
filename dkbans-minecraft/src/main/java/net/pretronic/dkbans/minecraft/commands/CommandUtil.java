@@ -32,14 +32,20 @@ import net.pretronic.libraries.command.sender.CommandSender;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
 import net.pretronic.libraries.utility.duration.DurationProcessor;
 import net.pretronic.libraries.utility.map.Pair;
-import org.mcnative.common.McNative;
-import org.mcnative.common.player.MinecraftPlayer;
-import org.mcnative.common.player.OnlineMinecraftPlayer;
-import org.mcnative.common.text.components.MessageComponent;
+import org.mcnative.runtime.api.McNative;
+import org.mcnative.runtime.api.player.MinecraftPlayer;
+import org.mcnative.runtime.api.player.OnlineMinecraftPlayer;
+import org.mcnative.runtime.api.text.components.MessageComponent;
 
 import java.time.Duration;
+import java.util.regex.Pattern;
 
 public class CommandUtil {
+
+    public static final Pattern IPADDRESS_PATTERN = Pattern.compile("^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
+            "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
+            "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
+            "([01]?\\d\\d?|2[0-4]\\d|25[0-5])$");
 
     public static DKBansExecutor getExecutor(CommandSender sender){
         if(sender instanceof MinecraftPlayer){
@@ -168,22 +174,4 @@ public class CommandUtil {
         }
     }
 
-    public static Pair<OnlineMinecraftPlayer, PlayerReport> checkAndGetTargetReport(CommandSender sender, String target0) {
-        if(!(sender instanceof OnlineMinecraftPlayer)) {
-            sender.sendMessage(Messages.ERROR_ONLY_PLAYER);
-            return null;
-        }
-        OnlineMinecraftPlayer target = McNative.getInstance().getLocal().getOnlinePlayer(target0);
-        if(target == null) {
-            sender.sendMessage(Messages.PLAYER_NOT_FOUND);
-            return null;
-        }
-
-        PlayerReport report = DKBans.getInstance().getReportManager().getReport(target.getAs(DKBansPlayer.class));
-        if(report == null) {
-            sender.sendMessage(Messages.REPORT_NOT_FOUND, VariableSet.create().addDescribed("player", target));
-            return null;
-        }
-        return new Pair<>(target, report);
-    }
 }

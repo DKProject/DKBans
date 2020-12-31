@@ -30,13 +30,13 @@ import net.pretronic.libraries.command.command.configuration.CommandConfiguratio
 import net.pretronic.libraries.command.sender.CommandSender;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
-import org.mcnative.common.McNative;
+import org.mcnative.runtime.api.McNative;
 
 import java.util.concurrent.TimeUnit;
 
-public class DKBansMigrateCommand extends BasicCommand {
+public class MigrationCommand extends BasicCommand {
 
-    public DKBansMigrateCommand(ObjectOwner owner) {
+    public MigrationCommand(ObjectOwner owner) {
         super(owner, CommandConfiguration.newBuilder().name("migrate").permission(Permissions.ADMIN).create());
     }
 

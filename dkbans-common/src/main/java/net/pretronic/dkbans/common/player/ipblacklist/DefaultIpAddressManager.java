@@ -20,28 +20,53 @@
 
 package net.pretronic.dkbans.common.player.ipblacklist;
 
+import net.pretronic.databasequery.api.query.SearchOrder;
+import net.pretronic.databasequery.api.query.result.QueryResult;
+import net.pretronic.databasequery.api.query.result.QueryResultEntry;
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.DKBansExecutor;
-import net.pretronic.dkbans.api.player.ipblacklist.IpAddressBlacklistManager;
-import net.pretronic.dkbans.api.player.ipblacklist.IpAddressBlock;
-import net.pretronic.dkbans.api.player.ipblacklist.IpAddressBlockType;
+import net.pretronic.dkbans.api.player.ipaddress.IpAddressInfo;
+import net.pretronic.dkbans.api.player.ipaddress.IpAddressManager;
+import net.pretronic.dkbans.api.player.ipaddress.IpAddressBlock;
+import net.pretronic.dkbans.api.player.ipaddress.IpAddressBlockType;
 import net.pretronic.dkbans.api.template.punishment.PunishmentTemplate;
+import net.pretronic.dkbans.common.DefaultDKBans;
+import net.pretronic.dkbans.common.player.session.DefaultIpAddressInfo;
 import net.pretronic.libraries.caching.ArrayCache;
 import net.pretronic.libraries.caching.Cache;
 import net.pretronic.libraries.caching.CacheQuery;
 import net.pretronic.libraries.utility.Validate;
+import net.pretronic.libraries.utility.exception.OperationFailedException;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.concurrent.TimeUnit;
 
-public class DefaultIpAddressBlacklistManager implements IpAddressBlacklistManager {
+public class DefaultIpAddressManager implements IpAddressManager {
 
     private final Cache<IpAddressBlock> ipAddressBlockCache;
 
-    public DefaultIpAddressBlacklistManager() {
+    public DefaultIpAddressManager() {
         this.ipAddressBlockCache = new ArrayCache<>();
         this.ipAddressBlockCache.setExpireAfterAccess(10, TimeUnit.MINUTES)
                 .setMaxSize(100)
                 .registerQuery("ipAddress", new IpAddressQuery());
+    }
+
+    @Override
+    public IpAddressInfo getIpAddressInfo(String ipAddress) {
+        QueryResult result = DefaultDKBans.getInstance().getStorage().getPlayerSessions().find().where("ipAddress",ipAddress)
+                .limit(1).orderBy("ConnectTime", SearchOrder.DESC).execute();
+        if(result.isEmpty()){
+            try {
+                return new DefaultIpAddressInfo(InetAddress.getByName(ipAddress),"Unknown","Unknown");
+            } catch (UnknownHostException e) {
+                throw new OperationFailedException(e);
+            }
+        }
+        QueryResultEntry entry = result.first();
+        return new DefaultIpAddressInfo(entry.getObject("ipAddress",InetAddress.class)
+                ,entry.getString("Country"),entry.getString("Region"));
     }
 
     @Override
@@ -59,19 +84,32 @@ public class DefaultIpAddressBlacklistManager implements IpAddressBlacklistManag
     }
 
     @Override
-    public IpAddressBlock blockIpAddress(String ipAddress, IpAddressBlockType type, DKBansExecutor staff, String reason, long timeout, String forReason, long forDuration) {
-        IpAddressBlock addressBlock = DKBans.getInstance().getStorage().blockIpAddress(ipAddress, type, staff, reason, timeout, forReason, forDuration);
-        this.ipAddressBlockCache.insert(addressBlock);
-        return addressBlock;
+    public boolean isIpAddressBlocked(InetAddress address) {
+        return getIpAddressBlock(address.getHostAddress()) != null;
     }
 
     @Override
-    public IpAddressBlock blockIpAddress(String ipAddress, IpAddressBlockType type, DKBansExecutor staff, String reason, long timeout, PunishmentTemplate forTemplate) {
-        IpAddressBlock addressBlock = DKBans.getInstance().getStorage().blockIpAddress(ipAddress, type, staff, reason, timeout, forTemplate);
-        this.ipAddressBlockCache.insert(addressBlock);
-        return addressBlock;
+    public boolean isIpAddressBlocked(String ipAddress) {
+        return getIpAddressBlock(ipAddress) != null;
     }
 
+    @Override
+    public IpAddressBlock blockIpAddress(IpAddressBlockType type, String ipAddress, String reason, long timeout, DKBansExecutor staff, String forReason, long forDuration) {
+        DefaultIpAddressBlock result = new DefaultIpAddressBlock(-1,ipAddress,type,staff.getUniqueId(),reason,timeout,forReason,forDuration,-1);
+        int id = DKBans.getInstance().getStorage().blockIpAddress(result);
+        result.setId(id);
+        this.ipAddressBlockCache.insert(result);
+        return result;
+    }
+
+    @Override
+    public IpAddressBlock blockIpAddress(IpAddressBlockType type, String ipAddress, String reason, long timeout, DKBansExecutor staff, PunishmentTemplate forTemplate) {
+        DefaultIpAddressBlock result = new DefaultIpAddressBlock(-1,ipAddress,type,staff.getUniqueId(),reason,timeout,null,0,forTemplate.getId());
+        int id = DKBans.getInstance().getStorage().blockIpAddress(result);
+        result.setId(id);
+        this.ipAddressBlockCache.insert(result);
+        return result;
+    }
 
     @Override
     public void unblockIpAddress(IpAddressBlock addressBlock) {

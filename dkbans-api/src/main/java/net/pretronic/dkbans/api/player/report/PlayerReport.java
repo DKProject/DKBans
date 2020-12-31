@@ -25,10 +25,13 @@ import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryEntry;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface PlayerReport {
 
     int getId();
+
+    UUID getPlayerId();
 
     DKBansPlayer getPlayer();
 
@@ -45,14 +48,14 @@ public interface PlayerReport {
 
     boolean isWatched();
 
+    UUID getWatcherId();
+
     DKBansPlayer getWatcher();
 
     void setWatcher(DKBansPlayer player);
 
 
-    PlayerHistoryEntry accept(DKBansExecutor executor, String reason);
-
-    PlayerHistoryEntry accept(DKBansExecutor executor);
+    void accept(DKBansExecutor executor);
 
     void decline(DKBansExecutor executor);
 

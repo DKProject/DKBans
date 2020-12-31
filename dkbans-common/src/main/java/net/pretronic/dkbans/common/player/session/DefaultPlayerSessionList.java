@@ -86,7 +86,7 @@ public class DefaultPlayerSessionList implements PlayerSessionList {
 
     @Override
     public List<PlayerSession> getPage(int page, int sizePerPage) {
-        throw new UnsupportedOperationException();
+        return DKBans.getInstance().getStorage().getPageSessions(player,page,sizePerPage);
     }
 
     @Override

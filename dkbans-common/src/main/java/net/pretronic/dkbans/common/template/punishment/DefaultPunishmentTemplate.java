@@ -47,7 +47,6 @@ import java.util.TreeMap;
 public class DefaultPunishmentTemplate extends DefaultTemplate implements PunishmentTemplate {
 
     private final Map<Integer, PunishmentTemplateEntry> durations;
-    private final Map<Integer, PunishmentTemplateEntry> points;
     private final int addedPoints;
     private double pointsDivider;
 
@@ -56,22 +55,19 @@ public class DefaultPunishmentTemplate extends DefaultTemplate implements Punish
         super(id, inGroupId, name, group, displayName, permission, aliases, historyType, enabled, hidden, category, data);
         Validate.notNull(historyType, "History can't be null");
 
-        this.durations = loadDurations(data.getDocument("durations"));
+        Map<Integer, PunishmentTemplateEntry> durations = loadDurations(data.getDocument("durations"));
 
-        Triple<Map<Integer, PunishmentTemplateEntry>, Integer, Double> points = loadPoints(data.getDocument("points"));
-        this.points = points.getFirst();
-        this.addedPoints = points.getSecond();
-        this.pointsDivider = points.getThird();
+        this.durations = new TreeMap<>(durations);
+
+        Pair<Integer, Double> points = loadPoints(data.getDocument("points"));
+
+        this.addedPoints = points.getKey();
+        this.pointsDivider = points.getValue();
     }
 
     @Override
     public Map<Integer, PunishmentTemplateEntry> getDurations() {
         return this.durations;
-    }
-
-    @Override
-    public Map<Integer, PunishmentTemplateEntry> getPoints() {
-        return this.points;
     }
 
     @Override
@@ -96,15 +92,10 @@ public class DefaultPunishmentTemplate extends DefaultTemplate implements Punish
         if(entry instanceof DurationAble) {
             builder.duration(((DurationAble)entry).getDuration());
         }
-
     }
 
     @Override
     public PunishmentTemplateEntry getNextEntry(DKBansPlayer player) {
-        Map<Integer, PunishmentTemplateEntry> data;
-        if(getGroup().getCalculationType() == CalculationType.AMOUNT) data = durations;
-        else data = points;
-
         int count = player.getHistory().calculate(getGroup().getCalculationType(), getHistoryType());
         if(getGroup().getCalculationType() == CalculationType.POINTS) {
             count = (int) Math.round(count/pointsDivider);
@@ -113,11 +104,9 @@ public class DefaultPunishmentTemplate extends DefaultTemplate implements Punish
         }
 
         PunishmentTemplateEntry punishmentTemplateEntry = null;
-
-        for (Map.Entry<Integer, PunishmentTemplateEntry> entry : data.entrySet()) {
-            if(count <= entry.getKey()) {
+        for (Map.Entry<Integer, PunishmentTemplateEntry> entry : durations.entrySet()) {
+            if(entry.getKey() <= count) {
                 punishmentTemplateEntry = entry.getValue();
-                break;
             }
         }
         return punishmentTemplateEntry;
@@ -130,11 +119,7 @@ public class DefaultPunishmentTemplate extends DefaultTemplate implements Punish
 
     @Override
     public PunishmentType getFirstType() {
-        if(getGroup().getCalculationType() == CalculationType.AMOUNT) {
-            return this.durations.values().iterator().next().getType();
-        }else {
-            return this.points.values().iterator().next().getType();
-        }
+        return this.durations.values().iterator().next().getType();
     }
 
     private Map<Integer, PunishmentTemplateEntry> loadDurations(Document data) {
@@ -150,23 +135,16 @@ public class DefaultPunishmentTemplate extends DefaultTemplate implements Punish
         return durations;
     }
 
-    private Triple<Map<Integer, PunishmentTemplateEntry>, Integer, Double> loadPoints(Document data) {
+    private Pair<Integer, Double> loadPoints(Document data) {
         int addedPoints = 0;
         double pointsDivider = 0;
-        Map<Integer, PunishmentTemplateEntry> points = new HashMap<>();
+
         if(data != null) {
             addedPoints = data.getInt("addedPoints");
             pointsDivider = data.getDouble("pointsDivider");
-
-            for (DocumentEntry entry0 : data.getDocument("durations")) {
-                Pair<Integer, PunishmentTemplateEntry> entry = loadEntry(entry0);
-                points.put(entry.getKey(), entry.getValue());
-            }
         }
 
-
-
-        return new Triple<>(points, addedPoints, pointsDivider);
+        return new Pair<>(addedPoints, pointsDivider);
     }
 
     private Pair<Integer, PunishmentTemplateEntry> loadEntry(DocumentEntry entry) {

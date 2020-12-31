@@ -75,7 +75,7 @@ public class BanSystem {
         this.config.loadConfig();
 
         this.messageConfig = new MessageConfig(this.platform);
-        this.messageConfig.loadConfig();
+        //this.messageConfig.loadConfig();
 
         this.reasonProvider = new ReasonProvider(this.platform);
         this.settingProvider = new SettingProvider();

@@ -20,71 +20,111 @@
 
 package net.pretronic.dkbans.common.player.report;
 
+import net.pretronic.databasequery.api.query.result.QueryResult;
+import net.pretronic.databasequery.api.query.result.QueryResultEntry;
 import net.pretronic.dkbans.api.DKBans;
-import net.pretronic.dkbans.api.event.DKBansPlayerReportSendEvent;
+import net.pretronic.dkbans.api.event.report.DKBansPlayerReportCreateEvent;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.report.PlayerReport;
 import net.pretronic.dkbans.api.player.report.PlayerReportEntry;
 import net.pretronic.dkbans.api.player.report.ReportManager;
 import net.pretronic.dkbans.api.player.report.ReportState;
 import net.pretronic.dkbans.api.template.report.ReportTemplate;
-import net.pretronic.dkbans.common.event.DefaultDKBansPlayerReportSendEvent;
+import net.pretronic.dkbans.common.DefaultDKBans;
+import net.pretronic.dkbans.common.event.DefaultDKBansPlayerReportCreateEvent;
 import net.pretronic.libraries.utility.Iterators;
 import net.pretronic.libraries.utility.Validate;
+import net.pretronic.libraries.utility.annonations.Internal;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Predicate;
 
 public class DefaultReportManager implements ReportManager {
 
-    private final List<PlayerReport> openReports;
+    private List<PlayerReport> reports;
 
     public DefaultReportManager() {
-        this.openReports = new ArrayList<>();
+        this.reports = null;
+    }
+
+    @Override
+    public int getReportCount() {
+        return getOpenReports().size();
+    }
+
+    public List<PlayerReport> getReports(){
+        if(this.reports == null){
+            QueryResult result = DefaultDKBans.getInstance().getStorage().getReports()
+                    .find().where("State",ReportState.OPEN)
+                    .or(query -> query.where("State",ReportState.PROCESSING)).execute();
+            this.reports = new ArrayList<>();
+            for (QueryResultEntry entry : result) {
+                this.reports.add(new DefaultPlayerReport(entry.getInt("Id")
+                        ,ReportState.valueOf(entry.getString("State"))
+                        ,entry.getUniqueId("PlayerId"),entry.getUniqueId("WatcherId")));
+            }
+        }
+        return this.reports;
     }
 
     @Override
     public List<PlayerReport> getOpenReports() {
-        return this.openReports;
+        return Iterators.filter(getReports(), report -> report.getState() == ReportState.OPEN);
     }
 
     @Override
     public PlayerReport getReport(DKBansPlayer player) {
-        return Iterators.findOne(this.openReports, report -> report.getPlayer().equals(player));
+        return Iterators.findOne(getReports(), report -> report.getPlayer().equals(player));
+    }
+
+    @Override
+    public PlayerReport getReport(UUID uniqueId) {
+        return Iterators.findOne(getReports(), report -> report.getPlayerId().equals(uniqueId));
+    }
+
+    @Override
+    public PlayerReport getReportByWatcher(UUID uniqueId) {
+        return Iterators.findOne(getReports(), report -> report.getWatcherId() != null && report.getWatcherId().equals(uniqueId));
     }
 
     @Override
     public PlayerReportEntry report(DKBansPlayer executor, DKBansPlayer target, ReportTemplate template, String serverName, UUID serverId) {
         Validate.notNull(executor, target, template);
-        DefaultPlayerReport report = getReportOrCreate(target);
-        if(report.getEntry(executor) != null) return null;
-        DefaultPlayerReportEntry entry = (DefaultPlayerReportEntry) DKBans.getInstance().getStorage()
-                .createPlayerReportEntry(report, executor, template, serverName, serverId);
-        report.addEntry(entry);
-
-        DefaultDKBansPlayerReportSendEvent event = new DefaultDKBansPlayerReportSendEvent(entry);
-        DKBans.getInstance().getEventBus().callEvent(DKBansPlayerReportSendEvent.class, event);
-        return entry;
+        return report(executor, target, template.getDisplayName(),template, serverName, serverId);
     }
 
     @Override
     public PlayerReportEntry report(DKBansPlayer executor, DKBansPlayer target, String reason, String serverName, UUID serverId) {
         Validate.notNull(executor, target);
+        return report(executor, target, reason,null, serverName, serverId);
+    }
+
+    private PlayerReportEntry report(DKBansPlayer executor, DKBansPlayer target,String reason, ReportTemplate template, String serverName, UUID serverId) {
         DefaultPlayerReport report = getReportOrCreate(target);
         if(report.getEntry(executor) != null) return null;
         DefaultPlayerReportEntry entry = (DefaultPlayerReportEntry) DKBans.getInstance().getStorage()
-                .createPlayerReportEntry(report, executor, reason, serverName, serverId);
+                .createPlayerReportEntry(report, executor,reason, template, serverName, serverId);
         report.addEntry(entry);
+
+        DefaultDKBansPlayerReportCreateEvent event = new DefaultDKBansPlayerReportCreateEvent(entry);
+        DKBans.getInstance().getEventBus().callEvent(DKBansPlayerReportCreateEvent.class, event);
         return entry;
     }
 
     private DefaultPlayerReport getReportOrCreate(DKBansPlayer target) {
-        PlayerReport report0 = Iterators.findOne(this.openReports, target0 -> target0.getPlayer().equals(target));
+        PlayerReport report0 = Iterators.findOne(getReports(), target0 -> target0.getPlayer().equals(target));
         if(report0 == null) {
             report0 = DKBans.getInstance().getStorage().createPlayerReport(target, ReportState.OPEN);
-            this.openReports.add(report0);
+            this.reports.add(report0);
         }
         return (DefaultPlayerReport) report0;
+    }
+
+    @Internal
+    public void removeReport(PlayerReport report){
+        if(report == null) return;
+        this.reports.remove(report);
     }
 }

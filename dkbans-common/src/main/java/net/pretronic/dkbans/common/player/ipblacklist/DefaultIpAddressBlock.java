@@ -22,15 +22,15 @@ package net.pretronic.dkbans.common.player.ipblacklist;
 
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.DKBansExecutor;
-import net.pretronic.dkbans.api.player.ipblacklist.IpAddressBlock;
-import net.pretronic.dkbans.api.player.ipblacklist.IpAddressBlockType;
+import net.pretronic.dkbans.api.player.ipaddress.IpAddressBlock;
+import net.pretronic.dkbans.api.player.ipaddress.IpAddressBlockType;
 import net.pretronic.dkbans.api.template.punishment.PunishmentTemplate;
 
 import java.util.UUID;
 
 public class DefaultIpAddressBlock implements IpAddressBlock {
 
-    private final int id;
+    private int id;
     private final String address;
     private final IpAddressBlockType type;
     private final UUID staffId;
@@ -95,5 +95,9 @@ public class DefaultIpAddressBlock implements IpAddressBlock {
     @Override
     public PunishmentTemplate getForTemplate() {
         return (PunishmentTemplate) DKBans.getInstance().getTemplateManager().getTemplate(this.forTemplateId);
+    }
+
+    public void setId(int id ){
+        this.id = id;
     }
 }

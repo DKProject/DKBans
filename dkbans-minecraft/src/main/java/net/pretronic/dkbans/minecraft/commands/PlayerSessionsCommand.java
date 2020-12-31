@@ -29,19 +29,20 @@ import net.pretronic.libraries.command.sender.CommandSender;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
 import net.pretronic.libraries.utility.GeneralUtil;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
-import org.mcnative.common.player.MinecraftPlayer;
+import org.mcnative.runtime.api.player.MinecraftPlayer;
 
 import java.util.List;
 
-public class SessionsCommand extends BasicCommand {
+public class PlayerSessionsCommand extends BasicCommand {
 
-    public SessionsCommand(ObjectOwner owner, CommandConfiguration configuration) {
+    public PlayerSessionsCommand(ObjectOwner owner, CommandConfiguration configuration) {
         super(owner, configuration);
     }
 
     @Override
     public void execute(CommandSender sender, String[] arguments) {
         if(arguments.length < 1){
+            sender.sendMessage(Messages.COMMAND_PLAYER_SESSIONS_HELP);
             return;
         }
 
@@ -49,14 +50,15 @@ public class SessionsCommand extends BasicCommand {
         if(player == null) return;
         DKBansPlayer dkBansPlayer = player.getAs(DKBansPlayer.class);
 
-
         int page = 1;
         if(arguments.length > 1 && GeneralUtil.isNaturalNumber(arguments[1])){
             page = Integer.parseInt(arguments[1]);
         }
 
-        List<PlayerSession> sessions = null;//@Todo get sessions dkBansPlayer.gets
-        sender.sendMessage(Messages.COMMAND_PLAYER_INFO_SESSIONS,
-                VariableSet.create().addDescribed("sessions",arguments[0]));
+        List<PlayerSession> sessions = dkBansPlayer.getSessions().getPage(page,10);
+        sender.sendMessage(Messages.COMMAND_PLAYER_SESSIONS_INFO, VariableSet.create()
+                .add("page",page)
+                .addDescribed("player",player)
+                .addDescribed("sessions",sessions));
     }
 }

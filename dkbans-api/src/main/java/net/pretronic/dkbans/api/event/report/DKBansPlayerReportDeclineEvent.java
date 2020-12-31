@@ -1,9 +1,8 @@
 /*
  * (C) Copyright 2020 The DKBans Project (Davide Wietlisbach & Philipp Elvin Friedhoff)
  *
- * @author Philipp Elvin Friedhoff
- * @since 20.07.20, 21:05
- * @web %web%
+ * @author Davide Wietlisbach
+ * @since 27.12.20, 12:51
  *
  * The DKBans Project is under the Apache License, version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,29 +17,6 @@
  * under the License.
  */
 
-package net.pretronic.dkbans.api.player.ipblacklist;
+package net.pretronic.dkbans.api.event.report;
 
-import net.pretronic.dkbans.api.DKBansExecutor;
-import net.pretronic.dkbans.api.template.punishment.PunishmentTemplate;
-
-public interface IpAddressBlock {
-
-    int getId();
-
-    String getAddress();
-
-    IpAddressBlockType getType();
-
-    DKBansExecutor getStaff();
-
-    String getReason();
-
-    long getTimeout();
-
-
-    String getForReason();
-
-    long getForDuration();
-
-    PunishmentTemplate getForTemplate();
-}
+public interface DKBansPlayerReportDeclineEvent extends DKBansPlayerReportEvent {}

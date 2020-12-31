@@ -32,8 +32,6 @@ public interface PunishmentTemplate extends Template {
 
     Map<Integer, PunishmentTemplateEntry> getDurations();
 
-    Map<Integer, PunishmentTemplateEntry> getPoints();
-
     int getAddedPoints();
 
     double getPointsDivider();

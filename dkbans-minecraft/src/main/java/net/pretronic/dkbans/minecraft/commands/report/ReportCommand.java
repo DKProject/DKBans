@@ -35,8 +35,8 @@ import net.pretronic.libraries.command.sender.CommandSender;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
 import net.pretronic.libraries.utility.Iterators;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
-import org.mcnative.common.player.MinecraftPlayer;
-import org.mcnative.common.player.OnlineMinecraftPlayer;
+import org.mcnative.runtime.api.player.MinecraftPlayer;
+import org.mcnative.runtime.api.player.OnlineMinecraftPlayer;
 
 import java.util.Comparator;
 import java.util.List;
@@ -70,10 +70,8 @@ public class ReportCommand extends MainCommand implements NotFindable {
         registerCommand(new ReportLogoutCommand(owner));
         registerCommand(new ReportToggleCommand(owner));
         registerCommand(new ReportTakeCommand(owner));
-        if(templateGroup != null) {
-            registerCommand(new ReportAcceptCommand(owner));
-            registerCommand(new ReportDeclineCommand(owner));
-        }
+        registerCommand(new ReportAcceptCommand(owner));
+        registerCommand(new ReportDeclineCommand(owner));
         registerCommand(new ReportListCommand(owner));
     }
 
@@ -98,7 +96,7 @@ public class ReportCommand extends MainCommand implements NotFindable {
             player.sendMessage(Messages.PLAYER_NOT_ONLINE,VariableSet.create()
                     .add("name",playerIdentifier)
                     .addDescribed("player",target0)
-                    .add("prefix",Messages.PREFIX));
+                    .add("prefix",Messages.PREFIX_REPORT));
             return;
         }
         if(args.length < 1) {
@@ -109,7 +107,8 @@ public class ReportCommand extends MainCommand implements NotFindable {
         if(this.templateGroup != null) {
             Template template = this.templateGroup.getTemplate(reason);
             if(!(template instanceof ReportTemplate)) {
-                player.sendMessage(Messages.COMMAND_REPORT_TEMPLATE_NOT_EXIST, VariableSet.create().add("name", reason));
+                player.sendMessage(Messages.COMMAND_REPORT_TEMPLATE_NOT_EXIST, VariableSet.create()
+                        .add("name", reason));
                 return;
             }
             PlayerReportEntry reportEntry = target.getAs(DKBansPlayer.class).report(player.getAs(DKBansPlayer.class), (ReportTemplate) template);

@@ -2,7 +2,7 @@
  * (C) Copyright 2020 The DKBans Project (Davide Wietlisbach & Philipp Elvin Friedhoff)
  *
  * @author Philipp Elvin Friedhoff
- * @since 20.07.20, 21:04
+ * @since 20.07.20, 21:05
  * @web %web%
  *
  * The DKBans Project is under the Apache License, version 2.0 (the "License");
@@ -18,21 +18,29 @@
  * under the License.
  */
 
-package net.pretronic.dkbans.api.player.ipblacklist;
+package net.pretronic.dkbans.api.player.ipaddress;
 
 import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.template.punishment.PunishmentTemplate;
-import net.pretronic.libraries.utility.annonations.Nullable;
 
-public interface IpAddressBlacklistManager {
+public interface IpAddressBlock {
 
-    @Nullable
-    IpAddressBlock getIpAddressBlock(String ipAddress);
+    int getId();
 
-    IpAddressBlock blockIpAddress(String ipAddress, IpAddressBlockType type, DKBansExecutor staff, String reason, long timeout, String forReason, long forDuration);
+    String getAddress();
 
-    IpAddressBlock blockIpAddress(String ipAddress, IpAddressBlockType type, DKBansExecutor staff, String reason, long timeout, PunishmentTemplate forTemplate);
+    IpAddressBlockType getType();
+
+    DKBansExecutor getStaff();
+
+    String getReason();
+
+    long getTimeout();
 
 
-    void unblockIpAddress(IpAddressBlock addressBlock);
+    String getForReason();
+
+    long getForDuration();
+
+    PunishmentTemplate getForTemplate();
 }

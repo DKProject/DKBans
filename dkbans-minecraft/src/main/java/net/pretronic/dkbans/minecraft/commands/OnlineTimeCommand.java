@@ -28,8 +28,10 @@ import net.pretronic.libraries.command.sender.CommandSender;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
 import net.pretronic.libraries.utility.duration.DurationProcessor;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
-import org.mcnative.common.McNative;
-import org.mcnative.common.player.MinecraftPlayer;
+import org.mcnative.runtime.api.McNative;
+import org.mcnative.runtime.api.player.MinecraftPlayer;
+
+import java.util.concurrent.TimeUnit;
 
 public class OnlineTimeCommand extends BasicCommand {
 
@@ -39,12 +41,13 @@ public class OnlineTimeCommand extends BasicCommand {
 
     @Override
     public void execute(CommandSender sender, String[] arguments) {
-        if(arguments.length == 1){
+        if(arguments.length == 0){
             if(sender instanceof MinecraftPlayer){
                 DKBansPlayer player = ((MinecraftPlayer) sender).getAs(DKBansPlayer.class);
+                long time = TimeUnit.MILLISECONDS.toSeconds(player.getOnlineTime());
                 sender.sendMessage(Messages.ONLINE_TIME_SELF, VariableSet.create()
-                        .add("online-time-formatted-short", DurationProcessor.getStandard().formatShort(player.getOnlineTime()))
-                        .add("online-time-formatted", DurationProcessor.getStandard().format(player.getOnlineTime()))
+                        .add("online-time-formatted-short", DurationProcessor.getStandard().formatShort(time))
+                        .add("online-time-formatted", DurationProcessor.getStandard().format(time))
                         .addDescribed("player",player));
             }else{
                 sender.sendMessage(Messages.ERROR_ONLY_PLAYER);
@@ -58,10 +61,10 @@ public class OnlineTimeCommand extends BasicCommand {
                 return;
             }
             DKBansPlayer dkBansPlayer = player.getAs(DKBansPlayer.class);
-
+            long time = TimeUnit.MILLISECONDS.toSeconds(dkBansPlayer.getOnlineTime());
             sender.sendMessage(Messages.ONLINE_TIME_OTHER, VariableSet.create()
-                    .add("online-time-formatted-short", DurationProcessor.getStandard().formatShort(dkBansPlayer.getOnlineTime()))
-                    .add("online-time-formatted", DurationProcessor.getStandard().format(dkBansPlayer.getOnlineTime()))
+                    .add("online-time-formatted-short", DurationProcessor.getStandard().formatShort(time))
+                    .add("online-time-formatted", DurationProcessor.getStandard().format(time))
                     .addDescribed("player",player));
         }
     }

@@ -1,9 +1,8 @@
 /*
  * (C) Copyright 2020 The DKBans Project (Davide Wietlisbach & Philipp Elvin Friedhoff)
  *
- * @author Philipp Elvin Friedhoff
- * @since 21.06.20, 17:26
- * @web %web%
+ * @author Davide Wietlisbach
+ * @since 24.12.20, 10:30
  *
  * The DKBans Project is under the Apache License, version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,12 +17,18 @@
  * under the License.
  */
 
-package net.pretronic.dkbans.api.event;
+package net.pretronic.dkbans.api.player.ipaddress;
 
-import net.pretronic.dkbans.api.player.report.PlayerReport;
+import java.net.InetAddress;
 
-public interface DKBansPlayerReportTeleportEvent extends DKBansPlayerEvent {
+public interface IpAddressInfo {
 
+    InetAddress getAddress();
 
-    PlayerReport getReport();
+    String getCountry();
+
+    String getRegion();
+
+    boolean isBlocked();
+
 }
