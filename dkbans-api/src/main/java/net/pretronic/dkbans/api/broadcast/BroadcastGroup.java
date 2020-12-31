@@ -49,9 +49,9 @@ public interface BroadcastGroup extends Iterable<BroadcastAssignment>{
     void setOrder(BroadcastOrder order);
 
 
-    long getInterval();
+    int getInterval();
 
-    void setInterval(long interval);
+    void setInterval(int interval);
 
 
     DKBansScope getScope();
@@ -63,6 +63,7 @@ public interface BroadcastGroup extends Iterable<BroadcastAssignment>{
 
     BroadcastAssignment getAssignment(Broadcast broadcast);
 
+    BroadcastAssignment searchAssignment(Object search);
 
     List<Broadcast> getBroadcasts();
 
@@ -74,14 +75,11 @@ public interface BroadcastGroup extends Iterable<BroadcastAssignment>{
 
     void removeBroadcast(Broadcast broadcast);
 
+    void removeAssignment(BroadcastAssignment assignment);
+
 
 
     BroadcastAssignment getNext(int position);
 
     BroadcastAssignment getNext(BroadcastAssignment current);
-
-
-    void delete();
-
-
 }

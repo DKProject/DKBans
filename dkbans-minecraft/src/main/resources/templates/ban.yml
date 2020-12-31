@@ -3,34 +3,111 @@ calculation: AMOUNT
 name: ban
 templates:
   1:
-    name: Provocation
+    name: Hacking
+    display: Hacking
+    permission: dkbans.ban.reason.hacking
+    aliases:
+      - hacks
+      - hacker
+    hidden: false
+    historyType: NETWORK
+    category: Bans
+    durations:
+      1:
+        type: BAN
+        duration: 30d
+      2:
+        type: BAN
+        duration: 90d
+      3:
+        type: BAN
+        duration: -1
+    points:
+      addedPoints: 7
+      pointsDivider: 2.0
+  2:
+    name: Provocatanion
     display: Provocation
     permission: dkbans.ban.reason.provocation
     aliases:
-      - provocation
       - provo
     hidden: false
     historyType: CHAT
-    category: TEST
+    category: Bans
     durations:
       1:
-        type: WARN
-        kick: true
-        targetPunishment: ban@Proocation
+        type: MUTE
+        duration: 4h
       2:
         type: MUTE
-        scopeType: SERVER_GROUP
-        scopeName: TTT
-        duration: 3d
+        duration: 10d
       3:
+        type: MUTE
+        duration: 10d
+      4:
         type: BAN
-        scope: GLOBAL
         duration: 30d
     points:
       addedPoints: 7
       pointsDivider: 2.0
-      durations:
-        1:
-          type: WARN
-          kick: true
-          duration: 10d
+  3:
+    name: Insult
+    display: Insult
+    permission: dkbans.ban.reason.insult
+    aliases:
+      - insult
+    hidden: false
+    historyType: CHAT
+    category: Bans
+    durations:
+      1:
+        type: MUTE
+        duration: 5h
+      2:
+        type: MUTE
+        duration: 10d
+      3:
+        type: BAN
+        duration: 30d
+    points:
+      addedPoints: 7
+      pointsDivider: 2.0
+  4:
+    name: Spamming
+    display: Spamming
+    permission: dkbans.ban.reason.spamming
+    aliases:
+      - spam
+    hidden: false
+    historyType: CHAT
+    category: Bans
+    durations:
+      1:
+        type: MUTE
+        duration: 5d
+      2:
+        type: BAN
+        duration: 1d
+      3:
+        type: BAN
+        duration: 10d
+    points:
+      addedPoints: 7
+      pointsDivider: 2.0
+  5:
+    name: Permanently
+    display: Permanently
+    permission: dkbans.ban.reason.permanently
+    aliases:
+      - permanently
+      - perma
+    hidden: false
+    historyType: NETWORK
+    category: Bans
+    durations:
+      1:
+        type: MUTE
+        duration: -1
+    points:
+      addedPoints: 7
+      pointsDivider: 2.0

@@ -49,6 +49,8 @@ public interface PlayerHistoryEntry extends Iterable<PlayerHistoryEntrySnapshot>
 
     PlayerHistoryEntrySnapshot getFirst();
 
+    PlayerHistoryEntrySnapshot get(int id);
+
     List<PlayerHistoryEntrySnapshot> getAll();
 
 

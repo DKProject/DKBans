@@ -25,8 +25,8 @@ import net.pretronic.dkbans.api.filter.Filter;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.chatlog.ChatLogEntry;
 import net.pretronic.dkbans.api.player.history.*;
-import net.pretronic.dkbans.api.player.ipblacklist.IpAddressBlock;
-import net.pretronic.dkbans.api.player.ipblacklist.IpAddressBlockType;
+import net.pretronic.dkbans.api.player.ipaddress.IpAddressBlock;
+import net.pretronic.dkbans.api.player.ipaddress.IpAddressBlockType;
 import net.pretronic.dkbans.api.player.note.PlayerNote;
 import net.pretronic.dkbans.api.player.note.PlayerNoteType;
 import net.pretronic.dkbans.api.player.report.PlayerReport;
@@ -121,6 +121,13 @@ public interface DKBansStorage {
 
     List<PlayerSession> getBetweenPlayerSessions(DKBansPlayer player, long startTime, long endTime);
 
+    List<PlayerSession> getPageSessions(DKBansPlayer player,int page, int pageSize);
+
+
+    long getOnlineTime(UUID playerId);
+
+    void addOnlineTime(UUID playerId, long onlineTime);
+
 
     List<PlayerNote> getPlayerNotes(DKBansPlayer player);
 
@@ -154,10 +161,7 @@ public interface DKBansStorage {
 
     PlayerReport createPlayerReport(DKBansPlayer player, ReportState state);
 
-    PlayerReportEntry createPlayerReportEntry(PlayerReport report, DKBansExecutor reporter, ReportTemplate template, String serverName, UUID serverId);
-
-    PlayerReportEntry createPlayerReportEntry(PlayerReport report, DKBansExecutor reporter, String reason, String serverName, UUID serverId);
-
+    PlayerReportEntry createPlayerReportEntry(PlayerReport report, DKBansExecutor reporter,String reason, ReportTemplate template, String serverName, UUID serverId);
 
 
     //Chat log
@@ -172,11 +176,12 @@ public interface DKBansStorage {
 
     IpAddressBlock getIpAddressBlock(String ipAddress);
 
-    IpAddressBlock blockIpAddress(String ipAddress, IpAddressBlockType type, DKBansExecutor staff, String reason, long timeout, String forReason, long forDuration);
-
-    IpAddressBlock blockIpAddress(String ipAddress, IpAddressBlockType type, DKBansExecutor staff, String reason, long timeout, PunishmentTemplate forTemplate);
+    int blockIpAddress(IpAddressBlock block);
 
     void unblockIpAddress(IpAddressBlock addressBlock);
+
+
+
       /*
     private final PlayerHistoryEntry entry;
     private final int id;

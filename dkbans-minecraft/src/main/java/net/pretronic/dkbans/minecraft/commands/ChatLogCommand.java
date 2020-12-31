@@ -30,8 +30,9 @@ import net.pretronic.libraries.command.sender.CommandSender;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
 import net.pretronic.libraries.utility.Convert;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
-import org.mcnative.common.McNative;
-import org.mcnative.common.player.MinecraftPlayer;
+import org.mcnative.runtime.api.McNative;
+import org.mcnative.runtime.api.player.MinecraftPlayer;
+import org.mcnative.runtime.api.text.components.MessageComponent;
 
 import java.util.List;
 import java.util.UUID;
@@ -61,7 +62,7 @@ public class ChatLogCommand extends BasicCommand {
                 return;
             }
             ChatLog chatLog = DKBans.getInstance().getChatLogManager().getPlayerChatLog(player.getUniqueId());
-            printChatLog(sender, chatLog, args);
+            printChatLog(sender, chatLog, args,Messages.COMMAND_CHATLOG_PLAYER_LIST);
         } else if(args[0].equalsIgnoreCase("server")) {
             ChatLog chatLog;
             String server0 = args[1];
@@ -71,19 +72,21 @@ public class ChatLogCommand extends BasicCommand {
             } catch (Exception ignored) {
                 chatLog = DKBans.getInstance().getChatLogManager().getServerChatLog(server0);
             }
-            printChatLog(sender, chatLog, args);
+            printChatLog(sender, chatLog, args,Messages.COMMAND_CHATLOG_SERVER_LIST);
         } else {
             sender.sendMessage(Messages.COMMAND_CHATLOG_USAGE);
         }
     }
 
-    private void printChatLog(CommandSender sender, ChatLog chatLog, String[] args) {
+    private void printChatLog(CommandSender sender, ChatLog chatLog, String[] args, MessageComponent<?> message) {
         int page = 1;
         if(args.length == 3) {
             page = Convert.toInteger(args[2]);
         }
         List<ChatLogEntry> entries = chatLog.getPage(page, 10);
-        sender.sendMessage(Messages.COMMAND_CHATLOG_LIST, VariableSet.create()
+        sender.sendMessage(message, VariableSet.create()
+                .add("page",page)
+                .add("prefix",Messages.PREFIX_CHAT)
                 .addDescribed("entries", entries));
     }
 }

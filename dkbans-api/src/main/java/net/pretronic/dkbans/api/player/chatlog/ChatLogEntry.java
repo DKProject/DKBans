@@ -35,8 +35,6 @@ public interface ChatLogEntry {
 
     long getTime();
 
-    String getTimeFormatted();
-
     String getServerName();
 
     UUID getServerId();

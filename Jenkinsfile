@@ -20,8 +20,8 @@ String JAVADOCS_MODULES = ":DKBans,:dkbans-api"
 
 
 def MIRROR_SERVER_PUBLISHING = [
-  "dkbans-minecraft/target/dkbans-minecraft-%version%.jar": "default",
-  "dkbans-minecraft/target/dkbans-minecraft-%version%-loader.jar": "loader"
+        "dkbans-minecraft/target/dkbans-minecraft-%version%.jar": "default",
+        "dkbans-minecraft/target/dkbans-minecraft-%version%-loader.jar": "loader"
 ]
 
 String MAVEN_SETTINGS_FILE_ID = "afe25550-309e-40c1-80ad-59da7989fb4e"

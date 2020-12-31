@@ -19,7 +19,7 @@
 
 package net.pretronic.dkbans.common.event;
 
-import net.pretronic.dkbans.api.event.DKBansPlayerPunishUpdateEvent;
+import net.pretronic.dkbans.api.event.punish.DKBansPlayerPunishUpdateEvent;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryEntry;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryEntrySnapshot;

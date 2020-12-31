@@ -22,8 +22,8 @@ package net.pretronic.dkbans.minecraft.config;
 
 import net.pretronic.dkbans.api.player.history.PlayerHistoryEntrySnapshot;
 import net.pretronic.dkbans.api.player.history.PunishmentType;
-import org.mcnative.common.text.Text;
-import org.mcnative.common.text.components.MessageComponent;
+import org.mcnative.runtime.api.text.Text;
+import org.mcnative.runtime.api.text.components.MessageComponent;
 
 public class Messages {
 
@@ -31,10 +31,12 @@ public class Messages {
     public static MessageComponent<?> PREFIX_NETWORK  = Text.ofMessageKey("dkbans.prefix.network");
     public static MessageComponent<?> PREFIX_TEAMCHAT  = Text.ofMessageKey("dkbans.prefix.teamchat");
     public static MessageComponent<?> PREFIX_REPORT  = Text.ofMessageKey("dkbans.prefix.report");
+    public static MessageComponent<?> PREFIX_CHAT  = Text.ofMessageKey("dkbans.prefix.chat");
 
     public static MessageComponent<?> ERROR_INTERNAL  = Text.ofMessageKey("dkbans.error.internal");
     public static MessageComponent<?> ERROR_INVALID_DURATION_FORMAT  = Text.ofMessageKey("dkbans.error.invalid.durationFormat");
     public static MessageComponent<?> ERROR_INVALID_NUMBER  = Text.ofMessageKey("dkbans.error.invalid.number");
+    public static MessageComponent<?> ERROR_INVALID_BOOLEAN  = Text.ofMessageKey("dkbans.error.invalid.boolean");
     public static MessageComponent<?> ERROR_ONLY_PLAYER = Text.ofMessageKey("dkbans.error.onlyPlayer");
     public static MessageComponent<?> ERROR_ONLY_CONSOLE = Text.ofMessageKey("dkbans.error.onlyConsole");
     public static MessageComponent<?> ERROR_NO_PERMISSIONS = Text.ofMessageKey("dkbans.error.noPermissions");
@@ -42,15 +44,13 @@ public class Messages {
     public static MessageComponent<?> ERROR_INVALID_TEMPLATE_SPECIFIER_FORMAT = Text.ofMessageKey("dkbans.error.invalid.templateSpecifierFormat");
     public static MessageComponent<?> ERROR_TEMPLATE_GROUP_NOT_EXISTS = Text.ofMessageKey("dkbans.error.templateGroup.notExists");
     public static MessageComponent<?> ERROR_TEMPLATE_NOT_EXISTS = Text.ofMessageKey("dkbans.error.template.notExists");
-    public static MessageComponent<?> ERROR_IP_BLOCK_NOT_EXISTS = Text.ofMessageKey("dkbans.error.ipBlock.notExists");
+    public static MessageComponent<?> ERROR_INVALID_BROADCAST_ORDER = Text.ofMessageKey("dkbans.error.invalidBroadcastOrder");
+    public static MessageComponent<?> ERROR_INVALID_SCOPE = Text.ofMessageKey("dkbans.error.invalidScope");
 
     public static MessageComponent<?> PLAYER_NOT_FOUND = Text.ofMessageKey("dkbans.player.notFound");
     public static MessageComponent<?> PLAYER_NOT_ONLINE = Text.ofMessageKey("dkbans.player.notOnline");
     public static MessageComponent<?> PLAYER_NOT_SELF = Text.ofMessageKey("dkbans.player.notSelf");
     public static MessageComponent<?> PLAYER_HAS_BYPASS = Text.ofMessageKey("dkbans.player.hasBypass");
-
-    public static MessageComponent<?> REPORT_NOT_FOUND = Text.ofMessageKey("dkbans.report.notFound");
-    public static MessageComponent<?> REPORT_COUNT_INFO = Text.ofMessageKey("dkbans.report.countInfo");
 
     public static MessageComponent<?> STAFF_STATUS_NOW = Text.ofMessageKey("dkbans.player.staff.status.now");
     public static MessageComponent<?> STAFF_STATUS_ALREADY = Text.ofMessageKey("dkbans.player.staff.status.already");
@@ -119,8 +119,22 @@ public class Messages {
     public static MessageComponent<?> PUNISH_LIST_BAN = Text.ofMessageKey("dkbans.punish.list.ban");
     public static MessageComponent<?> PUNISH_LIST_MUTE = Text.ofMessageKey("dkbans.punish.list.mute");
 
+    public static MessageComponent<?> PUNISH_NOT_FOUND = Text.ofMessageKey("dkbans.punish.notFound");
+    public static MessageComponent<?> PUNISH_EMPTY = Text.ofMessageKey("dkbans.punish.empty");
+
+    public static MessageComponent<?> PUNISH_ADDRESS_BLOCK = Text.ofMessageKey("dkbans.punish.addressBlock");
+
+    public static MessageComponent<?> REPORT_COUNT_INFO = Text.ofMessageKey("dkbans.report.countInfo");
+    public static MessageComponent<?> REPORT_ACCEPTED = Text.ofMessageKey("dkbans.report.accepted");
+    public static MessageComponent<?> REPORT_DECLINED = Text.ofMessageKey("dkbans.report.decline");
+    public static MessageComponent<?> REPORT_NOTIFY = Text.ofMessageKey("dkbans.report.notify");
+
     public static MessageComponent<?> COMMAND_HISTORY_HELP = Text.ofMessageKey("dkbans.command.history.help");
-    public static MessageComponent<?> COMMAND_HISTORY_LIST = Text.ofMessageKey("dkbans.command.history.list");//&8» &eKick &8| &7[time] - &7[reason]
+    public static MessageComponent<?> COMMAND_HISTORY_LIST = Text.ofMessageKey("dkbans.command.history.list");
+    public static MessageComponent<?> COMMAND_HISTORY_INFO = Text.ofMessageKey("dkbans.command.history.info");
+    public static MessageComponent<?> COMMAND_HISTORY_VERSION_LIST = Text.ofMessageKey("dkbans.command.history.version.list");
+    public static MessageComponent<?> COMMAND_HISTORY_VERSION_INFO = Text.ofMessageKey("dkbans.command.history.version.info");
+    public static MessageComponent<?> COMMAND_HISTORY_ENTRY_NOT_FOUND = Text.ofMessageKey("dkbans.command.history.notFound");
 
     public static MessageComponent<?> COMMAND_RESET_HISTORY_HELP = Text.ofMessageKey("dkbans.command.resetHistory.help");
     public static MessageComponent<?> COMMAND_RESET_HISTORY_MANY = Text.ofMessageKey("dkbans.command.resetHistory.many");
@@ -129,7 +143,9 @@ public class Messages {
     public static MessageComponent<?> COMMAND_PLAYER_INFO_HELP = Text.ofMessageKey("dkbans.command.playerInfo.help");
     public static MessageComponent<?> COMMAND_PLAYER_INFO_OFFLINE = Text.ofMessageKey("dkbans.command.playerInfo.offline");
     public static MessageComponent<?> COMMAND_PLAYER_INFO_ONLINE = Text.ofMessageKey("dkbans.command.playerInfo.online");
-    public static MessageComponent<?> COMMAND_PLAYER_INFO_SESSIONS = Text.ofMessageKey("dkbans.command.playerInfo.sessions");
+
+    public static MessageComponent<?> COMMAND_PLAYER_SESSIONS_HELP = Text.ofMessageKey("dkbans.command.playerSessions.help");
+    public static MessageComponent<?> COMMAND_PLAYER_SESSIONS_INFO = Text.ofMessageKey("dkbans.command.playerSessions.info");
 
     public static MessageComponent<?> COMMAND_HELP = Text.ofMessageKey("dkbans.command.help");
 
@@ -143,6 +159,13 @@ public class Messages {
     public static MessageComponent<?> COMMAND_PUNISH_HELP_ONE_TIME = Text.ofMessageKey("dkbans.command.punish.help.oneTime");
 
     public static MessageComponent<?> COMMAND_UNPUNISH_HELP = Text.ofMessageKey("dkbans.command.unpunish.help");
+
+    public static MessageComponent<?> COMMAND_PUNISH_INFO_HELP = Text.ofMessageKey("dkbans.command.punishinfo.help");
+    public static MessageComponent<?> COMMAND_PUNISH_INFO_MULTIPLE = Text.ofMessageKey("dkbans.command.punishinfo.multiple");
+
+    public static MessageComponent<?> COMMAND_PUNISH_EDIT_HELP = Text.ofMessageKey("dkbans.command.punishedit.help");
+    public static MessageComponent<?> COMMAND_PUNISH_EDIT_MULTIPLE = Text.ofMessageKey("dkbans.command.punishedit.multiple");
+    public static MessageComponent<?> COMMAND_PUNISH_EDIT_DONE = Text.ofMessageKey("dkbans.command.punishedit.done");
 
     public static MessageComponent<?> COMMAND_FILTER_HELP = Text.ofMessageKey("dkbans.command.filter.help");
     public static MessageComponent<?> COMMAND_FILTER_AFFILIATION_AREA_NOT_FOUND = Text.ofMessageKey("dkbans.command.filter.affiliationArea.notFound");
@@ -162,20 +185,15 @@ public class Messages {
 
     public static MessageComponent<?> COMMAND_REPORT_TAKE_USAGE = Text.ofMessageKey("dkbans.command.report.take.usage");
     public static MessageComponent<?> COMMAND_REPORT_TAKE = Text.ofMessageKey("dkbans.command.report.take");
+    public static MessageComponent<?> COMMAND_REPORT_NOT_REPORTED = Text.ofMessageKey("dkbans.command.report.take.notReported");
     public static MessageComponent<?> COMMAND_REPORT_TAKE_ALREADY = Text.ofMessageKey("dkbans.command.report.take.already");
 
-    public static MessageComponent<?> COMMAND_REPORT_ACCEPT_USAGE = Text.ofMessageKey("dkbans.command.report.accept.usage");
-    public static MessageComponent<?> COMMAND_REPORT_ACCEPT_NOT_WATCHING = Text.ofMessageKey("dkbans.command.report.accept.notWatching");
-    public static MessageComponent<?> COMMAND_REPORT_ACCEPT_LIST_ENTRIES = Text.ofMessageKey("dkbans.command.report.accept.listEntries");
+    public static MessageComponent<?> COMMAND_REPORT_NOT_WATCHING = Text.ofMessageKey("dkbans.command.report.notWatching");
 
-    public static MessageComponent<?> COMMAND_REPORT_DECLINE_USAGE = Text.ofMessageKey("dkbans.command.report.decline.usage");
     public static MessageComponent<?> COMMAND_REPORT_DECLINE = Text.ofMessageKey("dkbans.command.report.decline");
+    public static MessageComponent<?> COMMAND_REPORT_ACCEPTED = Text.ofMessageKey("dkbans.command.report.accepted");
 
     public static MessageComponent<?> COMMAND_REPORT_LIST = Text.ofMessageKey("dkbans.command.report.list");
-
-    public static MessageComponent<?> COMMAND_REPORT_NOTFIY = Text.ofMessageKey("dkbans.command.report.notify");
-
-
 
     public static MessageComponent<?> COMMAND_PLAYER_NOTES_HELP = Text.ofMessageKey("dkbans.command.playerNotes.help");
     public static MessageComponent<?> COMMAND_PLAYER_NOTES_LIST = Text.ofMessageKey("dkbans.command.playerNotes.list");
@@ -185,8 +203,9 @@ public class Messages {
     public static MessageComponent<?> COMMAND_MY_HISTORY_POINTS = Text.ofMessageKey("dkbans.command.myHistoryPoints");
 
 
-    public static MessageComponent<?> COMMAND_CHATLOG_USAGE = Text.ofMessageKey("dkbans.command.chatLog.usage");
-    public static MessageComponent<?> COMMAND_CHATLOG_LIST = Text.ofMessageKey("dkbans.command.chatLog.list");
+    public static MessageComponent<?> COMMAND_CHATLOG_USAGE = Text.ofMessageKey("dkbans.command.chatlog.usage");
+    public static MessageComponent<?> COMMAND_CHATLOG_PLAYER_LIST = Text.ofMessageKey("dkbans.command.chatlog.player.list");
+    public static MessageComponent<?> COMMAND_CHATLOG_SERVER_LIST = Text.ofMessageKey("dkbans.command.chatlog.server.list");
 
 
     public static MessageComponent<?> COMMAND_DKBANS_HELP = Text.ofMessageKey("dkbans.command.dkbans.help");
@@ -209,16 +228,75 @@ public class Messages {
     public static MessageComponent<?> COMMAND_JOINME_LINE_10 = Text.ofMessageKey("dkbans.command.joinme.line10");
 
 
-    public static MessageComponent<?> COMMAND_IP_INFO_USAGE = Text.ofMessageKey("dkbans.command.ip.info.usage");
-    public static MessageComponent<?> COMMAND_IP_INFO_BLOCKED = Text.ofMessageKey("dkbans.command.ip.info.blocked");
+    public static MessageComponent<?> COMMAND_IP_INFO_HELP = Text.ofMessageKey("dkbans.command.ip.info.help");
+    public static MessageComponent<?> COMMAND_IP_INFO_ADDRESS = Text.ofMessageKey("dkbans.command.ip.info.address");
+    public static MessageComponent<?> COMMAND_IP_INFO_ADDRESS_DETAILS = Text.ofMessageKey("dkbans.command.ip.info.address.details");
+    public static MessageComponent<?> COMMAND_IP_INFO_PLAYER = Text.ofMessageKey("dkbans.command.ip.info.player");
     public static MessageComponent<?> COMMAND_IP_INFO_NOT_BLOCKED = Text.ofMessageKey("dkbans.command.ip.info.notBlocked");
 
-    public static MessageComponent<?> COMMAND_IP_BLOCK_USAGE = Text.ofMessageKey("dkbans.command.ip.block.usage");
+    public static MessageComponent<?> COMMAND_IP_BLOCK_HELP = Text.ofMessageKey("dkbans.command.ip.block.help");
     public static MessageComponent<?> COMMAND_IP_BlOCK_INVALID_TYPE = Text.ofMessageKey("dkbans.command.ip.block.invalid.type");
     public static MessageComponent<?> COMMAND_IP_BLOCK = Text.ofMessageKey("dkbans.command.ip.block");
 
-    public static MessageComponent<?> COMMAND_IP_UNBLOCK_USAGE = Text.ofMessageKey("dkbans.command.ip.unblock.usage");
+    public static MessageComponent<?> COMMAND_IP_UNBLOCK_HELP = Text.ofMessageKey("dkbans.command.ip.unblock.help");
     public static MessageComponent<?> COMMAND_IP_UNBLOCK = Text.ofMessageKey("dkbans.command.ip.unblock");
+
+    public static MessageComponent<?> COMMAND_CHAT_CLEAR_HELP = Text.ofMessageKey("dkbans.command.chatClear.help");
+    public static MessageComponent<?> COMMAND_CHAT_CLEAR_MY = Text.ofMessageKey("dkbans.command.chatClear.my");
+    public static MessageComponent<?> COMMAND_CHAT_CLEAR_ALL = Text.ofMessageKey("dkbans.command.chatClear.all");
+
+
+    public static MessageComponent<?> COMMAND_BROADCAST_NOT_FOUND = Text.ofMessageKey("dkbans.command.broadcast.notFound");
+    public static MessageComponent<?> COMMAND_BROADCAST_ALREADY_EXISTS = Text.ofMessageKey("dkbans.command.broadcast.alreadyExists");
+    public static MessageComponent<?> COMMAND_BROADCAST_GROUP_ALREADY_EXISTS = Text.ofMessageKey("dkbans.command.broadcast.group.alreadyExists");
+
+    public static MessageComponent<?> COMMAND_BROADCAST_GROUP_HELP = Text.ofMessageKey("dkbans.command.broadcast.group.help");
+    public static MessageComponent<?> COMMAND_BROADCAST_GROUP_INFO = Text.ofMessageKey("dkbans.command.broadcast.group.info");
+    public static MessageComponent<?> COMMAND_BROADCAST_GROUP_LIST = Text.ofMessageKey("dkbans.command.broadcast.group.list");
+    public static MessageComponent<?> COMMAND_BROADCAST_GROUP_CREATE_HELP = Text.ofMessageKey("dkbans.command.broadcast.group.create.help");
+    public static MessageComponent<?> COMMAND_BROADCAST_GROUP_CREATED = Text.ofMessageKey("dkbans.command.broadcast.group.created");
+
+    public static MessageComponent<?> COMMAND_BROADCAST_GROUP_ASSIGNMENT_HELP = Text.ofMessageKey("dkbans.command.broadcast.group.assignment.help");
+    public static MessageComponent<?> COMMAND_BROADCAST_GROUP_ASSIGNMENT_NOT_FOUND = Text.ofMessageKey("dkbans.command.broadcast.group.assignment.notFound");
+    public static MessageComponent<?> COMMAND_BROADCAST_GROUP_ASSIGNMENT_LIST = Text.ofMessageKey("dkbans.command.broadcast.group.assignment.list");
+    public static MessageComponent<?> COMMAND_BROADCAST_GROUP_ASSIGNMENT_INFO = Text.ofMessageKey("dkbans.command.broadcast.group.assignment.info");
+    public static MessageComponent<?> COMMAND_BROADCAST_GROUP_ASSIGNMENT_REMOVE = Text.ofMessageKey("dkbans.command.broadcast.group.assignment.remove");
+    public static MessageComponent<?> COMMAND_BROADCAST_GROUP_ASSIGNMENT_ADD = Text.ofMessageKey("dkbans.command.broadcast.group.assignment.add");
+
+    public static MessageComponent<?> COMMAND_BROADCAST_VISIBILITY_NOT_EXISTS = Text.ofMessageKey("dkbans.command.broadcast.visibility.notExists");
+    public static MessageComponent<?> COMMAND_BROADCAST_CREATE_HELP = Text.ofMessageKey("dkbans.command.broadcast.create.help");
+    public static MessageComponent<?> COMMAND_BROADCAST_CREATED = Text.ofMessageKey("dkbans.command.broadcast.created");
+
+    public static MessageComponent<?> COMMAND_BROADCAST_GROUP_NOT_FOUND = Text.ofMessageKey("dkbans.command.broadcast.group.notFound");
+
+    public static MessageComponent<?> COMMAND_BROADCAST_LIST = Text.ofMessageKey("dkbans.command.broadcast.list");
+
+    public static MessageComponent<?> COMMAND_BROADCAST_DIRECT = Text.ofMessageKey("dkbans.command.broadcast.direct");
+
+    public static MessageComponent<?> COMMAND_BROADCAST_GROUP_EDIT_HELP = Text.ofMessageKey("dkbans.command.broadcast.group.edit.help");
+    public static MessageComponent<?> COMMAND_BROADCAST_GROUP_EDIT_EDITED = Text.ofMessageKey("dkbans.command.broadcast.group.edit.edited");
+
+    public static MessageComponent<?> COMMAND_BROADCAST_HELP = Text.ofMessageKey("dkbans.command.broadcast.help");
+
+    public static MessageComponent<?> COMMAND_BROADCAST_DELETED = Text.ofMessageKey("dkbans.command.broadcast.deleted");
+
+    public static MessageComponent<?> BROADCAST_CHAT = Text.ofMessageKey("dkbans.broadcast.chat");
+    public static MessageComponent<?> BROADCAST_ACTIONBAR = Text.ofMessageKey("dkbans.broadcast.actionbar");
+    public static MessageComponent<?> BROADCAST_TITLE = Text.ofMessageKey("dkbans.broadcast.title");
+    public static MessageComponent<?> BROADCAST_TITLE_SUB = Text.ofMessageKey("dkbans.broadcast.title.sub");
+
+    public static MessageComponent<?> COMMAND_BROADCAST_EDIT_HELP = Text.ofMessageKey("dkbans.command.broadcast.edit.help");
+    public static MessageComponent<?> COMMAND_BROADCAST_EDIT_EDITED = Text.ofMessageKey("dkbans.command.broadcast.edit.edited");
+
+    public static MessageComponent<?> COMMAND_BROADCAST_EDIT_PROPERTY_LIST = Text.ofMessageKey("dkbans.command.broadcast.edit.property.list");
+    public static MessageComponent<?> COMMAND_BROADCAST_EDIT_PROPERTY_ADD = Text.ofMessageKey("dkbans.command.broadcast.edit.property.add");
+
+    public static MessageComponent<?> COMMAND_BROADCAST_EDIT_PROPERTY_REMOVE = Text.ofMessageKey("dkbans.command.broadcast.edit.property.remove");
+    public static MessageComponent<?> COMMAND_BROADCAST_EDIT_PROPERTY_NOT_EXIST = Text.ofMessageKey("dkbans.command.broadcast.edit.property.notExists");
+
+    public static MessageComponent<?> COMMAND_BROADCAST_EDIT_PROPERTY_HELP = Text.ofMessageKey("dkbans.command.broadcast.edit.property.help");
+
+    public static MessageComponent<?> COMMAND_BROADCAST_INFO = Text.ofMessageKey("dkbans.command.broadcast.info");
 
     public static MessageComponent<?> getPunishmentMessage(PlayerHistoryEntrySnapshot snapshot){
         if(snapshot.getPunishmentType() == PunishmentType.BAN){

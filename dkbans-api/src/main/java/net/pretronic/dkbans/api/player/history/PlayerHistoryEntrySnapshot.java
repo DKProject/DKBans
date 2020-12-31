@@ -25,6 +25,8 @@ import net.pretronic.dkbans.api.DKBansScope;
 import net.pretronic.dkbans.api.template.Template;
 import net.pretronic.libraries.document.Document;
 
+import java.time.Duration;
+
 public interface PlayerHistoryEntrySnapshot {
 
     PlayerHistoryEntry getEntry();
@@ -41,6 +43,10 @@ public interface PlayerHistoryEntrySnapshot {
     String getReason();
 
     long getTimeout();
+
+    default Duration getDuration(){
+        return Duration.ofMillis(getTimeout()-getEntry().getCreated());
+    }
 
     default boolean isPermanently(){
         return getTimeout() <= 0;

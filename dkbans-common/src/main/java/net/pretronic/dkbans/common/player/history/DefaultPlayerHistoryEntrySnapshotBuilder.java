@@ -23,8 +23,8 @@ package net.pretronic.dkbans.common.player.history;
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.DKBansScope;
-import net.pretronic.dkbans.api.event.DKBansPlayerPunishEvent;
-import net.pretronic.dkbans.api.event.DKBansPlayerPunishUpdateEvent;
+import net.pretronic.dkbans.api.event.punish.DKBansPlayerPunishEvent;
+import net.pretronic.dkbans.api.event.punish.DKBansPlayerPunishUpdateEvent;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.history.*;
 import net.pretronic.dkbans.api.template.Template;
@@ -108,6 +108,7 @@ public class DefaultPlayerHistoryEntrySnapshotBuilder implements PlayerHistoryEn
 
     @Override
     public PlayerHistoryEntrySnapshotBuilder duration(long time, TimeUnit unit) {
+        if(time <= 0) return timeout(-1);
         return timeout(System.currentTimeMillis()+unit.toMillis(time));
     }
 
@@ -179,6 +180,8 @@ public class DefaultPlayerHistoryEntrySnapshotBuilder implements PlayerHistoryEn
     public PlayerHistoryEntrySnapshot execute() {
         Validate.notNull(stuff,player,historyType,reason);
 
+        if(punishmentType.isOneTime()) this.active = false;
+
         if(modifier == null) modifier = stuff;
         if(modifiedTime <= 0) modifiedTime = System.currentTimeMillis();
         if(scope == null) scope = DKBansScope.GLOBAL;
@@ -193,6 +196,9 @@ public class DefaultPlayerHistoryEntrySnapshotBuilder implements PlayerHistoryEn
             snapshot.setInsertResult(result);
             DKBans.getInstance().getEventBus().callEvent(DKBansPlayerPunishEvent.class,new DefaultDKBansPlayerPunishEvent(player,snapshot));
             ((DefaultPlayerHistory)history).push(result.getKey());
+            if(player.getReport() != null){
+                player.getReport().accept(this.stuff);
+            }
         }else{
             PlayerHistoryEntrySnapshot old = entry.getCurrent();
             snapshot = new DefaultPlayerHistoryEntrySnapshot(entry, -1, historyType,

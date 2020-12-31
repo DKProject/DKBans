@@ -21,108 +21,79 @@
 package net.pretronic.dkbans.minecraft.commands.ip;
 
 import net.pretronic.dkbans.api.DKBans;
-import net.pretronic.dkbans.api.DKBansExecutor;
-import net.pretronic.dkbans.api.player.DKBansPlayer;
-import net.pretronic.dkbans.api.player.ipblacklist.IpAddressBlock;
-import net.pretronic.dkbans.api.player.ipblacklist.IpAddressBlockType;
+import net.pretronic.dkbans.api.player.ipaddress.IpAddressBlock;
+import net.pretronic.dkbans.api.player.ipaddress.IpAddressBlockType;
 import net.pretronic.dkbans.api.template.Template;
 import net.pretronic.dkbans.api.template.TemplateGroup;
 import net.pretronic.dkbans.api.template.punishment.PunishmentTemplate;
+import net.pretronic.dkbans.minecraft.commands.CommandUtil;
 import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.libraries.command.command.BasicCommand;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
 import net.pretronic.libraries.command.sender.CommandSender;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
-import net.pretronic.libraries.utility.duration.DurationProcessor;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
-import org.mcnative.common.McNative;
-import org.mcnative.common.player.MinecraftPlayer;
 
+import java.time.Duration;
 import java.util.regex.Pattern;
 
-/*
-/ipblock <address> <type> <reason> <duration> <forReason> <forDuration>
- /ipblock <address> <type> <reason> <duration> <forTemplate>
- */
 public class IpBlockCommand extends BasicCommand {
-
-    private static final String IPADDRESS_PATTERN =
-            "^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
-                    "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
-                    "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
-                    "([01]?\\d\\d?|2[0-4]\\d|25[0-5])$";
-    private static final Pattern pattern = Pattern.compile(IPADDRESS_PATTERN);;
 
     public IpBlockCommand(ObjectOwner owner, CommandConfiguration configuration) {
         super(owner, configuration);
     }
 
     @Override
-    public void execute(CommandSender sender, String[] args) {
-        if(args.length == 5 || args.length == 6) {
-            DKBansExecutor executor;
-            if(sender.equals(McNative.getInstance().getConsoleSender())) {
-                executor = DKBansExecutor.CONSOLE;
-            } else {
-                executor = ((MinecraftPlayer)sender).getAs(DKBansPlayer.class);
-            }
-            String address = args[0];
-            if(!pattern.matcher(address).matches()) {
-                sender.sendMessage(Messages.ERROR_INVALID_IP_ADDRESS, VariableSet.create().add("address", address).add("prefix", Messages.PREFIX));
-                return;
-            }
-            String type0 = args[1];
-            IpAddressBlockType blockType = IpAddressBlockType.parse(type0);
-            if(blockType == null) {
-                sender.sendMessage(Messages.COMMAND_IP_BlOCK_INVALID_TYPE, VariableSet.create().add("type", type0));
-                return;
-            }
-            String reason = args[2];
-            String duration0 = args[3];
-            long duration = 0;
-            try {
-                duration = DurationProcessor.getStandard().parse(duration0).toMillis();
-            } catch (IllegalArgumentException ignored) {
-                sender.sendMessage(Messages.ERROR_INVALID_DURATION_FORMAT, VariableSet.create().add("prefix", Messages.PREFIX).add("duration", duration0));
-                return;
-            }
-            if(args.length == 5) {
-                String templateSpecifier = args[4];
-                if(!templateSpecifier.contains("@")) {
+    public void execute(CommandSender sender, String[] arguments) {
+        if(arguments.length < 3){
+            sender.sendMessage(Messages.COMMAND_IP_BLOCK_HELP);
+            return;
+        }
+
+        String address = arguments[0];
+        String reason = arguments[1];
+
+        Duration duration = CommandUtil.parseDuration(sender,arguments[2]);
+        if(duration == null) return;
+
+        IpAddressBlock result = null;
+        if(arguments.length > 3){
+            String action = arguments[3];
+            if(action.equalsIgnoreCase("template") && arguments.length > 4){
+
+                if(!arguments[4].contains("@")) {
                     sender.sendMessage(Messages.ERROR_INVALID_TEMPLATE_SPECIFIER_FORMAT, VariableSet.create().add("prefix", Messages.PREFIX));
                     return;
                 }
-                String[] templateSpecifierSplit = templateSpecifier.split("@");
-
-                TemplateGroup templateGroup = DKBans.getInstance().getTemplateManager().getTemplateGroup(templateSpecifierSplit[0]);
+                String[] parts = arguments[4].split("@");
+                TemplateGroup templateGroup = DKBans.getInstance().getTemplateManager().getTemplateGroup(parts[0]);
                 if(templateGroup == null) {
-                    sender.sendMessage(Messages.ERROR_TEMPLATE_GROUP_NOT_EXISTS, VariableSet.create().add("templateGroup", templateSpecifierSplit[0]));
+                    sender.sendMessage(Messages.ERROR_TEMPLATE_GROUP_NOT_EXISTS, VariableSet.create().add("templateGroup", parts[0]));
                     return;
                 }
-                Template template = templateGroup.getTemplate(templateSpecifierSplit[1]);
+                Template template = templateGroup.getTemplate(parts[1]);
                 if(!(template instanceof PunishmentTemplate)) {
-                    sender.sendMessage(Messages.ERROR_TEMPLATE_NOT_EXISTS, VariableSet.create().add("template", templateSpecifierSplit[1]));
+                    sender.sendMessage(Messages.ERROR_TEMPLATE_NOT_EXISTS, VariableSet.create().add("template", parts[1]));
                     return;
                 }
-                IpAddressBlock block = DKBans.getInstance().getIpAddressBlacklistManager().blockIpAddress(address, blockType, executor, reason,
-                        System.currentTimeMillis()+duration, (PunishmentTemplate) template);
-                sender.sendMessage(Messages.COMMAND_IP_BLOCK, VariableSet.create().add("block", block));
-            } else {
-                String forReason = args[4];
-                String forDuration0 = args[5];
-                long forDuration = 0;
-                try {
-                    forDuration = DurationProcessor.getStandard().parse(forDuration0).toMillis();
-                } catch (IllegalArgumentException ignored) {
-                    sender.sendMessage(Messages.ERROR_INVALID_DURATION_FORMAT, VariableSet.create().add("prefix", Messages.PREFIX).add("duration", forDuration0));
-                    return;
-                }
-                IpAddressBlock block = DKBans.getInstance().getIpAddressBlacklistManager().blockIpAddress(address, blockType, executor, reason,
-                        System.currentTimeMillis()+duration, forReason, forDuration);
-                sender.sendMessage(Messages.COMMAND_IP_BLOCK, VariableSet.create().add("block", block));
+
+                result = DKBans.getInstance().getIpAddressManager().blockIpAddress(IpAddressBlockType.BAN,address,reason
+                        ,duration,CommandUtil.getExecutor(sender), (PunishmentTemplate) template);
+            }else if(action.equalsIgnoreCase("temporary") && arguments.length > 5){
+                Duration forDuration = CommandUtil.parseDuration(sender,arguments[5]);
+                if(forDuration == null) return;
+                result = DKBans.getInstance().getIpAddressManager().blockIpAddress(IpAddressBlockType.BAN,address,reason
+                        ,duration,CommandUtil.getExecutor(sender), CommandUtil.readStringFromArguments(arguments,6),forDuration);
+            }else if(action.equalsIgnoreCase("permanently") && arguments.length > 4){
+                result = DKBans.getInstance().getIpAddressManager().blockIpAddress(IpAddressBlockType.BAN,address,reason
+                        ,duration,CommandUtil.getExecutor(sender), CommandUtil.readStringFromArguments(arguments,5));
+            }else{
+                sender.sendMessage(Messages.COMMAND_IP_BLOCK_HELP);
+                return;
             }
-        } else {
-            sender.sendMessage(Messages.COMMAND_IP_BLOCK_USAGE);
+        }else{
+            result = DKBans.getInstance().getIpAddressManager().blockIpAddress(address,reason,duration,CommandUtil.getExecutor(sender));
         }
+        sender.sendMessage(Messages.COMMAND_IP_BLOCK, VariableSet.create().addDescribed("block", result));
     }
 }

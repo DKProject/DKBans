@@ -24,6 +24,8 @@ public interface BroadcastAssignment {
 
     int getId();
 
+    BroadcastGroup getGroup();
+
     Broadcast getBroadcast();
 
     int getPosition();

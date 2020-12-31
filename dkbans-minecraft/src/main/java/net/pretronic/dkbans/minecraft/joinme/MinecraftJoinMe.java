@@ -23,14 +23,15 @@ package net.pretronic.dkbans.minecraft.joinme;
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.joinme.JoinMe;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
+import net.pretronic.dkbans.minecraft.config.CommandConfig;
 import net.pretronic.dkbans.minecraft.config.DKBansConfig;
 import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.libraries.utility.exception.OperationFailedException;
-import org.mcnative.common.text.ImageText;
-import org.mcnative.common.text.components.MessageComponent;
-import org.mcnative.common.text.components.TextComponent;
-import org.mcnative.common.text.event.ClickAction;
-import org.mcnative.common.text.event.TextEvent;
+import org.mcnative.runtime.api.text.ImageText;
+import org.mcnative.runtime.api.text.components.MessageComponent;
+import org.mcnative.runtime.api.text.components.TextComponent;
+import org.mcnative.runtime.api.text.event.ClickAction;
+import org.mcnative.runtime.api.text.event.TextEvent;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -40,7 +41,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
-//@Todo joinme in common
 public class MinecraftJoinMe implements JoinMe {
 
     private final UUID playerId;
@@ -105,13 +105,22 @@ public class MinecraftJoinMe implements JoinMe {
                         i++;
                     }
 
-                    return Arrays.asList(message.buildLines());
+                    components =  Arrays.asList(message.buildLines());
                 }
             }catch (Exception exception){
                 exception.printStackTrace();
             }
         }
 
-        return components;
+        List<MessageComponent<?>> result = new ArrayList<>();
+
+        for (MessageComponent<?> component : components) {
+            TextComponent root = new TextComponent();
+            root.addExtra(component);
+            root.setClickEvent(new TextEvent<>(ClickAction.RUN_COMMAND, "/"+CommandConfig.COMMAND_JOINME.getName()+" "+playerId));
+            result.add(root);
+        }
+
+        return result;
     }
 }

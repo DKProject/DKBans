@@ -3,11 +3,35 @@ calculation: AMOUNT
 name: report
 templates:
   1:
-    name: ReportTest
-    display: ReportTest
-    permission: dkbans.ban.reason.reportTest
+    name: Hacking
+    display: Hacking
+    permission: dkbans.report
     aliases:
-      - rep
+      - hacking
     hidden: false
-    category: TEST
+    category: Reports
+    targetPunishment: ban@Hacking
+  2:
+    name: Provocation
+    display: Provocation
+    permission: dkbans.report
+    aliases:
+      - hacking
+    hidden: false
+    category: Reports
     targetPunishment: ban@Provocation
+  3:
+    name: Insult
+    display: Insult
+    permission: dkbans.report
+    aliases:
+      - chat
+    hidden: false
+    category: Reports
+    targetPunishment: ban@Insult
+  4:
+    name: Other
+    display: Other
+    permission: dkbans.report
+    hidden: false
+    category: Reports

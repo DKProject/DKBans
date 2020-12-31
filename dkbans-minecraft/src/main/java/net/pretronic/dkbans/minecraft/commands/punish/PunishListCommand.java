@@ -31,7 +31,7 @@ import net.pretronic.libraries.command.sender.CommandSender;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
 import net.pretronic.libraries.utility.GeneralUtil;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
-import org.mcnative.common.text.components.MessageComponent;
+import org.mcnative.runtime.api.text.components.MessageComponent;
 
 import java.util.List;
 
@@ -49,12 +49,12 @@ public class PunishListCommand extends BasicCommand {
     @Override
     public void execute(CommandSender sender, String[] arguments) {
         int page = 1;
-        if(arguments.length > 1 && GeneralUtil.isNaturalNumber(arguments[0])){
+        if(arguments.length >= 1 && GeneralUtil.isNaturalNumber(arguments[0])){
             page = Integer.parseInt(arguments[0]);
         }
 
         PunishmentList punishments = DKBans.getInstance().getHistoryManager().getActivePunishments(type,scope);
-        List<PlayerHistoryEntry> result = punishments.getPage(page,12);
+        List<PlayerHistoryEntry> result = punishments.getPage(page,10);
 
         MessageComponent<?> list;
         if(type == PunishmentType.BAN) list = Messages.PUNISH_LIST_BAN;

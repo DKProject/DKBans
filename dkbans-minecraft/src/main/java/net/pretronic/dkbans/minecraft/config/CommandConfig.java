@@ -35,12 +35,14 @@ import java.util.Map;
 
 public class CommandConfig {
 
+    @DocumentKey("command.jumpTo")
     public static CommandConfiguration COMMAND_JUMP_TO = CommandConfiguration.newBuilder()
             .name("jumpto")
             .aliases("goto")
             .permission("dkbans.command.jumpto")
             .create();
 
+    @DocumentKey("command.onlineTime")
     public static CommandConfiguration COMMAND_ONLINE_TIME = CommandConfiguration.newBuilder()
             .name("onlinetime")
             .permission("dkbans.command.onlinetime")
@@ -51,10 +53,18 @@ public class CommandConfig {
             .permission("dkbans.command.ping")
             .create();
 
+    @DocumentKey("command.playerInfo")
     public static CommandConfiguration COMMAND_PLAYER_INFO = CommandConfiguration.newBuilder()
             .name("playerinfo")
             .aliases("pinfo")
             .permission("dkbans.command.playerInfo")
+            .create();
+
+    @DocumentKey("command.playerSessions")
+    public static CommandConfiguration COMMAND_PLAYER_SESSIONS = CommandConfiguration.newBuilder()
+            .name("playerSessions")
+            .aliases("playerSession", "psession","psessions")
+            .permission("dkbans.command.playerSessions")
             .create();
 
     public static CommandConfiguration COMMAND_TEAMCHAT = CommandConfiguration.newBuilder()
@@ -74,6 +84,7 @@ public class CommandConfig {
             .permission("dkbans.command.filter")
             .create();
 
+    @DocumentKey("command.playerNotes")
     public static CommandConfiguration COMMAND_PLAYER_NOTES = CommandConfiguration.newBuilder()
             .name("playerNotes")
             .aliases("playerNote","pnotes","pnote")
@@ -108,35 +119,79 @@ public class CommandConfig {
             .permission("dkbans.command.resethistory")
             .create();
 
+    @DocumentKey("command.myHistoryPoints")
     public static CommandConfiguration COMMAND_MY_HISTORY_POINTS = CommandConfiguration.newBuilder()
             .name("myhistorypoints")
             .permission("dkbans.command.myhistorypoints")
             .create();
-
-    public static Collection<PunishmentTypeConfiguration> COMMAND_PUNISH_DIRECT = new ArrayList<>();
-    public static Map<String,CommandConfiguration> COMMAND_PUNISH_TEMPLATE = new HashMap<>();
-
-    public static String COMMAND_REPORT_MODE = "NORMAL";
-    public static CommandConfiguration COMMAND_REPORT_CONFIGURATION = CommandConfiguration.newBuilder()
-            .name("report")
-            .permission("dkbans.command.report")
-            .create();
-    public static String COMMAND_REPORT_TEMPLATE_NAME = "report";
 
 
     public static CommandConfiguration COMMAND_JOINME = CommandConfiguration.newBuilder()
             .name("joinme")
             .create();
 
+    @DocumentKey("command.ipInfo")
     public static CommandConfiguration COMMAND_IP_INFO = CommandConfiguration.newBuilder()
             .name("ipInfo")
             .permission("dkbans.command.ipInfo")
             .create();
 
+    @DocumentKey("command.ipBlock")
     public static CommandConfiguration COMMAND_IP_BLOCK = CommandConfiguration.newBuilder()
             .name("ipBlock")
             .permission("dkbans.command.ipBlock")
             .create();
+
+    @DocumentKey("command.ipUnblock")
+    public static CommandConfiguration COMMAND_IP_UNBLOCK = CommandConfiguration.newBuilder()
+            .name("ipUnblock")
+            .permission("dkbans.command.ipUnblock")
+            .create();
+
+    @DocumentKey("command.chatClear")
+    public static CommandConfiguration COMMAND_CHAT_CLEAR = CommandConfiguration.newBuilder()
+            .name("chatClear")
+            .aliases("cc","ccheat")
+            .permission("dkbans.command.chatclear")
+            .create();
+
+    public static CommandConfiguration COMMAND_BROADCAST = CommandConfiguration.newBuilder()
+            .name("broadcast")
+            .aliases("bc")
+            .permission("dkbans.command.broadcast")
+            .create();
+
+    public static CommandConfiguration COMMAND_BROADCAST_GROUP = CommandConfiguration.newBuilder()
+            .name("broadcastgroup")
+            .aliases("bcg")
+            .permission("dkbans.command.broadcast.group")
+            .create();
+
+    public static Collection<PunishmentTypeConfiguration> COMMAND_PUNISH_DIRECT = new ArrayList<>();
+    public static Map<String,CommandConfiguration> COMMAND_PUNISH_TEMPLATE = new HashMap<>();
+
+    public static CommandConfiguration COMMAND_REPORT = CommandConfiguration.newBuilder()
+            .name("report")
+            .permission("dkbans.command.report")
+            .create();
+
+    @DocumentKey("command.punishInfo")
+    public static CommandConfiguration COMMAND_PUNISH_INFO_CONFIGURATION = CommandConfiguration.newBuilder()
+            .name("punishInfo")
+            .aliases("baninfo","muteinfo","binfo","minfo")
+            .permission("dkbans.command.punishInfo")
+            .create();
+
+    @DocumentKey("command.punishEdit")
+    public static CommandConfiguration COMMAND_PUNISH_EDIT_CONFIGURATION = CommandConfiguration.newBuilder()
+            .name("punishedit")
+            .aliases("banedit","muteedit")
+            .permission("dkbans.command.punishEdit")
+            .create();
+
+    public static String COMMAND_REPORT_TEMPLATE_NAME = "report";
+
+    public static String COMMAND_REPORT_MODE = "TEMPLATE";
 
     static {
 

@@ -96,6 +96,6 @@ public class DefaultPlayerNoteList implements PlayerNoteList {
         Validate.notNull(creator,message,type);
 
         int id = DKBans.getInstance().getStorage().createPlayerNote(this.player.getUniqueId(), creator.getUniqueId(), type, message);
-        return new DefaultPlayerNote(id,type,System.currentTimeMillis(),message,creator);
+        return new DefaultPlayerNote(id,type,System.currentTimeMillis(),message,creator.getUniqueId());
     }
 }

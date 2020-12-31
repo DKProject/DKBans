@@ -23,6 +23,7 @@ package net.pretronic.dkbans.api.player.session;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 
 import java.net.InetAddress;
+import java.time.Duration;
 import java.util.UUID;
 
 public interface PlayerSession {
@@ -63,8 +64,8 @@ public interface PlayerSession {
 
     long getDisconnectTime();
 
-    default long getDuration(){
-        return getDisconnectTime()-getConnectTime();
+    default Duration getDuration(){
+        return Duration.ofMillis(getDisconnectTime()-getConnectTime());
     }
 
     boolean isActive();

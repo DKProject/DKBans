@@ -39,6 +39,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -47,17 +48,25 @@ import java.util.concurrent.TimeUnit;
 
 public class DKBansConfig {
 
+    @DocumentKey("format.date.pattern")
+    public static String FORMAT_DATE_PATTERN = "dd-MM-yyyy HH:mm";
+
+    public static String FORMAT_DATE_ENDLESSLY = "-";
+
     @DocumentKey("player.onJoin.clearChat")
     public static boolean PLAYER_ON_JOIN_CLEAR_CHAT = true;
     @DocumentKey("player.onJoin.info.teamChat")
     public static boolean PLAYER_ON_JOIN_INFO_TEAMCHAT = true;
+
+    @DocumentKey("player.onJoin.info.punishNotify")
+    public static boolean PLAYER_ON_JOIN_PUNISH_NOTIFY = true;
     @DocumentKey("player.onJoin.info.report")
     public static boolean PLAYER_ON_JOIN_INFO_REPORT = true;
     @DocumentKey("player.onJoin.listReports")
     public static boolean PLAYER_ON_JOIN_LIST_REPORTS = true;
 
     public static boolean PLAYER_SESSION_LOGGING = true;
-    public static long PLAYER_SESSION_RETENTION = TimeUnit.DAYS.toMillis(180);
+    public static String PLAYER_SESSION_RETENTION = "180d";
 
     public static boolean CHAT_FILTER_ENABLED = true;
 
@@ -71,23 +80,33 @@ public class DKBansConfig {
 
     public static Collection<DKBansScope> JOINME_DISABLED_SCOPES = new ArrayList<>();
 
-    private static String JOINME_COOLDOWN = DurationProcessor.getStandard().formatShort(Duration.ofMinutes(15));
+    public static String JOINME_COOLDOWN = DurationProcessor.getStandard().formatShort(Duration.ofMinutes(15));
+
     @DocumentIgnored
     public static long JOINME_COOLDOWN_DURATION = 0;
 
-    private static String IP_ADDRESS_BLOCK_ALT_MIN_PLAYTIME = DurationProcessor.getStandard().formatShort(Duration.ofMinutes(3));
+    @DocumentKey("ipAddress.blockAltMinPlaytime")
+    public static String IP_ADDRESS_BLOCK_ALT_MIN_PLAYTIME = DurationProcessor.getStandard().formatShort(Duration.ofMinutes(3));
+
+    @DocumentKey("ipAddress.historyType")
+    public static String IP_ADDRESS_BLOCK_HISTORY_TYPE_NAME = "NETWORK";
 
     @DocumentIgnored
     public static long IP_ADDRESS_BLOCK_ALT_MIN_PLAYTIME_TIME = 0;
 
+    public static transient SimpleDateFormat FORMAT_DATE;
+
 
     public static void load() {
+        FORMAT_DATE = new SimpleDateFormat(FORMAT_DATE_PATTERN);
         JOINME_COOLDOWN_DURATION = DurationProcessor.getStandard().parse(JOINME_COOLDOWN).toMillis();
         IP_ADDRESS_BLOCK_ALT_MIN_PLAYTIME_TIME = DurationProcessor.getStandard().parse(IP_ADDRESS_BLOCK_ALT_MIN_PLAYTIME).toMillis();
 
         File templates = new File("plugins/DKBans/templates/");
 
-        if(!templates.exists()) templates.mkdirs();
+        if(!templates.exists()){
+            templates.mkdirs();
+        }
         File[] files = templates.listFiles();
         if(files != null && files.length == 0) {
             try {
@@ -113,7 +132,7 @@ public class DKBansConfig {
             TemplateGroup group = loadTemplateConfig(DKBans.getInstance(), Document.read(file));
             DKBans.getInstance().getTemplateManager().importTemplateGroup(group);
             groupCount++;
-            templateCount+=group.getTemplates().size();
+            templateCount+=(group != null && group.getTemplates() != null ? group.getTemplates().size() : 0);
         }
         DKBans.getInstance().getTemplateManager().loadTemplateGroups();
         return new Pair<>(groupCount, templateCount);
@@ -156,7 +175,6 @@ public class DKBansConfig {
             Document data = Document.newDocument();
 
             for (DocumentEntry entry : documentEntry) {
-                System.out.println("Entry: "+entry.getKey());
                 switch (entry.getKey().toLowerCase()) {
 
                     case "name": {
@@ -194,15 +212,11 @@ public class DKBansConfig {
                         break;
                     }
                     case "historytype": {
-                        System.out.println("Found history type");
                         String historyType0 = entry.toPrimitive().getAsString();
-                        System.out.println(historyType0);
 
                         historyType = dkBans.getHistoryManager().getHistoryType(historyType0);
-                        System.out.println(historyType);
                         if(historyType0 != null && historyType == null) {
                             historyType = dkBans.getHistoryManager().createHistoryType(historyType0);
-                            System.out.println("Created: "+historyType);
                         }
                         break;
                     }

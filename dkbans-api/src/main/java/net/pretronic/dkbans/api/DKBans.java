@@ -27,7 +27,7 @@ import net.pretronic.dkbans.api.migration.MigrationManager;
 import net.pretronic.dkbans.api.player.DKBansPlayerManager;
 import net.pretronic.dkbans.api.player.chatlog.ChatLogManager;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryManager;
-import net.pretronic.dkbans.api.player.ipblacklist.IpAddressBlacklistManager;
+import net.pretronic.dkbans.api.player.ipaddress.IpAddressManager;
 import net.pretronic.dkbans.api.player.report.ReportManager;
 import net.pretronic.dkbans.api.storage.DKBansStorage;
 import net.pretronic.dkbans.api.support.SupportTicketManager;
@@ -73,7 +73,7 @@ public abstract class DKBans {
 
     public abstract JoinMeManager getJoinMeManager();
 
-    public abstract IpAddressBlacklistManager getIpAddressBlacklistManager();
+    public abstract IpAddressManager getIpAddressManager();
 
     public abstract void broadcastMessage(String channel,DKBansExecutor executor,String message);
 

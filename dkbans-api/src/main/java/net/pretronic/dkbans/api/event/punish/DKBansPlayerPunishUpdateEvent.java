@@ -1,9 +1,8 @@
 /*
  * (C) Copyright 2020 The DKBans Project (Davide Wietlisbach & Philipp Elvin Friedhoff)
  *
- * @author Philipp Elvin Friedhoff
- * @since 20.07.20, 21:04
- * @web %web%
+ * @author Davide Wietlisbach
+ * @since 27.12.20, 12:51
  *
  * The DKBans Project is under the Apache License, version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,17 +17,21 @@
  * under the License.
  */
 
-package net.pretronic.dkbans.api.player.ipblacklist;
+package net.pretronic.dkbans.api.event.punish;
 
-public enum IpAddressBlockType {
+import net.pretronic.dkbans.api.event.DKBansEvent;
+import net.pretronic.dkbans.api.player.DKBansPlayer;
+import net.pretronic.dkbans.api.player.history.PlayerHistoryEntry;
+import net.pretronic.dkbans.api.player.history.PlayerHistoryEntrySnapshot;
 
-    BLOCK,
-    ALT;
+public interface DKBansPlayerPunishUpdateEvent extends DKBansEvent {
 
-    public static IpAddressBlockType parse(String value) {
-        for (IpAddressBlockType blockType : values()) {
-            if(blockType.name().equalsIgnoreCase(value)) return blockType;
-        }
-        return null;
-    }
+    DKBansPlayer getPlayer();
+
+    PlayerHistoryEntry getEntry();
+
+    PlayerHistoryEntrySnapshot getNewSnapshot();
+
+    PlayerHistoryEntrySnapshot getOldSnapshot();
+
 }

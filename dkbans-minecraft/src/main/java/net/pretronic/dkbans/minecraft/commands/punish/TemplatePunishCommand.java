@@ -32,7 +32,7 @@ import net.pretronic.libraries.command.command.configuration.CommandConfiguratio
 import net.pretronic.libraries.command.sender.CommandSender;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
-import org.mcnative.common.player.MinecraftPlayer;
+import org.mcnative.runtime.api.player.MinecraftPlayer;
 
 public class TemplatePunishCommand extends BasicCommand {
 
@@ -46,7 +46,7 @@ public class TemplatePunishCommand extends BasicCommand {
     @Override
     public void execute(CommandSender sender, String[] arguments) {
         if(arguments.length <= 1){
-            sendTemplates(sender);
+            sendTemplates(sender,arguments.length == 1 ? arguments[0] : "-");
             return;
         }
         MinecraftPlayer player = CommandUtil.getPlayer(sender, arguments[0],true);
@@ -56,7 +56,7 @@ public class TemplatePunishCommand extends BasicCommand {
 
         PunishmentTemplate template = (PunishmentTemplate) templates.getTemplate(arguments[1]);
         if(template == null){
-            sendTemplates(sender);
+            sendTemplates(sender,arguments[0]);
             return;
         }
         if(!sender.hasPermission(template.getPermission())){
@@ -69,7 +69,7 @@ public class TemplatePunishCommand extends BasicCommand {
 
         PunishmentTemplateEntry entry = template.getNextEntry(dkBansPlayer);
         if(entry == null){
-            sender.sendMessage(Messages.ERROR_INTERNAL);
+            sender.sendMessage(Messages.ERROR_INTERNAL,VariableSet.create().add("prefix",Messages.PREFIX));
             return;
         }
 
@@ -83,14 +83,13 @@ public class TemplatePunishCommand extends BasicCommand {
 
         if(dkBansPlayer.hasActivePunish(entry.getType())){
             if(override && CommandUtil.canOverridePunish(sender,dkBansPlayer,entry.getType())){
-                //@Todo override
-         //       dkBansPlayer.unpunish(CommandUtil.getExecutor(sender),entry.getType(),"Overriding punishment with a new one");
+                dkBansPlayer.unpunish(CommandUtil.getExecutor(sender),entry.getType(),"Overriding punishment with a new one");
             }else{
-                String command = getConfiguration().getName()+arguments[0]+" "+arguments[1]+" --override "+message;
+                String command = "/"+getConfiguration().getName()+" "+arguments[0]+" "+arguments[1]+" --override ";
                 if(message != null) command += message;
                 CommandUtil.sendAlreadyPunished(sender,dkBansPlayer,entry.getType(),command);
+                return;
             }
-            return;
         }
 
         PlayerHistoryEntrySnapshot result = dkBansPlayer.punish(CommandUtil.getExecutor(sender),template);
@@ -98,8 +97,10 @@ public class TemplatePunishCommand extends BasicCommand {
         CommandUtil.sendPunishResultMessage(sender,dkBansPlayer,result);
     }
 
-    private void sendTemplates(CommandSender sender){
+    private void sendTemplates(CommandSender sender,String selectedPlayer){
         sender.sendMessage(Messages.PUNISH_TEMPLATE_LIST,VariableSet.create()
+                .add("command",getConfiguration().getName())
+                .add("selectedPlayer",selectedPlayer)
                 .add("prefix",Messages.PREFIX)
                 .add("templates",templates.getTemplates())
                 .add("command",getConfiguration().getName()));

@@ -29,7 +29,7 @@ import net.pretronic.libraries.message.bml.variable.VariableSet;
 import net.pretronic.libraries.utility.GeneralUtil;
 import net.pretronic.libraries.utility.StringUtil;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
-import org.mcnative.common.player.MinecraftPlayer;
+import org.mcnative.runtime.api.player.MinecraftPlayer;
 
 import java.util.List;
 
@@ -53,21 +53,23 @@ public class PlayerNoteCommand extends BasicCommand {
         String argument = arguments.length > 1 ? arguments[1] : "list";
         if(StringUtil.equalsOne(argument,"list","l")){
             int page = 1;
-            if(arguments.length > 2 && GeneralUtil.isNaturalNumber(arguments[2])){
+            if(arguments.length > 3 && GeneralUtil.isNaturalNumber(arguments[2])){
                 page = Integer.parseInt(arguments[2]);
-            }else if(arguments.length > 1 && GeneralUtil.isNaturalNumber(arguments[1])){
+            }else if(arguments.length > 2 && GeneralUtil.isNaturalNumber(arguments[1])){
                 page = Integer.parseInt(arguments[1]);
             }
 
             List<PlayerNote> notes = dkBansPlayer.getNotes().getPage(page,15);
             sender.sendMessage(Messages.COMMAND_PLAYER_NOTES_LIST, VariableSet.create()
+                    .addDescribed("player",player)
+                    .addDescribed("page",page)
                     .addDescribed("nextPage",page+1)
                     .addDescribed("previousPage",page == 1 ? 1 : page-1)
                     .addDescribed("notes",notes));
 
         }else if(StringUtil.equalsOne(argument,"add","a","create","c")){
             PlayerNote note = dkBansPlayer.createNote(CommandUtil.getExecutor(sender)
-                    ,CommandUtil.readStringFromArguments(arguments,1));
+                    ,CommandUtil.readStringFromArguments(arguments,2));
             sender.sendMessage(Messages.COMMAND_PLAYER_NOTES_ADDED, VariableSet.create()
                     .addDescribed("note",note));
         }else {

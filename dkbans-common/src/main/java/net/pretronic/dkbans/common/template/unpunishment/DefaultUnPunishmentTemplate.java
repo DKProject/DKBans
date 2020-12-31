@@ -22,6 +22,7 @@ package net.pretronic.dkbans.common.template.unpunishment;
 
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.DKBansScope;
+import net.pretronic.dkbans.api.player.history.CalculationType;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryType;
 import net.pretronic.dkbans.api.template.Template;
 import net.pretronic.dkbans.api.template.TemplateCategory;
@@ -51,7 +52,6 @@ public class DefaultUnPunishmentTemplate extends DefaultTemplate implements UnPu
 
     private final Map<Integer, UnPunishmentTemplateEntry> durations;
 
-    private final Map<Integer, UnPunishmentTemplateEntry> points;
     private final int removedPoints;
     private final double pointsDivider;
 
@@ -63,12 +63,13 @@ public class DefaultUnPunishmentTemplate extends DefaultTemplate implements UnPu
         this.blacklistedTemplates = new ArrayList<>();
         loadBlacklistedTemplates(data.getDocument("blacklisted"));
         this.scopes = loadScopes(data.getDocument("scopes"));
-        this.durations = loadDurations(data.getDocument("durations"));
 
-        Triple<Map<Integer, UnPunishmentTemplateEntry>, Integer, Double> points = loadPoints(data.getDocument("points"));
-        this.points = points.getFirst();
-        this.removedPoints = points.getSecond();
-        this.pointsDivider = points.getThird();
+        Map<Integer, UnPunishmentTemplateEntry> durations = loadDurations(data.getDocument("durations"));
+        this.durations = new TreeMap<>(durations);
+
+        Pair<Integer, Double> points = loadPoints(data.getDocument("points"));
+        this.removedPoints = points.getKey();
+        this.pointsDivider = points.getValue();
     }
 
     @Override
@@ -84,11 +85,6 @@ public class DefaultUnPunishmentTemplate extends DefaultTemplate implements UnPu
     @Override
     public Map<Integer, UnPunishmentTemplateEntry> getDurations() {
         return this.durations;
-    }
-
-    @Override
-    public Map<Integer, UnPunishmentTemplateEntry> getPoints() {
-        return this.points;
     }
 
     @Override
@@ -130,21 +126,14 @@ public class DefaultUnPunishmentTemplate extends DefaultTemplate implements UnPu
             return durations;
         }
 
-
         return new HashMap<>();
     }
 
-    private Triple<Map<Integer, UnPunishmentTemplateEntry>, Integer, Double> loadPoints(Document data) {
+    private Pair<Integer, Double> loadPoints(Document data) {
         int addedPoints = data.getInt("removedPoints");
         double pointsDivider = data.getDouble("pointsDivider");
-        Map<Integer, UnPunishmentTemplateEntry> points = new HashMap<>();
 
-        for (DocumentEntry entry0 : data.getDocument("durations")) {
-            Pair<Integer, UnPunishmentTemplateEntry> entry = loadEntry(entry0);
-            points.put(entry.getKey(), entry.getValue());
-        }
-
-        return new Triple<>(points, addedPoints, pointsDivider);
+        return new Pair<>(addedPoints, pointsDivider);
     }
 
     private Pair<Integer, UnPunishmentTemplateEntry> loadEntry(DocumentEntry entry) {
@@ -158,13 +147,15 @@ public class DefaultUnPunishmentTemplate extends DefaultTemplate implements UnPu
 
     private Collection<? extends DKBansScope> loadScopes(Document data) {
         Collection<DKBansScope> scopes = new ArrayList<>();
-        for (DocumentEntry scope0 : data) {
-            Document scope = scope0.toDocument();
-            if(scope.size() == 1) {
-                PrimitiveEntry firstEntry = scope.getEntry(0).toPrimitive();
-                scopes.add(new DKBansScope(firstEntry.getKey(), firstEntry.getAsString(), null));
-            } else {
-                scopes.add(scope.getAsObject(DKBansScope.class));
+        if(data != null) {
+            for (DocumentEntry scope0 : data) {
+                Document scope = scope0.toDocument();
+                if(scope.size() == 1) {
+                    PrimitiveEntry firstEntry = scope.getEntry(0).toPrimitive();
+                    scopes.add(new DKBansScope(firstEntry.getKey(), firstEntry.getAsString(), null));
+                } else {
+                    scopes.add(scope.getAsObject(DKBansScope.class));
+                }
             }
         }
         return scopes;

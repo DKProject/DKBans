@@ -37,8 +37,8 @@ import net.pretronic.dkbans.api.filter.Filter;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.chatlog.ChatLogEntry;
 import net.pretronic.dkbans.api.player.history.*;
-import net.pretronic.dkbans.api.player.ipblacklist.IpAddressBlock;
-import net.pretronic.dkbans.api.player.ipblacklist.IpAddressBlockType;
+import net.pretronic.dkbans.api.player.ipaddress.IpAddressBlock;
+import net.pretronic.dkbans.api.player.ipaddress.IpAddressBlockType;
 import net.pretronic.dkbans.api.player.note.PlayerNote;
 import net.pretronic.dkbans.api.player.note.PlayerNoteType;
 import net.pretronic.dkbans.api.player.report.PlayerReport;
@@ -78,7 +78,6 @@ public class DefaultDKBansStorage implements DKBansStorage {
 
     private final DatabaseCollection playerSessions;
     private final DatabaseCollection playerChatLog;
-    private final DatabaseCollection playerSettings;
     private final DatabaseCollection playerNotes;
     private final DatabaseCollection historyType;
     private final DatabaseCollection history;
@@ -93,18 +92,16 @@ public class DefaultDKBansStorage implements DKBansStorage {
 
     private final DatabaseCollection filter;
 
-    /*private final DatabaseCollection broadcast;
+    private final DatabaseCollection broadcast;
     private final DatabaseCollection broadcastGroupAssignment;
     private final DatabaseCollection broadcastGroup;
-    private final DatabaseCollection supportTicket;
-    private final DatabaseCollection supportTicketParticipants;
-    private final DatabaseCollection supportTicketMessages;*/
+
+    private final DatabaseCollection onlinetime;
 
     public DefaultDKBansStorage(DKBans dkBans, Database database) {
         this.dkBans = dkBans;
         this.database = database;
         this.playerSessions = createPlayerSessionsCollection();
-        this.playerSettings = createPlayerSettingsCollection();
         this.playerNotes = createPlayerNotesCollection();
 
         this.historyType = createHistoryTypeCollection();
@@ -125,6 +122,11 @@ public class DefaultDKBansStorage implements DKBansStorage {
         this.filter = createFilterCollection();
         this.playerChatLog = createPlayerChatLogCollection();
 
+        this.broadcast = createBroadcastCollection();
+        this.broadcastGroup = createBroadcastGroupCollection();
+        this.broadcastGroupAssignment = createBroadcastGroupAssignmentCollection();
+
+        this.onlinetime = createOnlineTimeCollection();
     }
 
     @Override
@@ -134,7 +136,13 @@ public class DefaultDKBansStorage implements DKBansStorage {
 
     @Override
     public int createPlayerNote(UUID playerId, UUID creatorId, PlayerNoteType type, String message) {
-        return 0;
+        return this.playerNotes.insert()
+                .set("PlayerId",playerId)
+                .set("CreatorId",creatorId)
+                .set("Time",System.currentTimeMillis())
+                .set("Message",message)
+                .set("TypeId",type.getId())
+                .executeAndGetGeneratedKeyAsInt("Id");
     }
 
     @Override
@@ -210,11 +218,11 @@ public class DefaultDKBansStorage implements DKBansStorage {
             ((DefaultTemplateGroup)templateGroup).setIdInternal(id);
         }
         for (Template template : templateGroup.getTemplates()) {
-            boolean exist = !this.template.find()
+            QueryResult result = this.template.find()
                     .where("InGroupId", template.getInGroupId())
                     .where("GroupId", templateGroup.getId())
-                    .execute().isEmpty();
-            if(exist) {
+                    .execute();
+            if(!result.isEmpty()) {
                 this.template.update()
                         .set("Name", template.getName())
                         .set("DisplayName", template.getDisplayName())
@@ -228,6 +236,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
                         .where("InGroupId", template.getInGroupId())
                         .where("GroupId", templateGroup.getId())
                         .execute();
+                ((DefaultTemplate)template).setIdInternal(result.first().getInt("Id"));
             } else {
                 int id = this.template.insert()
                         .set("InGroupId", template.getInGroupId())
@@ -273,7 +282,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
     }
 
     @Override
-    public int insertHistoryEntrySnapshot(PlayerHistoryEntrySnapshot snapshot) {//@Todo optimize with group execution
+    public int insertHistoryEntrySnapshot(PlayerHistoryEntrySnapshot snapshot) {
         historyVersion.update()
                 .set("ModifiedActive",false)
                 .where("HistoryId",snapshot.getEntry().getId()).execute();
@@ -323,7 +332,9 @@ public class DefaultDKBansStorage implements DKBansStorage {
     public List<PlayerHistoryEntry> loadEntries(PlayerHistory playerHistory) {
         List<PlayerHistoryEntry> result = new ArrayList<>();
 
-        FindQuery query = createBaseQuery().where("PlayerId",playerHistory.getPlayer().getUniqueId());
+        FindQuery query = createBaseQuery()
+                .where("ModifiedActive",true)
+                .where("PlayerId",playerHistory.getPlayer().getUniqueId());
 
         QueryResult result0 = query.execute();
 
@@ -342,7 +353,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
         if(result.isEmpty()) return null;
 
         QueryResultEntry resultEntry = result.first();
-        DefaultPlayerHistoryEntrySnapshot snapshot = createSnapshot(resultEntry);
+        DefaultPlayerHistoryEntrySnapshot snapshot = createSnapshot(resultEntry,null);
 
         PlayerHistory playerHistory = DKBans.getInstance().getPlayerManager()
                 .getPlayer(resultEntry.getUniqueId("PlayerId")).getHistory();
@@ -380,7 +391,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
 
         List<PlayerHistoryEntry> result = new ArrayList<>();
         for (QueryResultEntry resultEntry : queryResult) {
-            DefaultPlayerHistoryEntrySnapshot snapshot = createSnapshot(resultEntry);
+            DefaultPlayerHistoryEntrySnapshot snapshot = createSnapshot(resultEntry,null);
 
             PlayerHistory playerHistory = DKBans.getInstance().getPlayerManager()
                     .getPlayer(resultEntry.getUniqueId("PlayerId")).getHistory();
@@ -398,8 +409,11 @@ public class DefaultDKBansStorage implements DKBansStorage {
     @Override
     public List<PlayerHistoryEntrySnapshot> loadSnapshots(PlayerHistoryEntry historyEntry) {
         List<PlayerHistoryEntrySnapshot> snapshots = new ArrayList<>();
-        QueryResult result = this.historyVersion.find().where("HistoryId",historyEntry.getId()).execute();
-        for (QueryResultEntry entry : result) snapshots.add(createSnapshot(entry));
+        QueryResult result = this.historyVersion.find()
+                .get("*")
+                .getAs("Id","SnapshotId")
+                .where("HistoryId",historyEntry.getId()).execute();
+        for (QueryResultEntry entry : result) snapshots.add(createSnapshot(entry,historyEntry));
         return snapshots;
     }
 
@@ -416,7 +430,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
     private void readEntries(PlayerHistory playerHistory, List<PlayerHistoryEntry> result, QueryResult result0) {
         if(!result0.isEmpty()){
             for (QueryResultEntry resultEntry : result0) {
-                DefaultPlayerHistoryEntrySnapshot snapshot = createSnapshot(resultEntry);
+                DefaultPlayerHistoryEntrySnapshot snapshot = createSnapshot(resultEntry,null);
                 DefaultPlayerHistoryEntry entry = new DefaultPlayerHistoryEntry(playerHistory,
                         resultEntry.getInt("HistoryId"),
                         snapshot,
@@ -427,7 +441,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
         }
     }
 
-    private DefaultPlayerHistoryEntrySnapshot createSnapshot(QueryResultEntry resultEntry) {
+    private DefaultPlayerHistoryEntrySnapshot createSnapshot(QueryResultEntry resultEntry,PlayerHistoryEntry entry) {
         DKBansScope scope = null;
         if(resultEntry.getString("ScopeType") != null){
             scope = new DKBansScope(resultEntry.getString("ScopeType")
@@ -435,7 +449,11 @@ public class DefaultDKBansStorage implements DKBansStorage {
                     ,resultEntry.getUniqueId("ScopeId"));
         }
 
-        return new DefaultPlayerHistoryEntrySnapshot(null,
+        for (Map.Entry<String, Object> entry0 : resultEntry) {
+            System.out.println(entry0.getKey()+" | "+entry0.getValue());
+        }
+
+        return new DefaultPlayerHistoryEntrySnapshot(entry,
                 resultEntry.getInt("SnapshotId"),
                 dkBans.getHistoryManager().getHistoryType(resultEntry.getInt("HistoryTypeId")),
                 PunishmentType.getPunishmentType(resultEntry.getString("PunishmentType")),
@@ -446,7 +464,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 scope,
                 resultEntry.getInt("Points"),
                 resultEntry.getBoolean("Active"),
-                null/*@Todo add properties*/,
+                DocumentFileType.JSON.getReader().read(resultEntry.getString("Properties")),
                 resultEntry.getString("RevokeReason"),
                 dkBans.getTemplateManager().getTemplate(resultEntry.getInt("RevokeTemplateId")),
                 resultEntry.getBoolean("ModifiedActive"),
@@ -565,7 +583,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
         return getPlayerSessionsByResult(player, this.playerSessions.find()
                 .where("PlayerId", player.getUniqueId())
                 .whereHigher("DisconnectTime", time)
-                .orderBy("DisconnectTime", SearchOrder.ASC)
+                .orderBy("DisconnectTime", SearchOrder.DESC)
                 .execute());
     }
 
@@ -574,7 +592,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
         return getPlayerSessionsByResult(player, this.playerSessions.find()
                 .where("PlayerId", player.getUniqueId())
                 .whereLower("DisconnectTime", time)
-                .orderBy("DisconnectTime", SearchOrder.ASC)
+                .orderBy("DisconnectTime", SearchOrder.DESC)
                 .execute());
     }
 
@@ -583,8 +601,39 @@ public class DefaultDKBansStorage implements DKBansStorage {
         return getPlayerSessionsByResult(player, this.playerSessions.find()
                 .where("PlayerId", player.getUniqueId())
                 .whereBetween("DisconnectTime", startTime, endTime)
-                .orderBy("DisconnectTime", SearchOrder.ASC)
+                .orderBy("DisconnectTime", SearchOrder.DESC)
                 .execute());
+    }
+
+    @Override
+    public List<PlayerSession> getPageSessions(DKBansPlayer player, int page, int pageSize) {
+        return getPlayerSessionsByResult(player, this.playerSessions.find()
+                .where("PlayerId", player.getUniqueId())
+                .page(page,pageSize)
+                .orderBy("DisconnectTime", SearchOrder.DESC)
+                .execute());
+    }
+
+    @Override
+    public long getOnlineTime(UUID playerId) {
+        Validate.notNull(playerId);
+        QueryResult result = this.onlinetime.find().get("OnlineTime").where("PlayerId", playerId).execute();
+        if(result.isEmpty()){
+            this.onlinetime.insert()
+                    .set("PlayerId",playerId)
+                    .set("OnlineTime",0)
+                    .set("AfkTime",0)
+                    .execute();
+            return 0;
+        }else {
+            return result.first().getLong("OnlineTime");
+        }
+    }
+
+    @Override
+    public void addOnlineTime(UUID playerId, long onlineTime) {
+        Validate.notNull(playerId);
+        this.onlinetime.update().add("OnlineTime", onlineTime).where("PlayerId", playerId).execute();
     }
 
     @Override
@@ -620,40 +669,24 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 .set("PlayerId", player.getUniqueId())
                 .set("State", state.toString())
                 .executeAndGetGeneratedKeyAsInt("Id");
-        return new DefaultPlayerReport(id, player, state);
+        return new DefaultPlayerReport(id,state, player);
     }
 
     @Override
-    public PlayerReportEntry createPlayerReportEntry(PlayerReport report, DKBansExecutor reporter, ReportTemplate template, String serverName, UUID serverId) {
-        Validate.notNull(report, reporter, template, serverName, serverId);
+    public PlayerReportEntry createPlayerReportEntry(PlayerReport report, DKBansExecutor reporter,String reason, ReportTemplate template, String serverName, UUID serverId) {
         long time = System.currentTimeMillis();
         int id = this.reportEntries.insert()
                 .set("ReportId", report.getId())
                 .set("ReporterId", reporter.getUniqueId())
-                .set("TemplateId", template.getId())
-                .set("Reason", template.getDisplayName())
-                .set("Time", time)
-                .set("ServerName", serverName)
-                .set("ServerId", serverId)
-                .set("Properties", "{}")
-                .executeAndGetGeneratedKeyAsInt("Id");
-        return new DefaultPlayerReportEntry(id, report, reporter, template, template.getDisplayName() , serverName, serverId, time, Document.newDocument());
-    }
-
-    @Override
-    public PlayerReportEntry createPlayerReportEntry(PlayerReport report, DKBansExecutor reporter, String reason, String serverName, UUID serverId) {
-        Validate.notNull(report, reporter, serverName, serverId);
-        long time = System.currentTimeMillis();
-        int id = this.reportEntries.insert()
-                .set("ReportId", report.getId())
-                .set("ReporterId", reporter.getUniqueId())
+                .set("TemplateId", template != null ? template.getId() : null)
                 .set("Reason", reason)
                 .set("Time", time)
                 .set("ServerName", serverName)
                 .set("ServerId", serverId)
                 .set("Properties", "{}")
                 .executeAndGetGeneratedKeyAsInt("Id");
-        return new DefaultPlayerReportEntry(id, report, reporter, null, reason , serverName, serverId, time, Document.newDocument());
+        return new DefaultPlayerReportEntry(id, report, reporter.getUniqueId(),template != null ? template.getId() : 0
+                , reason , serverName, serverId, time, Document.newDocument());
     }
 
     @Override
@@ -692,13 +725,17 @@ public class DefaultDKBansStorage implements DKBansStorage {
     }
 
     @Override
-    public IpAddressBlock blockIpAddress(String ipAddress, IpAddressBlockType type, DKBansExecutor staff, String reason, long timeout, String forReason, long forDuration) {
-        return null;
-    }
-
-    @Override
-    public IpAddressBlock blockIpAddress(String ipAddress, IpAddressBlockType type, DKBansExecutor staff, String reason, long timeout, PunishmentTemplate forTemplate) {
-        return null;
+    public int blockIpAddress(IpAddressBlock block) {
+        return this.ipAddressBlacklist.insert()
+                .set("Address",block.getAddress())
+                .set("Type",block.getType())
+                .set("StaffId",block.getStaff().getUniqueId())
+                .set("Reason",block.getReason())
+                .set("Timeout",block.getTimeout())
+                .set("ForReason",block.getForReason())
+                .set("ForDuration",block.getForDuration())
+                .set("ForTemplateId",block.getForTemplate() != null ? block.getForTemplate().getId() : null)
+                .executeAndGetGeneratedKeyAsInt("Id");
     }
 
     @Override
@@ -820,7 +857,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 PlayerNoteType.byId(entry.getInt("TypeId")),
                 entry.getLong("Time"),
                 entry.getString("Message"),
-                player);
+                entry.getUniqueId("CreatorId"));
     }
 
     public DatabaseCollection getPlayerSessions() {
@@ -829,10 +866,6 @@ public class DefaultDKBansStorage implements DKBansStorage {
 
     public DatabaseCollection getPlayerChatLog() {
         return playerChatLog;
-    }
-
-    public DatabaseCollection getPlayerSettings() {
-        return playerSettings;
     }
 
     public DatabaseCollection getPlayerNotes() {
@@ -883,18 +916,30 @@ public class DefaultDKBansStorage implements DKBansStorage {
         return filter;
     }
 
+    public DatabaseCollection getBroadcast() {
+        return broadcast;
+    }
+
+    public DatabaseCollection getBroadcastGroupAssignment() {
+        return broadcastGroupAssignment;
+    }
+
+    public DatabaseCollection getBroadcastGroup() {
+        return broadcastGroup;
+    }
+
     private DatabaseCollection createPlayerSessionsCollection() {
         return database.createCollection("dkbans_player_sessions")
                 .field("Id", DataType.INTEGER, FieldOption.PRIMARY_KEY, FieldOption.AUTO_INCREMENT)
-                .field("PlayerId", DataType.UUID, FieldOption.NOT_NULL)
+                .field("PlayerId", DataType.UUID, FieldOption.NOT_NULL,FieldOption.INDEX)
                 .field("PlayerSessionName", DataType.STRING, FieldOption.NOT_NULL)
                 .field("IpAddress", DataType.STRING, FieldOption.NOT_NULL)
                 .field("Country", DataType.STRING, FieldOption.NOT_NULL)
                 .field("Region", DataType.STRING, FieldOption.NOT_NULL)
                 .field("LastServerId", DataType.UUID)
                 .field("LastServerName", DataType.STRING)
-                .field("ProxyId", DataType.UUID, FieldOption.NOT_NULL)
-                .field("ProxyName", DataType.STRING, FieldOption.NOT_NULL)
+                .field("ProxyId", DataType.UUID)
+                .field("ProxyName", DataType.STRING)
                 .field("ClientEdition", DataType.STRING, FieldOption.NOT_NULL)
                 .field("ClientProtocolVersion", DataType.INTEGER, FieldOption.NOT_NULL)
                 .field("ConnectTime", DataType.LONG, FieldOption.NOT_NULL)
@@ -905,29 +950,20 @@ public class DefaultDKBansStorage implements DKBansStorage {
     private DatabaseCollection createPlayerChatLogCollection() {
         return database.createCollection("dkbans_player_chatlog")
                 .field("Id", DataType.INTEGER, FieldOption.PRIMARY_KEY, FieldOption.AUTO_INCREMENT)
-                .field("PlayerId", DataType.UUID, FieldOption.NOT_NULL)
+                .field("PlayerId", DataType.UUID, FieldOption.NOT_NULL,FieldOption.INDEX)
                 .field("Message", DataType.STRING, FieldOption.NOT_NULL)
                 .field("Time", DataType.LONG, FieldOption.NOT_NULL)
-                .field("ServerName", DataType.STRING, FieldOption.NOT_NULL)
-                .field("ServerId", DataType.UUID, FieldOption.NOT_NULL)
+                .field("ServerName", DataType.STRING, FieldOption.NOT_NULL,FieldOption.INDEX)
+                .field("ServerId", DataType.UUID, FieldOption.NOT_NULL,FieldOption.INDEX)
                 .field("FilterAffiliationArea", DataType.STRING)
-                .create();
-    }
-
-    private DatabaseCollection createPlayerSettingsCollection() {
-        return database.createCollection("dkbans_player_settings")
-                .field("Id", DataType.INTEGER, FieldOption.PRIMARY_KEY, FieldOption.AUTO_INCREMENT)
-                .field("PlayerId", DataType.UUID, FieldOption.NOT_NULL)
-                .field("Key", DataType.STRING, FieldOption.NOT_NULL)
-                .field("Value", DataType.STRING, FieldOption.NOT_NULL)
                 .create();
     }
 
     private DatabaseCollection createPlayerNotesCollection() {
         return database.createCollection("dkbans_player_notes")
                 .field("Id", DataType.INTEGER, FieldOption.PRIMARY_KEY, FieldOption.AUTO_INCREMENT)
-                .field("PlayerId", DataType.UUID, FieldOption.NOT_NULL)
-                .field("SenderId", DataType.UUID, FieldOption.NOT_NULL)
+                .field("PlayerId", DataType.UUID, FieldOption.NOT_NULL,FieldOption.INDEX)
+                .field("CreatorId", DataType.UUID, FieldOption.NOT_NULL)
                 .field("Time", DataType.LONG, FieldOption.NOT_NULL)
                 .field("Message", DataType.STRING, FieldOption.NOT_NULL)
                 .field("TypeId", DataType.INTEGER, FieldOption.NOT_NULL)
@@ -944,7 +980,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
     private DatabaseCollection createHistoryCollection() {
         return database.createCollection("dkbans_history")
                 .field("Id", DataType.INTEGER, FieldOption.PRIMARY_KEY, FieldOption.AUTO_INCREMENT)
-                .field("PlayerId", DataType.UUID, FieldOption.NOT_NULL)
+                .field("PlayerId", DataType.UUID, FieldOption.NOT_NULL,FieldOption.INDEX)
                 .field("SessionId", DataType.INTEGER, ForeignKey.of(this.playerSessions, "Id"))
                 .field("Created", DataType.LONG, FieldOption.NOT_NULL)
                 .create();
@@ -953,7 +989,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
     private DatabaseCollection createHistoryVersionCollection() {
         return database.createCollection("dkbans_history_version")
                 .field("Id", DataType.INTEGER, FieldOption.PRIMARY_KEY, FieldOption.AUTO_INCREMENT)
-                .field("HistoryId", DataType.INTEGER, ForeignKey.of(this.history, "Id", ForeignKey.Option.CASCADE), FieldOption.NOT_NULL)
+                .field("HistoryId", DataType.INTEGER, ForeignKey.of(this.history, "Id", ForeignKey.Option.CASCADE), FieldOption.NOT_NULL,FieldOption.INDEX)
                 .field("Reason", DataType.STRING, FieldOption.NOT_NULL)
                 .field("Timeout", DataType.LONG, FieldOption.NOT_NULL)
                 .field("StaffId", DataType.UUID, FieldOption.NOT_NULL)
@@ -961,7 +997,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 .field("ScopeName", DataType.STRING)
                 .field("ScopeId", DataType.UUID)
                 .field("Points", DataType.INTEGER)
-                .field("Active", DataType.BOOLEAN, FieldOption.NOT_NULL)
+                .field("Active", DataType.BOOLEAN, FieldOption.NOT_NULL,FieldOption.INDEX)
                 .field("Properties", DataType.LONG_TEXT, -1, FieldOption.NOT_NULL)
                 .field("HistoryTypeId", DataType.INTEGER, ForeignKey.of(this.historyType, "Id"))
                 .field("PunishmentType", DataType.STRING, FieldOption.NOT_NULL)
@@ -970,25 +1006,25 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 .field("RevokeReason", DataType.STRING)
                 .field("ModifiedTime", DataType.LONG, FieldOption.NOT_NULL)
                 .field("ModifiedBy", DataType.UUID, FieldOption.NOT_NULL)
-                .field("ModifiedActive", DataType.BOOLEAN)
+                .field("ModifiedActive", DataType.BOOLEAN,FieldOption.INDEX)
                 .create();
     }
 
     private DatabaseCollection createHistoryNotesCollection() {
         return database.createCollection("dkbans_history_notes")
                 .field("Id", DataType.INTEGER, FieldOption.PRIMARY_KEY, FieldOption.AUTO_INCREMENT)
-                .field("HistoryId", DataType.INTEGER, ForeignKey.of(this.history, "Id"), FieldOption.NOT_NULL)
+                .field("HistoryId", DataType.INTEGER, ForeignKey.of(this.history, "Id"), FieldOption.NOT_NULL,FieldOption.INDEX)
                 .field("SenderId", DataType.UUID, FieldOption.NOT_NULL)
                 .field("Time", DataType.LONG, FieldOption.NOT_NULL)
                 .field("Message", DataType.STRING, FieldOption.NOT_NULL)
-                .field("Type", DataType.STRING, FieldOption.NOT_NULL)
+                .field("TypeId", DataType.INTEGER, FieldOption.NOT_NULL)
                 .create();
     }
 
     private DatabaseCollection createReportsCollection() {
         return database.createCollection("dkbans_report")
                 .field("Id", DataType.INTEGER, FieldOption.PRIMARY_KEY, FieldOption.AUTO_INCREMENT)
-                .field("PlayerId", DataType.UUID, FieldOption.NOT_NULL)
+                .field("PlayerId", DataType.UUID, FieldOption.NOT_NULL,FieldOption.INDEX)
                 .field("WatcherId", DataType.UUID)
                 .field("State", DataType.STRING, FieldOption.NOT_NULL)
                 .create();
@@ -997,7 +1033,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
     private DatabaseCollection createReportEntriesCollection() {
         return database.createCollection("dkbans_report_entries")
                 .field("Id", DataType.INTEGER, FieldOption.PRIMARY_KEY, FieldOption.AUTO_INCREMENT)
-                .field("ReportId", DataType.INTEGER, ForeignKey.of(this.reports, "Id"))
+                .field("ReportId", DataType.INTEGER, ForeignKey.of(this.reports, "Id"),FieldOption.INDEX)
                 .field("ReporterId", DataType.UUID, FieldOption.NOT_NULL)
                 .field("TemplateId", DataType.INTEGER, ForeignKey.of(this.template, "Id"))
                 .field("Reason", DataType.STRING)
@@ -1011,9 +1047,9 @@ public class DefaultDKBansStorage implements DKBansStorage {
     private DatabaseCollection createIpAddressBlacklistCollection() {
         return database.createCollection("dkbans_ipaddress_blacklist")
                 .field("Id", DataType.INTEGER, FieldOption.PRIMARY_KEY, FieldOption.AUTO_INCREMENT)
-                .field("Address", DataType.STRING, FieldOption.NOT_NULL)
+                .field("Address", DataType.STRING, FieldOption.NOT_NULL,FieldOption.INDEX)
                 .field("Type", DataType.STRING, FieldOption.NOT_NULL)
-                .field("StaffId", DataType.UUID, FieldOption.NOT_NULL)
+                .field("StaffId", DataType.UUID)
                 .field("Reason", DataType.STRING, FieldOption.NOT_NULL)
                 .field("Timeout", DataType.LONG, FieldOption.NOT_NULL)
                 .field("ForReason", DataType.STRING)
@@ -1061,6 +1097,47 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 .field("AffiliationArea", DataType.STRING,32, FieldOption.NOT_NULL)
                 .field("Operation", DataType.STRING,32, FieldOption.NOT_NULL)
                 .field("Value", DataType.STRING,512, FieldOption.NOT_NULL)
+                .create();
+    }
+
+    private DatabaseCollection createBroadcastCollection() {
+        return database.createCollection("dkbans_broadcast")
+                .field("Id", DataType.INTEGER, FieldOption.PRIMARY_KEY, FieldOption.AUTO_INCREMENT)
+                .field("Name", DataType.STRING, FieldOption.NOT_NULL, FieldOption.UNIQUE)
+                .field("Visibility", DataType.STRING, FieldOption.NOT_NULL)
+                .field("Properties", DataType.LONG_TEXT, FieldOption.NOT_NULL)
+                .create();
+    }
+
+    private DatabaseCollection createBroadcastGroupCollection() {
+        return database.createCollection("dkbans_broadcast_group")
+                .field("Id", DataType.INTEGER, FieldOption.PRIMARY_KEY, FieldOption.AUTO_INCREMENT)
+                .field("Name", DataType.STRING, FieldOption.NOT_NULL, FieldOption.UNIQUE)
+                .field("Enabled", DataType.BOOLEAN, FieldOption.NOT_NULL)
+                .field("Permission", DataType.STRING)
+                .field("Interval", DataType.LONG, FieldOption.NOT_NULL)
+                .field("Order", DataType.STRING, FieldOption.NOT_NULL)
+                .field("ScopeType", DataType.STRING)
+                .field("ScopeName", DataType.STRING)
+                .field("ScopeId", DataType.UUID)
+                .field("Properties", DataType.LONG_TEXT, FieldOption.NOT_NULL)
+                .create();
+    }
+
+    private DatabaseCollection createBroadcastGroupAssignmentCollection() {
+        return database.createCollection("dkbans_broadcast_group_assignment")
+                .field("Id", DataType.INTEGER, FieldOption.PRIMARY_KEY, FieldOption.AUTO_INCREMENT)
+                .field("BroadcastId", DataType.INTEGER, ForeignKey.of(this.broadcast, "Id"), FieldOption.NOT_NULL)
+                .field("GroupId", DataType.INTEGER, ForeignKey.of(this.broadcastGroup, "Id"), FieldOption.NOT_NULL)
+                .field("Position", DataType.INTEGER, FieldOption.NOT_NULL)
+                .create();
+    }
+
+    private DatabaseCollection createOnlineTimeCollection() {
+        return database.createCollection("dkbans_onlinetime")
+                .field("PlayerId", DataType.UUID, FieldOption.NOT_NULL,FieldOption.PRIMARY_KEY,FieldOption.INDEX)
+                .field("OnlineTime", DataType.LONG, FieldOption.NOT_NULL)
+                .field("AfkTime", DataType.LONG, FieldOption.NOT_NULL)
                 .create();
     }
 }

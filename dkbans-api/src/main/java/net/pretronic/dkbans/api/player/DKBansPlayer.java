@@ -32,6 +32,7 @@ import net.pretronic.dkbans.api.player.note.PlayerNoteList;
 import net.pretronic.dkbans.api.player.note.PlayerNoteType;
 import net.pretronic.dkbans.api.player.report.PlayerReport;
 import net.pretronic.dkbans.api.player.report.PlayerReportEntry;
+import net.pretronic.dkbans.api.player.ipaddress.IpAddressInfo;
 import net.pretronic.dkbans.api.player.session.PlayerSession;
 import net.pretronic.dkbans.api.player.session.PlayerSessionList;
 import net.pretronic.dkbans.api.template.punishment.PunishmentTemplate;
@@ -55,6 +56,7 @@ public interface DKBansPlayer extends DKBansExecutor {
 
     PlayerSessionList getSessions();
 
+    Collection<IpAddressInfo> getIpAddresses();
 
     long getOnlineTime();
 
@@ -77,22 +79,35 @@ public interface DKBansPlayer extends DKBansExecutor {
 
 
 
-    boolean hasActivePunish(PunishmentType type);
+    default boolean hasActivePunish(PunishmentType type){
+        return getHistory().hasActivePunish(type);
+    }
 
-    boolean hasActivePunish(PunishmentType type,DKBansScope scope);
+    default boolean hasActivePunish(PunishmentType type,DKBansScope scope){
+        return getHistory().hasActivePunish(type,scope);
+    }
 
-    boolean hasActivePunish(PunishmentType type, Collection<DKBansScope> scopes);
+    default boolean hasActivePunish(PunishmentType type, Collection<DKBansScope> scopes){
+        return getHistory().hasActivePunish(type,scopes);
+    }
 
 
     PlayerHistoryEntrySnapshot punish(DKBansExecutor executor, PunishmentTemplate template);
 
     PlayerHistoryEntrySnapshotBuilder punish();
 
+    default PlayerHistoryEntrySnapshot unpunish(DKBansExecutor executor,PunishmentType type){
+        return unpunish(executor,type,null);
+    }
+
+    PlayerHistoryEntrySnapshot unpunish(DKBansExecutor executor,PunishmentType type,String message);
+
 
     boolean hasReport();
 
     PlayerReport getReport();
 
+    PlayerReport getWatchingReport();
 
 
     PlayerReportEntry report(DKBansPlayer executor, ReportTemplate template);

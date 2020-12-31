@@ -32,6 +32,8 @@ public interface PlayerReportEntry {
 
     PlayerReport getReport();
 
+    UUID getReporterId();
+
     DKBansExecutor getReporter();
 
     ReportTemplate getTemplate();
@@ -43,8 +45,6 @@ public interface PlayerReportEntry {
     UUID getServerId();
 
     long getTime();
-
-    String getPunishmentCommand(String target, int id);
 
     Document getProperties();
 

@@ -28,9 +28,15 @@ import java.util.UUID;
 
 public interface ReportManager {
 
+    int getReportCount();
+
     List<PlayerReport> getOpenReports();
 
     PlayerReport getReport(DKBansPlayer player);
+
+    PlayerReport getReport(UUID uniqueId);
+
+    PlayerReport getReportByWatcher(UUID uniqueId);
 
     PlayerReportEntry report(DKBansPlayer executor, DKBansPlayer target, ReportTemplate template, String serverName, UUID serverId);
 

@@ -2,7 +2,7 @@
  * (C) Copyright 2020 The DKBans Project (Davide Wietlisbach & Philipp Elvin Friedhoff)
  *
  * @author Philipp Elvin Friedhoff
- * @since 05.07.20, 17:34
+ * @since 30.06.20, 16:45
  * @web %web%
  *
  * The DKBans Project is under the Apache License, version 2.0 (the "License");
@@ -30,34 +30,32 @@ import net.pretronic.libraries.command.command.configuration.CommandConfiguratio
 import net.pretronic.libraries.command.sender.CommandSender;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
-import net.pretronic.libraries.utility.map.Pair;
-import org.mcnative.common.player.OnlineMinecraftPlayer;
+import org.mcnative.runtime.api.player.OnlineMinecraftPlayer;
 
 public class ReportAcceptCommand extends BasicCommand {
 
     public ReportAcceptCommand(ObjectOwner owner) {
-        super(owner, CommandConfiguration.newBuilder().name("accept").permission(Permissions.COMMAND_REPORT_STUFF).create());
+        super(owner, CommandConfiguration.newBuilder()
+                .name("accept")
+                .permission(Permissions.COMMAND_REPORT_STUFF).create());
     }
 
     @Override
     public void execute(CommandSender sender, String[] args) {
+        if(!(sender instanceof OnlineMinecraftPlayer)) {
+            sender.sendMessage(Messages.ERROR_ONLY_PLAYER);
+            return;
+        }
+        DKBansPlayer player = ((OnlineMinecraftPlayer) sender).getAs(DKBansPlayer.class);
 
-        if(args.length == 0) {
-            sender.sendMessage(Messages.COMMAND_REPORT_ACCEPT_USAGE);
+        PlayerReport report = player.getWatchingReport();
+        if(report == null){
+            sender.sendMessage(Messages.COMMAND_REPORT_NOT_WATCHING, VariableSet.create());
             return;
         }
 
-        Pair<OnlineMinecraftPlayer, PlayerReport> data = CommandUtil.checkAndGetTargetReport(sender, args[0]);
-        if(data != null) {
-            PlayerReport report = data.getValue();
-            DKBansPlayer player = ((OnlineMinecraftPlayer)sender).getAs(DKBansPlayer.class);
-
-            if(!player.equals(report.getWatcher())) {
-                sender.sendMessage(Messages.COMMAND_REPORT_ACCEPT_NOT_WATCHING);
-                return;
-            }
-            sender.sendMessage(Messages.COMMAND_REPORT_ACCEPT_LIST_ENTRIES, VariableSet.create()
-                    .addDescribed("entries", report.getEntries()));
-        }
+        report.accept(CommandUtil.getExecutor(sender));
+        sender.sendMessage(Messages.COMMAND_REPORT_ACCEPTED, VariableSet.create()
+                .addDescribed("report", report));
     }
 }

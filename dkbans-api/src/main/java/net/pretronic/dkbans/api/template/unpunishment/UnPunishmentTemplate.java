@@ -35,8 +35,6 @@ public interface UnPunishmentTemplate extends Template {
 
     Map<Integer, UnPunishmentTemplateEntry> getDurations();
 
-    Map<Integer, UnPunishmentTemplateEntry> getPoints();
-
     int getRemovedPoints();
 
     double getPointsDivider();
