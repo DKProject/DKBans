@@ -37,10 +37,8 @@ import net.pretronic.libraries.utility.Convert;
 import net.pretronic.libraries.utility.Validate;
 import net.pretronic.libraries.utility.annonations.Internal;
 import net.pretronic.libraries.utility.map.Pair;
-import net.pretronic.libraries.utility.map.Triple;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 

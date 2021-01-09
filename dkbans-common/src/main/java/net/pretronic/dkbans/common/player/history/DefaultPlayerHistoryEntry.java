@@ -34,14 +34,9 @@ import net.pretronic.dkbans.api.template.unpunishment.UnPunishmentTemplate;
 import net.pretronic.libraries.utility.Iterators;
 import net.pretronic.libraries.utility.Validate;
 import net.pretronic.libraries.utility.annonations.Internal;
-import net.pretronic.libraries.utility.duration.DurationProcessor;
 
-import java.text.SimpleDateFormat;
-import java.time.Duration;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.function.Predicate;
 
 public class DefaultPlayerHistoryEntry implements PlayerHistoryEntry {
 

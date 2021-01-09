@@ -22,7 +22,6 @@ package net.pretronic.dkbans.common.template.unpunishment;
 
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.DKBansScope;
-import net.pretronic.dkbans.api.player.history.CalculationType;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryType;
 import net.pretronic.dkbans.api.template.Template;
 import net.pretronic.dkbans.api.template.TemplateCategory;
@@ -41,7 +40,6 @@ import net.pretronic.libraries.utility.Iterators;
 import net.pretronic.libraries.utility.Validate;
 import net.pretronic.libraries.utility.annonations.Internal;
 import net.pretronic.libraries.utility.map.Pair;
-import net.pretronic.libraries.utility.map.Triple;
 
 import java.util.*;
 

@@ -33,7 +33,6 @@ import net.pretronic.libraries.message.bml.variable.VariableSet;
 import org.mcnative.runtime.api.McNative;
 import org.mcnative.runtime.api.player.OnlineMinecraftPlayer;
 import org.mcnative.runtime.api.player.Title;
-import org.mcnative.runtime.api.text.Text;
 import org.mcnative.runtime.api.utils.MinecraftTickConverter;
 
 import java.util.ArrayList;

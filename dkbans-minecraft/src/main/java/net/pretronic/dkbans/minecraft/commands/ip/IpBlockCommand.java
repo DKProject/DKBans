@@ -35,7 +35,6 @@ import net.pretronic.libraries.message.bml.variable.VariableSet;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
 
 import java.time.Duration;
-import java.util.regex.Pattern;
 
 public class IpBlockCommand extends BasicCommand {
 

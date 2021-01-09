@@ -30,7 +30,6 @@ import net.pretronic.dkbans.api.player.DKBansPlayerManager;
 import net.pretronic.dkbans.api.player.chatlog.ChatLogManager;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryManager;
 import net.pretronic.dkbans.api.player.ipaddress.IpAddressManager;
-import net.pretronic.dkbans.api.player.report.ReportManager;
 import net.pretronic.dkbans.api.support.SupportTicketManager;
 import net.pretronic.dkbans.common.broadcast.BroadcastSender;
 import net.pretronic.dkbans.common.broadcast.DefaultBroadcastManager;
