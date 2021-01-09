@@ -41,6 +41,7 @@ import org.mcnative.runtime.api.McNative;
 import org.mcnative.runtime.api.event.player.MinecraftPlayerChatEvent;
 import org.mcnative.runtime.api.event.player.MinecraftPlayerCommandPreprocessEvent;
 import org.mcnative.runtime.api.event.player.MinecraftPlayerLogoutEvent;
+import org.mcnative.runtime.api.event.player.login.MinecraftPlayerLoginConfirmEvent;
 import org.mcnative.runtime.api.event.player.login.MinecraftPlayerLoginEvent;
 import org.mcnative.runtime.api.event.player.login.MinecraftPlayerPostLoginEvent;
 import org.mcnative.runtime.api.network.component.server.ProxyServer;
@@ -133,7 +134,6 @@ public class PlayerListener {
     @Listener(priority = EventPriority.HIGHEST)//@Todo async
     public void onPlayerPostLogin(MinecraftPlayerPostLoginEvent event){
         OnlineMinecraftPlayer player = event.getOnlinePlayer();
-        DKBansPlayer dkBansPlayer = player.getAs(DKBansPlayer.class);
 
         if(DKBansConfig.PLAYER_ON_JOIN_PUNISH_NOTIFY && player.hasPermission(Permissions.PUNISH_NOTIFY)){
             boolean teamChat = event.getPlayer().hasSetting("DKBans",PlayerSettingsKey.PUNISH_NOTIFY_LOGIN,true);
@@ -163,8 +163,14 @@ public class PlayerListener {
             int openReports = DKBans.getInstance().getReportManager().getOpenReports().size();
             player.sendMessage(Messages.REPORT_COUNT_INFO,VariableSet.create().add("openReports",openReports));
         }
+    }
 
+    @Listener
+    public void onPlayerLoginConfirm(MinecraftPlayerLoginConfirmEvent event) {
         if(DKBansConfig.PLAYER_SESSION_LOGGING){
+            OnlineMinecraftPlayer player = event.getOnlinePlayer();
+            DKBansPlayer dkBansPlayer = player.getAs(DKBansPlayer.class);
+
             ConnectedMinecraftPlayer connectedPlayer = McNative.getInstance().getLocal().getConnectedPlayer(player.getUniqueId());
 
             Pair<String,String> locationLookup = DKBansUtil.lookupLocation(player.getAddress().getAddress().getHostAddress());
