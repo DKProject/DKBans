@@ -178,7 +178,7 @@ public class PlayerListener {
 
             Pair<String,String> locationLookup = DKBansUtil.lookupLocation(player.getAddress().getAddress().getHostAddress());
 
-            ProxyServer proxy = player.getProxy();
+            ProxyServer proxy = McNative.getInstance().isNetworkAvailable() ? player.getProxy() : null;
 
             dkBansPlayer.startSession(player.getName(),player.getAddress().getAddress(), locationLookup.getKey(), locationLookup.getValue(),
                     proxy != null ? proxy.getName() : null, proxy != null ? proxy.getUniqueId() : null
