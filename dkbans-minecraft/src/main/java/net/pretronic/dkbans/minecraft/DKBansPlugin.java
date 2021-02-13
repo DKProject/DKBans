@@ -24,7 +24,7 @@ import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.template.TemplateGroup;
 import net.pretronic.dkbans.common.DefaultDKBans;
-import net.pretronic.dkbans.common.broadcast.*;
+import net.pretronic.dkbans.common.broadcast.BroadcastTask;
 import net.pretronic.dkbans.minecraft.commands.*;
 import net.pretronic.dkbans.minecraft.commands.broadcast.BroadcastCommand;
 import net.pretronic.dkbans.minecraft.commands.broadcastgroup.BroadcastGroupCommand;

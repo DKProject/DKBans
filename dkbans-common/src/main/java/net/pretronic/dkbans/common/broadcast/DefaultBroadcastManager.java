@@ -30,7 +30,6 @@ import net.pretronic.libraries.document.type.DocumentFileType;
 import net.pretronic.libraries.utility.GeneralUtil;
 import net.pretronic.libraries.utility.Iterators;
 import net.pretronic.libraries.utility.Validate;
-import net.pretronic.libraries.utility.reflect.TypeReference;
 
 import java.util.ArrayList;
 import java.util.Collection;

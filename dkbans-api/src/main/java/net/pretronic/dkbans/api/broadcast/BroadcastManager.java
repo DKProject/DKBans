@@ -24,7 +24,6 @@ import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.libraries.document.Document;
 
 import java.util.Collection;
-import java.util.Map;
 
 public interface BroadcastManager {
 

@@ -21,7 +21,6 @@
 package net.pretronic.dkbans.minecraft.commands.broadcast;
 
 import net.pretronic.dkbans.api.DKBans;
-import net.pretronic.dkbans.api.DKBansScope;
 import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.libraries.command.command.BasicCommand;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;

@@ -22,7 +22,6 @@ package net.pretronic.dkbans.api.player.report;
 
 import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
-import net.pretronic.dkbans.api.player.history.PlayerHistoryEntry;
 
 import java.util.List;
 import java.util.UUID;

@@ -21,15 +21,10 @@
 package net.pretronic.dkbans.common.broadcast;
 
 import net.pretronic.dkbans.api.broadcast.Broadcast;
-import net.pretronic.dkbans.api.broadcast.BroadcastProperty;
 import net.pretronic.dkbans.api.broadcast.BroadcastVisibility;
 import net.pretronic.dkbans.common.DefaultDKBans;
 import net.pretronic.libraries.document.Document;
 import net.pretronic.libraries.document.type.DocumentFileType;
-import net.pretronic.libraries.utility.Iterators;
-import net.pretronic.libraries.utility.Validate;
-
-import java.util.Collection;
 
 public class DefaultBroadcast implements Broadcast {
 
