@@ -21,7 +21,6 @@
 package net.pretronic.dkbans.common.event;
 
 import net.pretronic.dkbans.api.event.report.DKBansPlayerReportTakeEvent;
-import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.report.PlayerReport;
 
 public class DefaultDKBansPlayerReportTakeEvent implements DKBansPlayerReportTakeEvent {
