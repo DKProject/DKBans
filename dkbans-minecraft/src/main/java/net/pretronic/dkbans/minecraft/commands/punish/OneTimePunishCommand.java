@@ -59,7 +59,9 @@ public class OneTimePunishCommand extends BasicCommand {
         if(player == null) return;
 
         if(!player.isOnline()){
-            sender.sendMessage(Messages.PLAYER_NOT_ONLINE, VariableSet.create().addDescribed("player",player));
+            sender.sendMessage(Messages.PLAYER_NOT_ONLINE, VariableSet.create()
+                    .add("prefix",Messages.PREFIX)
+                    .addDescribed("player",player));
             return;
         }
 

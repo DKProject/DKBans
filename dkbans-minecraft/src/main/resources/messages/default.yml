@@ -255,7 +255,7 @@ messages:
   dkbans.command.report.list: '${dkbans.prefix.report} &7Open reports&8: @for("report" in {reports}, ${dkbans.command.report.list.loop},"\n","\n")'
   dkbans.command.report.list.loop: ' !["&8- &e{report.player.displayName} &7Count&8: &e{report.count}"]("run:///report take {report.player.name}")'
 
-  dkbans.command.filter.help: '${dkbans.prefix.chat} &6Filter help
+  dkbans.command.filter.help: '${dkbans.prefix.chat} &7Filter help
   &7/filter list [area]
   &7/filter add <area> <value> <operation>
   &7/filter remove <id>
@@ -287,7 +287,7 @@ messages:
   dkbans.command.kick.help: '${dkbans.prefix.dkbans} &cUsage&8: &7/kick <player> <reason>'
   dkbans.command.jumpto.help: '${dkbans.prefix.network} &cUsage&8: &7/jumpto <player>'
 
-  dkbans.command.help: '${dkbans.prefix.network} &6Information
+  dkbans.command.help: '${dkbans.prefix.network} &7Information
   &8» &e/hub &8| &7Connect to the Hub-Server
   &8» &e/report &8| &7Report a player
   &8» &e/friends &8| &7Manage your friends
@@ -298,13 +298,13 @@ messages:
   &8» &eShop&8: &bshop.example.net'
 
   dkbans.command.playerInfo.help: '${dkbans.prefix} &cUsage&8: &7/playerinfo <player>'
-  dkbans.command.playerInfo.online: '${dkbans.prefix} &6Player Info
+  dkbans.command.playerInfo.online: '${dkbans.prefix} &7Player Info
   &8» &7Name&8: &e{player.displayName} &8(&aOnline&8)
   &8» &7UniqueId&8: &e{player.uniqueId}
 
   &8» &7FirstLogin&8: &e{player.firstLoginFormatted}
   &8» &7Server&8: &e{player.server}
-  &8» &7OnlineTime&8: &e{player.onlineTime}
+  &8» &7OnlineTime&8: &e{player.onlineTimeFormatted}
 
   &8» &7Ip&8: &e{player.activeSession.hostName}
   &8» &7Country&8: &e{player.activeSession.country}
@@ -312,13 +312,13 @@ messages:
 
   &8» !["&8[&bHistory&8]"]("run:///history {player.name}") !["&8[&9Notes&8]"]("run:///playernotes {player.name}") !["&8[&aSessions&8]"]("run:///playersessions {player.name}") !["&8[&eIps&8]"]("run:///ipinfo {player.name}") !["&8[&5Jump&8]"]("run:///jumpto {player.name}")'
 
-  dkbans.command.playerInfo.offline: '${dkbans.prefix} &6Player Info
+  dkbans.command.playerInfo.offline: '${dkbans.prefix} &7Player Info
   &8» &7Name&8: &e{player.displayName} &8(&cOffline&8)
   &8» &7UniqueId&8: &e{player.uniqueId}
 
   &8» &7FirstLogin&8: &e{player.firstLoginFormatted}
   &8» &7LastLogin&8: &e{player.lastLoginFormatted}
-  &8» &7OnlineTime&8: &e{player.onlineTime}
+  &8» &7OnlineTime&8: &e{player.onlineTimeFormatted}
 
   &8» &7Ip&8: &e{player.lastSession.hostName}
   &8» &7Country&8: &e{player.lastSession.country}
@@ -345,12 +345,12 @@ messages:
   dkbans.command.chatlog.player.list: '${dkbans.prefix.chat} &7Chatlog of player {player.displayName} &8| &7Page&8: {page}
   @for("entry" in {entries}, ${dkbans.command.chatLog.player.list.loop},"\n")'
   dkbans.command.chatlog.player.list.loop: '&8» {entry.serverName} &7on &e{entry.timeFormatted}&8:
-  &f{entry.message}'
+  &7{entry.message}'
 
   dkbans.command.chatlog.server.list: '${dkbans.prefix.chat} &7Chatlog of server {server.name} &8| &7Page&8: {page}
   @for("entry" in {entries}, ${dkbans.command.chatLog.server.list.loop},"\n")'
   dkbans.command.chatlog.server.list.loop: '&8» {entry.player.displayName} &7on &e{entry.timeFormatted}&8:
-  &f{entry.message}'
+  &7{entry.message}'
 
   dkbans.command.dkbans.help: '${dkbans.prefix} &cInvalid usage of dkbans command&8:
   &7/dkbans info
@@ -378,7 +378,7 @@ messages:
   &8» &7Region: &e{info.region}
   @for("player" in {players},${dkbans.command.ip.info.address.loop},"\n","\n")'
   dkbans.command.ip.info.address.loop: '![" &8- &e{player.displayName}"]("run:///playerinfo {player.name}")'
-  dkbans.command.ip.info.address.details: '${dkbans.prefix} &6Ip info of address &e{block.address}
+  dkbans.command.ip.info.address.details: '${dkbans.prefix} &7Ip info of address &e{block.address}
   &8» &7Type&8: &e{block.type}
   &8» &7Staff&8 &e{block.staff.displayName}
   &8» &7Reason&8: &e{block.reason}
@@ -390,7 +390,7 @@ messages:
   dkbans.command.ip.info.player: '${dkbans.prefix} &7Address information of player &e{player.displayName} @for("address" in {addresses},${dkbans.command.ip.info.player.loop},"\n","\n")'
   dkbans.command.ip.info.player.loop: '![" &8- &e{address.address} &8(&7Country&8: &e{address.country} &7Blocked&8: &e@if({address.blocked},"&cYes","&aNo")"]("run:///ipinfo {address.address}")'
 
-  dkbans.command.ip.info.blocked: '${dkbans.prefix} &6Ip info of address &e{block.address}
+  dkbans.command.ip.info.blocked: '${dkbans.prefix} &7Ip info of address &e{block.address}
   &8» &7Type&8: &e{block.type}
   &8» &7Staff&8 &e{block.staff.displayName}
   &8» &7Reason&8: &e{block.reason}
@@ -418,23 +418,23 @@ messages:
   dkbans.command.broadcast.notFound: '${dkbans.prefix} &cNo broadcast found for &e{broadcast}'
   dkbans.command.broadcast.group.notFound: '${dkbans.prefix} &cNo broadcast group found for &e{group}'
 
-  dkbans.command.broadcast.group.help: '${dkbans.prefix} &cInvalid usage of &eBroadcast group &ccommand&8:
+  dkbans.command.broadcast.group.help: '${dkbans.prefix} &cInvalid usage of &ebroadcast group &ccommand&8:
   &7/broadcastgroup <name> create <interval>
   &7/broadcastgroup <name> assignment
   &7/broadcastgroup <name> edit
   &7/broadcastgroup list'
-  dkbans.command.broadcast.group.create.help: '${dkbans.prefix} &cInvalid usage of &eBroadcast group create &ccommand&8:
+  dkbans.command.broadcast.group.create.help: '${dkbans.prefix} &cInvalid usage of &ebroadcast group create &ccommand&8:
   &7/broadcastgroup <name> create <interval>'
   dkbans.command.broadcast.group.created: '${dkbans.prefix} &7You have successfully created the broadcast group &e{group.name}'
 
   dkbans.command.broadcast.group.alreadyExists: '${dkbans.prefix} &cA broadcast group with the name &e{name} already exists'
   dkbans.command.broadcast.alreadyExists: '${dkbans.prefix} &cA broadcast with the name &e{name} already exists'
 
-  dkbans.command.broadcast.group.list: '${dkbans.prefix} &6Broadcast groups&8:
+  dkbans.command.broadcast.group.list: '${dkbans.prefix} &7Broadcast groups&8:
   @for("group" in {groups},${dkbans.command.broadcast.group.list.loop},"\n","\n")'
   dkbans.command.broadcast.group.list.loop: '&8» &7Id&8: &e{group.id} &7Name&8: &e{group.name}'
 
-  dkbans.command.broadcast.group.info: '${dkbans.prefix} &6Group info
+  dkbans.command.broadcast.group.info: '${dkbans.prefix} &7Group info
   &8» &7Id&8: &e{group.id}
   &8» &7Name&8: &e{group.name}
   &8» &7Enabled&8: &e{group.enabled}
@@ -449,12 +449,12 @@ messages:
      &8- &7add
      &8- &7remove
      &8- &7[info]'
-  dkbans.command.broadcast.group.assignment.list: '${dkbans.prefix} &6Assignments&8:
+  dkbans.command.broadcast.group.assignment.list: '${dkbans.prefix} &7Assignments&8:
   @for("assignment" in {assignments},${dkbans.command.broadcast.group.assignment.list.loop},"\n","\n")'
   dkbans.command.broadcast.group.assignment.list.loop: '&8» &7Id&8: &e{assignment.id} &7Name&8: &e{assignment.broadcast.name} &7Position&8: &e {assignment.position}'
 
   dkbans.command.broadcast.group.assignment.notFound: '${dkbans.prefix} &cNo assignment found for &e{assignment}'
-  dkbans.command.broadcast.group.assignment.info: '${dkbans.prefix} &6Assignment info
+  dkbans.command.broadcast.group.assignment.info: '${dkbans.prefix} &7Assignment info
   &8» &7Id&8: &e{assignment.id}
   &8» &7Name&8: &e{assignment.broadcast.name}
   &8» &7Position&8: &e{assignment.position}'
@@ -462,7 +462,7 @@ messages:
   dkbans.command.broadcast.group.assignment.remove: '${dkbans.prefix} &7You have removed the assignment with id &e{assignment.id} &7from the group'
   dkbans.command.broadcast.group.assignment.add: '${dkbans.prefix} &7You have added the broadcast with id &e{assignment.id} &to the group'
 
-  dkbans.command.broadcast.create.help: '${dkbans.prefix} &cInvalid usage of &eBroadcast create &ccommand&8:
+  dkbans.command.broadcast.create.help: '${dkbans.prefix} &cInvalid usage of &ebroadcast create &ccommand&8:
   &7/broadcast <name> create <visibility> <text>'
   dkbans.command.broadcast.visibility.notExists: '${dkbans.prefix} &cThe broadcast visibility &e{name} &cdoes not exists'
   dkbans.command.broadcast.created: '${dkbans.prefix} &7You have successfully created the broadcast &e{broadcast.name}'
@@ -479,12 +479,12 @@ messages:
   dkbans.command.broadcast.group.edit.edited: '${dkbans.prefix} &7You have edited the property &e{property} &7to &e{value}'
   dkbans.command.broadcast.edit.edited: '${dkbans.prefix} &7You have edited the property &e{property} &7to &e{value}'
 
-  dkbans.command.broadcast.list: '${dkbans.prefix} &6Broadcasts&8:
+  dkbans.command.broadcast.list: '${dkbans.prefix} &7Broadcasts&8:
   @for("broadcast" in {broadcasts}, ${dkbans.command.broadcast.list.loop},"\n","\n")'
-  dkbans.command.broadcast.list.loop: '&8» &7Id&8: &e{broadcast.id} &7Name&8: &e{broadcast.name} &7Visibility&8: {broadcast.visibility}'
+  dkbans.command.broadcast.list.loop: '  &8- &e{broadcast.id} &8| &e{broadcast.visibility} &8| &e{broadcast.name}'
 
   dkbans.command.broadcast.direct: '${dkbans.prefix} &7You have successfully broadcast the message'
-  dkbans.command.broadcast.help: '${dkbans.prefix} &cInvalid usage of &eBroadcast group &ccommand&8:
+  dkbans.command.broadcast.help: '${dkbans.prefix} &cInvalid usage of &ebroadcast &ccommand&8:
   &7/broadcast <name> create <visibility> <text>
   &7/broadcast <name> delete
   &7/broadcast <name> edit
@@ -493,7 +493,7 @@ messages:
   dkbans.broadcast.chat: '&9
   ${dkbans.prefix.broadcast} {message}
   &a'
-  dkbans.broadcast.actionbar: '${dkbans.prefix.broadcast} {message}'
+  dkbans.broadcast.actionbar: '{message}'
   dkbans.broadcast.title: '{title}'
   dkbans.broadcast.title.sub: '{subTitle}'
 
@@ -516,7 +516,7 @@ messages:
     &8- &7fade-in (title)
     &8- &7fade-out (title)'
 
-  dkbans.command.broadcast.edit.property.list: '${dkbans.prefix} &6Properties&8:
+  dkbans.command.broadcast.edit.property.list: '${dkbans.prefix} &7Properties&8:
   @for("property" in {properties}, ${dkbans.command.broadcast.edit.property.list.loop},"\n","\n")'
   dkbans.command.broadcast.edit.property.list.loop: '&8» &e{property.key}&8:&e{property.value}'
 
@@ -524,9 +524,9 @@ messages:
   dkbans.command.broadcast.edit.property.remove: '${dkbans.prefix} &7You have removed the property &e{key}'
   dkbans.command.broadcast.edit.property.notExists: '${dkbans.prefix} &cThe property &e{key} &7does not exists'
 
-  dkbans.command.broadcast.info: '${dkbans.prefix} &6Broadcast info
+  dkbans.command.broadcast.info: '${dkbans.prefix} &7Broadcast info
   &8» &7Id&8: &e{broadcast.id}
   &8» &7Name&8: &e{broadcast.name}
-  &8» &Visibility&8: &e{broadcast.visibility}
+  &8» &7Visibility&8: &e{broadcast.visibility}
 
   &7Properties&8: @for("property" in {properties}, ${dkbans.command.broadcast.edit.property.list.loop},"\n","\n")'

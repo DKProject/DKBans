@@ -55,10 +55,10 @@ public class BroadcastCreateCommand extends ObjectCommand<String> {
         }
         StringBuilder text = new StringBuilder();
         for (int i = 1; i < args.length; i++) {
-            text.append(args[i]);
+            text.append(" ").append(args[i]);
         }
         Broadcast broadcast = DKBans.getInstance().getBroadcastManager()
-                .createBroadcast(name, visibility, Document.newDocument().add(BroadcastProperty.TEXT, text.toString()));
+                .createBroadcast(name, visibility, Document.newDocument().add(BroadcastProperty.TEXT, text.substring(1)));
         commandSender.sendMessage(Messages.COMMAND_BROADCAST_CREATED, VariableSet.create().addDescribed("broadcast", broadcast));
     }
 }
