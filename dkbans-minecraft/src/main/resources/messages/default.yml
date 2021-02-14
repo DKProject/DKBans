@@ -423,8 +423,7 @@ messages:
   &7/broadcastgroup <name> assignment
   &7/broadcastgroup <name> edit
   &7/broadcastgroup list'
-  dkbans.command.broadcast.group.create.help: '${dkbans.prefix} &cInvalid usage of &ebroadcast group create &ccommand&8:
-  &7/broadcastgroup <name> create <interval>'
+  dkbans.command.broadcast.group.create.help: '${dkbans.prefix} &cUsage&8: &7/broadcastgroup <name> create <interval>'
   dkbans.command.broadcast.group.created: '${dkbans.prefix} &7You have successfully created the broadcast group &e{group.name}'
 
   dkbans.command.broadcast.group.alreadyExists: '${dkbans.prefix} &cA broadcast group with the name &e{name} already exists'
@@ -462,8 +461,7 @@ messages:
   dkbans.command.broadcast.group.assignment.remove: '${dkbans.prefix} &7You have removed the assignment with id &e{assignment.id} &7from the group'
   dkbans.command.broadcast.group.assignment.add: '${dkbans.prefix} &7You have added the broadcast with id &e{assignment.id} &to the group'
 
-  dkbans.command.broadcast.create.help: '${dkbans.prefix} &cInvalid usage of &ebroadcast create &ccommand&8:
-  &7/broadcast <name> create <visibility> <text>'
+  dkbans.command.broadcast.create.help: '${dkbans.prefix} &cUsage&8: &7/broadcast <name> create <visibility> <text>'
   dkbans.command.broadcast.visibility.notExists: '${dkbans.prefix} &cThe broadcast visibility &e{name} &cdoes not exists'
   dkbans.command.broadcast.created: '${dkbans.prefix} &7You have successfully created the broadcast &e{broadcast.name}'
   dkbans.command.broadcast.deleted: '${dkbans.prefix} &7You have successfully deleted the broadcast &e{broadcast.name}'
