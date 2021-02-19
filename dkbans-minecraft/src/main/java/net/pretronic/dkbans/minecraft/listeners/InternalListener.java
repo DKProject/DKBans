@@ -168,7 +168,6 @@ public class InternalListener {
         sendToStaff(event, Messages.PUNISH_BAN_NOTIFY, "ban");
     }
 
-
     private void handleKick(DKBansPlayerPunishEvent event, OnlineMinecraftPlayer player) {
         if (player != null) {
             player.kick(Messages.PUNISH_KICK_MESSAGE, VariableSet.create()

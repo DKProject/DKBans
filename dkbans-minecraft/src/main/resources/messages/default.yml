@@ -14,7 +14,7 @@ messages:
   dkbans.prefix.broadcast: '&8» &aDKBroadcast &8|&f'
 
   dkbans.error.internal: '{prefix} &cAn internal server error occurred, please contact a network administrator"'
-  dkbans.error.invalid.DurationFormat: '{prefix} &e{duration} &cis not a valid duration. Use for example 10m'
+  dkbans.error.invalid.DurationFormat: '{prefix} &e{input} &cis not a valid duration. Use for example 10m'
   dkbans.error.invalid.number: '{prefix} &e{number} &cis not a valid number'
   dkbans.error.invalid.boolean: '{prefix} &e{value} &cis not a valid boolean'
   dkbans.error.onlyPlayer: '{prefix} &cThis command can only be executed as a player'

@@ -61,18 +61,21 @@ public class IpBlockCommand extends BasicCommand {
             if(action.equalsIgnoreCase("template") && arguments.length > 4){
 
                 if(!arguments[4].contains("@")) {
-                    sender.sendMessage(Messages.ERROR_INVALID_TEMPLATE_SPECIFIER_FORMAT, VariableSet.create().add("prefix", Messages.PREFIX));
+                    sender.sendMessage(Messages.ERROR_INVALID_TEMPLATE_SPECIFIER_FORMAT, VariableSet.create()
+                            .add("prefix", Messages.PREFIX));
                     return;
                 }
                 String[] parts = arguments[4].split("@");
                 TemplateGroup templateGroup = DKBans.getInstance().getTemplateManager().getTemplateGroup(parts[0]);
                 if(templateGroup == null) {
-                    sender.sendMessage(Messages.ERROR_TEMPLATE_GROUP_NOT_EXISTS, VariableSet.create().add("templateGroup", parts[0]));
+                    sender.sendMessage(Messages.ERROR_TEMPLATE_GROUP_NOT_EXISTS, VariableSet.create()
+                            .add("templateGroup", parts[0]));
                     return;
                 }
                 Template template = templateGroup.getTemplate(parts[1]);
                 if(!(template instanceof PunishmentTemplate)) {
-                    sender.sendMessage(Messages.ERROR_TEMPLATE_NOT_EXISTS, VariableSet.create().add("template", parts[1]));
+                    sender.sendMessage(Messages.ERROR_TEMPLATE_NOT_EXISTS, VariableSet.create()
+                            .add("template", parts[1]));
                     return;
                 }
 
