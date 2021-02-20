@@ -210,7 +210,7 @@ public  class DefaultDKBansPlayer implements DKBansPlayer {
     @Override
     public void finishSession(String lastServerName, UUID lastServerId) {
         DefaultPlayerSession session = (DefaultPlayerSession) getActiveSession();
-        if(session == null) throw new IllegalArgumentException("No active session found");
+        if(session == null) return;
 
         session.setDisconnectTime();
         session.setLastServerName(lastServerName);

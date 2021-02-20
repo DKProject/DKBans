@@ -106,9 +106,6 @@ public class PlayerListener {
                     event.setCancelled(true);
                 }
             }
-        }else {
-            boolean allowed = !player.hasActivePunish(PunishmentType.MUTE);
-            LabyModIntegration.changeVoiceChat((ConnectedMinecraftPlayer) event.getPlayer(),allowed);
         }
     }
 
@@ -170,6 +167,10 @@ public class PlayerListener {
         if(DKBansConfig.PLAYER_ON_JOIN_LIST_REPORTS && player.hasPermission(Permissions.COMMAND_REPORT_STUFF)){
             int openReports = DKBans.getInstance().getReportManager().getOpenReports().size();
             player.sendMessage(Messages.REPORT_COUNT_INFO,VariableSet.create().add("openReports",openReports));
+        }
+        DKBansPlayer dkBansPlayer = player.getAs(DKBansPlayer.class);
+        if(dkBansPlayer.hasActivePunish(PunishmentType.MUTE)){
+            LabyModIntegration.changeVoiceChat((ConnectedMinecraftPlayer) event.getPlayer(),false);
         }
     }
 
