@@ -58,6 +58,10 @@ public class DefaultDKBansChannelBroadcastMessageReceiveEvent implements DKBansC
 
     @Override
     public void read(Document document) {
+        System.out.println(document.getString("channel"));
+        System.out.println(document.getString("message"));
+        System.out.println(document.getString("executorId"));
+
         this.channel = document.getString("channel");
         this.message = document.getString("message");
         this.executor = DKBans.getInstance().getPlayerManager().getExecutor(document.getObject("executorId", UUID.class));
@@ -68,6 +72,7 @@ public class DefaultDKBansChannelBroadcastMessageReceiveEvent implements DKBansC
         Document document = Document.newDocument();
         document.set("channel",channel);
         document.set("message",message);
+        System.out.println("EXECUTE: "+executor.getUniqueId());
         document.set("executorId",executor.getUniqueId());
     }
 }
