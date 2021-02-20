@@ -91,6 +91,7 @@ public class DKBansPlugin extends MinecraftPlugin {
 
         getRuntime().getLocal().getEventBus().subscribe(this,new PlayerListener());
         getRuntime().getLocal().getEventBus().subscribe(this,new InternalListener());
+        getRuntime().getNetwork().getEventBus().subscribe(this,new InternalListener());
         getRuntime().getPlayerManager().registerPlayerAdapter(DKBansPlayer.class, player -> playerManager.getPlayer(player.getUniqueId()));
         getRuntime().getRegistry().getService(PlaceholderProvider.class).registerPlaceHolders(this,"dkbans",new DKBansPlaceholders());
         DescriberRegistrar.register();
