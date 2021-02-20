@@ -34,6 +34,7 @@ import net.pretronic.dkbans.minecraft.BroadcastMessageChannels;
 import net.pretronic.dkbans.minecraft.PlayerSettingsKey;
 import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.dkbans.minecraft.config.Permissions;
+import net.pretronic.dkbans.minecraft.integration.LabyModIntegration;
 import net.pretronic.dkbans.minecraft.joinme.MinecraftJoinMe;
 import net.pretronic.libraries.event.Listener;
 import net.pretronic.libraries.event.network.NetworkListener;
@@ -107,7 +108,7 @@ public class InternalListener {
 
     @Listener
     public void onPlayerPunish(DKBansPlayerPunishEvent event){
-        OnlineMinecraftPlayer player = McNative.getInstance().getLocal().getConnectedPlayer(event.getPlayer().getUniqueId());
+        ConnectedMinecraftPlayer player = McNative.getInstance().getLocal().getConnectedPlayer(event.getPlayer().getUniqueId());
         if(player == null) return;
         if(event.getSnapshot().getPunishmentType() == PunishmentType.BAN) handleBan(event, player);
         else if(event.getSnapshot().getPunishmentType() == PunishmentType.MUTE) handleMute(event, player);
@@ -142,7 +143,7 @@ public class InternalListener {
         }
     }
 
-    private void handleMute(DKBansPlayerPunishEvent event, OnlineMinecraftPlayer player) {
+    private void handleMute(DKBansPlayerPunishEvent event, ConnectedMinecraftPlayer player) {
         if(player != null){
             MessageComponent<?> message = event.getSnapshot().isPermanently()
                     ? Messages.PUNISH_MUTE_MESSAGE_PERMANENTLY : Messages.PUNISH_MUTE_MESSAGE_TEMPORARY;
@@ -150,12 +151,13 @@ public class InternalListener {
                     .addDescribed("mute",event.getEntry())
                     .addDescribed("punish",event.getEntry())
                     .addDescribed("player",event.getPlayer()));
+            LabyModIntegration.disableVoiceChat(player);
         }
 
         sendToStaff(event, Messages.PUNISH_MUTE_NOTIFY, "mute");
     }
 
-    private void handleBan(DKBansPlayerPunishEvent event, OnlineMinecraftPlayer player) {
+    private void handleBan(DKBansPlayerPunishEvent event, ConnectedMinecraftPlayer player) {
         if (player != null) {
             MessageComponent<?> message = event.getSnapshot().isPermanently()
                     ? Messages.PUNISH_BAN_MESSAGE_PERMANENTLY : Messages.PUNISH_BAN_MESSAGE_TEMPORARY;
@@ -169,7 +171,7 @@ public class InternalListener {
         sendToStaff(event, Messages.PUNISH_BAN_NOTIFY, "ban");
     }
 
-    private void handleKick(DKBansPlayerPunishEvent event, OnlineMinecraftPlayer player) {
+    private void handleKick(DKBansPlayerPunishEvent event, ConnectedMinecraftPlayer player) {
         if (player != null) {
             player.kick(Messages.PUNISH_KICK_MESSAGE, VariableSet.create()
                     .addDescribed("kick", event.getEntry())
@@ -179,7 +181,7 @@ public class InternalListener {
         sendToStaff(event, Messages.PUNISH_KICK_NOTIFY, "kick");
     }
 
-    private void handleWarn(DKBansPlayerPunishEvent event, OnlineMinecraftPlayer player) {
+    private void handleWarn(DKBansPlayerPunishEvent event, ConnectedMinecraftPlayer player) {
         if (player != null) {
             player.sendMessage(Messages.PUNISH_WARN_MESSAGE_CHAT, VariableSet.create()
                     .addDescribed("warn", event.getEntry())

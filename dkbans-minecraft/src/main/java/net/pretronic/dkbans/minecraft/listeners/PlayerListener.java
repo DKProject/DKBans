@@ -36,6 +36,7 @@ import net.pretronic.dkbans.minecraft.PlayerSettingsKey;
 import net.pretronic.dkbans.minecraft.config.DKBansConfig;
 import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.dkbans.minecraft.config.Permissions;
+import net.pretronic.dkbans.minecraft.integration.LabyModIntegration;
 import net.pretronic.libraries.event.EventPriority;
 import net.pretronic.libraries.event.Listener;
 import net.pretronic.libraries.event.execution.ExecutionType;
@@ -105,6 +106,8 @@ public class PlayerListener {
                     event.setCancelled(true);
                 }
             }
+        }else if(player.hasActivePunish(PunishmentType.MUTE)){
+            LabyModIntegration.disableVoiceChat((ConnectedMinecraftPlayer) event.getPlayer());
         }
     }
 
