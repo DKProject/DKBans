@@ -25,7 +25,7 @@ import net.pretronic.dkbans.api.joinme.JoinMe;
 import net.pretronic.libraries.document.Document;
 import net.pretronic.libraries.event.network.NetworkEventAdapter;
 
-public class DefaultDKBansJoinMeCreateEvent implements DKBansJoinMeCreateEvent, NetworkEventAdapter {
+public class DefaultDKBansJoinMeCreateEvent implements DKBansJoinMeCreateEvent {
 
     private final JoinMe joinMe;
 
@@ -36,15 +36,5 @@ public class DefaultDKBansJoinMeCreateEvent implements DKBansJoinMeCreateEvent, 
     @Override
     public JoinMe getJoinMe() {
         return this.joinMe;
-    }
-
-    @Override
-    public void read(Document document) {
-
-    }
-
-    @Override
-    public Document write() {
-        return null;
     }
 }

@@ -64,11 +64,10 @@ public class DefaultDKBansChannelBroadcastMessageReceiveEvent implements DKBansC
     }
 
     @Override
-    public Document write() {
+    public void write(Document data) {
         Document document = Document.newDocument();
         document.set("channel",channel);
         document.set("message",message);
         document.set("executorId",executor.getUniqueId());
-        return document;
     }
 }
