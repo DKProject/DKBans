@@ -151,7 +151,7 @@ public class InternalListener {
                     .addDescribed("mute",event.getEntry())
                     .addDescribed("punish",event.getEntry())
                     .addDescribed("player",event.getPlayer()));
-            LabyModIntegration.disableVoiceChat(player);
+            LabyModIntegration.changeVoiceChat(player,false);
         }
 
         sendToStaff(event, Messages.PUNISH_MUTE_NOTIFY, "mute");

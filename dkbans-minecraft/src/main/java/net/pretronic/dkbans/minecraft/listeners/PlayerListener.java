@@ -106,8 +106,9 @@ public class PlayerListener {
                     event.setCancelled(true);
                 }
             }
-        }else if(player.hasActivePunish(PunishmentType.MUTE)){
-            LabyModIntegration.disableVoiceChat((ConnectedMinecraftPlayer) event.getPlayer());
+        }else {
+            boolean allowed = !player.hasActivePunish(PunishmentType.MUTE);
+            LabyModIntegration.changeVoiceChat((ConnectedMinecraftPlayer) event.getPlayer(),allowed);
         }
     }
 

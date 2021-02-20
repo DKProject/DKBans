@@ -30,9 +30,9 @@ import java.nio.charset.StandardCharsets;
 
 public class LabyModIntegration {
 
-    public static void disableVoiceChat(ConnectedMinecraftPlayer player){
+    public static void changeVoiceChat(ConnectedMinecraftPlayer player,boolean allowed){
         Document document = Document.newDocument();
-        document.set("allowed",false);
+        document.set("allowed",allowed);
         document.set("keep_settings_on_server_switch",true);
         sendLabyModMessage( player,"voicechat", document);
     }
