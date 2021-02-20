@@ -36,6 +36,7 @@ import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.dkbans.minecraft.config.Permissions;
 import net.pretronic.dkbans.minecraft.joinme.MinecraftJoinMe;
 import net.pretronic.libraries.event.Listener;
+import net.pretronic.libraries.event.network.NetworkListener;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
 import org.mcnative.runtime.api.McNative;
 import org.mcnative.runtime.api.player.ConnectedMinecraftPlayer;
@@ -129,7 +130,7 @@ public class InternalListener {
         }
     }
 
-    @Listener
+    @NetworkListener
     public void onJoinMeCreate(DKBansJoinMeCreateEvent event) {
         MinecraftJoinMe joinMe = ((MinecraftJoinMe)event.getJoinMe());
         List<MessageComponent<?>> messageComponents = joinMe.create();

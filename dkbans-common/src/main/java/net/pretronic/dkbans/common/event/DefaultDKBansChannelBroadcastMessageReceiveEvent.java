@@ -19,14 +19,21 @@
 
 package net.pretronic.dkbans.common.event;
 
+import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.event.DKBansChannelBroadcastMessageReceiveEvent;
+import net.pretronic.libraries.document.Document;
+import net.pretronic.libraries.event.network.NetworkEvent;
+import net.pretronic.libraries.event.network.NetworkEventAdapter;
 
-public class DefaultDKBansChannelBroadcastMessageReceiveEvent implements DKBansChannelBroadcastMessageReceiveEvent {
+import java.util.UUID;
 
-    private final String channel;
-    private final String message;
-    private final DKBansExecutor executor;
+@NetworkEvent
+public class DefaultDKBansChannelBroadcastMessageReceiveEvent implements DKBansChannelBroadcastMessageReceiveEvent, NetworkEventAdapter {
+
+    private String channel;
+    private String message;
+    private DKBansExecutor executor;
 
     public DefaultDKBansChannelBroadcastMessageReceiveEvent(String channel, String message, DKBansExecutor executor) {
         this.channel = channel;
@@ -47,5 +54,21 @@ public class DefaultDKBansChannelBroadcastMessageReceiveEvent implements DKBansC
     @Override
     public DKBansExecutor getExecutor() {
         return executor;
+    }
+
+    @Override
+    public void read(Document document) {
+        this.channel = document.getString("channel");
+        this.message = document.getString("message");
+        this.executor = DKBans.getInstance().getPlayerManager().getExecutor(document.getObject("executorId", UUID.class));
+    }
+
+    @Override
+    public Document write() {
+        Document document = Document.newDocument();
+        document.set("channel",channel);
+        document.set("message",message);
+        document.set("executorId",executor.getUniqueId());
+        return document;
     }
 }

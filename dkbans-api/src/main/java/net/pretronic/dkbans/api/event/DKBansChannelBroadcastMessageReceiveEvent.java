@@ -21,14 +21,14 @@
 package net.pretronic.dkbans.api.event;
 
 import net.pretronic.dkbans.api.DKBansExecutor;
+import net.pretronic.libraries.event.network.NetworkEvent;
 
+@NetworkEvent
 public interface DKBansChannelBroadcastMessageReceiveEvent extends DKBansEvent {
 
     String getChannel();
 
     String getMessage();
-
-    //Document getProperties();
 
     DKBansExecutor getExecutor();
 

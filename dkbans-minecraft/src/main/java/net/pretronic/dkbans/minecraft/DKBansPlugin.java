@@ -73,7 +73,7 @@ public class DKBansPlugin extends MinecraftPlugin {
         MinecraftPlayerManager playerManager = new MinecraftPlayerManager();
         this.dkBans = new DefaultDKBans(getDescription().getVersion().getName(),getLogger()
                 ,McNative.getInstance().getExecutorService()
-                ,McNative.getInstance().getLocal().getEventBus()
+                ,McNative.getInstance().getNetwork().getEventBus()
                 ,getRuntime().getRegistry().getService(ConfigurationProvider.class).getDatabase(this, true)
                 ,playerManager, new MinecraftJoinMeManager(),
                 new MinecraftBroadcastSender());
