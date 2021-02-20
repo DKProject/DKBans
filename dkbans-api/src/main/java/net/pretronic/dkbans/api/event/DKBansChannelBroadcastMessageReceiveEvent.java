@@ -23,7 +23,7 @@ package net.pretronic.dkbans.api.event;
 import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.libraries.event.network.NetworkEvent;
 
-@NetworkEvent
+@NetworkEvent(ignoreNetworkException = true)
 public interface DKBansChannelBroadcastMessageReceiveEvent extends DKBansEvent {
 
     String getChannel();

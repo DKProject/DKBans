@@ -47,7 +47,7 @@ import java.util.List;
 
 public class InternalListener {
 
-    @Listener
+    @NetworkListener
     public void onChannelBroadcastMessageReceive(DKBansChannelBroadcastMessageReceiveEvent event) {
         if(event.getChannel().equals(BroadcastMessageChannels.TEAM_CHAT)){
             MessageComponent<?> result = Messages.TEAMCHAT_MESSAGE_FORMAT;
@@ -130,7 +130,7 @@ public class InternalListener {
         }
     }
 
-    @NetworkListener
+    @Listener
     public void onJoinMeCreate(DKBansJoinMeCreateEvent event) {
         MinecraftJoinMe joinMe = ((MinecraftJoinMe)event.getJoinMe());
         List<MessageComponent<?>> messageComponents = joinMe.create();

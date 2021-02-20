@@ -38,6 +38,7 @@ import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.dkbans.minecraft.config.Permissions;
 import net.pretronic.libraries.event.EventPriority;
 import net.pretronic.libraries.event.Listener;
+import net.pretronic.libraries.event.execution.ExecutionType;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
 import net.pretronic.libraries.utility.map.Pair;
 import org.mcnative.runtime.api.McNative;
@@ -134,7 +135,7 @@ public class PlayerListener {
         }
     }
 
-    @Listener(priority = EventPriority.HIGHEST)//@Todo async
+    @Listener(priority = EventPriority.HIGHEST,execution = ExecutionType.ASYNC)
     public void onPlayerPostLogin(MinecraftPlayerPostLoginEvent event){
         OnlineMinecraftPlayer player = event.getOnlinePlayer();
 

@@ -67,8 +67,8 @@
         <dependency.pretronic.libraries>1.2.39.177-SNAPSHOT</dependency.pretronic.libraries>
         <dependency.pretronic.databasequery>1.2.55.82-SNAPSHOT</dependency.pretronic.databasequery>
 
-        <dependency.mcnative.runtime>1.7.102.30</dependency.mcnative.runtime>
-        <dependency.mcnative.api>1.0.19.26</dependency.mcnative.api>
+        <dependency.mcnative.runtime>1.8.8.40-SNAPSHOT</dependency.mcnative.runtime>
+        <dependency.mcnative.api>1.0.19.28-SNAPSHOT</dependency.mcnative.api>
         <dependency.mcnative.licensing>1.0.2.4-SNAPSHOT</dependency.mcnative.licensing>
         <dependency.mcnative.buildtool>1.0.0.5</dependency.mcnative.buildtool>
         <dependency.mcnative.loader>1.7.75.45</dependency.mcnative.loader>
