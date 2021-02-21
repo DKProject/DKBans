@@ -33,7 +33,7 @@ public class DefaultDKBansReportStateChangeEvent implements DKBansReportStateCha
     private final ReportState oldState;
     private final ReportState newState;
 
-    private PlayerReport cachedReport;
+    private transient PlayerReport cachedReport;
 
     public DefaultDKBansReportStateChangeEvent(int reportId, ReportState oldState, ReportState newState, PlayerReport cachedReport) {
         this.reportId = reportId;

@@ -32,8 +32,8 @@ public class DefaultDKBansReportWatchEvent implements DKBansReportWatchEvent {
     private final int reportId;
     private final UUID watcherId;
 
-    private PlayerReport cachedReport;
-    private DKBansExecutor cachedWatcher;
+    private transient PlayerReport cachedReport;
+    private transient DKBansExecutor cachedWatcher;
 
     public DefaultDKBansReportWatchEvent(int reportId, UUID watcherId, PlayerReport cachedReport, DKBansExecutor cachedWatcher) {
         this.reportId = reportId;
