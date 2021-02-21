@@ -90,4 +90,6 @@ public class PunishmentType implements VariableObjectToString {
     public String toStringVariable() {
         return name;
     }
+
+
 }

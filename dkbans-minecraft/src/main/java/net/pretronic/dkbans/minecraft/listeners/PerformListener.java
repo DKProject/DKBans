@@ -120,10 +120,10 @@ public class PerformListener {
     public void onPlayerPunish(DKBansPlayerPunishEvent event){
         ConnectedMinecraftPlayer player = McNative.getInstance().getLocal().getConnectedPlayer(event.getPlayerId());
         if(player == null) return;
-        if(event.getSnapshot().getPunishmentType() == PunishmentType.BAN) handleBan(event, player);
-        else if(event.getSnapshot().getPunishmentType() == PunishmentType.MUTE) handleMute(event, player);
-        else if(event.getSnapshot().getPunishmentType() == PunishmentType.KICK) handleKick(event, player);
-        else if(event.getSnapshot().getPunishmentType() == PunishmentType.WARN) handleWarn(event, player);
+        if(event.getSnapshot().getPunishmentType().equals(PunishmentType.BAN)) handleBan(event, player);
+        else if(event.getSnapshot().getPunishmentType().equals(PunishmentType.MUTE)) handleMute(event, player);
+        else if(event.getSnapshot().getPunishmentType().equals(PunishmentType.KICK)) handleKick(event, player);
+        else if(event.getSnapshot().getPunishmentType().equals(PunishmentType.WARN)) handleWarn(event, player);
     }
 
     @Listener

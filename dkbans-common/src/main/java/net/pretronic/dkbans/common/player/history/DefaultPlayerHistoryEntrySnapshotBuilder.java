@@ -203,9 +203,9 @@ public class DefaultPlayerHistoryEntrySnapshotBuilder implements PlayerHistoryEn
         }else{
             PlayerHistoryEntrySnapshot old = entry.getCurrent();
             snapshot = new DefaultPlayerHistoryEntrySnapshot(entry.getId(), -1, historyType
-                    ,punishmentType, reason, timeout, template.getId(), staff.getUniqueId(), scope, points, active
-                    ,properties, revokeReason, revokeTemplate.getId(), true, modifiedTime
-                    ,modifier.getUniqueId(),entry,staff);
+                    ,punishmentType, reason, timeout, template != null ? template.getId() : -1, staff.getUniqueId()
+                    , scope, points, active,properties, revokeReason, revokeTemplate != null ? revokeTemplate.getId() : -1, true
+                    , modifiedTime,modifier.getUniqueId(),entry,staff);
             int id = DKBans.getInstance().getStorage().insertHistoryEntrySnapshot(snapshot);
             snapshot.setId(id);
             ((DefaultPlayerHistoryEntry)entry).setCurrent(snapshot);
