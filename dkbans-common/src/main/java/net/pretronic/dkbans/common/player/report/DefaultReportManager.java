@@ -107,9 +107,9 @@ public class DefaultReportManager implements ReportManager {
             report = loadReport(DefaultDKBans.getInstance().getStorage().getReports().find()
                     .where("PlayerId",uniqueId)
                     .or(query -> {
-                        query.where("Status",ReportState.NEW);
-                        query.where("Status",ReportState.PROCESSING);
-                        query.where("Status",ReportState.WAITING);
+                        query.where("State",ReportState.NEW);
+                        query.where("State",ReportState.PROCESSING);
+                        query.where("State",ReportState.WAITING);
                     }).execute());
             reports.insert(report);
         }

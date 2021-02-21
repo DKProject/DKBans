@@ -34,7 +34,7 @@ public class DefaultDKBansPlayerPunishUpdateEvent implements DKBansPlayerPunishU
     private final PlayerHistoryEntrySnapshot oldSnapshot;
     private final PlayerHistoryEntrySnapshot newSnapshot;
 
-    private DKBansPlayer cachedPlayer;
+    private transient DKBansPlayer cachedPlayer;
 
     public DefaultDKBansPlayerPunishUpdateEvent(PlayerHistoryEntrySnapshot oldSnapshot, PlayerHistoryEntrySnapshot newSnapshot,UUID playerId, DKBansPlayer cachedPlayer) {
         this.oldSnapshot = oldSnapshot;

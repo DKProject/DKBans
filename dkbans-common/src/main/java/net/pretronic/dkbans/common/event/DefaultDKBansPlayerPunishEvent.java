@@ -32,7 +32,7 @@ public class DefaultDKBansPlayerPunishEvent implements DKBansPlayerPunishEvent {
     private final UUID playerId;
     private final PlayerHistoryEntrySnapshot snapshot;
 
-    public DKBansPlayer cachedPlayer;
+    public transient DKBansPlayer cachedPlayer;
 
     public DefaultDKBansPlayerPunishEvent(PlayerHistoryEntrySnapshot snapshot,UUID playerId, DKBansPlayer cachedPlayer) {
         this.playerId = playerId;
