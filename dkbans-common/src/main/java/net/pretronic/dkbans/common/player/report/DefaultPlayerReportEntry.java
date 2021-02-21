@@ -40,7 +40,9 @@ public class DefaultPlayerReportEntry implements PlayerReportEntry {
     private final String serverName;
     private final UUID serverId;
     private final long time;
-    private final Document properties;
+
+    //@Todo add again after document fix
+    private final transient Document properties;
 
     private transient PlayerReport cachedReport;
     private transient DKBansExecutor cachedReporter;

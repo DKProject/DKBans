@@ -23,11 +23,15 @@ package net.pretronic.dkbans.minecraft;
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.joinme.JoinMe;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
+import net.pretronic.dkbans.api.player.history.PlayerHistoryEntry;
+import net.pretronic.dkbans.api.player.history.PlayerHistoryEntrySnapshot;
 import net.pretronic.dkbans.api.player.report.PlayerReport;
 import net.pretronic.dkbans.api.player.report.PlayerReportEntry;
 import net.pretronic.dkbans.api.template.TemplateGroup;
 import net.pretronic.dkbans.common.DefaultDKBans;
 import net.pretronic.dkbans.common.broadcast.BroadcastTask;
+import net.pretronic.dkbans.common.player.history.DefaultPlayerHistoryEntry;
+import net.pretronic.dkbans.common.player.history.DefaultPlayerHistoryEntrySnapshot;
 import net.pretronic.dkbans.common.player.report.DefaultPlayerReport;
 import net.pretronic.dkbans.common.player.report.DefaultPlayerReportEntry;
 import net.pretronic.dkbans.minecraft.commands.*;
@@ -192,6 +196,8 @@ public class DKBansPlugin extends MinecraftPlugin {
         DocumentRegistry.getDefaultContext().registerMappingAdapter(JoinMe.class, MinecraftJoinMe.class);
         DocumentRegistry.getDefaultContext().registerMappingAdapter(PlayerReport.class, DefaultPlayerReport.class);
         DocumentRegistry.getDefaultContext().registerMappingAdapter(PlayerReportEntry.class, DefaultPlayerReportEntry.class);
+        DocumentRegistry.getDefaultContext().registerMappingAdapter(PlayerHistoryEntry.class, DefaultPlayerHistoryEntry.class);
+        DocumentRegistry.getDefaultContext().registerMappingAdapter(PlayerHistoryEntrySnapshot.class, DefaultPlayerHistoryEntrySnapshot.class);
     }
 
     private void loadConfigs() {
