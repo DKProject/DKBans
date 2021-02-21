@@ -111,9 +111,7 @@ public class DefaultReportManager implements ReportManager {
                         query.where("State",ReportState.PROCESSING);
                         query.where("State",ReportState.WAITING);
                     }).execute());
-            if(report != null){
-                reports.insert(report);
-            }
+            if(report != null) reports.insert(report);
         }
         return report;
     }
@@ -125,7 +123,7 @@ public class DefaultReportManager implements ReportManager {
             report = loadReport(DefaultDKBans.getInstance().getStorage().getReports().find()
                     .where("State",ReportState.PROCESSING)
                     .where("WatcherId",uniqueId).execute());
-            reports.insert(report);
+            if(report != null) reports.insert(report);
         }
         return report;
     }

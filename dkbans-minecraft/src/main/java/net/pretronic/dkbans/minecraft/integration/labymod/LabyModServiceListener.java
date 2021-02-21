@@ -42,11 +42,9 @@ public class LabyModServiceListener {
         if(player.hasActivePunish(PunishmentType.MUTE)){
             LabyModIntegration.sendMutePlayer(McNative.getInstance().getLocal().getConnectedPlayers(),player.getUniqueId(),true);
         }
-        McNative.getInstance().getScheduler().createTask(ObjectOwner.SYSTEM).delay(2, TimeUnit.SECONDS).execute(() -> {
+        McNative.getInstance().getScheduler().createTask(ObjectOwner.SYSTEM).delay(1, TimeUnit.SECONDS).execute(() -> {
             for (ConnectedMinecraftPlayer target : McNative.getInstance().getLocal().getConnectedPlayers()) {
-                System.out.println(target.getUniqueId()+" <- check");
                 if(target.getAs(DKBansPlayer.class).hasActivePunish(PunishmentType.MUTE)){
-                    System.out.println("MUTED");
                     LabyModIntegration.sendMutePlayer(event.getPlayer().getAsConnectedPlayer(),target.getUniqueId(),true);
                 }
             }
