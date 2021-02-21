@@ -190,11 +190,6 @@ public class DefaultReportManager implements ReportManager {
         }
 
         @Override
-        public void validate(Object[] identifiers) {
-            Validate.isTrue(identifiers.length == 1 && (identifiers[0] instanceof UUID || identifiers[0] instanceof String));
-        }
-
-        @Override
         public PlayerReport load(Object[] identifiers) {
             Object identifier = identifiers[0];
             if(identifier instanceof UUID){
