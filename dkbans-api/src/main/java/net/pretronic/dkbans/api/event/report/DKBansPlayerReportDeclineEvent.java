@@ -19,4 +19,7 @@
 
 package net.pretronic.dkbans.api.event.report;
 
+import net.pretronic.libraries.event.network.NetworkEvent;
+
+@NetworkEvent(ignoreNetworkException = true)
 public interface DKBansPlayerReportDeclineEvent extends DKBansPlayerReportEvent {}

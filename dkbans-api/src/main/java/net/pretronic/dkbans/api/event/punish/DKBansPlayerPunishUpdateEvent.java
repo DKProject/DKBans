@@ -23,8 +23,14 @@ import net.pretronic.dkbans.api.event.DKBansEvent;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryEntry;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryEntrySnapshot;
+import net.pretronic.libraries.event.network.NetworkEvent;
 
+import java.util.UUID;
+
+@NetworkEvent(ignoreNetworkException = true)
 public interface DKBansPlayerPunishUpdateEvent extends DKBansEvent {
+
+    UUID getUniqueId();
 
     DKBansPlayer getPlayer();
 

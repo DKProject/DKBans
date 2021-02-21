@@ -23,12 +23,16 @@ package net.pretronic.dkbans.api.event;
 import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.libraries.event.network.NetworkEvent;
 
+import java.util.UUID;
+
 @NetworkEvent(ignoreNetworkException = true)
 public interface DKBansChannelBroadcastMessageReceiveEvent extends DKBansEvent {
 
     String getChannel();
 
     String getMessage();
+
+    UUID getExecutorId();
 
     DKBansExecutor getExecutor();
 

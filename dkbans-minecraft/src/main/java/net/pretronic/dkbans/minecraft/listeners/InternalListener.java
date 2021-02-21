@@ -20,6 +20,7 @@
 
 package net.pretronic.dkbans.minecraft.listeners;
 
+import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.event.DKBansChannelBroadcastMessageReceiveEvent;
 import net.pretronic.dkbans.api.event.DKBansJoinMeCreateEvent;
 import net.pretronic.dkbans.api.event.punish.DKBansPlayerPunishEvent;
@@ -34,7 +35,7 @@ import net.pretronic.dkbans.minecraft.BroadcastMessageChannels;
 import net.pretronic.dkbans.minecraft.PlayerSettingsKey;
 import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.dkbans.minecraft.config.Permissions;
-import net.pretronic.dkbans.minecraft.integration.LabyModIntegration;
+import net.pretronic.dkbans.minecraft.integration.labymod.LabyModIntegration;
 import net.pretronic.dkbans.minecraft.joinme.MinecraftJoinMe;
 import net.pretronic.libraries.event.Listener;
 import net.pretronic.libraries.event.network.NetworkListener;
@@ -48,22 +49,25 @@ import java.util.List;
 
 public class InternalListener {
 
+    @Listener
     @NetworkListener
     public void onChannelBroadcastMessageReceive(DKBansChannelBroadcastMessageReceiveEvent event) {
         if(event.getChannel().equals(BroadcastMessageChannels.TEAM_CHAT)){
             MessageComponent<?> result = Messages.TEAMCHAT_MESSAGE_FORMAT;
             for (OnlineMinecraftPlayer staff : McNative.getInstance().getLocal().getOnlinePlayers()) {
+                DKBansExecutor executor = event.getExecutor();
                 if(staff.hasPermission(Permissions.TEAM)
                         && staff.hasSetting("DKBans", PlayerSettingsKey.TEAM_CHAT_LOGIN,true)){
                     staff.sendMessage(result,VariableSet.create()
                             .add("message",event.getMessage())
-                            .addDescribed("sender",event.getExecutor()));
+                            .addDescribed("sender",executor));
                 }
             }
         }
     }
 
     @Listener
+    @NetworkListener
     public void onPlayerReportCreate(DKBansPlayerReportCreateEvent event) {
         for (ConnectedMinecraftPlayer player : McNative.getInstance().getLocal().getConnectedPlayers()) {
             if(player.hasPermission(Permissions.COMMAND_REPORT_STUFF)) {
@@ -75,6 +79,7 @@ public class InternalListener {
     }
 
     @Listener
+    @NetworkListener
     public void onPlayerReportTake(DKBansPlayerReportTakeEvent event) {
         OnlineMinecraftPlayer watcher = McNative.getInstance().getLocal().getOnlinePlayer(event.getReport().getWatcherId());
         if(watcher == null) return;
@@ -85,6 +90,7 @@ public class InternalListener {
     }
 
     @Listener
+    @NetworkListener
     public void onPlayerReportAccept(DKBansPlayerReportAcceptEvent event) {
         for (PlayerReportEntry entry : event.getReport().getEntries()) {
             OnlineMinecraftPlayer player = McNative.getInstance().getLocal().getOnlinePlayer(entry.getReporterId());
@@ -96,6 +102,7 @@ public class InternalListener {
     }
 
     @Listener
+    @NetworkListener
     public void onPlayerReportDecline(DKBansPlayerReportDeclineEvent event) {
         for (PlayerReportEntry entry : event.getReport().getEntries()) {
             OnlineMinecraftPlayer player = McNative.getInstance().getLocal().getOnlinePlayer(entry.getReporterId());
@@ -107,6 +114,7 @@ public class InternalListener {
     }
 
     @Listener
+    @NetworkListener
     public void onPlayerPunish(DKBansPlayerPunishEvent event){
         ConnectedMinecraftPlayer player = McNative.getInstance().getLocal().getConnectedPlayer(event.getPlayer().getUniqueId());
         if(player == null) return;
@@ -117,6 +125,7 @@ public class InternalListener {
     }
 
     @Listener
+    @NetworkListener
     public void onPlayerPunishUpdate(DKBansPlayerPunishUpdateEvent event){
         OnlineMinecraftPlayer player = McNative.getInstance().getLocal().getConnectedPlayer(event.getPlayer().getUniqueId());
         if(player == null) return;
@@ -132,6 +141,7 @@ public class InternalListener {
     }
 
     @Listener
+    @NetworkListener
     public void onJoinMeCreate(DKBansJoinMeCreateEvent event) {
         MinecraftJoinMe joinMe = ((MinecraftJoinMe)event.getJoinMe());
         List<MessageComponent<?>> messageComponents = joinMe.create();
@@ -151,10 +161,7 @@ public class InternalListener {
                     .addDescribed("mute",event.getEntry())
                     .addDescribed("punish",event.getEntry())
                     .addDescribed("player",event.getPlayer()));
-
-            for (ConnectedMinecraftPlayer onlinePlayer : McNative.getInstance().getLocal().getConnectedPlayers()) {
-                LabyModIntegration.sendMutedPlayerTo(onlinePlayer,player.getUniqueId(),true);
-            }
+            LabyModIntegration.sendMutePlayer(McNative.getInstance().getLocal().getConnectedPlayers(),player.getUniqueId(),true);
         }
 
         sendToStaff(event, Messages.PUNISH_MUTE_NOTIFY, "mute");

@@ -36,7 +36,7 @@ import net.pretronic.dkbans.minecraft.PlayerSettingsKey;
 import net.pretronic.dkbans.minecraft.config.DKBansConfig;
 import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.dkbans.minecraft.config.Permissions;
-import net.pretronic.dkbans.minecraft.integration.LabyModIntegration;
+import net.pretronic.dkbans.minecraft.integration.labymod.LabyModIntegration;
 import net.pretronic.libraries.event.EventPriority;
 import net.pretronic.libraries.event.Listener;
 import net.pretronic.libraries.event.execution.ExecutionType;
@@ -167,10 +167,6 @@ public class PlayerListener {
         if(DKBansConfig.PLAYER_ON_JOIN_LIST_REPORTS && player.hasPermission(Permissions.COMMAND_REPORT_STUFF)){
             int openReports = DKBans.getInstance().getReportManager().getOpenReports().size();
             player.sendMessage(Messages.REPORT_COUNT_INFO,VariableSet.create().add("openReports",openReports));
-        }
-        DKBansPlayer dkBansPlayer = player.getAs(DKBansPlayer.class);
-        if(dkBansPlayer.hasActivePunish(PunishmentType.MUTE)){
-            LabyModIntegration.changeVoiceChat((ConnectedMinecraftPlayer) event.getPlayer(),false);
         }
     }
 

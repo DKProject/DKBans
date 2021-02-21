@@ -1,8 +1,8 @@
 /*
- * (C) Copyright 2020 The DKBans Project (Davide Wietlisbach & Philipp Elvin Friedhoff)
+ * (C) Copyright 2021 The DKBans Project (Davide Wietlisbach & Philipp Elvin Friedhoff)
  *
  * @author Davide Wietlisbach
- * @since 27.12.20, 12:51
+ * @since 21.02.21, 08:35
  *
  * The DKBans Project is under the Apache License, version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,15 +17,17 @@
  * under the License.
  */
 
-package net.pretronic.dkbans.api.event.report;
+package net.pretronic.dkbans.minecraft.integration.labymod;
 
-import net.pretronic.dkbans.api.event.DKBansPlayerEvent;
-import net.pretronic.dkbans.api.player.DKBansPlayer;
-import net.pretronic.dkbans.api.player.report.PlayerReport;
-import net.pretronic.libraries.event.network.NetworkEvent;
+public class LabyModListener {
 
-@NetworkEvent(ignoreNetworkException = true)
-public interface DKBansPlayerReportEvent extends DKBansPlayerEvent {
+    /*
+    DKBansPlayer dkBansPlayer = player.getAs(DKBansPlayer.class);
+        if(dkBansPlayer.hasActivePunish(PunishmentType.MUTE)){
+            LabyModIntegration.changeVoiceChat((ConnectedMinecraftPlayer) event.getPlayer(),false);
+        }
+     */
 
-    PlayerReport getReport();
+
+
 }

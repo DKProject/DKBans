@@ -28,17 +28,19 @@ import net.pretronic.libraries.event.network.NetworkEventAdapter;
 
 import java.util.UUID;
 
-@NetworkEvent
-public class DefaultDKBansChannelBroadcastMessageReceiveEvent implements DKBansChannelBroadcastMessageReceiveEvent, NetworkEventAdapter {
+public class DefaultDKBansChannelBroadcastMessageReceiveEvent implements DKBansChannelBroadcastMessageReceiveEvent {
 
-    private String channel;
-    private String message;
-    private DKBansExecutor executor;
+    private final String channel;
+    private final String message;
+    private final UUID executorId;
 
-    public DefaultDKBansChannelBroadcastMessageReceiveEvent(String channel, String message, DKBansExecutor executor) {
+    private transient DKBansExecutor cachedExecutor;
+
+    public DefaultDKBansChannelBroadcastMessageReceiveEvent(String channel, String message, UUID executorId,DKBansExecutor cachedExecutor) {
         this.channel = channel;
         this.message = message;
-        this.executor = executor;
+        this.executorId = executorId;
+        this.cachedExecutor = cachedExecutor;
     }
 
     @Override
@@ -52,21 +54,13 @@ public class DefaultDKBansChannelBroadcastMessageReceiveEvent implements DKBansC
     }
 
     @Override
+    public UUID getExecutorId() {
+        return executorId;
+    }
+
+    @Override
     public DKBansExecutor getExecutor() {
-        return executor;
-    }
-
-    @Override
-    public void read(Document document) {
-        this.channel = document.getString("channel");
-        this.message = document.getString("message");
-        this.executor = DKBans.getInstance().getPlayerManager().getExecutor(document.getObject("executorId", UUID.class));
-    }
-
-    @Override
-    public void write(Document data) {
-        data.set("channel",channel);
-        data.set("message",message);
-        data.set("executorId",executor.getUniqueId());
+        if(cachedExecutor == null) cachedExecutor = DKBans.getInstance().getPlayerManager().getExecutor(executorId);
+        return cachedExecutor;
     }
 }

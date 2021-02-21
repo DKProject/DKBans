@@ -2,7 +2,7 @@
  * (C) Copyright 2021 The DKBans Project (Davide Wietlisbach & Philipp Elvin Friedhoff)
  *
  * @author Davide Wietlisbach
- * @since 20.02.21, 22:33
+ * @since 21.02.21, 08:35
  *
  * The DKBans Project is under the Apache License, version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
  * under the License.
  */
 
-package net.pretronic.dkbans.minecraft.integration;
+package net.pretronic.dkbans.minecraft.integration.labymod;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -27,11 +27,12 @@ import net.pretronic.libraries.utility.exception.OperationFailedException;
 import org.mcnative.runtime.api.player.ConnectedMinecraftPlayer;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Collection;
 import java.util.UUID;
 
 public class LabyModIntegration {
 
-    public static void sendMutedPlayerTo(ConnectedMinecraftPlayer player, UUID target, boolean muted) {
+    public static void sendMutePlayer(Collection<ConnectedMinecraftPlayer> players, UUID target, boolean muted) {
         Document voicechatObject = Document.newDocument();
         Document mutePlayerObject = Document.newDocument();
 
@@ -40,7 +41,9 @@ public class LabyModIntegration {
 
         voicechatObject.add("mute_player", mutePlayerObject);
 
-        sendLabyModMessage( player, "voicechat", voicechatObject );
+        for (ConnectedMinecraftPlayer player : players) {
+            sendLabyModMessage( player, "voicechat", voicechatObject );
+        }
     }
 
     public static void changeVoiceChat(ConnectedMinecraftPlayer player,boolean allowed){

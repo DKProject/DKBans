@@ -168,7 +168,7 @@ public class DefaultDKBans extends DKBans {
     @Override
     public void broadcastMessage(String channel, DKBansExecutor executor, String message) {
         getEventBus().callEvent(DKBansChannelBroadcastMessageReceiveEvent.class
-                ,new DefaultDKBansChannelBroadcastMessageReceiveEvent(channel, message, executor));
+                ,new DefaultDKBansChannelBroadcastMessageReceiveEvent(channel, message, executor.getUniqueId(),executor));
     }
 
     public static DefaultDKBans getInstance() {

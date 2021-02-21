@@ -64,10 +64,13 @@ import java.util.concurrent.TimeUnit;
 
 public class DKBansPlugin extends MinecraftPlugin {
 
+    private static DKBansPlugin INSTANCE;
+
     private DefaultDKBans dkBans;
 
     @Lifecycle(state = LifecycleState.LOAD)
     public void onLoad(LifecycleState state){
+        INSTANCE = this;
         getLogger().info("DKBans is starting, please wait..");
 
         MinecraftPlayerManager playerManager = new MinecraftPlayerManager();
@@ -90,9 +93,10 @@ public class DKBansPlugin extends MinecraftPlugin {
         initBroadcast();
 
         getRuntime().getLocal().getEventBus().subscribe(this,new PlayerListener());
-        getRuntime().getLocal().getEventBus().subscribe(this,new InternalListener());
         if(getRuntime().isNetworkAvailable()){
             getRuntime().getNetwork().getEventBus().subscribe(this,new InternalListener());
+        }else{
+            getRuntime().getLocal().getEventBus().subscribe(this,new InternalListener());
         }
         getRuntime().getPlayerManager().registerPlayerAdapter(DKBansPlayer.class, player -> playerManager.getPlayer(player.getUniqueId()));
         getRuntime().getRegistry().getService(PlaceholderProvider.class).registerPlaceHolders(this,"dkbans",new DKBansPlaceholders());
@@ -201,5 +205,9 @@ public class DKBansPlugin extends MinecraftPlugin {
                 .delay(5, TimeUnit.SECONDS)
                 .interval(1, TimeUnit.SECONDS)
                 .execute(new BroadcastTask().start());
+    }
+
+    public static DKBansPlugin getInstance() {
+        return INSTANCE;
     }
 }
