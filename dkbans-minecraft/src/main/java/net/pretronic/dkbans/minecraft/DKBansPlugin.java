@@ -94,7 +94,7 @@ public class DKBansPlugin extends MinecraftPlugin {
                 new MinecraftBroadcastSender());
 
         DKBans.setInstance(dkBans);
-        dkBans.getBroadcastManager().init();
+        dkBans.getBroadcastManager().initialize();
         dkBans.getTemplateManager().initialize();
 
         loadConfigs();

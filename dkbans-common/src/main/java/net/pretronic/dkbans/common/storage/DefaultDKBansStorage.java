@@ -451,10 +451,6 @@ public class DefaultDKBansStorage implements DKBansStorage {
                     ,resultEntry.getUniqueId("ScopeId"));
         }
 
-        for (Map.Entry<String, Object> entry0 : resultEntry) {
-            System.out.println(entry0.getKey()+" | "+entry0.getValue());
-        }
-
         return new DefaultPlayerHistoryEntrySnapshot(resultEntry.getInt("SnapshotId"),
                 entry != null ? entry.getId() : -1,
                 dkBans.getHistoryManager().getHistoryType(resultEntry.getInt("HistoryTypeId")),

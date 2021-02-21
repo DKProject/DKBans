@@ -21,10 +21,13 @@
 package net.pretronic.dkbans.common.broadcast;
 
 import net.pretronic.databasequery.api.query.result.QueryResultEntry;
+import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.DKBansScope;
 import net.pretronic.dkbans.api.broadcast.*;
+import net.pretronic.dkbans.api.event.DKBansBroadcastsUpdateEvent;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.common.DefaultDKBans;
+import net.pretronic.dkbans.common.event.DefaultDKBansBroadcastsUpdateEvent;
 import net.pretronic.libraries.document.Document;
 import net.pretronic.libraries.document.type.DocumentFileType;
 import net.pretronic.libraries.utility.GeneralUtil;
@@ -49,7 +52,7 @@ public class DefaultBroadcastManager implements BroadcastManager {
         this.broadcastSender = broadcastSender;
     }
 
-    public void init() {
+    public void initialize() {
         this.broadcasts.addAll(loadBroadcasts());
         this.groups.addAll(loadGroups());
     }
@@ -93,6 +96,7 @@ public class DefaultBroadcastManager implements BroadcastManager {
                 .executeAndGetGeneratedKeyAsInt("Id");
         Broadcast broadcast = new DefaultBroadcast(id, name, visibility, properties);
         this.broadcasts.add(broadcast);
+        sendUpdate();
         return broadcast;
     }
 
@@ -107,6 +111,7 @@ public class DefaultBroadcastManager implements BroadcastManager {
         Validate.notNull(broadcast);
         DefaultDKBans.getInstance().getStorage().getBroadcast().delete().where("Id", broadcast.getId()).execute();
         this.broadcasts.remove(broadcast);
+        sendUpdate();
     }
 
     @Override
@@ -143,6 +148,7 @@ public class DefaultBroadcastManager implements BroadcastManager {
                 .executeAndGetGeneratedKeyAsInt("Id");
         BroadcastGroup group = new DefaultBroadcastGroup(id, name, interval);
         this.groups.add(group);
+        sendUpdate();
         return group;
     }
 
@@ -158,6 +164,7 @@ public class DefaultBroadcastManager implements BroadcastManager {
                 .where("Id", group.getId())
                 .execute();
         this.groups.remove(group);
+        sendUpdate();
     }
 
     @Override
@@ -168,6 +175,18 @@ public class DefaultBroadcastManager implements BroadcastManager {
     @Override
     public Collection<DKBansPlayer> sendBroadcast(BroadcastAssignment broadcast) {
         return broadcastSender.sendBroadcast(broadcast);
+    }
+
+    @Override
+    public void reload() {
+        this.broadcasts.clear();
+        this.groups.clear();
+        this.broadcasts.addAll(loadBroadcasts());
+        this.groups.addAll(loadGroups());
+    }
+
+    private void sendUpdate(){
+        DKBans.getInstance().getEventBus().callEvent(DKBansBroadcastsUpdateEvent.class,new DefaultDKBansBroadcastsUpdateEvent());
     }
 
     private Collection<Broadcast> loadBroadcasts() {
@@ -203,7 +222,7 @@ public class DefaultBroadcastManager implements BroadcastManager {
             if(rawScopeType != null && rawScopeName != null) {
                 scope = new DKBansScope(rawScopeType, rawScopeName, result.getUniqueId("ScopeId"));
             }
-            DefaultBroadcastGroup group = new DefaultBroadcastGroup(groupId,
+            return new DefaultBroadcastGroup(groupId,
                     result.getString("Name"),
                     result.getBoolean("Enabled"),
                     result.getString("Permission"),
@@ -211,7 +230,6 @@ public class DefaultBroadcastManager implements BroadcastManager {
                     result.getInt("Interval"),
                     scope,
                     assignments);
-            return group;
         });
         return groups;
     }

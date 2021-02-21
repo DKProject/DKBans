@@ -120,9 +120,10 @@ public class DefaultReportManager implements ReportManager {
 
     @Override
     public PlayerReport getReportByWatcher(UUID uniqueId) {
-        PlayerReport report = this.reports.get(report1 -> report1.getWatcherId().equals(uniqueId));
+        PlayerReport report = this.reports.get(report1 -> report1.getWatcherId().equals(uniqueId) && report1.getState() == ReportState.PROCESSING);
         if(report == null){
             report = loadReport(DefaultDKBans.getInstance().getStorage().getReports().find()
+                    .where("State",ReportState.PROCESSING)
                     .where("WatcherId",uniqueId).execute());
             reports.insert(report);
         }

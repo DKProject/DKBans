@@ -70,7 +70,6 @@ public class PerformListener {
     @NetworkListener
     public void onJoinMeCreate(DKBansJoinMeCreateEvent event) {
         MinecraftJoinMe joinMe = ((MinecraftJoinMe)event.getJoinMe());
-        System.out.println(joinMe);
         List<MessageComponent<?>> messageComponents = joinMe.create();
 
         for (MessageComponent<?> messageComponent : messageComponents) {

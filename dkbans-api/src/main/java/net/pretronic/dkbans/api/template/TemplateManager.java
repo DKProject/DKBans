@@ -53,4 +53,6 @@ public interface TemplateManager {
     void clearCache();
 
     void loadTemplateGroups();
+
+    void reload();
 }
