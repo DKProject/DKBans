@@ -47,7 +47,7 @@ import org.mcnative.runtime.api.text.components.MessageComponent;
 
 import java.util.List;
 
-public class InternalListener {
+public class PerformListener {
 
     @Listener
     @NetworkListener

@@ -21,6 +21,7 @@
 package net.pretronic.dkbans.minecraft;
 
 import net.pretronic.dkbans.api.DKBans;
+import net.pretronic.dkbans.api.joinme.JoinMe;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.template.TemplateGroup;
 import net.pretronic.dkbans.common.DefaultDKBans;
@@ -41,14 +42,17 @@ import net.pretronic.dkbans.minecraft.commands.unpunish.UnpunishCommand;
 import net.pretronic.dkbans.minecraft.config.CommandConfig;
 import net.pretronic.dkbans.minecraft.config.DKBansConfig;
 import net.pretronic.dkbans.minecraft.integration.DKBansPlaceholders;
+import net.pretronic.dkbans.minecraft.joinme.MinecraftJoinMe;
 import net.pretronic.dkbans.minecraft.joinme.MinecraftJoinMeManager;
-import net.pretronic.dkbans.minecraft.listeners.InternalListener;
+import net.pretronic.dkbans.minecraft.listeners.PerformListener;
 import net.pretronic.dkbans.minecraft.listeners.PlayerListener;
+import net.pretronic.dkbans.minecraft.listeners.SyncListener;
 import net.pretronic.dkbans.minecraft.migration.DKBansLegacyMigration;
 import net.pretronic.dkbans.minecraft.player.MinecraftPlayerManager;
 import net.pretronic.libraries.command.command.Command;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
 import net.pretronic.libraries.document.Document;
+import net.pretronic.libraries.document.DocumentRegistry;
 import net.pretronic.libraries.document.type.DocumentFileType;
 import net.pretronic.libraries.plugin.lifecycle.Lifecycle;
 import net.pretronic.libraries.plugin.lifecycle.LifecycleState;
@@ -94,9 +98,12 @@ public class DKBansPlugin extends MinecraftPlugin {
 
         getRuntime().getLocal().getEventBus().subscribe(this,new PlayerListener());
         if(getRuntime().isNetworkAvailable()){
-            getRuntime().getNetwork().getEventBus().subscribe(this,new InternalListener());
+            getRuntime().getNetwork().getEventBus().subscribe(this,new SyncListener());
+            if(getRuntime().getPlatform().isProxy()){
+                getRuntime().getNetwork().getEventBus().subscribe(this,new PerformListener());
+            }
         }else{
-            getRuntime().getLocal().getEventBus().subscribe(this,new InternalListener());
+            getRuntime().getLocal().getEventBus().subscribe(this,new PerformListener());
         }
         getRuntime().getPlayerManager().registerPlayerAdapter(DKBansPlayer.class, player -> playerManager.getPlayer(player.getUniqueId()));
         getRuntime().getRegistry().getService(PlaceholderProvider.class).registerPlaceHolders(this,"dkbans",new DKBansPlaceholders());
@@ -169,6 +176,9 @@ public class DKBansPlugin extends MinecraftPlugin {
         } else {
             getRuntime().getLocal().getCommandManager().registerCommand(new ReportCommand(this, CommandConfig.COMMAND_REPORT, null));
         }
+    }
+    private void registerDocumentAdapters(){
+        DocumentRegistry.getDefaultContext().registerMappingAdapter(JoinMe.class, MinecraftJoinMe.class);
     }
 
     private void loadConfigs() {
