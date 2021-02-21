@@ -114,9 +114,9 @@ public class PlayerListener {
         if(ipAddressBlock.getForTemplate() != null) {
             result = player.punish(DKBansExecutor.IP_ADDRESS_BLOCK,ipAddressBlock.getForTemplate());
         } else {
-            PlayerHistoryEntrySnapshotBuilder builder = player.punish().stuff(DKBansExecutor.IP_ADDRESS_BLOCK);
+            PlayerHistoryEntrySnapshotBuilder builder = player.punish().staff(DKBansExecutor.IP_ADDRESS_BLOCK);
             builder.reason(ipAddressBlock.getForReason())
-                    .stuff(DKBansExecutor.IP_ADDRESS_BLOCK)
+                    .staff(DKBansExecutor.IP_ADDRESS_BLOCK)
                     .historyType(DKBans.getInstance().getHistoryManager().getHistoryType(DKBansConfig.IP_ADDRESS_BLOCK_HISTORY_TYPE_NAME))
                     .timeout(System.currentTimeMillis()+ipAddressBlock.getForDuration());
             result = builder.execute();

@@ -71,7 +71,7 @@ public class OneTimePunishCommand extends BasicCommand {
         String reason = CommandUtil.readStringFromArguments(arguments,1);
         PlayerHistoryEntrySnapshot snapshot = dkBansPlayer.punish()
                 .scope(scope)
-                .stuff(CommandUtil.getExecutor(sender))
+                .staff(CommandUtil.getExecutor(sender))
                 .punishmentType(punishmentType)
                 .historyType(historyType)
                 .reason(reason)

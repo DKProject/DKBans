@@ -288,7 +288,7 @@ public class DKBansLegacyMigration extends Migration {
 
             for (HistoryEntry entry : player.getHistory().getEntries()) {
                 PlayerHistoryEntrySnapshotBuilder builder = new DefaultPlayerHistoryEntrySnapshotBuilder(dkBansPlayer, null);
-                builder.stuff(getStuff(entry));
+                builder.staff(getStuff(entry));
                 builder.reason(entry.getReason());
                 builder.points(entry.getPoints().getPoints());
                 PlayerHistoryType historyType = DKBans.getInstance().getHistoryManager().getHistoryType(entry.getPoints().getHistoryType().name());

@@ -26,9 +26,14 @@ import net.pretronic.dkbans.api.event.punish.DKBansPlayerPunishUpdateEvent;
 import net.pretronic.dkbans.api.event.report.DKBansReportCreateEvent;
 import net.pretronic.dkbans.api.event.report.DKBansReportStateChangedEvent;
 import net.pretronic.dkbans.api.event.report.DKBansReportWatchEvent;
+import net.pretronic.dkbans.api.player.DKBansPlayer;
+import net.pretronic.dkbans.api.player.history.PlayerHistoryEntry;
 import net.pretronic.dkbans.api.player.report.PlayerReport;
 import net.pretronic.dkbans.common.DefaultDKBans;
+import net.pretronic.dkbans.common.player.history.DefaultPlayerHistory;
+import net.pretronic.dkbans.common.player.history.DefaultPlayerHistoryEntry;
 import net.pretronic.dkbans.common.player.report.DefaultPlayerReport;
+import net.pretronic.dkbans.minecraft.player.MinecraftPlayerManager;
 import net.pretronic.libraries.event.EventPriority;
 import net.pretronic.libraries.event.network.NetworkListener;
 
@@ -49,12 +54,18 @@ public class SyncListener {
     @NetworkListener(priority = EventPriority.LOWEST,onlyRemote = true)
     public void onPlayerPunish(DKBansPlayerPunishEvent event){
         System.out.println("---> PUNISH SYNC");
-
+        DKBansPlayer player = ((MinecraftPlayerManager)dkbans.getPlayerManager()).getLoadedPlayer(event.getPlayerId());
+        if(player != null) ((DefaultPlayerHistory)player.getHistory()).push(event.getEntry());
     }
 
     @NetworkListener(priority = EventPriority.LOWEST,onlyRemote = true)
     public void onPlayerPunishUpdate(DKBansPlayerPunishUpdateEvent event){
-
+        System.out.println("---> PUNISH UPDATE SYNC");
+        DKBansPlayer player = ((MinecraftPlayerManager)dkbans.getPlayerManager()).getLoadedPlayer(event.getPlayerId());
+        if(player != null){
+            PlayerHistoryEntry entry = ((DefaultPlayerHistory)player.getHistory()).getLoadedEntry(event.getNewSnapshot().getEntryId());
+            if(entry != null) ((DefaultPlayerHistoryEntry)entry).setCurrent(event.getNewSnapshot());
+        }
     }
 
     @NetworkListener(priority = EventPriority.LOWEST,onlyRemote = true)

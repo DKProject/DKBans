@@ -36,17 +36,17 @@ import java.util.UUID;
 
 public class DefaultPlayerHistoryEntrySnapshot implements PlayerHistoryEntrySnapshot {
 
-    private PlayerHistoryEntry entry;
     private int id;
+    private int entryId;
     private final PlayerHistoryType historyType;
     private final PunishmentType punishmentType;
 
     private final String reason;
     private final long timeout;
 
-    private final Template template;
+    private final int templateId;
 
-    private final UUID stuffId;
+    private final UUID staffId;
     private final DKBansScope scope;
 
     private final int points;
@@ -54,42 +54,49 @@ public class DefaultPlayerHistoryEntrySnapshot implements PlayerHistoryEntrySnap
 
     private final Document properties;
     private final String revokeMessage;
-    private final Template revokeTemplate;
+    private final int revokeTemplateId;
 
     private final boolean modifiedActive;
     private final long modifiedTime;
     private final UUID modifierId;
 
-    public DefaultPlayerHistoryEntrySnapshot(PlayerHistoryEntry entry, int id, PlayerHistoryType historyType, PunishmentType punishmentType
-            , String reason, long timeout, Template template, UUID stuffId, DKBansScope scope, int points
-            , boolean active, Document properties, String revokeMessage, Template revokeTemplate, boolean modifiedActive, long modifiedTime, UUID modifierId) {
-        this.entry = entry;
+    private transient PlayerHistoryEntry cachedEntry;
+    private transient DKBansExecutor cachedStaff;
+
+    public DefaultPlayerHistoryEntrySnapshot(int id, int entryId, PlayerHistoryType historyType, PunishmentType punishmentType
+            , String reason, long timeout, int templateId, UUID staffId, DKBansScope scope, int points, boolean active
+            , Document properties, String revokeMessage, int revokeTemplateId, boolean modifiedActive, long modifiedTime
+            , UUID modifierId, PlayerHistoryEntry cachedEntry, DKBansExecutor cachedStaff) {
         this.id = id;
+        this.entryId = entryId;
         this.historyType = historyType;
         this.punishmentType = punishmentType;
         this.reason = reason;
         this.timeout = timeout;
-        this.template = template;
-        this.stuffId = stuffId;
+        this.templateId = templateId;
+        this.staffId = staffId;
         this.scope = scope;
         this.points = points;
         this.active = active;
         this.properties = properties;
         this.revokeMessage = revokeMessage;
-        this.revokeTemplate = revokeTemplate;
+        this.revokeTemplateId = revokeTemplateId;
         this.modifiedActive = modifiedActive;
         this.modifiedTime = modifiedTime;
         this.modifierId = modifierId;
+        this.cachedEntry = cachedEntry;
+        this.cachedStaff = cachedStaff;
     }
 
     @Override
     public int getEntryId() {
-        return 0;
+        return entryId;
     }
 
     @Override
     public PlayerHistoryEntry getEntry() {
-        return entry;
+        if(cachedEntry == null) cachedEntry = DKBans.getInstance().getHistoryManager().getHistoryEntry(entryId);
+        return cachedEntry;
     }
 
     @Override
@@ -118,13 +125,24 @@ public class DefaultPlayerHistoryEntrySnapshot implements PlayerHistoryEntrySnap
     }
 
     @Override
+    public int getTemplateId() {
+        return templateId;
+    }
+
+    @Override
     public Template getTemplate() {
-        return template;
+        return DKBans.getInstance().getTemplateManager().getTemplate(templateId);
+    }
+
+    @Override
+    public UUID getStaffId() {
+        return staffId;
     }
 
     @Override
     public DKBansExecutor getStaff() {
-        return DKBans.getInstance().getPlayerManager().getExecutor(stuffId);
+        if(cachedStaff == null) cachedStaff = DKBans.getInstance().getPlayerManager().getExecutor(this.staffId);
+        return cachedStaff;
     }
 
     @Override
@@ -153,8 +171,13 @@ public class DefaultPlayerHistoryEntrySnapshot implements PlayerHistoryEntrySnap
     }
 
     @Override
+    public int getRevokeTemplateId() {
+        return revokeTemplateId;
+    }
+
+    @Override
     public Template getRevokeTemplate() {
-        return revokeTemplate;
+        return DKBans.getInstance().getTemplateManager().getTemplate(revokeTemplateId);
     }
 
     @Override
@@ -168,6 +191,11 @@ public class DefaultPlayerHistoryEntrySnapshot implements PlayerHistoryEntrySnap
     }
 
     @Override
+    public UUID getModifiedById() {
+        return modifierId;
+    }
+
+    @Override
     public DKBansExecutor getModifiedBy() {
         return DKBans.getInstance().getPlayerManager().getExecutor(modifierId);
     }
@@ -175,7 +203,8 @@ public class DefaultPlayerHistoryEntrySnapshot implements PlayerHistoryEntrySnap
     @Internal
     public void setInsertResult(Pair<PlayerHistoryEntry, Integer> result) {
         this.id = result.getValue();
-        this.entry = result.getKey();
+        this.entryId = result.getKey().getId();
+        this.cachedEntry = result.getKey();
     }
 
     @Internal
@@ -185,6 +214,6 @@ public class DefaultPlayerHistoryEntrySnapshot implements PlayerHistoryEntrySnap
 
     @Internal
     public void setEntry(PlayerHistoryEntry entry) {
-        this.entry = entry;
+        this.cachedEntry = entry;
     }
 }

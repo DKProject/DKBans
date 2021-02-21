@@ -44,7 +44,7 @@ public interface PlayerHistoryEntrySnapshotBuilder {
 
     PlayerHistoryEntrySnapshotBuilder duration(Duration duration);
 
-    PlayerHistoryEntrySnapshotBuilder stuff(DKBansExecutor executor);
+    PlayerHistoryEntrySnapshotBuilder staff(DKBansExecutor executor);
 
     PlayerHistoryEntrySnapshotBuilder points(int points);
 

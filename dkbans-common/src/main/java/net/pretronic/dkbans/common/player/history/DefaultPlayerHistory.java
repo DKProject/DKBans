@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Predicate;
 
 public class DefaultPlayerHistory implements PlayerHistory {
 
@@ -218,5 +219,9 @@ public class DefaultPlayerHistory implements PlayerHistory {
         if(loadedActive || loadedAll){
             this.entries.add(entry);
         }
+    }
+
+    public PlayerHistoryEntry getLoadedEntry(int id){
+        return Iterators.findOne(this.entries, entry -> entry.getId() == id);
     }
 }

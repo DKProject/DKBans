@@ -26,6 +26,7 @@ import net.pretronic.dkbans.api.template.Template;
 import net.pretronic.libraries.document.Document;
 
 import java.time.Duration;
+import java.util.UUID;
 
 public interface PlayerHistoryEntrySnapshot {
 
@@ -53,9 +54,12 @@ public interface PlayerHistoryEntrySnapshot {
         return getTimeout() <= 0;
     }
 
+    int getTemplateId();
 
     Template getTemplate();
 
+
+    UUID getStaffId();
 
     DKBansExecutor getStaff();
 
@@ -71,12 +75,16 @@ public interface PlayerHistoryEntrySnapshot {
 
     String getRevokeReason();
 
+    int getRevokeTemplateId();
+
     Template getRevokeTemplate();
 
 
     boolean isModifiedActive();
 
     long getModifiedTime();
+
+    UUID getModifiedById();
 
     DKBansExecutor getModifiedBy();
 

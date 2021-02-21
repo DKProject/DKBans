@@ -40,6 +40,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Predicate;
 
 public class MinecraftPlayerManager implements DKBansPlayerManager {
 
@@ -85,12 +86,6 @@ public class MinecraftPlayerManager implements DKBansPlayerManager {
     }
 
     @Override
-    public Collection<DKBansPlayer> getLoadedPlayers() {
-        return players.getCachedObjects();
-    }
-
-
-    @Override
     public DKBansExecutor getExecutor(UUID uniqueId) {
         DKBansExecutor executor = Iterators.findOne(this.specialExecutors, o -> o.getUniqueId().equals(uniqueId));
         if(executor != null) return executor;
@@ -111,6 +106,15 @@ public class MinecraftPlayerManager implements DKBansPlayerManager {
             throw new IllegalArgumentException("Special executor already registered");
         }
         this.specialExecutors.add(executor);
+    }
+
+    @Override
+    public Collection<DKBansPlayer> getLoadedPlayers() {
+        return players.getCachedObjects();
+    }
+
+    public DKBansPlayer getLoadedPlayer(UUID playerId) {
+        return players.get(player -> player.getUniqueId().equals(playerId));
     }
 
     private static class PlayerGetter implements CacheQuery<DKBansPlayer> {

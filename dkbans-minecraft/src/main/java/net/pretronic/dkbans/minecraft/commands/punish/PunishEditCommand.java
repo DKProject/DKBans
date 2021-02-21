@@ -108,7 +108,7 @@ public class PunishEditCommand extends BasicCommand {
         }else if(action.equalsIgnoreCase("setStuff")){
             MinecraftPlayer player = CommandUtil.getPlayer(sender,arguments[2]);
             if(player == null) return;
-            builder.stuff(player.getAs(DKBansPlayer.class));
+            builder.staff(player.getAs(DKBansPlayer.class));
         }else{
             sender.sendMessage(Messages.COMMAND_PUNISH_EDIT_HELP, VariableSet.create());
             return;

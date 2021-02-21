@@ -76,7 +76,7 @@ public class PermanentlyPunishCommand extends BasicCommand {
         }
 
         PlayerHistoryEntrySnapshot result = dkBansPlayer.punish()
-                .stuff(CommandUtil.getExecutor(sender))
+                .staff(CommandUtil.getExecutor(sender))
                 .punishmentType(punishmentType)
                 .historyType(historyType)
                 .scope(scope)

@@ -277,7 +277,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 .set("Created",created)
                 .executeAndGetGeneratedKeyAsInt("Id");
         int snapId = buildSnapshotQuery(id,snapshot);
-        return new Pair<>(new DefaultPlayerHistoryEntry(player.getHistory(),id,snapshot,created),snapId);
+        return new Pair<>(new DefaultPlayerHistoryEntry(id,player.getUniqueId(),created,player.getHistory(),snapshot,new ArrayList<>()),snapId);
     }
 
     @Override
@@ -357,10 +357,11 @@ public class DefaultDKBansStorage implements DKBansStorage {
         PlayerHistory playerHistory = DKBans.getInstance().getPlayerManager()
                 .getPlayer(resultEntry.getUniqueId("PlayerId")).getHistory();
 
-        DefaultPlayerHistoryEntry entry = new DefaultPlayerHistoryEntry(playerHistory,
-                resultEntry.getInt("HistoryId"),
-                snapshot,
-                resultEntry.getLong("Created"));
+        DefaultPlayerHistoryEntry entry = new DefaultPlayerHistoryEntry(resultEntry.getInt("HistoryId"),
+                playerHistory.getPlayer().getUniqueId(),
+                resultEntry.getLong("Created"),
+                playerHistory,
+                snapshot,null);
         snapshot.setEntry(entry);
         return entry;
     }
@@ -395,10 +396,11 @@ public class DefaultDKBansStorage implements DKBansStorage {
             PlayerHistory playerHistory = DKBans.getInstance().getPlayerManager()
                     .getPlayer(resultEntry.getUniqueId("PlayerId")).getHistory();
 
-            DefaultPlayerHistoryEntry entry = new DefaultPlayerHistoryEntry(playerHistory,
-                    resultEntry.getInt("HistoryId"),
-                    snapshot,
-                    resultEntry.getLong("Created"));
+            DefaultPlayerHistoryEntry entry = new DefaultPlayerHistoryEntry(resultEntry.getInt("HistoryId"),
+                    playerHistory.getPlayer().getUniqueId(),
+                    resultEntry.getLong("Created"),
+                    playerHistory,
+                    snapshot,null);
             snapshot.setEntry(entry);
             result.add(entry);
         }
@@ -430,10 +432,11 @@ public class DefaultDKBansStorage implements DKBansStorage {
         if(!result0.isEmpty()){
             for (QueryResultEntry resultEntry : result0) {
                 DefaultPlayerHistoryEntrySnapshot snapshot = createSnapshot(resultEntry,null);
-                DefaultPlayerHistoryEntry entry = new DefaultPlayerHistoryEntry(playerHistory,
+                DefaultPlayerHistoryEntry entry = new DefaultPlayerHistoryEntry(
                         resultEntry.getInt("HistoryId"),
-                        snapshot,
-                        resultEntry.getLong("Created"));
+                        playerHistory.getPlayer().getUniqueId(),
+                        resultEntry.getLong("Created")
+                        ,playerHistory,snapshot,null);
                 snapshot.setEntry(entry);
                 result.add(entry);
             }
@@ -452,23 +455,24 @@ public class DefaultDKBansStorage implements DKBansStorage {
             System.out.println(entry0.getKey()+" | "+entry0.getValue());
         }
 
-        return new DefaultPlayerHistoryEntrySnapshot(entry,
-                resultEntry.getInt("SnapshotId"),
+        return new DefaultPlayerHistoryEntrySnapshot(resultEntry.getInt("SnapshotId"),
+                entry.getId(),
                 dkBans.getHistoryManager().getHistoryType(resultEntry.getInt("HistoryTypeId")),
                 PunishmentType.getPunishmentType(resultEntry.getString("PunishmentType")),
                 resultEntry.getString("Reason"),
                 resultEntry.getLong("Timeout"),
-                dkBans.getTemplateManager().getTemplate(resultEntry.getInt("TemplateId")),
+                resultEntry.getInt("TemplateId"),
                 resultEntry.getUniqueId("StaffId"),
                 scope,
                 resultEntry.getInt("Points"),
                 resultEntry.getBoolean("Active"),
                 DocumentFileType.JSON.getReader().read(resultEntry.getString("Properties")),
                 resultEntry.getString("RevokeReason"),
-                dkBans.getTemplateManager().getTemplate(resultEntry.getInt("RevokeTemplateId")),
+                resultEntry.getInt("RevokeTemplateId"),
                 resultEntry.getBoolean("ModifiedActive"),
                 resultEntry.getLong("ModifiedTime"),
-                resultEntry.getUniqueId("ModifiedBy"));
+                resultEntry.getUniqueId("ModifiedBy")
+                ,entry,null);
     }
 
     @Override
