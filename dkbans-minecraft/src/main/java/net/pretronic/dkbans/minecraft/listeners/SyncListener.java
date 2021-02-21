@@ -24,7 +24,7 @@ import net.pretronic.dkbans.api.event.DKBansJoinMeCreateEvent;
 import net.pretronic.dkbans.api.event.punish.DKBansPlayerPunishEvent;
 import net.pretronic.dkbans.api.event.punish.DKBansPlayerPunishUpdateEvent;
 import net.pretronic.dkbans.api.event.report.DKBansReportCreateEvent;
-import net.pretronic.dkbans.api.event.report.DKBansReportStateChangeEvent;
+import net.pretronic.dkbans.api.event.report.DKBansReportStateChangedEvent;
 import net.pretronic.dkbans.api.event.report.DKBansReportWatchEvent;
 import net.pretronic.dkbans.api.player.report.PlayerReport;
 import net.pretronic.dkbans.common.DefaultDKBans;
@@ -58,19 +58,22 @@ public class SyncListener {
     }
 
     @NetworkListener(priority = EventPriority.LOWEST,onlyRemote = true)
-    public void onPlayerReportCreate(DKBansReportCreateEvent event) {
+    public void onReportCreate(DKBansReportCreateEvent event) {
+        System.out.println("---> REPORT SYNC CREATE");
         PlayerReport report = dkbans.getReportManager().getLoadedReport(event.getReportId());
         if(report != null) ((DefaultPlayerReport) report).addEntry(event.getReportEntry());
     }
 
     @NetworkListener(priority = EventPriority.LOWEST,onlyRemote = true)
-    public void onPlayerReportTake(DKBansReportWatchEvent event) {
+    public void onReportTake(DKBansReportWatchEvent event) {
+        System.out.println("---> REPORT SYNC TAKE");
         PlayerReport report = dkbans.getReportManager().getLoadedReport(event.getReportId());
         if(report != null) ((DefaultPlayerReport) report).changeWatcher(event.getWatcherId());
     }
 
     @NetworkListener(priority = EventPriority.LOWEST,onlyRemote = true)
-    public void onPlayerReportAccept(DKBansReportStateChangeEvent event) {
+    public void onReportStateChane(DKBansReportStateChangedEvent event) {
+        System.out.println("---> REPORT SYNC STATE CHANGED");
         PlayerReport report = dkbans.getReportManager().getLoadedReport(event.getReportId());
         if(report != null) ((DefaultPlayerReport) report).changeStatus(event.getNewState());
     }

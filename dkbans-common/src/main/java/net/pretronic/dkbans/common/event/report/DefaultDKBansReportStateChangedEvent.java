@@ -20,14 +20,14 @@
 package net.pretronic.dkbans.common.event.report;
 
 import net.pretronic.dkbans.api.DKBans;
-import net.pretronic.dkbans.api.event.report.DKBansReportStateChangeEvent;
+import net.pretronic.dkbans.api.event.report.DKBansReportStateChangedEvent;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.report.PlayerReport;
 import net.pretronic.dkbans.api.player.report.ReportState;
 
 import java.util.UUID;
 
-public class DefaultDKBansReportStateChangeEvent implements DKBansReportStateChangeEvent {
+public class DefaultDKBansReportStateChangedEvent implements DKBansReportStateChangedEvent {
 
     private final int reportId;
     private final ReportState oldState;
@@ -35,7 +35,7 @@ public class DefaultDKBansReportStateChangeEvent implements DKBansReportStateCha
 
     private transient PlayerReport cachedReport;
 
-    public DefaultDKBansReportStateChangeEvent(int reportId, ReportState oldState, ReportState newState, PlayerReport cachedReport) {
+    public DefaultDKBansReportStateChangedEvent(int reportId, ReportState oldState, ReportState newState, PlayerReport cachedReport) {
         this.reportId = reportId;
         this.oldState = oldState;
         this.newState = newState;

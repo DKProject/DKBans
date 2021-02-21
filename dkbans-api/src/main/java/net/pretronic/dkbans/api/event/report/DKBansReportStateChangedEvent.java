@@ -23,7 +23,7 @@ import net.pretronic.dkbans.api.player.report.ReportState;
 import net.pretronic.libraries.event.network.NetworkEvent;
 
 @NetworkEvent(ignoreNetworkException = true)
-public interface DKBansReportStateChangeEvent extends DKBansReportEvent {
+public interface DKBansReportStateChangedEvent extends DKBansReportEvent {
 
     ReportState getOldState();
 

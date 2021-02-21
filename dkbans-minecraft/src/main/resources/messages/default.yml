@@ -247,8 +247,8 @@ messages:
   dkbans.command.report.take.notReported: '${dkbans.prefix.report} &cThe player &e{target.displayName} &cis not reported'
   dkbans.command.report.take.already: '${dkbans.prefix.report} &cThe report of &e{target.displayName} &chas already been taken'
 
-  dkbans.command.report.decline: '${dkbans.prefix.report} &7You have declined the report about &e{target.displayName}'
-  dkbans.command.report.accept: '${dkbans.prefix.report} &7You have accepted the report about &e{target.displayName}'
+  dkbans.command.report.decline: '${dkbans.prefix.report} &7You have declined the report about &e{report.player.displayName}'
+  dkbans.command.report.accept: '${dkbans.prefix.report} &7You have accepted the report about &e{report.player.displayName}'
 
   dkbans.command.report.notWatching: '${dkbans.prefix.report} &7You are not watching a report'
 

@@ -26,7 +26,7 @@ import net.pretronic.dkbans.api.event.DKBansJoinMeCreateEvent;
 import net.pretronic.dkbans.api.event.punish.DKBansPlayerPunishEvent;
 import net.pretronic.dkbans.api.event.punish.DKBansPlayerPunishUpdateEvent;
 import net.pretronic.dkbans.api.event.report.DKBansReportCreateEvent;
-import net.pretronic.dkbans.api.event.report.DKBansReportStateChangeEvent;
+import net.pretronic.dkbans.api.event.report.DKBansReportStateChangedEvent;
 import net.pretronic.dkbans.api.event.report.DKBansReportWatchEvent;
 import net.pretronic.dkbans.api.player.history.PunishmentType;
 import net.pretronic.dkbans.api.player.report.PlayerReportEntry;
@@ -105,7 +105,7 @@ public class PerformListener {
 
     @Listener
     @NetworkListener
-    public void onPlayerReportStateChange(DKBansReportStateChangeEvent event) {
+    public void onPlayerReportStateChange(DKBansReportStateChangedEvent event) {
         MessageComponent<?> message = event.getNewState() == ReportState.ACCEPTED ? Messages.REPORT_ACCEPTED : Messages.REPORT_DECLINED;
         for (PlayerReportEntry entry : event.getReport().getEntries()) {
             OnlineMinecraftPlayer player = McNative.getInstance().getLocal().getOnlinePlayer(entry.getReporterId());

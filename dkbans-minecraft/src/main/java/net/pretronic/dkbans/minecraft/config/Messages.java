@@ -126,7 +126,7 @@ public class Messages {
 
     public static MessageComponent<?> REPORT_COUNT_INFO = Text.ofMessageKey("dkbans.report.countInfo");
     public static MessageComponent<?> REPORT_ACCEPTED = Text.ofMessageKey("dkbans.report.accepted");
-    public static MessageComponent<?> REPORT_DECLINED = Text.ofMessageKey("dkbans.report.decline");
+    public static MessageComponent<?> REPORT_DECLINED = Text.ofMessageKey("dkbans.report.declined");
     public static MessageComponent<?> REPORT_NOTIFY = Text.ofMessageKey("dkbans.report.notify");
 
     public static MessageComponent<?> COMMAND_HISTORY_HELP = Text.ofMessageKey("dkbans.command.history.help");

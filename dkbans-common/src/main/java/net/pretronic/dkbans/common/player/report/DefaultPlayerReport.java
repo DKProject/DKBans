@@ -25,13 +25,13 @@ import net.pretronic.databasequery.api.query.result.QueryResultEntry;
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.event.report.DKBansReportWatchEvent;
-import net.pretronic.dkbans.api.event.report.DKBansReportStateChangeEvent;
+import net.pretronic.dkbans.api.event.report.DKBansReportStateChangedEvent;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.report.PlayerReport;
 import net.pretronic.dkbans.api.player.report.PlayerReportEntry;
 import net.pretronic.dkbans.api.player.report.ReportState;
 import net.pretronic.dkbans.common.DefaultDKBans;
-import net.pretronic.dkbans.common.event.report.DefaultDKBansReportStateChangeEvent;
+import net.pretronic.dkbans.common.event.report.DefaultDKBansReportStateChangedEvent;
 import net.pretronic.dkbans.common.event.report.DefaultDKBansReportWatchEvent;
 import net.pretronic.libraries.document.type.DocumentFileType;
 import net.pretronic.libraries.utility.Iterators;
@@ -94,8 +94,8 @@ public class DefaultPlayerReport implements PlayerReport {
                 .set("State",state)
                 .where("Id",id)
                 .execute();
-        DKBans.getInstance().getEventBus().callEvent(DKBansReportStateChangeEvent.class
-                ,new DefaultDKBansReportStateChangeEvent(this.id,oldState,state,this));
+        DKBans.getInstance().getEventBus().callEvent(DKBansReportStateChangedEvent.class
+                ,new DefaultDKBansReportStateChangedEvent(this.id,oldState,state,this));
     }
 
     @Override
