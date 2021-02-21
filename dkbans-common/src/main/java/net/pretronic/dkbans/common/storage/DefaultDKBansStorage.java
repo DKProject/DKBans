@@ -456,7 +456,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
         }
 
         return new DefaultPlayerHistoryEntrySnapshot(resultEntry.getInt("SnapshotId"),
-                entry.getId(),
+                entry != null ? entry.getId() : -1,
                 dkBans.getHistoryManager().getHistoryType(resultEntry.getInt("HistoryTypeId")),
                 PunishmentType.getPunishmentType(resultEntry.getString("PunishmentType")),
                 resultEntry.getString("Reason"),

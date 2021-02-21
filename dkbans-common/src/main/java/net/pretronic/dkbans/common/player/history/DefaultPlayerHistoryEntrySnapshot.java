@@ -214,6 +214,7 @@ public class DefaultPlayerHistoryEntrySnapshot implements PlayerHistoryEntrySnap
 
     @Internal
     public void setEntry(PlayerHistoryEntry entry) {
+        this.entryId = entry.getId();
         this.cachedEntry = entry;
     }
 }
