@@ -27,8 +27,21 @@ import net.pretronic.libraries.utility.exception.OperationFailedException;
 import org.mcnative.runtime.api.player.ConnectedMinecraftPlayer;
 
 import java.nio.charset.StandardCharsets;
+import java.util.UUID;
 
 public class LabyModIntegration {
+
+    public static void sendMutedPlayerTo(ConnectedMinecraftPlayer player, UUID target, boolean muted) {
+        Document voicechatObject = Document.newDocument();
+        Document mutePlayerObject = Document.newDocument();
+
+        mutePlayerObject.set("mute", muted );
+        mutePlayerObject.set("target", target );
+
+        voicechatObject.add("mute_player", mutePlayerObject);
+
+        sendLabyModMessage( player, "voicechat", voicechatObject );
+    }
 
     public static void changeVoiceChat(ConnectedMinecraftPlayer player,boolean allowed){
         Document document = Document.newDocument();
@@ -39,7 +52,7 @@ public class LabyModIntegration {
 
     public static void sendLabyModMessage(ConnectedMinecraftPlayer player,String key, Document document){
         String json = DocumentFileType.JSON.getWriter().write(document,false);
-        byte[] bytes = getBytesToSend( "voicechat", json);
+        byte[] bytes = getBytesToSend( key, json);
         player.sendData("LMC",bytes);
     }
 

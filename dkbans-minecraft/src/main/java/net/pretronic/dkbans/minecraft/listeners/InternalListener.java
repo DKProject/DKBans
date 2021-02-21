@@ -151,7 +151,10 @@ public class InternalListener {
                     .addDescribed("mute",event.getEntry())
                     .addDescribed("punish",event.getEntry())
                     .addDescribed("player",event.getPlayer()));
-            LabyModIntegration.changeVoiceChat(player,false);
+
+            for (ConnectedMinecraftPlayer onlinePlayer : McNative.getInstance().getLocal().getConnectedPlayers()) {
+                LabyModIntegration.sendMutedPlayerTo(onlinePlayer,player.getUniqueId(),true);
+            }
         }
 
         sendToStaff(event, Messages.PUNISH_MUTE_NOTIFY, "mute");
