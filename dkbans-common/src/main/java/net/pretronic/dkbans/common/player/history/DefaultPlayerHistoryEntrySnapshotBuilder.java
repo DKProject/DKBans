@@ -202,7 +202,7 @@ public class DefaultPlayerHistoryEntrySnapshotBuilder implements PlayerHistoryEn
             }
         }else{
             PlayerHistoryEntrySnapshot old = entry.getCurrent();
-            snapshot = new DefaultPlayerHistoryEntrySnapshot(entry.getId(), -1, historyType
+            snapshot = new DefaultPlayerHistoryEntrySnapshot(-1, entry.getId(), historyType
                     ,punishmentType, reason, timeout, template != null ? template.getId() : -1, staff.getUniqueId()
                     , scope, points, active,properties, revokeReason, revokeTemplate != null ? revokeTemplate.getId() : -1, true
                     , modifiedTime,modifier.getUniqueId(),entry,staff);
