@@ -31,6 +31,7 @@ import net.pretronic.dkbans.api.player.history.PlayerHistoryEntrySnapshotBuilder
 import net.pretronic.dkbans.api.player.history.PunishmentType;
 import net.pretronic.dkbans.api.player.ipaddress.IpAddressBlock;
 import net.pretronic.dkbans.api.player.ipaddress.IpAddressBlockType;
+import net.pretronic.dkbans.api.player.report.ReportState;
 import net.pretronic.dkbans.common.DKBansUtil;
 import net.pretronic.dkbans.minecraft.PlayerSettingsKey;
 import net.pretronic.dkbans.minecraft.config.DKBansConfig;
@@ -191,8 +192,12 @@ public class PlayerListener {
 
     @Listener(execution = ExecutionType.ASYNC)
     public void onPlayerDisconnect(MinecraftPlayerLogoutEvent event) {
-        event.getPlayer().getAs(DKBansPlayer.class).finishSession(event.getOnlinePlayer().getServer().getName(),
+        DKBansPlayer player = event.getPlayer().getAs(DKBansPlayer.class);
+        player.finishSession(event.getOnlinePlayer().getServer().getName(),
                 event.getOnlinePlayer().getServer().getIdentifier().getUniqueId());
+        if(player.getWatchingReport() != null){
+            player.getWatchingReport().setState(ReportState.NEW);
+        }
     }
 
     @Listener(priority = EventPriority.HIGHEST)

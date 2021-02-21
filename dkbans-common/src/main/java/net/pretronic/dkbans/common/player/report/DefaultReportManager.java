@@ -111,7 +111,9 @@ public class DefaultReportManager implements ReportManager {
                         query.where("State",ReportState.PROCESSING);
                         query.where("State",ReportState.WAITING);
                     }).execute());
-            reports.insert(report);
+            if(report != null){
+                reports.insert(report);
+            }
         }
         return report;
     }

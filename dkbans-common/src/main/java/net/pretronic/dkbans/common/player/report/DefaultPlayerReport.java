@@ -127,7 +127,7 @@ public class DefaultPlayerReport implements PlayerReport {
 
     @Override
     public boolean isWatched() {
-        return this.watcherId != null;
+        return this.watcherId != null && state == ReportState.PROCESSING;
     }
 
     @Override
