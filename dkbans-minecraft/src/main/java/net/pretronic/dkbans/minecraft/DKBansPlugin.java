@@ -23,9 +23,13 @@ package net.pretronic.dkbans.minecraft;
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.joinme.JoinMe;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
+import net.pretronic.dkbans.api.player.report.PlayerReport;
+import net.pretronic.dkbans.api.player.report.PlayerReportEntry;
 import net.pretronic.dkbans.api.template.TemplateGroup;
 import net.pretronic.dkbans.common.DefaultDKBans;
 import net.pretronic.dkbans.common.broadcast.BroadcastTask;
+import net.pretronic.dkbans.common.player.report.DefaultPlayerReport;
+import net.pretronic.dkbans.common.player.report.DefaultPlayerReportEntry;
 import net.pretronic.dkbans.minecraft.commands.*;
 import net.pretronic.dkbans.minecraft.commands.broadcast.BroadcastCommand;
 import net.pretronic.dkbans.minecraft.commands.broadcastgroup.BroadcastGroupCommand;
@@ -90,12 +94,23 @@ public class DKBansPlugin extends MinecraftPlugin {
         dkBans.getTemplateManager().initialize();
 
         loadConfigs();
-        registerCommands();
 
         dkBans.getFilterManager().initialize();
         dkBans.getMigrationManager().registerMigration(new DKBansLegacyMigration());
         initBroadcast();
 
+        registerListeners();
+        registerCommands();
+        registerDocumentAdapters();
+
+        getRuntime().getPlayerManager().registerPlayerAdapter(DKBansPlayer.class, player -> playerManager.getPlayer(player.getUniqueId()));
+        getRuntime().getRegistry().getService(PlaceholderProvider.class).registerPlaceHolders(this,"dkbans",new DKBansPlaceholders());
+        DescriberRegistrar.register();
+
+        getLogger().info("DKBans started successfully");
+    }
+
+    private void registerListeners(){
         getRuntime().getLocal().getEventBus().subscribe(this,new PlayerListener());
         if(getRuntime().isNetworkAvailable()){
             getRuntime().getNetwork().getEventBus().subscribe(this,new SyncListener(dkBans));
@@ -105,11 +120,6 @@ public class DKBansPlugin extends MinecraftPlugin {
         }else{
             getRuntime().getLocal().getEventBus().subscribe(this,new PerformListener());
         }
-        getRuntime().getPlayerManager().registerPlayerAdapter(DKBansPlayer.class, player -> playerManager.getPlayer(player.getUniqueId()));
-        getRuntime().getRegistry().getService(PlaceholderProvider.class).registerPlaceHolders(this,"dkbans",new DKBansPlaceholders());
-        DescriberRegistrar.register();
-
-        getLogger().info("DKBans started successfully");
     }
 
     private void registerCommands(){
@@ -179,6 +189,8 @@ public class DKBansPlugin extends MinecraftPlugin {
     }
     private void registerDocumentAdapters(){
         DocumentRegistry.getDefaultContext().registerMappingAdapter(JoinMe.class, MinecraftJoinMe.class);
+        DocumentRegistry.getDefaultContext().registerMappingAdapter(PlayerReport.class, DefaultPlayerReport.class);
+        DocumentRegistry.getDefaultContext().registerMappingAdapter(PlayerReportEntry.class, DefaultPlayerReportEntry.class);
     }
 
     private void loadConfigs() {
