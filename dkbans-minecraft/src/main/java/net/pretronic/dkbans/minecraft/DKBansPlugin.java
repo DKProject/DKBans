@@ -50,6 +50,7 @@ import net.pretronic.dkbans.minecraft.commands.unpunish.UnpunishCommand;
 import net.pretronic.dkbans.minecraft.config.CommandConfig;
 import net.pretronic.dkbans.minecraft.config.DKBansConfig;
 import net.pretronic.dkbans.minecraft.integration.DKBansPlaceholders;
+import net.pretronic.dkbans.minecraft.integration.labymod.LabyModServiceListener;
 import net.pretronic.dkbans.minecraft.joinme.MinecraftJoinMe;
 import net.pretronic.dkbans.minecraft.joinme.MinecraftJoinMeManager;
 import net.pretronic.dkbans.minecraft.listeners.PerformListener;
@@ -121,9 +122,15 @@ public class DKBansPlugin extends MinecraftPlugin {
                 getRuntime().getLocal().getEventBus().subscribe(this,new PlayerListener());
                 getRuntime().getNetwork().getEventBus().subscribe(this,new PerformListener());
             }
+            if(DKBansConfig.INTEGRATION_LABYMOD_ENABLED){
+                getRuntime().getNetwork().getEventBus().subscribe(this,new LabyModServiceListener());
+            }
         }else{
             getRuntime().getLocal().getEventBus().subscribe(this,new PlayerListener());
             getRuntime().getLocal().getEventBus().subscribe(this,new PerformListener());
+            if(DKBansConfig.INTEGRATION_LABYMOD_ENABLED){
+                getRuntime().getLocal().getEventBus().subscribe(this,new LabyModServiceListener());
+            }
         }
     }
 

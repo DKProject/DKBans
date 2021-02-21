@@ -46,6 +46,18 @@ public class LabyModIntegration {
         }
     }
 
+    public static void sendMutePlayer(ConnectedMinecraftPlayer player, UUID target, boolean muted) {
+        Document voicechatObject = Document.newDocument();
+        Document mutePlayerObject = Document.newDocument();
+
+        mutePlayerObject.set("mute", muted );
+        mutePlayerObject.set("target", target );
+
+        voicechatObject.add("mute_player", mutePlayerObject);
+
+        sendLabyModMessage( player, "voicechat", voicechatObject );
+    }
+
     public static void changeVoiceChat(ConnectedMinecraftPlayer player,boolean allowed){
         Document document = Document.newDocument();
         document.set("allowed",allowed);

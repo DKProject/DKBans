@@ -95,6 +95,9 @@ public class DKBansConfig {
     @DocumentIgnored
     public static long IP_ADDRESS_BLOCK_ALT_MIN_PLAYTIME_TIME = 0;
 
+    @DocumentKey("integration.labyModEnabled")
+    public static boolean INTEGRATION_LABYMOD_ENABLED = true;
+
     public static transient SimpleDateFormat FORMAT_DATE;
 
 
