@@ -176,7 +176,7 @@ public  class DefaultDKBansPlayer implements DKBansPlayer {
 
     @Override
     public PlayerReport getReport() {
-        return DKBans.getInstance().getReportManager().getReport(this.uniqueId);
+        return DKBans.getInstance().getReportManager().getOpenReport(this.uniqueId);
     }
 
     @Override

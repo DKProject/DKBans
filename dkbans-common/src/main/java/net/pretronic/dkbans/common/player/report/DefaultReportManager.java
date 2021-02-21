@@ -22,6 +22,7 @@ package net.pretronic.dkbans.common.player.report;
 
 import net.pretronic.databasequery.api.query.result.QueryResult;
 import net.pretronic.databasequery.api.query.result.QueryResultEntry;
+import net.pretronic.databasequery.api.query.type.SearchQuery;
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.event.report.DKBansReportCreateEvent;
@@ -61,14 +62,14 @@ public class DefaultReportManager implements ReportManager {
 
     @Override
     public int getReportCount() {
-        return getOpenReports().size();
+        return getNewReports().size();
     }
 
     @Override
-    public List<PlayerReport> getOpenReports() {
+    public List<PlayerReport> getNewReports() {
         if(loadedAllTimeout < System.currentTimeMillis()){
             QueryResult result = DefaultDKBans.getInstance().getStorage().getReports().find()
-                    .where("State",ReportState.OPEN).execute();
+                    .where("State",ReportState.NEW).execute();
             List<PlayerReport> reports = new ArrayList<>();
             for (QueryResultEntry entry : result) {
                 int id = entry.getInt("Id");
@@ -86,7 +87,7 @@ public class DefaultReportManager implements ReportManager {
             }
             return reports;
         }
-        return Iterators.filter(this.reports.getCachedObjects(), report -> report.getState() == ReportState.OPEN);
+        return Iterators.filter(this.reports.getCachedObjects(), report -> report.getState() == ReportState.NEW);
     }
 
     @Override
@@ -95,13 +96,24 @@ public class DefaultReportManager implements ReportManager {
     }
 
     @Override
-    public PlayerReport getReport(DKBansPlayer player) {
-        return getReport(player.getUniqueId());
+    public PlayerReport getReport(UUID uniqueId) {
+        return this.reports.get("get", uniqueId);
     }
 
     @Override
-    public PlayerReport getReport(UUID uniqueId) {
-        return this.reports.get("get", uniqueId);
+    public PlayerReport getOpenReport(UUID uniqueId) {
+        PlayerReport report = this.reports.get(report1 -> report1.getWatcherId().equals(uniqueId) && report1.getState().isOpen());
+        if(report == null){
+            report = loadReport(DefaultDKBans.getInstance().getStorage().getReports().find()
+                    .where("PlayerId",uniqueId)
+                    .or(query -> {
+                        query.where("Status",ReportState.NEW);
+                        query.where("Status",ReportState.PROCESSING);
+                        query.where("Status",ReportState.WAITING);
+                    }).execute());
+            reports.insert(report);
+        }
+        return report;
     }
 
     @Override
@@ -140,9 +152,9 @@ public class DefaultReportManager implements ReportManager {
     }
 
     private DefaultPlayerReport getReportOrCreate(DKBansPlayer target) {
-        PlayerReport report = this.reports.get(report0 -> report0.getPlayerId().equals(target.getUniqueId()));
+        PlayerReport report = getOpenReport(target.getUniqueId());
         if(report == null) {
-            report = DKBans.getInstance().getStorage().createPlayerReport(target, ReportState.OPEN);
+            report = DKBans.getInstance().getStorage().createPlayerReport(target, ReportState.NEW);
             this.reports.insert(report);
         }
         return (DefaultPlayerReport) report;

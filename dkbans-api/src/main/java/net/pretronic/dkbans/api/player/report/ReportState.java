@@ -22,11 +22,20 @@ package net.pretronic.dkbans.api.player.report;
 
 public enum ReportState {
 
-    OPEN(),
-    PROCESSING(),
-    WAITING(),
-    ACCEPTED(),
-    DECLINED(),
-    CLOSE(),
+    NEW(true),
+    PROCESSING(true),
+    WAITING(true),
+    ACCEPTED(false),
+    DECLINED(false),
+    COMPLETED(false);
 
+    private final boolean open;
+
+    ReportState(boolean open){
+        this.open = open;
+    }
+
+    public boolean isOpen() {
+        return open;
+    }
 }

@@ -303,8 +303,8 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 .set("ModifiedBy",snapshot.getModifiedBy().getUniqueId())
                 .set("ModifiedActive",snapshot.isModifiedActive());
        if(snapshot.getHistoryType() != null)  query.set("HistoryTypeId",snapshot.getHistoryType().getId());
-       if(snapshot.getRevokeTemplate() != null) query.set("RevokeTemplateId",snapshot.getRevokeTemplate().getId());
-       if(snapshot.getTemplate() != null) query.set("TemplateId",snapshot.getTemplate().getId());
+       if(snapshot.getRevokeTemplateId() > 0) query.set("RevokeTemplateId",snapshot.getRevokeTemplateId());
+       if(snapshot.getTemplateId() > 0) query.set("TemplateId",snapshot.getTemplateId());
        if(snapshot.getScope() != null){
            query.set("ScopeType",snapshot.getScope().getType())
                    .set("ScopeName",snapshot.getScope().getName())

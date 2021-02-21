@@ -98,7 +98,7 @@ public class PerformListener {
         OnlineMinecraftPlayer watcher = McNative.getInstance().getLocal().getOnlinePlayer(event.getReport().getWatcherId());
         if(watcher == null) return;
         OnlineMinecraftPlayer target = McNative.getInstance().getNetwork().getOnlinePlayer(event.getReport().getPlayerId());
-        if(target != null && !watcher.getServer().getName().equalsIgnoreCase(target.getName())){
+        if(target != null && !watcher.getServer().getName().equalsIgnoreCase(target.getServer().getName())){
             watcher.connect(target.getServer());
         }
     }

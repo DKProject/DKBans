@@ -165,7 +165,7 @@ public class PlayerListener {
         }
 
         if(DKBansConfig.PLAYER_ON_JOIN_LIST_REPORTS && player.hasPermission(Permissions.COMMAND_REPORT_STUFF)){
-            int openReports = DKBans.getInstance().getReportManager().getOpenReports().size();
+            int openReports = DKBans.getInstance().getReportManager().getNewReports().size();
             player.sendMessage(Messages.REPORT_COUNT_INFO,VariableSet.create().add("openReports",openReports));
         }
     }
