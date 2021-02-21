@@ -102,7 +102,7 @@ public class DefaultReportManager implements ReportManager {
 
     @Override
     public PlayerReport getOpenReport(UUID uniqueId) {
-        PlayerReport report = this.reports.get(report1 -> report1.getWatcherId().equals(uniqueId) && report1.getState().isOpen());
+        PlayerReport report = this.reports.get(report1 -> report1.getPlayerId().equals(uniqueId) && report1.getState().isOpen());
         if(report == null){
             report = loadReport(DefaultDKBans.getInstance().getStorage().getReports().find()
                     .where("PlayerId",uniqueId)
