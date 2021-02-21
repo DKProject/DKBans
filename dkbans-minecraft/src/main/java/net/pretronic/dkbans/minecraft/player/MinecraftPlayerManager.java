@@ -30,6 +30,7 @@ import net.pretronic.dkbans.common.player.DefaultDKBansPlayer;
 import net.pretronic.libraries.caching.ArrayCache;
 import net.pretronic.libraries.caching.Cache;
 import net.pretronic.libraries.caching.CacheQuery;
+import net.pretronic.libraries.caching.ShadowArrayCache;
 import net.pretronic.libraries.utility.Iterators;
 import net.pretronic.libraries.utility.Validate;
 import org.mcnative.runtime.api.McNative;
@@ -46,7 +47,7 @@ public class MinecraftPlayerManager implements DKBansPlayerManager {
     private final Collection<DKBansExecutor> specialExecutors;
 
     public MinecraftPlayerManager() {
-        this.players = new ArrayCache<>();
+        this.players = new ShadowArrayCache<>();
         this.players.setMaxSize(1024);
         this.players.setExpireAfterAccess(10, TimeUnit.MINUTES);
         this.players.registerQuery("get", new PlayerGetter());

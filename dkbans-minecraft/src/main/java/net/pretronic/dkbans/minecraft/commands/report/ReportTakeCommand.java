@@ -68,7 +68,7 @@ public class ReportTakeCommand extends BasicCommand {
                     .addDescribed("target", player)
                     .addDescribed("report", report));
         } else {
-            report.setWatcher(staff);
+            report.watch(staff);
             sender.sendMessage(Messages.COMMAND_REPORT_TAKE, VariableSet.create()
                     .addDescribed("target", player)
                     .addDescribed("report", report));

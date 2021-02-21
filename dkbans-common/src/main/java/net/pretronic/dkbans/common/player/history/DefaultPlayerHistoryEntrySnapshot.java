@@ -83,6 +83,11 @@ public class DefaultPlayerHistoryEntrySnapshot implements PlayerHistoryEntrySnap
     }
 
     @Override
+    public int getEntryId() {
+        return 0;
+    }
+
+    @Override
     public PlayerHistoryEntry getEntry() {
         return entry;
     }

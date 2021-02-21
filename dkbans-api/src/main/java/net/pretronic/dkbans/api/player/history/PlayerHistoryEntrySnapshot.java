@@ -29,10 +29,11 @@ import java.time.Duration;
 
 public interface PlayerHistoryEntrySnapshot {
 
+    int getEntryId();
+
     PlayerHistoryEntry getEntry();
 
     int getId();
-
 
     PlayerHistoryType getHistoryType();
 

@@ -30,7 +30,7 @@ import java.util.UUID;
 @NetworkEvent(ignoreNetworkException = true)
 public interface DKBansPlayerPunishUpdateEvent extends DKBansEvent {
 
-    UUID getUniqueId();
+    UUID getPlayerId();
 
     DKBansPlayer getPlayer();
 

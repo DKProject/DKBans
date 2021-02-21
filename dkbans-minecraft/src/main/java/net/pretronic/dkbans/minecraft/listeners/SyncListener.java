@@ -21,20 +21,58 @@ package net.pretronic.dkbans.minecraft.listeners;
 
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.event.DKBansJoinMeCreateEvent;
-import net.pretronic.dkbans.api.event.report.DKBansPlayerReportCreateEvent;
+import net.pretronic.dkbans.api.event.punish.DKBansPlayerPunishEvent;
+import net.pretronic.dkbans.api.event.punish.DKBansPlayerPunishUpdateEvent;
+import net.pretronic.dkbans.api.event.report.DKBansReportCreateEvent;
+import net.pretronic.dkbans.api.event.report.DKBansReportStateChangeEvent;
+import net.pretronic.dkbans.api.event.report.DKBansReportWatchEvent;
+import net.pretronic.dkbans.api.player.report.PlayerReport;
+import net.pretronic.dkbans.common.DefaultDKBans;
+import net.pretronic.dkbans.common.player.report.DefaultPlayerReport;
 import net.pretronic.libraries.event.EventPriority;
 import net.pretronic.libraries.event.network.NetworkListener;
 
 public class SyncListener {
 
-    @NetworkListener(priority = EventPriority.LOW,onlyRemote = true)
+    private final DefaultDKBans dkbans;
+
+    public SyncListener(DefaultDKBans dkbans) {
+        this.dkbans = dkbans;
+    }
+
+    @NetworkListener(priority = EventPriority.LOWEST,onlyRemote = true)
     public void onJoinMeCreate(DKBansJoinMeCreateEvent event) {
+        System.out.println("---> JOINME SYNC");
         DKBans.getInstance().getJoinMeManager().registerJoinMe(event.getJoinMe());
     }
 
-    @NetworkListener(priority = EventPriority.LOW,onlyRemote = true)
-    public void onPlayerReportCreate(DKBansPlayerReportCreateEvent event) {
+    @NetworkListener(priority = EventPriority.LOWEST,onlyRemote = true)
+    public void onPlayerPunish(DKBansPlayerPunishEvent event){
+        System.out.println("---> PUNISH SYNC");
 
+    }
+
+    @NetworkListener(priority = EventPriority.LOWEST,onlyRemote = true)
+    public void onPlayerPunishUpdate(DKBansPlayerPunishUpdateEvent event){
+
+    }
+
+    @NetworkListener(priority = EventPriority.LOWEST,onlyRemote = true)
+    public void onPlayerReportCreate(DKBansReportCreateEvent event) {
+        PlayerReport report = dkbans.getReportManager().getLoadedReport(event.getReportId());
+        if(report != null) ((DefaultPlayerReport) report).addEntry(event.getReportEntry());
+    }
+
+    @NetworkListener(priority = EventPriority.LOWEST,onlyRemote = true)
+    public void onPlayerReportTake(DKBansReportWatchEvent event) {
+        PlayerReport report = dkbans.getReportManager().getLoadedReport(event.getReportId());
+        if(report != null) ((DefaultPlayerReport) report).changeWatcher(event.getWatcherId());
+    }
+
+    @NetworkListener(priority = EventPriority.LOWEST,onlyRemote = true)
+    public void onPlayerReportAccept(DKBansReportStateChangeEvent event) {
+        PlayerReport report = dkbans.getReportManager().getLoadedReport(event.getReportId());
+        if(report != null) ((DefaultPlayerReport) report).changeStatus(event.getNewState());
     }
 
 }

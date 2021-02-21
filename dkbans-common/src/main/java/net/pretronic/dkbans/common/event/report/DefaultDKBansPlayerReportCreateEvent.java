@@ -1,9 +1,8 @@
 /*
- * (C) Copyright 2020 The DKBans Project (Davide Wietlisbach & Philipp Elvin Friedhoff)
+ * (C) Copyright 2021 The DKBans Project (Davide Wietlisbach & Philipp Elvin Friedhoff)
  *
- * @author Philipp Elvin Friedhoff
- * @since 21.06.20, 17:28
- * @web %web%
+ * @author Davide Wietlisbach
+ * @since 21.02.21, 13:20
  *
  * The DKBans Project is under the Apache License, version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,34 +17,45 @@
  * under the License.
  */
 
-package net.pretronic.dkbans.common.event;
+package net.pretronic.dkbans.common.event.report;
 
-import net.pretronic.dkbans.api.event.report.DKBansPlayerReportTakeEvent;
+import net.pretronic.dkbans.api.event.report.DKBansReportCreateEvent;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.report.PlayerReport;
+import net.pretronic.dkbans.api.player.report.PlayerReportEntry;
 
 import java.util.UUID;
 
-public class DefaultDKBansPlayerReportTakeEvent implements DKBansPlayerReportTakeEvent {
+public class DefaultDKBansPlayerReportCreateEvent implements DKBansReportCreateEvent {
 
-   private final PlayerReport report;
+    private final PlayerReportEntry entry;
 
-    public DefaultDKBansPlayerReportTakeEvent(PlayerReport report) {
-        this.report = report;
+    public DefaultDKBansPlayerReportCreateEvent(PlayerReportEntry entry) {
+        this.entry = entry;
+    }
+
+    @Override
+    public PlayerReportEntry getReportEntry() {
+        return this.entry;
+    }
+
+    @Override
+    public int getReportId() {
+        return entry.getReportId();
     }
 
     @Override
     public PlayerReport getReport() {
-        return this.report;
+        return entry.getReport();
     }
 
     @Override
     public UUID getPlayerId() {
-        return null;
+        return entry.getReport().getPlayerId();
     }
 
     @Override
     public DKBansPlayer getPlayer() {
-        return null;
+        return entry.getReport().getPlayer();
     }
 }

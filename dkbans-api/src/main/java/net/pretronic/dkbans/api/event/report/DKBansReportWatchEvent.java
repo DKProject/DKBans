@@ -19,12 +19,18 @@
 
 package net.pretronic.dkbans.api.event.report;
 
-import net.pretronic.dkbans.api.player.report.PlayerReportEntry;
+import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.libraries.event.network.NetworkEvent;
 
-@NetworkEvent(ignoreNetworkException = true)
-public interface DKBansPlayerReportCreateEvent extends DKBansPlayerReportEvent {
+import java.util.UUID;
 
-    PlayerReportEntry getReportEntry();
+@NetworkEvent(ignoreNetworkException = true)
+public interface DKBansReportWatchEvent extends DKBansReportEvent {
+
+
+
+    UUID getWatcherId();
+
+    DKBansExecutor getWatcher();
 
 }

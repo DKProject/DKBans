@@ -32,6 +32,8 @@ public interface ReportManager {
 
     List<PlayerReport> getOpenReports();
 
+    PlayerReport getReport(int reportId);
+
     PlayerReport getReport(DKBansPlayer player);
 
     PlayerReport getReport(UUID uniqueId);

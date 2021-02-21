@@ -33,29 +33,33 @@ import java.util.UUID;
 public class DefaultPlayerReportEntry implements PlayerReportEntry {
 
     private final int id;
-    private final PlayerReport report;
+    private final int reportId;
     private final UUID reporterId;
-    private final int tempalteId;
+    private final int templateId;
     private final String reason;
     private final String serverName;
     private final UUID serverId;
     private final long time;
     private final Document properties;
 
-    private DKBansExecutor reporter;
+    private transient PlayerReport cachedReport;
+    private transient DKBansExecutor cachedReporter;
 
-    public DefaultPlayerReportEntry(int id, PlayerReport report, UUID reporterId, int tempalteId, String reason,
-                                    String serverName, UUID serverId, long time, Document properties) {
-        Validate.notNull(report, reporterId);
+    public DefaultPlayerReportEntry(int id, int reportId, UUID reporterId, int templateId, String reason,
+                                    String serverName, UUID serverId, long time,
+                                    Document properties,PlayerReport cachedReport,DKBansExecutor cachedReporter) {
         this.id = id;
-        this.report = report;
+        this.reportId = reportId;
         this.reporterId = reporterId;
-        this.tempalteId = tempalteId;
+        this.templateId = templateId;
         this.reason = reason;
         this.serverName = serverName;
         this.serverId = serverId;
         this.time = time;
         this.properties = properties;
+
+        this.cachedReport = cachedReport;
+        this.cachedReporter = cachedReporter;
     }
 
     @Override
@@ -64,8 +68,14 @@ public class DefaultPlayerReportEntry implements PlayerReportEntry {
     }
 
     @Override
+    public int getReportId() {
+        return reportId;
+    }
+
+    @Override
     public PlayerReport getReport() {
-        return this.report;
+        if(cachedReport == null) cachedReport =DKBans.getInstance().getReportManager().getReport(reportId);
+        return this.cachedReport;
     }
 
     @Override
@@ -75,15 +85,18 @@ public class DefaultPlayerReportEntry implements PlayerReportEntry {
 
     @Override
     public DKBansExecutor getReporter() {
-        if(reporter == null){
-            reporter = DKBans.getInstance().getPlayerManager().getPlayer(this.reporterId);
-        }
-        return this.reporter;
+        if(cachedReporter == null) cachedReporter = DKBans.getInstance().getPlayerManager().getPlayer(this.reporterId);
+        return this.cachedReporter;
+    }
+
+    @Override
+    public int getTemplateId() {
+        return templateId;
     }
 
     @Override
     public ReportTemplate getTemplate() {
-        return (ReportTemplate) DKBans.getInstance().getTemplateManager().getTemplate(tempalteId);
+        return (ReportTemplate) DKBans.getInstance().getTemplateManager().getTemplate(templateId);
     }
 
     @Override

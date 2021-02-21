@@ -237,8 +237,8 @@ public  class DefaultDKBansPlayer implements DKBansPlayer {
     }
 
     @Override
-    public DKBansPlayer getPlayer() {
-         return this;
+    public DKBansPlayer getAsPlayer() {
+        return this;
     }
 
     @Override
