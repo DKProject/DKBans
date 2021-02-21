@@ -26,9 +26,12 @@ import net.pretronic.dkbans.api.player.history.PunishmentType;
 import net.pretronic.libraries.event.Listener;
 import net.pretronic.libraries.event.execution.ExecutionType;
 import net.pretronic.libraries.event.network.NetworkListener;
+import net.pretronic.libraries.utility.interfaces.ObjectOwner;
 import org.mcnative.runtime.api.McNative;
 import org.mcnative.runtime.api.event.player.login.MinecraftPlayerPostLoginEvent;
 import org.mcnative.runtime.api.player.ConnectedMinecraftPlayer;
+
+import java.util.concurrent.TimeUnit;
 
 public class LabyModServiceListener {
 
@@ -39,13 +42,15 @@ public class LabyModServiceListener {
         if(player.hasActivePunish(PunishmentType.MUTE)){
             LabyModIntegration.sendMutePlayer(McNative.getInstance().getLocal().getConnectedPlayers(),player.getUniqueId(),true);
         }
-        for (ConnectedMinecraftPlayer target : McNative.getInstance().getLocal().getConnectedPlayers()) {
-            System.out.println(target.getUniqueId()+" <- check");
-            if(target.getAs(DKBansPlayer.class).hasActivePunish(PunishmentType.MUTE)){
-                System.out.println("MUTED");
-                LabyModIntegration.sendMutePlayer(event.getPlayer().getAsConnectedPlayer(),target.getUniqueId(),true);
+        McNative.getInstance().getScheduler().createTask(ObjectOwner.SYSTEM).delay(2, TimeUnit.SECONDS).execute(() -> {
+            for (ConnectedMinecraftPlayer target : McNative.getInstance().getLocal().getConnectedPlayers()) {
+                System.out.println(target.getUniqueId()+" <- check");
+                if(target.getAs(DKBansPlayer.class).hasActivePunish(PunishmentType.MUTE)){
+                    System.out.println("MUTED");
+                    LabyModIntegration.sendMutePlayer(event.getPlayer().getAsConnectedPlayer(),target.getUniqueId(),true);
+                }
             }
-        }
+        });
     }
 
     @Listener(execution = ExecutionType.ASYNC)
