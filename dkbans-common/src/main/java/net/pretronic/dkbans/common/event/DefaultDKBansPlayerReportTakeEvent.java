@@ -21,7 +21,10 @@
 package net.pretronic.dkbans.common.event;
 
 import net.pretronic.dkbans.api.event.report.DKBansPlayerReportTakeEvent;
+import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.report.PlayerReport;
+
+import java.util.UUID;
 
 public class DefaultDKBansPlayerReportTakeEvent implements DKBansPlayerReportTakeEvent {
 
@@ -34,5 +37,15 @@ public class DefaultDKBansPlayerReportTakeEvent implements DKBansPlayerReportTak
     @Override
     public PlayerReport getReport() {
         return this.report;
+    }
+
+    @Override
+    public UUID getPlayerId() {
+        return null;
+    }
+
+    @Override
+    public DKBansPlayer getPlayer() {
+        return null;
     }
 }

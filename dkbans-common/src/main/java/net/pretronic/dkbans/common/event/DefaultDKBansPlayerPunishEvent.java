@@ -24,6 +24,8 @@ import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryEntry;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryEntrySnapshot;
 
+import java.util.UUID;
+
 public class DefaultDKBansPlayerPunishEvent implements DKBansPlayerPunishEvent {
 
     private final DKBansPlayer player;
@@ -32,6 +34,11 @@ public class DefaultDKBansPlayerPunishEvent implements DKBansPlayerPunishEvent {
     public DefaultDKBansPlayerPunishEvent(DKBansPlayer player, PlayerHistoryEntrySnapshot snapshot) {
         this.player = player;
         this.snapshot = snapshot;
+    }
+
+    @Override
+    public UUID getPlayerId() {
+        return null;
     }
 
     @Override
