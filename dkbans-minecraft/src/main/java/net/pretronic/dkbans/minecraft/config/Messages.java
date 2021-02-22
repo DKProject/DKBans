@@ -185,6 +185,7 @@ public class Messages {
 
     public static MessageComponent<?> COMMAND_REPORT_TAKE_USAGE = Text.ofMessageKey("dkbans.command.report.take.usage");
     public static MessageComponent<?> COMMAND_REPORT_TAKE = Text.ofMessageKey("dkbans.command.report.take");
+    public static MessageComponent<?> COMMAND_REPORT_TAKE_NO_PERMISSION = Text.ofMessageKey("dkbans.command.report.take.noPermission");
     public static MessageComponent<?> COMMAND_REPORT_NOT_REPORTED = Text.ofMessageKey("dkbans.command.report.take.notReported");
     public static MessageComponent<?> COMMAND_REPORT_TAKE_ALREADY = Text.ofMessageKey("dkbans.command.report.take.already");
 

@@ -37,7 +37,7 @@ public class ReportAcceptCommand extends BasicCommand {
     public ReportAcceptCommand(ObjectOwner owner) {
         super(owner, CommandConfiguration.newBuilder()
                 .name("accept")
-                .permission(Permissions.COMMAND_REPORT_STUFF).create());
+                .permission(Permissions.COMMAND_REPORT_STAFF).create());
     }
 
     @Override

@@ -33,7 +33,7 @@ import org.mcnative.runtime.api.player.OnlineMinecraftPlayer;
 public class ReportLogoutCommand extends BasicCommand {
 
     public ReportLogoutCommand(ObjectOwner owner) {
-        super(owner, CommandConfiguration.newBuilder().name("logout").permission(Permissions.COMMAND_REPORT_STUFF).create());
+        super(owner, CommandConfiguration.newBuilder().name("logout").permission(Permissions.COMMAND_REPORT_STAFF).create());
     }
 
     @Override

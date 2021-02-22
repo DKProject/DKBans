@@ -246,6 +246,7 @@ messages:
   ${dkbans.prefix.report} &7Action&8: !["&8[&aACCEPT&8]"]("run:///ban {target.name}") !["&8[&cDECLINE&8]"]("run:///report decline")'
   dkbans.command.report.take.notReported: '${dkbans.prefix.report} &cThe player &e{target.displayName} &cis not reported'
   dkbans.command.report.take.already: '${dkbans.prefix.report} &cThe report of &e{target.displayName} &chas already been taken'
+  dkbans.command.report.take.noPermission: '${dkbans.prefix.report} &cYou are not allowed to watch this report'
 
   dkbans.command.report.decline: '${dkbans.prefix.report} &7You have declined the report about &e{report.player.displayName}'
   dkbans.command.report.accept: '${dkbans.prefix.report} &7You have accepted the report about &e{report.player.displayName}'

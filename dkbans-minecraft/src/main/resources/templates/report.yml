@@ -6,6 +6,7 @@ templates:
     name: Hacking
     display: Hacking
     permission: dkbans.report
+    watchPermission: dkbans.report.staff
     aliases:
       - hacking
     hidden: false
@@ -15,6 +16,7 @@ templates:
     name: Provocation
     display: Provocation
     permission: dkbans.report
+    watchPermission: dkbans.report.staff
     aliases:
       - hacking
     hidden: false
@@ -24,6 +26,7 @@ templates:
     name: Insult
     display: Insult
     permission: dkbans.report
+    watchPermission: dkbans.report.staff
     aliases:
       - chat
     hidden: false
@@ -33,5 +36,6 @@ templates:
     name: Other
     display: Other
     permission: dkbans.report
+    watchPermission: dkbans.report.staff
     hidden: false
     category: Reports

@@ -22,6 +22,7 @@ package net.pretronic.dkbans.minecraft.commands.report;
 
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.report.PlayerReport;
+import net.pretronic.dkbans.api.player.report.PlayerReportEntry;
 import net.pretronic.dkbans.minecraft.commands.CommandUtil;
 import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.dkbans.minecraft.config.Permissions;
@@ -36,7 +37,10 @@ import org.mcnative.runtime.api.player.OnlineMinecraftPlayer;
 public class ReportTakeCommand extends BasicCommand {
 
     public ReportTakeCommand(ObjectOwner owner) {
-        super(owner, CommandConfiguration.newBuilder().name("take").permission(Permissions.COMMAND_REPORT_STUFF).create());
+        super(owner, CommandConfiguration.newBuilder()
+                .name("watch")
+                .aliases("take")
+                .permission(Permissions.COMMAND_REPORT_STAFF).create());
     }
 
     @Override
@@ -68,10 +72,25 @@ public class ReportTakeCommand extends BasicCommand {
                     .addDescribed("target", player)
                     .addDescribed("report", report));
         } else {
-            report.watch(staff);
-            sender.sendMessage(Messages.COMMAND_REPORT_TAKE, VariableSet.create()
-                    .addDescribed("target", player)
-                    .addDescribed("report", report));
+            boolean hasTemplate = false;
+            boolean allowed = false;
+            for (PlayerReportEntry entry : report.getEntries()) {
+                if(entry.getTemplate() != null){
+                    hasTemplate = true;
+                    if(sender.hasPermission(entry.getTemplate().getWatchPermission())) allowed = true;
+                }
+            }
+
+            if(!hasTemplate || allowed){
+                report.watch(staff);
+                sender.sendMessage(Messages.COMMAND_REPORT_TAKE, VariableSet.create()
+                        .addDescribed("target", player)
+                        .addDescribed("report", report));
+            }else{
+                sender.sendMessage(Messages.COMMAND_REPORT_TAKE_NO_PERMISSION, VariableSet.create()
+                        .addDescribed("target", player)
+                        .addDescribed("report", report));
+            }
         }
     }
 }

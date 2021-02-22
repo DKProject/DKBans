@@ -83,7 +83,7 @@ public class PerformListener {
     @NetworkListener
     public void onPlayerReportCreate(DKBansReportCreateEvent event) {
         for (ConnectedMinecraftPlayer player : McNative.getInstance().getLocal().getConnectedPlayers()) {
-            if(player.hasPermission(Permissions.COMMAND_REPORT_STUFF)) {
+            if(player.hasPermission(Permissions.COMMAND_REPORT_STAFF)) {
                 player.sendMessage(Messages.REPORT_NOTIFY, VariableSet.create()
                         .addDescribed("player",event.getPlayer())
                         .addDescribed("report", event.getReportEntry()));

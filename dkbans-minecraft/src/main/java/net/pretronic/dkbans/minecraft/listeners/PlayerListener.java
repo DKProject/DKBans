@@ -157,7 +157,7 @@ public class PlayerListener {
                     .add("statusFormatted", teamChat ? Messages.STAFF_STATUS_LOGIN :  Messages.STAFF_STATUS_LOGOUT));
         }
 
-        if(DKBansConfig.PLAYER_ON_JOIN_INFO_REPORT && player.hasPermission(Permissions.COMMAND_REPORT_STUFF)){
+        if(DKBansConfig.PLAYER_ON_JOIN_INFO_REPORT && player.hasPermission(Permissions.COMMAND_REPORT_STAFF)){
             boolean report = event.getPlayer().hasSetting("DKBans", PlayerSettingsKey.REPORT_CHAT_LOGIN,true);
             player.sendMessage(Messages.STAFF_STATUS_NOW,VariableSet.create()
                     .add("prefix",Messages.PREFIX_REPORT)
@@ -165,7 +165,7 @@ public class PlayerListener {
                     .add("statusFormatted", report ? Messages.STAFF_STATUS_LOGIN :  Messages.STAFF_STATUS_LOGOUT));
         }
 
-        if(DKBansConfig.PLAYER_ON_JOIN_LIST_REPORTS && player.hasPermission(Permissions.COMMAND_REPORT_STUFF)){
+        if(DKBansConfig.PLAYER_ON_JOIN_LIST_REPORTS && player.hasPermission(Permissions.COMMAND_REPORT_STAFF)){
             int openReports = DKBans.getInstance().getReportManager().getNewReports().size();
             player.sendMessage(Messages.REPORT_COUNT_INFO,VariableSet.create().add("openReports",openReports));
         }
