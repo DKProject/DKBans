@@ -1102,7 +1102,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
     private DatabaseCollection createBroadcastCollection() {
         return database.createCollection("dkbans_broadcast")
                 .field("Id", DataType.INTEGER, FieldOption.PRIMARY_KEY, FieldOption.AUTO_INCREMENT)
-                .field("Name", DataType.STRING, FieldOption.NOT_NULL, FieldOption.UNIQUE)
+                .field("Name", DataType.STRING, FieldOption.NOT_NULL)//, FieldOption.UNIQUE
                 .field("Visibility", DataType.STRING, FieldOption.NOT_NULL)
                 .field("Properties", DataType.LONG_TEXT, FieldOption.NOT_NULL)
                 .create();
@@ -1111,7 +1111,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
     private DatabaseCollection createBroadcastGroupCollection() {
         return database.createCollection("dkbans_broadcast_group")
                 .field("Id", DataType.INTEGER, FieldOption.PRIMARY_KEY, FieldOption.AUTO_INCREMENT)
-                .field("Name", DataType.STRING, FieldOption.NOT_NULL, FieldOption.UNIQUE)
+                .field("Name", DataType.STRING, FieldOption.NOT_NULL)//, FieldOption.UNIQUE
                 .field("Enabled", DataType.BOOLEAN, FieldOption.NOT_NULL)
                 .field("Permission", DataType.STRING)
                 .field("Interval", DataType.LONG, FieldOption.NOT_NULL)
