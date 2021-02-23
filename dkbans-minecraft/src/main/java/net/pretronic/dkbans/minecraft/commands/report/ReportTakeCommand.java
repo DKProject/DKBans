@@ -77,7 +77,9 @@ public class ReportTakeCommand extends BasicCommand {
             for (PlayerReportEntry entry : report.getEntries()) {
                 if(entry.getTemplate() != null){
                     hasTemplate = true;
-                    if(sender.hasPermission(entry.getTemplate().getWatchPermission())) allowed = true;
+                    if(entry.getTemplate().getWatchPermission() == null || sender.hasPermission(entry.getTemplate().getWatchPermission())){
+                        allowed = true;
+                    }
                 }
             }
 
