@@ -209,7 +209,7 @@ messages:
  dkbans.command.report.listTemplates.loop: '![" &8- &c{template.inGroupId} &8| &c{template.displayName}"]("run:///{command} {selectedPlayer} {template.inGroupId}")'
  dkbans.command.report.take.Nutze: '${dkbans.prefix.report} &cNutze&8: &7/report take <name>'
  dkbans.command.report.take: '${dkbans.prefix.report} &7Du hast die Meldung über &e{target.displayName} &7übernommen'
- ${dkbans.prefix.report} &7Action&8: !["&8[&aACCEPT&8]"]("run:///ban {target.name}") !["&8[&cDECLINE&8]"]("run:///report decline")'
+ ${dkbans.prefix.report} &7Action&8: '!["&8[&aACCEPT&8]"]("run:///ban {target.name}") !["&8[&cDECLINE&8]"]("run:///report decline")'
  dkbans.command.report.take.notReported: '${dkbans.prefix.report} &cDer Spieler &e{target.displayName} &cwurde nicht gemeldet'
  dkbans.command.report.take.already: '${dkbans.prefix.report} &cDie Meldung über &e{target.displayName} &cwird bereits bearbeitet'
   dkbans.command.report.take.noPermission: '${dkbans.prefix.report} &cDu darfst diesen Report nicht bearbeiten'
@@ -395,11 +395,11 @@ messages:
   @for("assignment" in {assignments},${dkbans.command.broadcast.group.assignment.list.loop},"\n","\n")'
  dkbans.command.broadcast.group.assignment.list.loop: '&8» &7Id&8: &e{assignment.id} &7Name&8: &e{assignment.broadcast.name} &7Position&8: &e {assignment.position}'
  dkbans.command.broadcast.group.assignment.notFound: '${dkbans.prefix} &cKeine Zuweisungen für &e{assignment} &cgefunden'
- dkbans.command.broadcast.group.assignment.info: '${dkbans.prefix} &6Zuweisung's Information
+ dkbans.command.broadcast.group.assignment.info: '${dkbans.prefix} &6Zuweisung''s Information
   &8» &7Id&8: &e{assignment.id}
   &8» &7Name&8: &e{assignment.broadcast.name}
-  &8» &7Position&8: &e{assignment.position}'
-  dkbans.command.broadcast.group.assignment.remove: '${dkbans.prefix} &7Du hast die Zuweisung mit der ID &e{assignment.id} &7entfernt'
+  &8» &7Position&8: &e{assignment.position}'F
+ dkbans.command.broadcast.group.assignment.remove: '${dkbans.prefix} &7Du hast die Zuweisung mit der ID &e{assignment.id} &7entfernt'
  dkbans.command.broadcast.group.assignment.add: '${dkbans.prefix} &7Du hast die Zuweisung &e{assignment.id} &7hinzugefügt'
  dkbans.command.broadcast.create.help: '${dkbans.prefix} &cFalsche Verwendung von &ebroadcast create &ccommand&8:
   &7/broadcast <name> create <visibility> <text>'
