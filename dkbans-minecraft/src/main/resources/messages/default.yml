@@ -304,7 +304,6 @@ messages:
   &8» &7UniqueId&8: &e{player.uniqueId}
 
   &8» &7FirstLogin&8: &e{player.firstLoginFormatted}
-  &8» &7Proxy&8: &e{player.proxy}
   &8» &7Server&8: &e{player.server}
   &8» &7OnlineTime&8: &e{player.onlineTimeFormatted}
 
