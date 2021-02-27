@@ -126,7 +126,7 @@ public class Messages {
 
     public static MessageComponent<?> REPORT_COUNT_INFO = Text.ofMessageKey("dkbans.report.countInfo");
     public static MessageComponent<?> REPORT_ACCEPTED = Text.ofMessageKey("dkbans.report.accepted");
-    public static MessageComponent<?> REPORT_DECLINED = Text.ofMessageKey("dkbans.report.decline");
+    public static MessageComponent<?> REPORT_DECLINED = Text.ofMessageKey("dkbans.report.declined");
     public static MessageComponent<?> REPORT_NOTIFY = Text.ofMessageKey("dkbans.report.notify");
 
     public static MessageComponent<?> COMMAND_HISTORY_HELP = Text.ofMessageKey("dkbans.command.history.help");
@@ -185,6 +185,7 @@ public class Messages {
 
     public static MessageComponent<?> COMMAND_REPORT_TAKE_USAGE = Text.ofMessageKey("dkbans.command.report.take.usage");
     public static MessageComponent<?> COMMAND_REPORT_TAKE = Text.ofMessageKey("dkbans.command.report.take");
+    public static MessageComponent<?> COMMAND_REPORT_TAKE_NO_PERMISSION = Text.ofMessageKey("dkbans.command.report.take.noPermission");
     public static MessageComponent<?> COMMAND_REPORT_NOT_REPORTED = Text.ofMessageKey("dkbans.command.report.take.notReported");
     public static MessageComponent<?> COMMAND_REPORT_TAKE_ALREADY = Text.ofMessageKey("dkbans.command.report.take.already");
 

@@ -54,6 +54,11 @@ public class MinecraftJoinMe implements JoinMe {
     }
 
     @Override
+    public UUID getPlayerId() {
+        return playerId;
+    }
+
+    @Override
     public DKBansPlayer getPlayer() {
         return DKBans.getInstance().getPlayerManager().getPlayer(this.playerId);
     }
@@ -72,7 +77,6 @@ public class MinecraftJoinMe implements JoinMe {
     public void setTimeout(long timeout) {
         this.timeout = timeout;
     }
-
 
     public List<MessageComponent<?>> create(){
         List<MessageComponent<?>> components = new ArrayList<>();

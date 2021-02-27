@@ -83,7 +83,7 @@ public class DefaultPunishmentTemplate extends DefaultTemplate implements Punish
         PunishmentTemplateEntry entry = getNextEntry(player);
         builder.historyType(getHistoryType())
                 .punishmentType(entry.getType())
-                .stuff(executor)
+                .staff(executor)
                 .reason(getDisplayName())
                 .template(this)
                 .points(addedPoints);

@@ -19,26 +19,40 @@
 
 package net.pretronic.dkbans.common.event;
 
+import net.pretronic.dkbans.api.DKBans;
+import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.event.punish.DKBansPlayerPunishUpdateEvent;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryEntry;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryEntrySnapshot;
 
+import java.util.UUID;
+
 public class DefaultDKBansPlayerPunishUpdateEvent implements DKBansPlayerPunishUpdateEvent {
 
-    private final DKBansPlayer player;
+    private final UUID playerId;
     private final PlayerHistoryEntrySnapshot oldSnapshot;
     private final PlayerHistoryEntrySnapshot newSnapshot;
 
-    public DefaultDKBansPlayerPunishUpdateEvent(DKBansPlayer player, PlayerHistoryEntrySnapshot oldSnapshot, PlayerHistoryEntrySnapshot newSnapshot) {
-        this.player = player;
+    private transient DKBansPlayer cachedPlayer;
+
+    public DefaultDKBansPlayerPunishUpdateEvent(PlayerHistoryEntrySnapshot oldSnapshot, PlayerHistoryEntrySnapshot newSnapshot,UUID playerId, DKBansPlayer cachedPlayer) {
         this.oldSnapshot = oldSnapshot;
         this.newSnapshot = newSnapshot;
+        this.playerId = playerId;
+
+        this.cachedPlayer = cachedPlayer;
+    }
+
+    @Override
+    public UUID getPlayerId() {
+        return playerId;
     }
 
     @Override
     public DKBansPlayer getPlayer() {
-        return player;
+        if(cachedPlayer == null) cachedPlayer = DKBans.getInstance().getPlayerManager().getPlayer(playerId);
+        return cachedPlayer;
     }
 
     @Override

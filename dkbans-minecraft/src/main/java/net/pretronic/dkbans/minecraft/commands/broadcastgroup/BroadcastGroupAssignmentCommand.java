@@ -41,7 +41,6 @@ public class BroadcastGroupAssignmentCommand extends ObjectCommand<BroadcastGrou
 
     @Override
     public void execute(CommandSender commandSender, BroadcastGroup group, String[] args) {
-        System.out.println("Assignment:" + Arrays.toString(args) + ":" + group);
         if(args.length == 0 || args[0].equalsIgnoreCase("list")) {
             list(commandSender, group);
         } else if(args[0].equalsIgnoreCase("help")) {

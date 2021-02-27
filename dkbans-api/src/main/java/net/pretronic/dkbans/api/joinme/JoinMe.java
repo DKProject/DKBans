@@ -22,7 +22,11 @@ package net.pretronic.dkbans.api.joinme;
 
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 
+import java.util.UUID;
+
 public interface JoinMe {
+
+    UUID getPlayerId();
 
     DKBansPlayer getPlayer();
 

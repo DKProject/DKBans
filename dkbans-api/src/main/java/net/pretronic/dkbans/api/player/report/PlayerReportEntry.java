@@ -30,11 +30,15 @@ public interface PlayerReportEntry {
 
     int getId();
 
+    int getReportId();
+
     PlayerReport getReport();
 
     UUID getReporterId();
 
     DKBansExecutor getReporter();
+
+    int getTemplateId();
 
     ReportTemplate getTemplate();
 

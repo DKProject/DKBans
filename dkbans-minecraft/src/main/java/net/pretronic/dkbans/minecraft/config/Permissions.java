@@ -42,7 +42,7 @@ public class Permissions {
 
     public static final String COMMAND_TEAMCHAT_SEND = "dkbans.teamchat.send";
 
-    public static final String COMMAND_REPORT_STUFF = "dkbans.report.stuff";
+    public static final String COMMAND_REPORT_STAFF = "dkbans.report.staff";
 
     public static final String COMMAND_JOINME = "dkbans.joinme";
 

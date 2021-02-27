@@ -31,13 +31,16 @@ import net.pretronic.dkbans.api.player.history.PlayerHistoryEntrySnapshotBuilder
 import net.pretronic.dkbans.api.player.history.PunishmentType;
 import net.pretronic.dkbans.api.player.ipaddress.IpAddressBlock;
 import net.pretronic.dkbans.api.player.ipaddress.IpAddressBlockType;
+import net.pretronic.dkbans.api.player.report.ReportState;
 import net.pretronic.dkbans.common.DKBansUtil;
 import net.pretronic.dkbans.minecraft.PlayerSettingsKey;
 import net.pretronic.dkbans.minecraft.config.DKBansConfig;
 import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.dkbans.minecraft.config.Permissions;
+import net.pretronic.dkbans.minecraft.integration.labymod.LabyModIntegration;
 import net.pretronic.libraries.event.EventPriority;
 import net.pretronic.libraries.event.Listener;
+import net.pretronic.libraries.event.execution.ExecutionType;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
 import net.pretronic.libraries.utility.map.Pair;
 import org.mcnative.runtime.api.McNative;
@@ -112,9 +115,9 @@ public class PlayerListener {
         if(ipAddressBlock.getForTemplate() != null) {
             result = player.punish(DKBansExecutor.IP_ADDRESS_BLOCK,ipAddressBlock.getForTemplate());
         } else {
-            PlayerHistoryEntrySnapshotBuilder builder = player.punish().stuff(DKBansExecutor.IP_ADDRESS_BLOCK);
+            PlayerHistoryEntrySnapshotBuilder builder = player.punish().staff(DKBansExecutor.IP_ADDRESS_BLOCK);
             builder.reason(ipAddressBlock.getForReason())
-                    .stuff(DKBansExecutor.IP_ADDRESS_BLOCK)
+                    .staff(DKBansExecutor.IP_ADDRESS_BLOCK)
                     .historyType(DKBans.getInstance().getHistoryManager().getHistoryType(DKBansConfig.IP_ADDRESS_BLOCK_HISTORY_TYPE_NAME))
                     .timeout(System.currentTimeMillis()+ipAddressBlock.getForDuration());
             result = builder.execute();
@@ -134,7 +137,7 @@ public class PlayerListener {
         }
     }
 
-    @Listener(priority = EventPriority.HIGHEST)//@Todo async
+    @Listener(priority = EventPriority.HIGHEST,execution = ExecutionType.ASYNC)
     public void onPlayerPostLogin(MinecraftPlayerPostLoginEvent event){
         OnlineMinecraftPlayer player = event.getOnlinePlayer();
 
@@ -154,7 +157,7 @@ public class PlayerListener {
                     .add("statusFormatted", teamChat ? Messages.STAFF_STATUS_LOGIN :  Messages.STAFF_STATUS_LOGOUT));
         }
 
-        if(DKBansConfig.PLAYER_ON_JOIN_INFO_REPORT && player.hasPermission(Permissions.COMMAND_REPORT_STUFF)){
+        if(DKBansConfig.PLAYER_ON_JOIN_INFO_REPORT && player.hasPermission(Permissions.COMMAND_REPORT_STAFF)){
             boolean report = event.getPlayer().hasSetting("DKBans", PlayerSettingsKey.REPORT_CHAT_LOGIN,true);
             player.sendMessage(Messages.STAFF_STATUS_NOW,VariableSet.create()
                     .add("prefix",Messages.PREFIX_REPORT)
@@ -162,8 +165,8 @@ public class PlayerListener {
                     .add("statusFormatted", report ? Messages.STAFF_STATUS_LOGIN :  Messages.STAFF_STATUS_LOGOUT));
         }
 
-        if(DKBansConfig.PLAYER_ON_JOIN_LIST_REPORTS && player.hasPermission(Permissions.COMMAND_REPORT_STUFF)){
-            int openReports = DKBans.getInstance().getReportManager().getOpenReports().size();
+        if(DKBansConfig.PLAYER_ON_JOIN_LIST_REPORTS && player.hasPermission(Permissions.COMMAND_REPORT_STAFF)){
+            int openReports = DKBans.getInstance().getReportManager().getNewReports().size();
             player.sendMessage(Messages.REPORT_COUNT_INFO,VariableSet.create().add("openReports",openReports));
         }
     }
@@ -187,10 +190,15 @@ public class PlayerListener {
         }
     }
 
-    @Listener//@Todo async
+    @Listener(execution = ExecutionType.ASYNC)
     public void onPlayerDisconnect(MinecraftPlayerLogoutEvent event) {
-        event.getPlayer().getAs(DKBansPlayer.class).finishSession(event.getOnlinePlayer().getServer().getName(),
+        DKBansPlayer player = event.getPlayer().getAs(DKBansPlayer.class);
+        if(player == null) return;
+        player.finishSession(event.getOnlinePlayer().getServer().getName(),
                 event.getOnlinePlayer().getServer().getIdentifier().getUniqueId());
+        if(player.getWatchingReport() != null){
+            player.getWatchingReport().setState(ReportState.NEW);
+        }
     }
 
     @Listener(priority = EventPriority.HIGHEST)

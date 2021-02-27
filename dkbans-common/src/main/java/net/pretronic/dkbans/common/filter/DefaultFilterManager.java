@@ -21,11 +21,13 @@
 package net.pretronic.dkbans.common.filter;
 
 import net.pretronic.dkbans.api.DKBans;
+import net.pretronic.dkbans.api.event.DKBansFiltersUpdateEvent;
 import net.pretronic.dkbans.api.filter.Filter;
 import net.pretronic.dkbans.api.filter.FilterAffiliationArea;
 import net.pretronic.dkbans.api.filter.FilterManager;
 import net.pretronic.dkbans.api.filter.operation.FilterOperation;
 import net.pretronic.dkbans.api.filter.operation.FilterOperationFactory;
+import net.pretronic.dkbans.common.event.DefaultDKBansFiltersUpdateEvent;
 import net.pretronic.dkbans.common.filter.operations.*;
 import net.pretronic.libraries.utility.Iterators;
 import net.pretronic.libraries.utility.Validate;
@@ -66,6 +68,7 @@ public class DefaultFilterManager implements FilterManager {
         Validate.notNull((Object) operation0,area,value);
         FilterOperationFactory factory = getOperationFactory(operation0);
         if(factory == null) throw new NullPointerException("Filter operation not available");
+        sendUpdate();
         return createFilter(area, factory.build(value), value);
     }
 
@@ -75,6 +78,7 @@ public class DefaultFilterManager implements FilterManager {
         int id = DKBans.getInstance().getStorage().createFilter(area,operation.getName(),value);
         Filter filter = new DefaultFilter(id,area,operation,value);
         this.filters.add(filter);
+        sendUpdate();
         return filter;
     }
 
@@ -82,6 +86,7 @@ public class DefaultFilterManager implements FilterManager {
     public void deleteFilter(int id) {
         DKBans.getInstance().getStorage().deleteFilter(id);
         Iterators.removeOne(this.filters, filter -> filter.getId() == id);
+        sendUpdate();
     }
 
     @Override
@@ -142,6 +147,16 @@ public class DefaultFilterManager implements FilterManager {
     public void unregisterOperationFactory(FilterOperationFactory operation) {
         Validate.notNull(operation);
         factories.remove(operation);
+    }
+
+    @Override
+    public void reload() {
+        this.filters.clear();
+        this.filters.addAll(DKBans.getInstance().getStorage().loadFilters());
+    }
+
+    private void sendUpdate(){
+        DKBans.getInstance().getEventBus().callEvent(DKBansFiltersUpdateEvent.class,new DefaultDKBansFiltersUpdateEvent());
     }
 
     public void initialize(){

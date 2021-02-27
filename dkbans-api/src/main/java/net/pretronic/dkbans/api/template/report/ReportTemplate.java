@@ -27,6 +27,8 @@ import java.util.Map;
 
 public interface ReportTemplate extends Template {
 
+    String getWatchPermission();
+
     PunishmentTemplate getTargetTemplate();
 
     Map<String, Object> getProperties();

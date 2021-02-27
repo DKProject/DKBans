@@ -19,10 +19,15 @@
 
 package net.pretronic.dkbans.api.event.report;
 
-import net.pretronic.dkbans.api.player.report.PlayerReportEntry;
+import net.pretronic.dkbans.api.event.DKBansPlayerEvent;
+import net.pretronic.dkbans.api.player.DKBansPlayer;
+import net.pretronic.dkbans.api.player.report.PlayerReport;
+import net.pretronic.libraries.event.network.NetworkEvent;
 
-public interface DKBansPlayerReportCreateEvent extends DKBansPlayerReportEvent {
+@NetworkEvent(ignoreNetworkException = true)
+public interface DKBansReportEvent extends DKBansPlayerEvent {
 
-    PlayerReportEntry getReportEntry();
+    int getReportId();
 
+    PlayerReport getReport();
 }

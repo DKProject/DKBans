@@ -81,7 +81,7 @@ public class TemporaryPunishCommand extends BasicCommand {
         Duration duration = CommandUtil.parseDuration(sender,arguments[1]);
 
         PlayerHistoryEntrySnapshot result = dkBansPlayer.punish()
-                .stuff(CommandUtil.getExecutor(sender))
+                .staff(CommandUtil.getExecutor(sender))
                 .punishmentType(punishmentType)
                 .historyType(historyType)
                 .scope(scope)

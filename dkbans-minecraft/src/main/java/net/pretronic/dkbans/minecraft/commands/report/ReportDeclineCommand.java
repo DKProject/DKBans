@@ -37,7 +37,7 @@ public class ReportDeclineCommand extends BasicCommand {
     public ReportDeclineCommand(ObjectOwner owner) {
         super(owner, CommandConfiguration.newBuilder()
                 .name("decline").aliases("deny")
-                .permission(Permissions.COMMAND_REPORT_STUFF).create());
+                .permission(Permissions.COMMAND_REPORT_STAFF).create());
     }
 
     @Override

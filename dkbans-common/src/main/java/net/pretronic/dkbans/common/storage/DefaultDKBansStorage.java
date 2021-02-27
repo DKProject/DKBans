@@ -277,7 +277,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 .set("Created",created)
                 .executeAndGetGeneratedKeyAsInt("Id");
         int snapId = buildSnapshotQuery(id,snapshot);
-        return new Pair<>(new DefaultPlayerHistoryEntry(player.getHistory(),id,snapshot,created),snapId);
+        return new Pair<>(new DefaultPlayerHistoryEntry(id,player.getUniqueId(),created,player.getHistory(),snapshot,new ArrayList<>()),snapId);
     }
 
     @Override
@@ -303,8 +303,8 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 .set("ModifiedBy",snapshot.getModifiedBy().getUniqueId())
                 .set("ModifiedActive",snapshot.isModifiedActive());
        if(snapshot.getHistoryType() != null)  query.set("HistoryTypeId",snapshot.getHistoryType().getId());
-       if(snapshot.getRevokeTemplate() != null) query.set("RevokeTemplateId",snapshot.getRevokeTemplate().getId());
-       if(snapshot.getTemplate() != null) query.set("TemplateId",snapshot.getTemplate().getId());
+       if(snapshot.getRevokeTemplateId() > 0) query.set("RevokeTemplateId",snapshot.getRevokeTemplateId());
+       if(snapshot.getTemplateId() > 0) query.set("TemplateId",snapshot.getTemplateId());
        if(snapshot.getScope() != null){
            query.set("ScopeType",snapshot.getScope().getType())
                    .set("ScopeName",snapshot.getScope().getName())
@@ -357,10 +357,11 @@ public class DefaultDKBansStorage implements DKBansStorage {
         PlayerHistory playerHistory = DKBans.getInstance().getPlayerManager()
                 .getPlayer(resultEntry.getUniqueId("PlayerId")).getHistory();
 
-        DefaultPlayerHistoryEntry entry = new DefaultPlayerHistoryEntry(playerHistory,
-                resultEntry.getInt("HistoryId"),
-                snapshot,
-                resultEntry.getLong("Created"));
+        DefaultPlayerHistoryEntry entry = new DefaultPlayerHistoryEntry(resultEntry.getInt("HistoryId"),
+                playerHistory.getPlayer().getUniqueId(),
+                resultEntry.getLong("Created"),
+                playerHistory,
+                snapshot,null);
         snapshot.setEntry(entry);
         return entry;
     }
@@ -395,10 +396,11 @@ public class DefaultDKBansStorage implements DKBansStorage {
             PlayerHistory playerHistory = DKBans.getInstance().getPlayerManager()
                     .getPlayer(resultEntry.getUniqueId("PlayerId")).getHistory();
 
-            DefaultPlayerHistoryEntry entry = new DefaultPlayerHistoryEntry(playerHistory,
-                    resultEntry.getInt("HistoryId"),
-                    snapshot,
-                    resultEntry.getLong("Created"));
+            DefaultPlayerHistoryEntry entry = new DefaultPlayerHistoryEntry(resultEntry.getInt("HistoryId"),
+                    playerHistory.getPlayer().getUniqueId(),
+                    resultEntry.getLong("Created"),
+                    playerHistory,
+                    snapshot,null);
             snapshot.setEntry(entry);
             result.add(entry);
         }
@@ -430,10 +432,11 @@ public class DefaultDKBansStorage implements DKBansStorage {
         if(!result0.isEmpty()){
             for (QueryResultEntry resultEntry : result0) {
                 DefaultPlayerHistoryEntrySnapshot snapshot = createSnapshot(resultEntry,null);
-                DefaultPlayerHistoryEntry entry = new DefaultPlayerHistoryEntry(playerHistory,
+                DefaultPlayerHistoryEntry entry = new DefaultPlayerHistoryEntry(
                         resultEntry.getInt("HistoryId"),
-                        snapshot,
-                        resultEntry.getLong("Created"));
+                        playerHistory.getPlayer().getUniqueId(),
+                        resultEntry.getLong("Created")
+                        ,playerHistory,snapshot,null);
                 snapshot.setEntry(entry);
                 result.add(entry);
             }
@@ -448,27 +451,24 @@ public class DefaultDKBansStorage implements DKBansStorage {
                     ,resultEntry.getUniqueId("ScopeId"));
         }
 
-        for (Map.Entry<String, Object> entry0 : resultEntry) {
-            System.out.println(entry0.getKey()+" | "+entry0.getValue());
-        }
-
-        return new DefaultPlayerHistoryEntrySnapshot(entry,
-                resultEntry.getInt("SnapshotId"),
+        return new DefaultPlayerHistoryEntrySnapshot(resultEntry.getInt("SnapshotId"),
+                entry != null ? entry.getId() : -1,
                 dkBans.getHistoryManager().getHistoryType(resultEntry.getInt("HistoryTypeId")),
                 PunishmentType.getPunishmentType(resultEntry.getString("PunishmentType")),
                 resultEntry.getString("Reason"),
                 resultEntry.getLong("Timeout"),
-                dkBans.getTemplateManager().getTemplate(resultEntry.getInt("TemplateId")),
+                resultEntry.getInt("TemplateId"),
                 resultEntry.getUniqueId("StaffId"),
                 scope,
                 resultEntry.getInt("Points"),
                 resultEntry.getBoolean("Active"),
                 DocumentFileType.JSON.getReader().read(resultEntry.getString("Properties")),
                 resultEntry.getString("RevokeReason"),
-                dkBans.getTemplateManager().getTemplate(resultEntry.getInt("RevokeTemplateId")),
+                resultEntry.getInt("RevokeTemplateId"),
                 resultEntry.getBoolean("ModifiedActive"),
                 resultEntry.getLong("ModifiedTime"),
-                resultEntry.getUniqueId("ModifiedBy"));
+                resultEntry.getUniqueId("ModifiedBy")
+                ,entry,null);
     }
 
     @Override
@@ -668,7 +668,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 .set("PlayerId", player.getUniqueId())
                 .set("State", state.toString())
                 .executeAndGetGeneratedKeyAsInt("Id");
-        return new DefaultPlayerReport(id,state, player);
+        return new DefaultPlayerReport(id,player.getUniqueId(),null,state,player,null,null);
     }
 
     @Override
@@ -684,8 +684,8 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 .set("ServerId", serverId)
                 .set("Properties", "{}")
                 .executeAndGetGeneratedKeyAsInt("Id");
-        return new DefaultPlayerReportEntry(id, report, reporter.getUniqueId(),template != null ? template.getId() : 0
-                , reason , serverName, serverId, time, Document.newDocument());
+        return new DefaultPlayerReportEntry(id, report.getId(), reporter.getUniqueId(),template != null ? template.getId() : 0
+                , reason , serverName, serverId, time, Document.newDocument(),report,null);
     }
 
     @Override
@@ -1102,7 +1102,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
     private DatabaseCollection createBroadcastCollection() {
         return database.createCollection("dkbans_broadcast")
                 .field("Id", DataType.INTEGER, FieldOption.PRIMARY_KEY, FieldOption.AUTO_INCREMENT)
-                .field("Name", DataType.STRING, FieldOption.NOT_NULL, FieldOption.UNIQUE)
+                .field("Name", DataType.STRING, FieldOption.NOT_NULL)//, FieldOption.UNIQUE
                 .field("Visibility", DataType.STRING, FieldOption.NOT_NULL)
                 .field("Properties", DataType.LONG_TEXT, FieldOption.NOT_NULL)
                 .create();
@@ -1111,7 +1111,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
     private DatabaseCollection createBroadcastGroupCollection() {
         return database.createCollection("dkbans_broadcast_group")
                 .field("Id", DataType.INTEGER, FieldOption.PRIMARY_KEY, FieldOption.AUTO_INCREMENT)
-                .field("Name", DataType.STRING, FieldOption.NOT_NULL, FieldOption.UNIQUE)
+                .field("Name", DataType.STRING, FieldOption.NOT_NULL)//, FieldOption.UNIQUE
                 .field("Enabled", DataType.BOOLEAN, FieldOption.NOT_NULL)
                 .field("Permission", DataType.STRING)
                 .field("Interval", DataType.LONG, FieldOption.NOT_NULL)

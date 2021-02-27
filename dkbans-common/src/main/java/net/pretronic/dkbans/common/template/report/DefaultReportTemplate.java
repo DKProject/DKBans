@@ -53,6 +53,11 @@ public class DefaultReportTemplate extends DefaultTemplate implements ReportTemp
     }
 
     @Override
+    public String getWatchPermission() {
+        return getData().getString("watchPermission");
+    }
+
+    @Override
     public PunishmentTemplate getTargetTemplate() {
         if(targetTemplate == null && targetTemplateGroupName != null && (targetTemplateName != null || targetTemplateId != 0)) {
             TemplateGroup templateGroup = DKBans.getInstance().getTemplateManager().getTemplateGroup(targetTemplateGroupName);

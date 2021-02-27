@@ -22,7 +22,11 @@ package net.pretronic.dkbans.api.event;
 
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 
+import java.util.UUID;
+
 public interface DKBansPlayerEvent extends DKBansEvent {
+
+    UUID getPlayerId();
 
     DKBansPlayer getPlayer();
 }

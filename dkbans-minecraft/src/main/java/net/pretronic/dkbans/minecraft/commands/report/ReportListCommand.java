@@ -41,7 +41,7 @@ public class ReportListCommand extends BasicCommand {
     public ReportListCommand(ObjectOwner owner) {
         super(owner, CommandConfiguration.newBuilder()
                 .name("list")
-                .permission(Permissions.COMMAND_REPORT_STUFF).create());
+                .permission(Permissions.COMMAND_REPORT_STAFF).create());
     }
 
     @Override
@@ -50,7 +50,7 @@ public class ReportListCommand extends BasicCommand {
             sender.sendMessage(Messages.ERROR_ONLY_PLAYER);
             return;
         }
-        List<PlayerReport> reports = DKBans.getInstance().getReportManager().getOpenReports();
+        List<PlayerReport> reports = DKBans.getInstance().getReportManager().getNewReports();
         reports.sort(Comparator.comparingInt(PlayerReport::getCount));
 
         int page = 1;

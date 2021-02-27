@@ -51,8 +51,7 @@ public interface PlayerReport {
 
     DKBansPlayer getWatcher();
 
-    void setWatcher(DKBansPlayer player);
-
+    void watch(DKBansPlayer player);
 
     void accept(DKBansExecutor executor);
 

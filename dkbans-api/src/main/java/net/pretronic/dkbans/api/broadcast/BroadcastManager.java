@@ -59,4 +59,6 @@ public interface BroadcastManager {
     Collection<DKBansPlayer> sendBroadcast(Broadcast broadcast);
 
     Collection<DKBansPlayer> sendBroadcast(BroadcastAssignment broadcast);
+
+    void reload();
 }

@@ -92,7 +92,9 @@ public class CommandUtil {
         try {
             return DurationProcessor.getStandard().parse(duration);
         }catch (IllegalArgumentException exception){
-            sender.sendMessage(Messages.ERROR_INVALID_DURATION_FORMAT,VariableSet.create().add("input",duration));
+            sender.sendMessage(Messages.ERROR_INVALID_DURATION_FORMAT,VariableSet.create()
+                    .addDescribed("prefix",Messages.PREFIX)
+                    .add("input",duration));
             return null;
         }
     }

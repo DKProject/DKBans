@@ -30,11 +30,13 @@ public interface ReportManager {
 
     int getReportCount();
 
-    List<PlayerReport> getOpenReports();
+    List<PlayerReport> getNewReports();
 
-    PlayerReport getReport(DKBansPlayer player);
+    PlayerReport getReport(int reportId);
 
     PlayerReport getReport(UUID uniqueId);
+
+    PlayerReport getOpenReport(UUID uniqueId);
 
     PlayerReport getReportByWatcher(UUID uniqueId);
 

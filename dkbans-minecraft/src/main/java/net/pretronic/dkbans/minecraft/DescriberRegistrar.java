@@ -82,6 +82,7 @@ public class DescriberRegistrar {
             MinecraftPlayer mcPlayer = McNative.getInstance().getPlayerManager().getPlayer(player.getUniqueId());
             return DKBansConfig.FORMAT_DATE.format(mcPlayer.getLastPlayed());
         });
+        playerDescriber.registerFunction("onlineTimeFormatted", player -> DurationProcessor.getStandard().formatShort(TimeUnit.MILLISECONDS.toSeconds(player.getOnlineTime())));
 
         VariableDescriber<DefaultPlayerHistoryEntry> entryDescriber =  VariableDescriberRegistry.registerDescriber(DefaultPlayerHistoryEntry.class);
         entryDescriber.setForwardFunction(DefaultPlayerHistoryEntry::getCurrent);

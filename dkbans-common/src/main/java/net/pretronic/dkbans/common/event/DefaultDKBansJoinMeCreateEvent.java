@@ -22,6 +22,8 @@ package net.pretronic.dkbans.common.event;
 
 import net.pretronic.dkbans.api.event.DKBansJoinMeCreateEvent;
 import net.pretronic.dkbans.api.joinme.JoinMe;
+import net.pretronic.libraries.document.Document;
+import net.pretronic.libraries.event.network.NetworkEventAdapter;
 
 public class DefaultDKBansJoinMeCreateEvent implements DKBansJoinMeCreateEvent {
 
