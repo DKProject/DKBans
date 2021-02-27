@@ -61,22 +61,24 @@ public class DKBansConfig {
     public static boolean PLAYER_ON_JOIN_PUNISH_NOTIFY = true;
     @DocumentKey("player.onJoin.info.report")
     public static boolean PLAYER_ON_JOIN_INFO_REPORT = true;
-    @DocumentKey("player.onJoin.listReports")
+    @DocumentKey("player.onJoin.info.listReports")
     public static boolean PLAYER_ON_JOIN_LIST_REPORTS = true;
 
     public static boolean PLAYER_SESSION_LOGGING = true;
-    public static String PLAYER_SESSION_RETENTION = "180d";
+    public static String PLAYER_SESSION_RETENTION = "90d";
 
     public static boolean CHAT_FILTER_ENABLED = true;
 
     @DocumentKey("chat.filter.repeatDelay")
     public static long CHAT_FILTER_REPEAT_DELAY = 1000;
 
-
+    @DocumentKey("joinme.headEnabled")
     public static boolean JOINME_HEAD_ENABLED = true;
 
+    @DocumentKey("joinme.multipleLines")
     public static boolean JOINME_MULTIPLE_LINES = true;
 
+    @DocumentKey("joinme.disabledScopes")
     public static Collection<DKBansScope> JOINME_DISABLED_SCOPES = new ArrayList<>();
 
     public static String JOINME_COOLDOWN = DurationProcessor.getStandard().formatShort(Duration.ofMinutes(15));
@@ -85,13 +87,16 @@ public class DKBansConfig {
     public static long JOINME_COOLDOWN_DURATION = 0;
 
     @DocumentKey("ipAddress.blockAltMinPlaytime")
-    public static String IP_ADDRESS_BLOCK_ALT_MIN_PLAYTIME = DurationProcessor.getStandard().formatShort(Duration.ofMinutes(3));
+    public static String IP_ADDRESS_BLOCK_ALT_MIN_PLAYTIME = DurationProcessor.getStandard().formatShort(Duration.ofHours(1));
 
     @DocumentKey("ipAddress.historyType")
     public static String IP_ADDRESS_BLOCK_HISTORY_TYPE_NAME = "NETWORK";
 
     @DocumentIgnored
     public static long IP_ADDRESS_BLOCK_ALT_MIN_PLAYTIME_TIME = 0;
+
+    @DocumentKey("integration.labyModEnabled")
+    public static boolean INTEGRATION_LABYMOD_ENABLED = true;
 
     public static transient SimpleDateFormat FORMAT_DATE;
 

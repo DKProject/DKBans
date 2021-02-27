@@ -31,4 +31,6 @@ public interface JoinMeManager {
     JoinMe getJoinMe(UUID playerId);
 
     JoinMe sendJoinMe(DKBansPlayer player, String server, long timeout);
+
+    void registerJoinMe(JoinMe joinMe);
 }

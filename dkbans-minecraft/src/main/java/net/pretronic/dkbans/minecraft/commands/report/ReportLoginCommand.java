@@ -33,7 +33,7 @@ import org.mcnative.runtime.api.player.OnlineMinecraftPlayer;
 public class ReportLoginCommand extends BasicCommand {
 
     public ReportLoginCommand(ObjectOwner owner) {
-        super(owner, CommandConfiguration.newBuilder().name("login").permission(Permissions.COMMAND_REPORT_STUFF).create());
+        super(owner, CommandConfiguration.newBuilder().name("login").permission(Permissions.COMMAND_REPORT_STAFF).create());
     }
 
     @Override

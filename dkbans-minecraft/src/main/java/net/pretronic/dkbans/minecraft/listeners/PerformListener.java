@@ -20,22 +20,25 @@
 
 package net.pretronic.dkbans.minecraft.listeners;
 
+import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.event.DKBansChannelBroadcastMessageReceiveEvent;
 import net.pretronic.dkbans.api.event.DKBansJoinMeCreateEvent;
 import net.pretronic.dkbans.api.event.punish.DKBansPlayerPunishEvent;
 import net.pretronic.dkbans.api.event.punish.DKBansPlayerPunishUpdateEvent;
-import net.pretronic.dkbans.api.event.report.DKBansPlayerReportAcceptEvent;
-import net.pretronic.dkbans.api.event.report.DKBansPlayerReportCreateEvent;
-import net.pretronic.dkbans.api.event.report.DKBansPlayerReportDeclineEvent;
-import net.pretronic.dkbans.api.event.report.DKBansPlayerReportTakeEvent;
+import net.pretronic.dkbans.api.event.report.DKBansReportCreateEvent;
+import net.pretronic.dkbans.api.event.report.DKBansReportStateChangedEvent;
+import net.pretronic.dkbans.api.event.report.DKBansReportWatchEvent;
 import net.pretronic.dkbans.api.player.history.PunishmentType;
 import net.pretronic.dkbans.api.player.report.PlayerReportEntry;
+import net.pretronic.dkbans.api.player.report.ReportState;
 import net.pretronic.dkbans.minecraft.BroadcastMessageChannels;
 import net.pretronic.dkbans.minecraft.PlayerSettingsKey;
 import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.dkbans.minecraft.config.Permissions;
+import net.pretronic.dkbans.minecraft.integration.labymod.LabyModIntegration;
 import net.pretronic.dkbans.minecraft.joinme.MinecraftJoinMe;
 import net.pretronic.libraries.event.Listener;
+import net.pretronic.libraries.event.network.NetworkListener;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
 import org.mcnative.runtime.api.McNative;
 import org.mcnative.runtime.api.player.ConnectedMinecraftPlayer;
@@ -44,27 +47,43 @@ import org.mcnative.runtime.api.text.components.MessageComponent;
 
 import java.util.List;
 
-public class InternalListener {
+public class PerformListener {
 
     @Listener
+    @NetworkListener
     public void onChannelBroadcastMessageReceive(DKBansChannelBroadcastMessageReceiveEvent event) {
         if(event.getChannel().equals(BroadcastMessageChannels.TEAM_CHAT)){
             MessageComponent<?> result = Messages.TEAMCHAT_MESSAGE_FORMAT;
             for (OnlineMinecraftPlayer staff : McNative.getInstance().getLocal().getOnlinePlayers()) {
+                DKBansExecutor executor = event.getExecutor();
                 if(staff.hasPermission(Permissions.TEAM)
                         && staff.hasSetting("DKBans", PlayerSettingsKey.TEAM_CHAT_LOGIN,true)){
                     staff.sendMessage(result,VariableSet.create()
                             .add("message",event.getMessage())
-                            .addDescribed("sender",event.getExecutor()));
+                            .addDescribed("sender",executor));
                 }
             }
         }
     }
 
     @Listener
-    public void onPlayerReportCreate(DKBansPlayerReportCreateEvent event) {
+    @NetworkListener
+    public void onJoinMeCreate(DKBansJoinMeCreateEvent event) {
+        MinecraftJoinMe joinMe = ((MinecraftJoinMe)event.getJoinMe());
+        List<MessageComponent<?>> messageComponents = joinMe.create();
+
+        for (MessageComponent<?> messageComponent : messageComponents) {
+            McNative.getInstance().getLocal().broadcast(messageComponent,VariableSet.create()
+                    .add("server",event.getJoinMe().getServer())
+                    .addDescribed("player",event.getJoinMe().getPlayer()));
+        }
+    }
+
+    @Listener
+    @NetworkListener
+    public void onPlayerReportCreate(DKBansReportCreateEvent event) {
         for (ConnectedMinecraftPlayer player : McNative.getInstance().getLocal().getConnectedPlayers()) {
-            if(player.hasPermission(Permissions.COMMAND_REPORT_STUFF)) {
+            if(player.hasPermission(Permissions.COMMAND_REPORT_STAFF)) {
                 player.sendMessage(Messages.REPORT_NOTIFY, VariableSet.create()
                         .addDescribed("player",event.getPlayer())
                         .addDescribed("report", event.getReportEntry()));
@@ -73,48 +92,41 @@ public class InternalListener {
     }
 
     @Listener
-    public void onPlayerReportTake(DKBansPlayerReportTakeEvent event) {
+    @NetworkListener
+    public void onPlayerReportWatch(DKBansReportWatchEvent event) {
         OnlineMinecraftPlayer watcher = McNative.getInstance().getLocal().getOnlinePlayer(event.getReport().getWatcherId());
         if(watcher == null) return;
         OnlineMinecraftPlayer target = McNative.getInstance().getNetwork().getOnlinePlayer(event.getReport().getPlayerId());
-        if(target != null && !watcher.getServer().getName().equalsIgnoreCase(target.getName())){
+        if(target != null && !watcher.getServer().getName().equalsIgnoreCase(target.getServer().getName())){
             watcher.connect(target.getServer());
         }
     }
 
     @Listener
-    public void onPlayerReportAccept(DKBansPlayerReportAcceptEvent event) {
+    @NetworkListener
+    public void onPlayerReportStateChange(DKBansReportStateChangedEvent event) {
+        MessageComponent<?> message = event.getNewState() == ReportState.ACCEPTED ? Messages.REPORT_ACCEPTED : Messages.REPORT_DECLINED;
         for (PlayerReportEntry entry : event.getReport().getEntries()) {
             OnlineMinecraftPlayer player = McNative.getInstance().getLocal().getOnlinePlayer(entry.getReporterId());
             if(player != null){
-                player.sendMessage(Messages.REPORT_ACCEPTED,VariableSet.create()
-                        .addDescribed("report",event.getReport()));
+                player.sendMessage(message,VariableSet.create().addDescribed("report",event.getReport()));
             }
         }
     }
 
     @Listener
-    public void onPlayerReportDecline(DKBansPlayerReportDeclineEvent event) {
-        for (PlayerReportEntry entry : event.getReport().getEntries()) {
-            OnlineMinecraftPlayer player = McNative.getInstance().getLocal().getOnlinePlayer(entry.getReporterId());
-            if(player != null){
-                player.sendMessage(Messages.REPORT_DECLINED,VariableSet.create()
-                        .addDescribed("report",event.getReport()));
-            }
-        }
-    }
-
-    @Listener
+    @NetworkListener
     public void onPlayerPunish(DKBansPlayerPunishEvent event){
-        OnlineMinecraftPlayer player = McNative.getInstance().getLocal().getConnectedPlayer(event.getPlayer().getUniqueId());
+        ConnectedMinecraftPlayer player = McNative.getInstance().getLocal().getConnectedPlayer(event.getPlayerId());
         if(player == null) return;
-        if(event.getSnapshot().getPunishmentType() == PunishmentType.BAN) handleBan(event, player);
-        else if(event.getSnapshot().getPunishmentType() == PunishmentType.MUTE) handleMute(event, player);
-        else if(event.getSnapshot().getPunishmentType() == PunishmentType.KICK) handleKick(event, player);
-        else if(event.getSnapshot().getPunishmentType() == PunishmentType.WARN) handleWarn(event, player);
+        if(event.getSnapshot().getPunishmentType().equals(PunishmentType.BAN)) handleBan(event, player);
+        else if(event.getSnapshot().getPunishmentType().equals(PunishmentType.MUTE)) handleMute(event, player);
+        else if(event.getSnapshot().getPunishmentType().equals(PunishmentType.KICK)) handleKick(event, player);
+        else if(event.getSnapshot().getPunishmentType().equals(PunishmentType.WARN)) handleWarn(event, player);
     }
 
     @Listener
+    @NetworkListener
     public void onPlayerPunishUpdate(DKBansPlayerPunishUpdateEvent event){
         OnlineMinecraftPlayer player = McNative.getInstance().getLocal().getConnectedPlayer(event.getPlayer().getUniqueId());
         if(player == null) return;
@@ -129,19 +141,7 @@ public class InternalListener {
         }
     }
 
-    @Listener
-    public void onJoinMeCreate(DKBansJoinMeCreateEvent event) {
-        MinecraftJoinMe joinMe = ((MinecraftJoinMe)event.getJoinMe());
-        List<MessageComponent<?>> messageComponents = joinMe.create();
-
-        for (MessageComponent<?> messageComponent : messageComponents) {
-            McNative.getInstance().getLocal().broadcast(messageComponent,VariableSet.create()
-                    .add("server",event.getJoinMe().getServer())
-                    .addDescribed("player",event.getJoinMe().getPlayer()));
-        }
-    }
-
-    private void handleMute(DKBansPlayerPunishEvent event, OnlineMinecraftPlayer player) {
+    private void handleMute(DKBansPlayerPunishEvent event, ConnectedMinecraftPlayer player) {
         if(player != null){
             MessageComponent<?> message = event.getSnapshot().isPermanently()
                     ? Messages.PUNISH_MUTE_MESSAGE_PERMANENTLY : Messages.PUNISH_MUTE_MESSAGE_TEMPORARY;
@@ -149,12 +149,13 @@ public class InternalListener {
                     .addDescribed("mute",event.getEntry())
                     .addDescribed("punish",event.getEntry())
                     .addDescribed("player",event.getPlayer()));
+            LabyModIntegration.sendMutePlayer(McNative.getInstance().getLocal().getConnectedPlayers(),player.getUniqueId(),true);
         }
 
         sendToStaff(event, Messages.PUNISH_MUTE_NOTIFY, "mute");
     }
 
-    private void handleBan(DKBansPlayerPunishEvent event, OnlineMinecraftPlayer player) {
+    private void handleBan(DKBansPlayerPunishEvent event, ConnectedMinecraftPlayer player) {
         if (player != null) {
             MessageComponent<?> message = event.getSnapshot().isPermanently()
                     ? Messages.PUNISH_BAN_MESSAGE_PERMANENTLY : Messages.PUNISH_BAN_MESSAGE_TEMPORARY;
@@ -168,8 +169,7 @@ public class InternalListener {
         sendToStaff(event, Messages.PUNISH_BAN_NOTIFY, "ban");
     }
 
-
-    private void handleKick(DKBansPlayerPunishEvent event, OnlineMinecraftPlayer player) {
+    private void handleKick(DKBansPlayerPunishEvent event, ConnectedMinecraftPlayer player) {
         if (player != null) {
             player.kick(Messages.PUNISH_KICK_MESSAGE, VariableSet.create()
                     .addDescribed("kick", event.getEntry())
@@ -179,7 +179,7 @@ public class InternalListener {
         sendToStaff(event, Messages.PUNISH_KICK_NOTIFY, "kick");
     }
 
-    private void handleWarn(DKBansPlayerPunishEvent event, OnlineMinecraftPlayer player) {
+    private void handleWarn(DKBansPlayerPunishEvent event, ConnectedMinecraftPlayer player) {
         if (player != null) {
             player.sendMessage(Messages.PUNISH_WARN_MESSAGE_CHAT, VariableSet.create()
                     .addDescribed("warn", event.getEntry())

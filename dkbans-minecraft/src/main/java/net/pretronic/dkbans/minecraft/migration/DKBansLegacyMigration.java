@@ -288,7 +288,7 @@ public class DKBansLegacyMigration extends Migration {
 
             for (HistoryEntry entry : player.getHistory().getEntries()) {
                 PlayerHistoryEntrySnapshotBuilder builder = new DefaultPlayerHistoryEntrySnapshotBuilder(dkBansPlayer, null);
-                builder.stuff(getStuff(entry));
+                builder.staff(getStuff(entry));
                 builder.reason(entry.getReason());
                 builder.points(entry.getPoints().getPoints());
                 PlayerHistoryType historyType = DKBans.getInstance().getHistoryManager().getHistoryType(entry.getPoints().getHistoryType().name());
@@ -307,8 +307,6 @@ public class DKBansLegacyMigration extends Migration {
                     migrateUnbanEntry(builder, tempHistory, unban);
                 } else if(entry instanceof Warn) {
                     migrateWarnEntry(builder, ((Warn) entry));
-                } else if(entry instanceof Unwarn) {
-                    //Not included in new dkbans
                 }
             }
         }
@@ -330,8 +328,7 @@ public class DKBansLegacyMigration extends Migration {
                 builder.reason(edit.getReason());
             } else if(version instanceof Ban.MessageBanEdit) {
                 Ban.MessageBanEdit edit = ((Ban.MessageBanEdit) version);
-                //@Todo add note
-
+                historyEntry.createNote(getStuff(version.getStaff()),edit.getMessage());
             } else if(version instanceof Ban.TimeOutBanEdit) {
                 Ban.TimeOutBanEdit edit = ((Ban.TimeOutBanEdit) version);
                 builder.timeout(edit.getTimeOut());

@@ -21,11 +21,13 @@
 package net.pretronic.dkbans.common.template;
 
 import net.pretronic.dkbans.api.DKBans;
+import net.pretronic.dkbans.api.event.DKBansTemplatesUpdateEvent;
 import net.pretronic.dkbans.api.player.history.CalculationType;
 import net.pretronic.dkbans.api.player.history.PunishmentType;
 import net.pretronic.dkbans.api.template.*;
 import net.pretronic.dkbans.api.template.punishment.PunishmentTemplateEntryFactory;
 import net.pretronic.dkbans.api.template.unpunishment.UnPunishmentTemplateEntryFactory;
+import net.pretronic.dkbans.common.event.DefaultDKBansTemplatesUpdateEvent;
 import net.pretronic.dkbans.common.template.punishment.DefaultPunishmentTemplate;
 import net.pretronic.dkbans.common.template.punishment.types.DefaultBanPunishmentTemplateEntry;
 import net.pretronic.dkbans.common.template.punishment.types.DefaultKickPunishmentTemplateEntry;
@@ -64,6 +66,7 @@ public class DefaultTemplateManager implements TemplateManager {
     public TemplateGroup createTemplateGroup(String name, TemplateType templateType, CalculationType calculationType) {
         TemplateGroup templateGroup = DKBans.getInstance().getStorage().createTemplateGroup(name, templateType, calculationType);
         this.templateGroups.add(templateGroup);
+        sendUpdate();
         return templateGroup;
     }
 
@@ -110,12 +113,14 @@ public class DefaultTemplateManager implements TemplateManager {
     public TemplateCategory createTemplateCategory(String name, String displayName) {
         TemplateCategory category = DKBans.getInstance().getStorage().createTemplateCategory(name, displayName);
         this.templateCategories.add(category);
+        sendUpdate();
         return category;
     }
 
     @Override
     public void importTemplateGroup(TemplateGroup group) {
         DKBans.getInstance().getStorage().importTemplateGroup(group);
+        sendUpdate();
     }
 
     @Override
@@ -129,6 +134,17 @@ public class DefaultTemplateManager implements TemplateManager {
     public void loadTemplateGroups() {
         this.templateGroups.clear();
         this.templateGroups.addAll(DKBans.getInstance().getStorage().loadTemplateGroups());
+    }
+
+    @Override
+    public void reload() {
+        this.templateCategories.clear();
+        this.templateCategories.addAll(DKBans.getInstance().getStorage().loadTemplateCategories());
+        loadTemplateGroups();
+    }
+
+    private void sendUpdate(){
+        DKBans.getInstance().getEventBus().callEvent(DKBansTemplatesUpdateEvent.class, new DefaultDKBansTemplatesUpdateEvent());
     }
 
     private void registerDefaultFactories() {

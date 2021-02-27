@@ -49,7 +49,7 @@ public class DefaultPlayerHistoryManager implements PlayerHistoryManager {
     @Override
     public PlayerHistoryEntry getHistoryEntry(int id) {
         //Search cached objects
-        for (DKBansPlayer player : DKBans.getInstance().getPlayerManager().getLoadedPlayers()) {
+        for (DKBansPlayer player : (DKBans.getInstance().getPlayerManager()).getLoadedPlayers()) {
             for (PlayerHistoryEntry entry : player.getHistory().getLoadedEntries()) {
                 if(entry.getId() == id){
                     return entry;

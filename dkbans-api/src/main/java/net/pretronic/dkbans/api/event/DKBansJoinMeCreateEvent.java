@@ -21,7 +21,9 @@
 package net.pretronic.dkbans.api.event;
 
 import net.pretronic.dkbans.api.joinme.JoinMe;
+import net.pretronic.libraries.event.network.NetworkEvent;
 
+@NetworkEvent(ignoreNetworkException = true)
 public interface DKBansJoinMeCreateEvent extends DKBansEvent {
 
     JoinMe getJoinMe();

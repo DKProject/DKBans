@@ -37,21 +37,29 @@ import net.pretronic.libraries.utility.annonations.Internal;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 
 public class DefaultPlayerHistoryEntry implements PlayerHistoryEntry {
 
-    private final PlayerHistory history;
     private final int id;
+    private final UUID playerId;
     private final long created;
 
-    private PlayerHistoryEntrySnapshot current;
-    private List<PlayerHistoryEntrySnapshot> snapshots;
+    private transient PlayerHistory history;
+    private transient PlayerHistoryEntrySnapshot current;
+    private transient List<PlayerHistoryEntrySnapshot> snapshots;
 
-    public DefaultPlayerHistoryEntry(PlayerHistory history, int id, PlayerHistoryEntrySnapshot current, long created) {
-        this.history = history;
+    public DefaultPlayerHistoryEntry(int id, UUID playerId, long created, PlayerHistory history
+            ,PlayerHistoryEntrySnapshot current,List<PlayerHistoryEntrySnapshot> snapshots) {
         this.id = id;
+        this.playerId = playerId;
         this.created = created;
+        this.history = history;
         this.current = current;
+        this.snapshots = snapshots;
+        if(current != null && snapshots != null){
+            snapshots.add(current);
+        }
     }
 
     @Override
@@ -66,7 +74,13 @@ public class DefaultPlayerHistoryEntry implements PlayerHistoryEntry {
 
     @Override
     public PlayerHistory getHistory() {
+        if(history == null) history = DKBans.getInstance().getPlayerManager().getPlayer(this.playerId).getHistory();
         return history;
+    }
+
+    @Override
+    public int getSessionId() {
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -131,10 +145,8 @@ public class DefaultPlayerHistoryEntry implements PlayerHistoryEntry {
 
     @Override
     public PlayerHistoryEntrySnapshot unpunish(DKBansExecutor executor, String reason) {
-        return newSnapshot(executor)
-                .active(false)
-                .revokeReason(reason)
-                .execute();
+        return newSnapshot(executor).active(false)
+                .revokeReason(reason).execute();
     }
 
     @Override

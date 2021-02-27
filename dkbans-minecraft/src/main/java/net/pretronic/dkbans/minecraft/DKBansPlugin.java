@@ -21,10 +21,19 @@
 package net.pretronic.dkbans.minecraft;
 
 import net.pretronic.dkbans.api.DKBans;
+import net.pretronic.dkbans.api.joinme.JoinMe;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
+import net.pretronic.dkbans.api.player.history.PlayerHistoryEntry;
+import net.pretronic.dkbans.api.player.history.PlayerHistoryEntrySnapshot;
+import net.pretronic.dkbans.api.player.report.PlayerReport;
+import net.pretronic.dkbans.api.player.report.PlayerReportEntry;
 import net.pretronic.dkbans.api.template.TemplateGroup;
 import net.pretronic.dkbans.common.DefaultDKBans;
 import net.pretronic.dkbans.common.broadcast.BroadcastTask;
+import net.pretronic.dkbans.common.player.history.DefaultPlayerHistoryEntry;
+import net.pretronic.dkbans.common.player.history.DefaultPlayerHistoryEntrySnapshot;
+import net.pretronic.dkbans.common.player.report.DefaultPlayerReport;
+import net.pretronic.dkbans.common.player.report.DefaultPlayerReportEntry;
 import net.pretronic.dkbans.minecraft.commands.*;
 import net.pretronic.dkbans.minecraft.commands.broadcast.BroadcastCommand;
 import net.pretronic.dkbans.minecraft.commands.broadcastgroup.BroadcastGroupCommand;
@@ -41,14 +50,18 @@ import net.pretronic.dkbans.minecraft.commands.unpunish.UnpunishCommand;
 import net.pretronic.dkbans.minecraft.config.CommandConfig;
 import net.pretronic.dkbans.minecraft.config.DKBansConfig;
 import net.pretronic.dkbans.minecraft.integration.DKBansPlaceholders;
+import net.pretronic.dkbans.minecraft.integration.labymod.LabyModServiceListener;
+import net.pretronic.dkbans.minecraft.joinme.MinecraftJoinMe;
 import net.pretronic.dkbans.minecraft.joinme.MinecraftJoinMeManager;
-import net.pretronic.dkbans.minecraft.listeners.InternalListener;
+import net.pretronic.dkbans.minecraft.listeners.PerformListener;
 import net.pretronic.dkbans.minecraft.listeners.PlayerListener;
+import net.pretronic.dkbans.minecraft.listeners.SyncListener;
 import net.pretronic.dkbans.minecraft.migration.DKBansLegacyMigration;
 import net.pretronic.dkbans.minecraft.player.MinecraftPlayerManager;
 import net.pretronic.libraries.command.command.Command;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
 import net.pretronic.libraries.document.Document;
+import net.pretronic.libraries.document.DocumentRegistry;
 import net.pretronic.libraries.document.type.DocumentFileType;
 import net.pretronic.libraries.plugin.lifecycle.Lifecycle;
 import net.pretronic.libraries.plugin.lifecycle.LifecycleState;
@@ -64,10 +77,13 @@ import java.util.concurrent.TimeUnit;
 
 public class DKBansPlugin extends MinecraftPlugin {
 
+    private static DKBansPlugin INSTANCE;
+
     private DefaultDKBans dkBans;
 
     @Lifecycle(state = LifecycleState.LOAD)
     public void onLoad(LifecycleState state){
+        INSTANCE = this;
         getLogger().info("DKBans is starting, please wait..");
 
         MinecraftPlayerManager playerManager = new MinecraftPlayerManager();
@@ -79,23 +95,43 @@ public class DKBansPlugin extends MinecraftPlugin {
                 new MinecraftBroadcastSender());
 
         DKBans.setInstance(dkBans);
-        dkBans.getBroadcastManager().init();
+        dkBans.getBroadcastManager().initialize();
         dkBans.getTemplateManager().initialize();
 
         loadConfigs();
-        registerCommands();
 
         dkBans.getFilterManager().initialize();
         dkBans.getMigrationManager().registerMigration(new DKBansLegacyMigration());
         initBroadcast();
 
-        getRuntime().getLocal().getEventBus().subscribe(this,new PlayerListener());
-        getRuntime().getLocal().getEventBus().subscribe(this,new InternalListener());
+        registerListeners();
+        registerCommands();
+        registerDocumentAdapters();
+
         getRuntime().getPlayerManager().registerPlayerAdapter(DKBansPlayer.class, player -> playerManager.getPlayer(player.getUniqueId()));
         getRuntime().getRegistry().getService(PlaceholderProvider.class).registerPlaceHolders(this,"dkbans",new DKBansPlaceholders());
         DescriberRegistrar.register();
 
         getLogger().info("DKBans started successfully");
+    }
+
+    private void registerListeners(){
+        if(getRuntime().isNetworkAvailable()){
+            getRuntime().getNetwork().getEventBus().subscribe(this,new SyncListener(dkBans));
+            if(getRuntime().getPlatform().isProxy()){
+                getRuntime().getLocal().getEventBus().subscribe(this,new PlayerListener());
+                getRuntime().getNetwork().getEventBus().subscribe(this,new PerformListener());
+            }
+            if(DKBansConfig.INTEGRATION_LABYMOD_ENABLED){
+                getRuntime().getNetwork().getEventBus().subscribe(this,new LabyModServiceListener());
+            }
+        }else{
+            getRuntime().getLocal().getEventBus().subscribe(this,new PlayerListener());
+            getRuntime().getLocal().getEventBus().subscribe(this,new PerformListener());
+            if(DKBansConfig.INTEGRATION_LABYMOD_ENABLED){
+                getRuntime().getLocal().getEventBus().subscribe(this,new LabyModServiceListener());
+            }
+        }
     }
 
     private void registerCommands(){
@@ -163,6 +199,13 @@ public class DKBansPlugin extends MinecraftPlugin {
             getRuntime().getLocal().getCommandManager().registerCommand(new ReportCommand(this, CommandConfig.COMMAND_REPORT, null));
         }
     }
+    private void registerDocumentAdapters(){
+        DocumentRegistry.getDefaultContext().registerMappingAdapter(JoinMe.class, MinecraftJoinMe.class);
+        DocumentRegistry.getDefaultContext().registerMappingAdapter(PlayerReport.class, DefaultPlayerReport.class);
+        DocumentRegistry.getDefaultContext().registerMappingAdapter(PlayerReportEntry.class, DefaultPlayerReportEntry.class);
+        DocumentRegistry.getDefaultContext().registerMappingAdapter(PlayerHistoryEntry.class, DefaultPlayerHistoryEntry.class);
+        DocumentRegistry.getDefaultContext().registerMappingAdapter(PlayerHistoryEntrySnapshot.class, DefaultPlayerHistoryEntrySnapshot.class);
+    }
 
     private void loadConfigs() {
         File configLocation = new File("plugins/DKBans/config.yml");
@@ -198,5 +241,9 @@ public class DKBansPlugin extends MinecraftPlugin {
                 .delay(5, TimeUnit.SECONDS)
                 .interval(1, TimeUnit.SECONDS)
                 .execute(new BroadcastTask().start());
+    }
+
+    public static DKBansPlugin getInstance() {
+        return INSTANCE;
     }
 }

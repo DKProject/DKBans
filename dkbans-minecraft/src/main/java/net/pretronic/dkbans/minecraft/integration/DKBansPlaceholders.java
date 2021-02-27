@@ -53,7 +53,7 @@ public class DKBansPlaceholders implements PlaceholderHook {
             if(session == null) return "Unknown";
             MinecraftProtocolVersion version = MinecraftProtocolVersion.of(MinecraftEdition.JAVA,session.getClientProtocolVersion());
             return version.getName();
-        }else if(parameter.equalsIgnoreCase("player_teamchatLogin")){
+        }else if(parameter.equalsIgnoreCase("player_teamChatLogin")){
             return player.hasSetting("DKBans", PlayerSettingsKey.TEAM_CHAT_LOGIN,true);
         }else if(parameter.equalsIgnoreCase("player_notifyLogin")){
             return player.hasSetting("DKBans", PlayerSettingsKey.PUNISH_NOTIFY_LOGIN,true);

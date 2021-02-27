@@ -59,7 +59,9 @@ public class OneTimePunishCommand extends BasicCommand {
         if(player == null) return;
 
         if(!player.isOnline()){
-            sender.sendMessage(Messages.PLAYER_NOT_ONLINE, VariableSet.create().addDescribed("player",player));
+            sender.sendMessage(Messages.PLAYER_NOT_ONLINE, VariableSet.create()
+                    .add("prefix",Messages.PREFIX)
+                    .addDescribed("player",player));
             return;
         }
 
@@ -69,7 +71,7 @@ public class OneTimePunishCommand extends BasicCommand {
         String reason = CommandUtil.readStringFromArguments(arguments,1);
         PlayerHistoryEntrySnapshot snapshot = dkBansPlayer.punish()
                 .scope(scope)
-                .stuff(CommandUtil.getExecutor(sender))
+                .staff(CommandUtil.getExecutor(sender))
                 .punishmentType(punishmentType)
                 .historyType(historyType)
                 .reason(reason)

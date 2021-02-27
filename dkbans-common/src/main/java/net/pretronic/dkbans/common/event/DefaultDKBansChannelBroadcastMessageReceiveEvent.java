@@ -19,19 +19,28 @@
 
 package net.pretronic.dkbans.common.event;
 
+import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.event.DKBansChannelBroadcastMessageReceiveEvent;
+import net.pretronic.libraries.document.Document;
+import net.pretronic.libraries.event.network.NetworkEvent;
+import net.pretronic.libraries.event.network.NetworkEventAdapter;
+
+import java.util.UUID;
 
 public class DefaultDKBansChannelBroadcastMessageReceiveEvent implements DKBansChannelBroadcastMessageReceiveEvent {
 
     private final String channel;
     private final String message;
-    private final DKBansExecutor executor;
+    private final UUID executorId;
 
-    public DefaultDKBansChannelBroadcastMessageReceiveEvent(String channel, String message, DKBansExecutor executor) {
+    private transient DKBansExecutor cachedExecutor;
+
+    public DefaultDKBansChannelBroadcastMessageReceiveEvent(String channel, String message, UUID executorId,DKBansExecutor cachedExecutor) {
         this.channel = channel;
         this.message = message;
-        this.executor = executor;
+        this.executorId = executorId;
+        this.cachedExecutor = cachedExecutor;
     }
 
     @Override
@@ -45,7 +54,13 @@ public class DefaultDKBansChannelBroadcastMessageReceiveEvent implements DKBansC
     }
 
     @Override
+    public UUID getExecutorId() {
+        return executorId;
+    }
+
+    @Override
     public DKBansExecutor getExecutor() {
-        return executor;
+        if(cachedExecutor == null) cachedExecutor = DKBans.getInstance().getPlayerManager().getExecutor(executorId);
+        return cachedExecutor;
     }
 }

@@ -20,19 +20,6 @@
 
 package net.pretronic.dkbans.common.event;
 
-import net.pretronic.dkbans.api.event.DKBansPlayerEvent;
-import net.pretronic.dkbans.api.player.DKBansPlayer;
+import net.pretronic.dkbans.api.event.DKBansTemplatesUpdateEvent;
 
-public class DefaultDKBansPlayerEvent implements DKBansPlayerEvent {
-
-    private final DKBansPlayer player;
-
-    public DefaultDKBansPlayerEvent(DKBansPlayer player) {
-        this.player = player;
-    }
-
-    @Override
-    public DKBansPlayer getPlayer() {
-        return this.player;
-    }
-}
+public class DefaultDKBansTemplatesUpdateEvent implements DKBansTemplatesUpdateEvent {}

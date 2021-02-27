@@ -36,11 +36,11 @@ public interface DKBansExecutor {
     UUID getUniqueId();
 
     default boolean isPlayer(){
-        return getPlayer() != null;
+        return getAsPlayer() != null;
     }
 
     @Nullable
-    DKBansPlayer getPlayer();
+    DKBansPlayer getAsPlayer();
 
 
     class SpecialExecutor implements DKBansExecutor{
@@ -64,7 +64,7 @@ public interface DKBansExecutor {
         }
 
         @Override
-        public DKBansPlayer getPlayer() {
+        public DKBansPlayer getAsPlayer() {
             return null;
         }
 

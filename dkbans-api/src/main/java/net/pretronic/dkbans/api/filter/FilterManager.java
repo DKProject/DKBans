@@ -43,7 +43,6 @@ public interface FilterManager {
 
     boolean checkFilter(String area,String input);
 
-
     Collection<String> getAffiliationAreas();
 
     default boolean hasAffiliationArea(String area){
@@ -69,5 +68,7 @@ public interface FilterManager {
     void registerOperationFactory(FilterOperationFactory operation);
 
     void unregisterOperationFactory(FilterOperationFactory operation);
+
+    void reload();
 
 }
