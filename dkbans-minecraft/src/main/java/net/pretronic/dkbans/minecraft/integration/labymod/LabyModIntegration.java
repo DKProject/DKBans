@@ -25,6 +25,7 @@ import net.pretronic.libraries.document.Document;
 import net.pretronic.libraries.document.type.DocumentFileType;
 import net.pretronic.libraries.utility.exception.OperationFailedException;
 import org.mcnative.runtime.api.player.ConnectedMinecraftPlayer;
+import org.mcnative.runtime.api.protocol.MinecraftProtocolVersion;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
@@ -68,7 +69,7 @@ public class LabyModIntegration {
     public static void sendLabyModMessage(ConnectedMinecraftPlayer player,String key, Document document){
         String json = DocumentFileType.JSON.getWriter().write(document,false);
         byte[] bytes = getBytesToSend( key, json);
-        player.sendData("LMC",bytes);
+        if(player.getProtocolVersion() == MinecraftProtocolVersion.JE_1_8) player.sendData("LMC",bytes);
     }
 
     private static byte[] getBytesToSend(String messageKey, String messageContents ) {
