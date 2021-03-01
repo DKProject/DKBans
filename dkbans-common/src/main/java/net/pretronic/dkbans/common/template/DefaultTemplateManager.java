@@ -27,6 +27,7 @@ import net.pretronic.dkbans.api.player.history.PunishmentType;
 import net.pretronic.dkbans.api.template.*;
 import net.pretronic.dkbans.api.template.punishment.PunishmentTemplateEntryFactory;
 import net.pretronic.dkbans.api.template.unpunishment.UnPunishmentTemplateEntryFactory;
+import net.pretronic.dkbans.common.DefaultDKBans;
 import net.pretronic.dkbans.common.event.DefaultDKBansTemplatesUpdateEvent;
 import net.pretronic.dkbans.common.template.punishment.DefaultPunishmentTemplate;
 import net.pretronic.dkbans.common.template.punishment.types.DefaultBanPunishmentTemplateEntry;
@@ -37,6 +38,8 @@ import net.pretronic.dkbans.common.template.report.DefaultReportTemplate;
 import net.pretronic.dkbans.common.template.unpunishment.DefaultUnPunishmentTemplate;
 import net.pretronic.dkbans.common.template.unpunishment.DefaultUnPunishmentTemplateEntry;
 import net.pretronic.libraries.utility.Iterators;
+import net.pretronic.libraries.utility.Validate;
+import net.pretronic.libraries.utility.annonations.Internal;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -71,6 +74,19 @@ public class DefaultTemplateManager implements TemplateManager {
     }
 
     @Override
+    public boolean deleteTemplateGroup(TemplateGroup group) {
+        Validate.notNull(group);
+        boolean exist = this.templateGroups.remove(group);
+        if(exist) {
+            DefaultDKBans.getInstance().getStorage().getTemplateGroups().delete()
+                    .where("Id", group.getId())
+                    .execute();
+            sendUpdate();
+        }
+        return exist;
+    }
+
+    @Override
     public Collection<Template> getTemplates() {
         Collection<Template> templates = new ArrayList<>();
         this.templateGroups.forEach(group -> templates.addAll(group.getTemplates()));
@@ -92,6 +108,18 @@ public class DefaultTemplateManager implements TemplateManager {
             }
         }
         return null;
+    }
+
+    @Override
+    public boolean deleteTemplate(Template template) {
+        Validate.notNull(template);
+        for (TemplateGroup group : this.templateGroups) {
+            if(group.getTemplates().contains(template)) {
+                group.removeTemplate(template);
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -143,7 +171,8 @@ public class DefaultTemplateManager implements TemplateManager {
         loadTemplateGroups();
     }
 
-    private void sendUpdate(){
+    @Internal
+    public void sendUpdate(){
         DKBans.getInstance().getEventBus().callEvent(DKBansTemplatesUpdateEvent.class, new DefaultDKBansTemplatesUpdateEvent());
     }
 

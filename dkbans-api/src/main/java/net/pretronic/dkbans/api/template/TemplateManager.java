@@ -32,12 +32,16 @@ public interface TemplateManager {
 
     TemplateGroup createTemplateGroup(String name, TemplateType templateType, CalculationType calculationType);
 
+    boolean deleteTemplateGroup(TemplateGroup group);
+
 
     Collection<Template> getTemplates();
 
     Collection<Template> getTemplates(TemplateCategory category);
 
     Template getTemplate(int id);
+
+    boolean deleteTemplate(Template template);
 
 
     Collection<TemplateCategory> getTemplateCategories();
