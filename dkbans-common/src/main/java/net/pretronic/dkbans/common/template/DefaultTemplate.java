@@ -127,4 +127,13 @@ public class DefaultTemplate implements Template {
     public void setIdInternal(int id) {
         this.id = id;
     }
+
+    public static String buildAliases(Collection<String> aliases) {
+        StringBuilder builder = new StringBuilder();
+        for (String alias : aliases) {
+            if(builder.length() > 0) builder.append(",");
+            builder.append(alias);
+        }
+        return builder.toString();
+    }
 }

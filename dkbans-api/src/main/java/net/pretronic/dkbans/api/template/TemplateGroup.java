@@ -37,10 +37,6 @@ public interface TemplateGroup extends Iterable<Template> {
 
     List<Template> getTemplates();
 
-    void addTemplate(Template template);
-
-    void addTemplates(List<Template> templates);
-
     default Template getTemplate(String name){
         return Iterators.findOne(getTemplates(), template -> template.hasName(name));
     }
@@ -49,4 +45,5 @@ public interface TemplateGroup extends Iterable<Template> {
         return Iterators.findOne(getTemplates(), template -> template.getInGroupId() == inGroupId);
     }
 
+    boolean removeTemplate(Template template);
 }

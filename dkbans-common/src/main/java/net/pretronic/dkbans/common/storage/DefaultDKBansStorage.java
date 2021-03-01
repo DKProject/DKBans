@@ -226,7 +226,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
                         .set("Name", template.getName())
                         .set("DisplayName", template.getDisplayName())
                         .set("Permission", template.getPermission())
-                        .set("Aliases", buildAliases(template.getAliases()))
+                        .set("Aliases", DefaultTemplate.buildAliases(template.getAliases()))
                         .set("HistoryTypeId", template.getHistoryType() != null ? template.getHistoryType().getId() : null)
                         .set("Enabled", template.isEnabled())
                         .set("Hidden", template.isHidden())
@@ -242,7 +242,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
                         .set("Name", template.getName())
                         .set("DisplayName", template.getDisplayName())
                         .set("Permission", template.getPermission())
-                        .set("Aliases", buildAliases(template.getAliases()))
+                        .set("Aliases", DefaultTemplate.buildAliases(template.getAliases()))
                         .set("HistoryTypeId", template.getHistoryType() != null ? template.getHistoryType().getId() : null)
                         .set("Enabled", template.isEnabled())
                         .set("Hidden", template.isHidden())
@@ -256,14 +256,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
         }
     }
 
-    private String buildAliases(Collection<String> aliases) {
-        StringBuilder builder = new StringBuilder();
-        for (String alias : aliases) {
-            if(builder.length() > 0) builder.append(",");
-            builder.append(alias);
-        }
-        return builder.toString();
-    }
+
 
     private Collection<String> loadAliases(String aliases0) {
         return new ArrayList<>(Arrays.asList(aliases0.split(",")));

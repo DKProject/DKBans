@@ -22,8 +22,12 @@ package net.pretronic.dkbans.common.template;
 
 import net.pretronic.dkbans.api.player.history.CalculationType;
 import net.pretronic.dkbans.api.template.Template;
+import net.pretronic.dkbans.api.template.TemplateFactory;
 import net.pretronic.dkbans.api.template.TemplateGroup;
 import net.pretronic.dkbans.api.template.TemplateType;
+import net.pretronic.dkbans.common.DefaultDKBans;
+import net.pretronic.libraries.document.type.DocumentFileType;
+import net.pretronic.libraries.utility.Validate;
 import net.pretronic.libraries.utility.annonations.Internal;
 
 import java.util.ArrayList;
@@ -75,15 +79,17 @@ public class DefaultTemplateGroup implements TemplateGroup {
         return this.templates;
     }
 
-    //@Todo add to database
     @Override
-    public void addTemplate(Template template) {
-        this.templates.add(template);
-    }
-
-    @Override
-    public void addTemplates(List<Template> templates) {
-        this.templates.addAll(templates);
+    public boolean removeTemplate(Template template) {
+        Validate.notNull(template);
+        boolean removed = this.templates.remove(template);
+        if(removed) {
+            DefaultDKBans.getInstance().getStorage().getTemplate().delete()
+                    .where("Id", template.getId())
+                    .execute();
+            DefaultDKBans.getInstance().getTemplateManager().sendUpdate();
+        }
+        return removed;
     }
 
     @Override
