@@ -21,7 +21,7 @@
 package net.pretronic.dkbans.minecraft.commands.report;
 
 import net.pretronic.dkbans.minecraft.PlayerSettingsKey;
-import net.pretronic.dkbans.minecraft.commands.CommandUtil;
+import net.pretronic.dkbans.minecraft.commands.util.CommandUtil;
 import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.dkbans.minecraft.config.Permissions;
 import net.pretronic.libraries.command.command.BasicCommand;

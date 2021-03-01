@@ -23,6 +23,7 @@ package net.pretronic.dkbans.minecraft.commands;
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.minecraft.BroadcastMessageChannels;
 import net.pretronic.dkbans.minecraft.PlayerSettingsKey;
+import net.pretronic.dkbans.minecraft.commands.util.CommandUtil;
 import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.dkbans.minecraft.config.Permissions;
 import net.pretronic.libraries.command.command.BasicCommand;

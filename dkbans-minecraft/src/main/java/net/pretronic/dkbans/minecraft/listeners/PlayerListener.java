@@ -52,10 +52,12 @@ import org.mcnative.runtime.api.event.player.login.MinecraftPlayerLoginEvent;
 import org.mcnative.runtime.api.event.player.login.MinecraftPlayerPostLoginEvent;
 import org.mcnative.runtime.api.network.component.server.ProxyServer;
 import org.mcnative.runtime.api.player.ConnectedMinecraftPlayer;
+import org.mcnative.runtime.api.player.MinecraftPlayer;
 import org.mcnative.runtime.api.player.OnlineMinecraftPlayer;
 import org.mcnative.runtime.api.text.Text;
 import org.mcnative.runtime.api.text.components.MessageComponent;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -214,7 +216,7 @@ public class PlayerListener {
             event.setCancelled(true);
             sendMutedMessage(event.getOnlinePlayer(), mute);
         }else{
-            String filterAffiliationArea = checkMessageBlocked(event,player);
+            String filterAffiliationArea = checkMessageBlocked(event);
             DKBans.getInstance().getChatLogManager().createChatLogEntryAsync(event.getPlayer().getUniqueId(),
                     event.getMessage(),
                     System.currentTimeMillis(),
@@ -242,20 +244,41 @@ public class PlayerListener {
         return false;
     }
 
-    private String checkMessageBlocked(MinecraftPlayerChatEvent event, DKBansPlayer player) {
+    private String checkMessageBlocked(MinecraftPlayerChatEvent event) {
         FilterManager filterManager = DKBans.getInstance().getFilterManager();
         if(filterManager.checkFilter(FilterAffiliationArea.CHAT_INSULT,event.getMessage())){
             event.getOnlinePlayer().sendMessage(Messages.FILTER_BLOCKED_INSULTING);
             event.setCancelled(true);
+            sendBlockNotification(event.getMessage(),event.getOnlinePlayer());
             return FilterAffiliationArea.CHAT_INSULT;
         }
 
         if(filterManager.checkFilter(FilterAffiliationArea.CHAT_ADVERTISING,event.getMessage())){
             event.getOnlinePlayer().sendMessage(Messages.FILTER_BLOCKED_ADVERTISING);
             event.setCancelled(true);
+            sendBlockNotification(event.getMessage(), event.getOnlinePlayer());
             return FilterAffiliationArea.CHAT_ADVERTISING;
         }
         return null;
+    }
+
+    private void sendBlockNotification(String message, OnlineMinecraftPlayer player){//CHAT_FILTER_NOTIFICATION
+        if(DKBansConfig.CHAT_FILTER_NOTIFICATION){
+            MessageComponent<?> message0 = Messages.FILTER_BLOCKED_NOTIFICATION;
+            VariableSet variables = VariableSet.create().add("message",message).addDescribed("player",player);
+
+            Collection<OnlineMinecraftPlayer> players;
+            if(McNative.getInstance().getPlatform().isProxy()){
+                players = player.getServer().getOnlinePlayers();
+            }else players = McNative.getInstance().getLocal().getOnlinePlayers();
+
+            for (OnlineMinecraftPlayer staff : players) {
+                if (staff.hasPermission(Permissions.CHAT_NOTIFICATION)
+                        && staff.hasSetting("DKBans", PlayerSettingsKey.PUNISH_NOTIFY_LOGIN, true)) {
+                    staff.sendMessage(message0,variables);
+                }
+            }
+        }
     }
 
     @Listener(priority = EventPriority.HIGHEST)//@Todo async

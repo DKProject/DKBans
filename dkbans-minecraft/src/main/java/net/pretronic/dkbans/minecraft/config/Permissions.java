@@ -30,6 +30,8 @@ public class Permissions {
 
     public static final String CHAT_BYPASS = "dkbans.chat.bypass";
 
+    public static final String CHAT_NOTIFICATION = "dkbans.chat.notification";
+
     public static final String BYPASS_IGNORE = "dkbans.bypass.ignore";
 
     public static final String PUNISH_OVERRIDE_OWN = "dkbans.punish.override";

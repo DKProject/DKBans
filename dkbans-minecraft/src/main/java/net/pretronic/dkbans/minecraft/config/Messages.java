@@ -46,6 +46,7 @@ public class Messages {
     public static MessageComponent<?> ERROR_TEMPLATE_NOT_EXISTS = Text.ofMessageKey("dkbans.error.template.notExists");
     public static MessageComponent<?> ERROR_INVALID_BROADCAST_ORDER = Text.ofMessageKey("dkbans.error.invalidBroadcastOrder");
     public static MessageComponent<?> ERROR_INVALID_SCOPE = Text.ofMessageKey("dkbans.error.invalidScope");
+    public static MessageComponent<?> ERROR_PUNISHMENT_TO_LONG = Text.ofMessageKey("dkbans.error.punishment.toLong");
 
     public static MessageComponent<?> PLAYER_NOT_FOUND = Text.ofMessageKey("dkbans.player.notFound");
     public static MessageComponent<?> PLAYER_NOT_ONLINE = Text.ofMessageKey("dkbans.player.notOnline");
@@ -101,6 +102,7 @@ public class Messages {
     public static MessageComponent<?> FILTER_BLOCKED_COMMAND = Text.ofMessageKey("dkbans.filter.blocked.command");
     public static MessageComponent<?> FILTER_BLOCKED_INSULTING = Text.ofMessageKey("dkbans.filter.blocked.insulting");
     public static MessageComponent<?> FILTER_BLOCKED_ADVERTISING = Text.ofMessageKey("dkbans.filter.blocked.advertising");
+    public static MessageComponent<?> FILTER_BLOCKED_NOTIFICATION = Text.ofMessageKey("dkbans.filter.blocked.notification");
 
     public static MessageComponent<?> PUNISH_BAN_MESSAGE_PERMANENTLY = Text.ofMessageKey("dkbans.punish.ban.message.permanently");
     public static MessageComponent<?> PUNISH_BAN_MESSAGE_TEMPORARY = Text.ofMessageKey("dkbans.punish.ban.message.temporary");

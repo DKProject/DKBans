@@ -25,7 +25,7 @@ import net.pretronic.dkbans.api.player.history.PlayerHistoryEntrySnapshot;
 import net.pretronic.dkbans.api.template.TemplateGroup;
 import net.pretronic.dkbans.api.template.punishment.PunishmentTemplate;
 import net.pretronic.dkbans.api.template.punishment.PunishmentTemplateEntry;
-import net.pretronic.dkbans.minecraft.commands.CommandUtil;
+import net.pretronic.dkbans.minecraft.commands.util.CommandUtil;
 import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.libraries.command.command.BasicCommand;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;

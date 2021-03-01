@@ -27,6 +27,7 @@ messages:
   dkbans.error.templateGroup.notExists: '{prefix} &e{templateGroup} &ctemplate group does not exist'
   dkbans.error.template.notExists: '{prefix} &e{template} &ctemplate does not exist'
   dkbans.error.ipBlock.notExists: '{prefix} &cAn ip block for address &e{address} &cdoes not exist'
+  dkbans.error.punishment.toLong: '{prefix} &cYou can not longer &e{type} &ca player than &e{duration}'
 
   dkbans.player.notFound: '{prefix} &cThe player &e{name} &cwas not found'
   dkbans.player.notOnline: '{prefix} &cThe player &e{player.displayName} &cis not online'
@@ -53,6 +54,7 @@ messages:
   dkbans.chat.filter.toFast: '${dkbans.prefix.chat} &cYou are chatting to fast.'
   dkbans.chat.filter.repeat: '${dkbans.prefix.chat} &cYou are repeating yourself.'
 
+
   dkbans.filter.blocked.command: '${dkbans.prefix.chat} &fUnknown command. Type "/help" for help.'
   dkbans.filter.blocked.insulting: '${dkbans.prefix.chat} &cPlease pay attention to your choice of words.'
   dkbans.filter.blocked.advertising: '${dkbans.prefix.chat} &cPlease do not advertise'
@@ -61,6 +63,8 @@ messages:
   &cYour nickname is not allowed on this server
   &7
   &aIf you change you name, you can join :D'
+  dkbans.filter.blocked.notification: '${dkbans.prefix.chat} Blocked chat message from {player.displayName}
+  &7{message}'
 
   dkbans.punish.template.noPermission: '{prefix} &cYou are not allowed to use this reason'
   dkbans.punish.template.list: '{prefix} &7Available reasons&8:

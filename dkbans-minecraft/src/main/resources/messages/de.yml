@@ -27,6 +27,8 @@ messages:
   dkbans.error.templateGroup.notExists: '{prefix} &e{templateGroup} &cVorlagengruppe existiert nicht'
   dkbans.error.template.notExists: '{prefix} &e{template} &cVorlage existiert nicht.'
   dkbans.error.ipBlock.notExists: '{prefix} &cEin IP-Block für &e{address} &cexistiert nicht'
+  dkbans.error.punishment.toLong: '{prefix} &cDer &e{type} &cdarf nicht länger als &e{duration} &csein'
+
   dkbans.player.notFound: '{prefix} &cDer Spieler &e{name} &cwurde nicht gefunden'
   dkbans.player.notOnline: '{prefix} &cDer Spieler &e{player.displayName} &cist nicht online'
   dkbans.player.notSelf: '{prefix} &cDu kannst nicht mit dir selbst interagieren'
