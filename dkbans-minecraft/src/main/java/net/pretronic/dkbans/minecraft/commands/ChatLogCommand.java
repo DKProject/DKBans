@@ -23,6 +23,8 @@ package net.pretronic.dkbans.minecraft.commands;
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.player.chatlog.ChatLog;
 import net.pretronic.dkbans.api.player.chatlog.ChatLogEntry;
+import net.pretronic.dkbans.api.player.chatlog.PlayerChatLog;
+import net.pretronic.dkbans.api.player.chatlog.ServerChatLog;
 import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.libraries.command.command.BasicCommand;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
@@ -84,9 +86,16 @@ public class ChatLogCommand extends BasicCommand {
             page = Convert.toInteger(args[2]);
         }
         List<ChatLogEntry> entries = chatLog.getPage(page, 10);
-        sender.sendMessage(message, VariableSet.create()
+        VariableSet variableSet = VariableSet.create()
                 .add("page",page)
                 .add("prefix",Messages.PREFIX_CHAT)
-                .addDescribed("entries", entries));
+                .addDescribed("entries", entries);
+        if(chatLog instanceof PlayerChatLog) {
+            variableSet.addDescribed("player", ((PlayerChatLog)chatLog).getPlayer());
+        } else if(chatLog instanceof ServerChatLog) {
+            variableSet.add("serverName", ((ServerChatLog)chatLog).getServerName())
+                    .add("serverId", ((ServerChatLog)chatLog).getServerId().toString());
+        }
+        sender.sendMessage(message, variableSet);
     }
 }

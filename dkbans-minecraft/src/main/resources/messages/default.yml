@@ -348,7 +348,7 @@ messages:
   dkbans.command.chatlog.player.list.loop: '&8» {entry.serverName} &7on &e{entry.timeFormatted}&8:
   &7{entry.message}'
 
-  dkbans.command.chatlog.server.list: '${dkbans.prefix.chat} &7Chatlog of server {server.name} &8| &7Page&8: {page}
+  dkbans.command.chatlog.server.list: '${dkbans.prefix.chat} &7Chatlog of server {serverName} &8| &7Page&8: {page}
   @for("entry" in {entries}, ${dkbans.command.chatLog.server.list.loop},"\n")'
   dkbans.command.chatlog.server.list.loop: '&8» {entry.player.displayName} &7on &e{entry.timeFormatted}&8:
   &7{entry.message}'
