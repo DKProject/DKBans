@@ -64,7 +64,7 @@ public class ChatLogCommand extends BasicCommand {
                 return;
             }
             ChatLog chatLog = DKBans.getInstance().getChatLogManager().getPlayerChatLog(player.getUniqueId());
-            printChatLog(sender, chatLog, args,Messages.COMMAND_CHATLOG_PLAYER_LIST);
+            printChatLog(sender, chatLog, args,Messages.COMMAND_CHATLOG_PLAYER_LIST,player);
         } else if(args[0].equalsIgnoreCase("server")) {
             ChatLog chatLog;
             String server0 = args[1];
@@ -74,13 +74,13 @@ public class ChatLogCommand extends BasicCommand {
             } catch (Exception ignored) {
                 chatLog = DKBans.getInstance().getChatLogManager().getServerChatLog(server0);
             }
-            printChatLog(sender, chatLog, args,Messages.COMMAND_CHATLOG_SERVER_LIST);
+            printChatLog(sender, chatLog, args,Messages.COMMAND_CHATLOG_SERVER_LIST,null);
         } else {
             sender.sendMessage(Messages.COMMAND_CHATLOG_USAGE);
         }
     }
 
-    private void printChatLog(CommandSender sender, ChatLog chatLog, String[] args, MessageComponent<?> message) {
+    private void printChatLog(CommandSender sender, ChatLog chatLog, String[] args, MessageComponent<?> message,MinecraftPlayer player) {
         int page = 1;
         if(args.length == 3) {
             page = Convert.toInteger(args[2]);
@@ -90,6 +90,7 @@ public class ChatLogCommand extends BasicCommand {
                 .add("page",page)
                 .add("prefix",Messages.PREFIX_CHAT)
                 .addDescribed("entries", entries);
+        if(player != null) variableSet.addDescribed("player",player);
         if(chatLog instanceof PlayerChatLog) {
             variableSet.addDescribed("player", ((PlayerChatLog)chatLog).getPlayer());
         } else if(chatLog instanceof ServerChatLog) {
