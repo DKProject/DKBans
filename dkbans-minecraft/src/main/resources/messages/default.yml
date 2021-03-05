@@ -116,7 +116,7 @@ messages:
   dkbans.punish.notify.mute: '${dkbans.prefix} &e{player.displayName} &7has been &9muted &7by &8{mute.staff.displayName} &7for &4{mute.reason}&7'
   dkbans.punish.notify.kick: '${dkbans.prefix} &e{player.displayName} &7has been &ekicked &7by &8{kick.staff.displayName} &7for &4{kick.reason}&7'
   dkbans.punish.notify.warn: '${dkbans.prefix} &e{player.displayName} &7has been &6warned &7by &8{warn.staff.displayName} &7for &4{warn.reason}&7'
-  dkbans.punish.notify.edit: '${dkbans.prefix} &7Punish &e{entry.id} &8(&e{newSnapshot.punishmentType.color}{newSnapshot.punishmentType.name}&8) of &e{player.displayName} &7has been changed by &8{warn.staff.displayName}'
+  dkbans.punish.notify.edit: '${dkbans.prefix} &7Punish &e{entry.id} &8(&e{newSnapshot.punishmentType.color}{newSnapshot.punishmentType.name}&8) &7of &e{player.displayName} &7has been changed by &8{newSnapshot.modifiedBy.displayName}'
 
   dkbans.punish.success.ban: '${dkbans.prefix} &e{player.displayName} &7was banned'
   dkbans.punish.success.mute: '${dkbans.prefix} &e{player.displayName} &7was muted'
