@@ -116,6 +116,7 @@ public class PunishEditCommand extends BasicCommand {
         PlayerHistoryEntrySnapshot result = builder.execute();
         sender.sendMessage(Messages.COMMAND_PUNISH_EDIT_DONE, VariableSet.create()
                 .addDescribed("entry",entry)
+                .addDescribed("player",entry.getHistory().getPlayer())
                 .addDescribed("snapshot",result));
     }
 }

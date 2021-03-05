@@ -105,10 +105,10 @@ messages:
   &8» &3WarnID&8: &7{warn.id}
   &7'
 
-  dkbans.punish.notify.ban: '${dkbans.prefix} &9{player.displayName} &7wurde &cgebannt &7von &8{ban.staff.displayName} &7für &4{ban.reason}&7'
-  dkbans.punish.notify.mute: '${dkbans.prefix} &9{player.displayName} &7wurde &9gemutet &7von &8{mute.staff.displayName} &7für &4{mute.reason}&7'
-  dkbans.punish.notify.warn: '${dkbans.prefix} &9{player.displayName} &7wurde &6verwarnt &7von &8{warn.staff.displayName} &7für &4{warn.reason}&7'
-  dkbans.punish.notify.kick: '${dkbans.prefix} &9{player.displayName} &7wurde &egekickt &7von &8{kick.staff.displayName} &7für &4{kick.reason}&7'
+  dkbans.punish.notify.ban: '${dkbans.prefix} &9{player.displayName} &7wurde &7von &8{ban.staff.displayName} &7für &4{ban.reason} &cgebannt'
+  dkbans.punish.notify.mute: '${dkbans.prefix} &9{player.displayName} &7wurde &7von &8{mute.staff.displayName} &7für &4{mute.reason} &9gemutet'
+  dkbans.punish.notify.warn: '${dkbans.prefix} &9{player.displayName} &7wurde &7von &8{warn.staff.displayName} &7für &4{warn.reason} &6verwarnt'
+  dkbans.punish.notify.kick: '${dkbans.prefix} &9{player.displayName} &7wurde &7von &8{kick.staff.displayName} &7für &4{kick.reason} &egekickt'
   dkbans.punish.notify.edit: '${dkbans.prefix} &7Bestrafung &e{entry.id} &8(&e{newSnapshot.punishmentType.color}{newSnapshot.punishmentType.name}&8) für &e{player.displayName} &7wurde von &8{warn.staff.displayName} &7geändert'
 
   dkbans.punish.success.ban: '${dkbans.prefix} &e{player.displayName} &7wurde gebannt'

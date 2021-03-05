@@ -150,6 +150,7 @@ public class PerformListener {
                         .addDescribed("player", event.getPlayer()));
             }
         }
+        System.out.println("punish edit executed");
         sendToStaff(Messages.PUNISH_NOTIFY_EDIT, VariableSet.create()
                 .addDescribed("player",event.getPlayer())
                 .addDescribed("entry",event.getEntry())
