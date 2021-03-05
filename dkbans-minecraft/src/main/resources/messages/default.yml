@@ -71,14 +71,14 @@ messages:
   @for("template" in {templates},${dkbans.punish.template.list.loop},"\n")'
   dkbans.punish.template.list.loop: '![" &8- &c{template.inGroupId} &8| &c{template.displayName} &8» &4&l{template.firstType.name}"]("run:///{command} {selectedPlayer} {template.inGroupId}")'
 
-  dkbans.punish.ban.message.permanently: '&e&lexample.net
+  dkbans.punish.message.ban.permanently: '&e&lexample.net
   &e
   &cYou are &4&lpermanently banned &cfrom this network
   &3Reason&8: &4&l{ban.reason}
   &3BanID&8: &7{ban.id}
   &e
   &aYou can make a unban request at &eforum.example.net.'
-  dkbans.punish.ban.message.temporary: '&e&lexample.net&r
+  dkbans.punish.message.ban.temporary: '&e&lexample.net&r
   &e
   &cYou are &e&l{ban.durationFormatted} &cbanned from this network
   &3Reason&8: &4&l{ban.reason}
@@ -87,35 +87,36 @@ messages:
   &3Remaining time&8: &e{ban.remainingFormatted}
   &e
   &aYou can make a unban request at &eforum.example.net'
-  dkbans.punish.ban.notify: '${dkbans.prefix} &9{player.displayName} &7has been &cbanned &7by &8{ban.staff.displayName} &7for &4{ban.reason}&7'
 
-  dkbans.punish.mute.message.permanently: '&5
+  dkbans.punish.message.mute.permanently: '&5
   ${dkbans.prefix} &cYou are &4&lPermanently &cbanned from the chat
   &8» &3Reason&8: &4&l{mute.reason}
   &8» &3BanID&8: &7{mute.id}
   &7'
-  dkbans.punish.mute.message.temporary: '&5
+  dkbans.punish.message.mute.temporary: '&5
   ${dkbans.prefix} &cYou are &e&l{mute.durationFormatted} &cbanned from the chat
   &8» &3Reason&8: &4&l{mute.reason}
   &8» &3BanID&8: &7{mute.id}
   &e
   &8» &3Remaining time&8: &e{mute.remainingFormatted}
   &7'
-  dkbans.punish.mute.notify: '${dkbans.prefix} &9{player.displayName} &7has been &9muted &7by &8{mute.staff.displayName} &7for &4{mute.reason}&7'
 
-  dkbans.punish.kick.message: '&e&lexample.net&r
+  dkbans.punish.message.kick: '&e&lexample.net&r
   &e
   &cYou were kicked from the network
   &3Reason&8: &4&l{kick.reason}'
 
-  dkbans.punish.kick.notify: '${dkbans.prefix} &9{player.displayName} &7has been &ekicked &7by &8{kick.staff.displayName} &7for &4{kick.reason}&7'
-
-  dkbans.punish.warn.message.chat: '&5
+  dkbans.punish.message.warn.chat: '&5
   ${dkbans.prefix} &cYou have been warned
   &8» &3Reason&8: &4&l{warn.reason}
   &8» &3WarnID&8: &7{warn.id}
   &7'
-  dkbans.punish.warn.notify: '${dkbans.prefix} &9{player.displayName} &7has been &6warned &7by &8{warn.staff.displayName} &7for &4{warn.reason}&7'
+
+  dkbans.punish.notify.ban: '${dkbans.prefix} &e{player.displayName} &7has been &cbanned &7by &8{ban.staff.displayName} &7for &4{ban.reason}&7'
+  dkbans.punish.notify.mute: '${dkbans.prefix} &e{player.displayName} &7has been &9muted &7by &8{mute.staff.displayName} &7for &4{mute.reason}&7'
+  dkbans.punish.notify.kick: '${dkbans.prefix} &e{player.displayName} &7has been &ekicked &7by &8{kick.staff.displayName} &7for &4{kick.reason}&7'
+  dkbans.punish.notify.warn: '${dkbans.prefix} &e{player.displayName} &7has been &6warned &7by &8{warn.staff.displayName} &7for &4{warn.reason}&7'
+  dkbans.punish.notify.edit: '${dkbans.prefix} &7Punish &e{entry.id} &8(&e{newSnapshot.punishmentType.color}{newSnapshot.punishmentType.name}&8) of &e{player.displayName} &7has been changed by &8{warn.staff.displayName}'
 
   dkbans.punish.success.ban: '${dkbans.prefix} &e{player.displayName} &7was banned'
   dkbans.punish.success.mute: '${dkbans.prefix} &e{player.displayName} &7was muted'

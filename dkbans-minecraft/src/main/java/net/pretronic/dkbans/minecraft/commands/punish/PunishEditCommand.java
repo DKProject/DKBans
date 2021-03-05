@@ -74,7 +74,7 @@ public class PunishEditCommand extends BasicCommand {
             }else if(entries.size() == 1){
                 entry = entries.get(0);
             }else{
-                sender.sendMessage(Messages.COMMAND_PUNISH_INFO_MULTIPLE,VariableSet.create()
+                sender.sendMessage(Messages.COMMAND_PUNISH_EDIT_MULTIPLE,VariableSet.create()
                         .addDescribed("entries",entries)
                         .addDescribed("player",player));
                 return;

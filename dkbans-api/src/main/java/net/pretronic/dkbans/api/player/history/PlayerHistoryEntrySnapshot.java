@@ -72,6 +72,8 @@ public interface PlayerHistoryEntrySnapshot {
 
     Document getProperties();
 
+    void updateProperties();
+
 
     String getRevokeReason();
 

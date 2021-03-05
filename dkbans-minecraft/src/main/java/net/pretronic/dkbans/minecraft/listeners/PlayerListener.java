@@ -85,7 +85,7 @@ public class PlayerListener {
             PlayerHistoryEntry ban = player.getHistory().getActiveEntry(PunishmentType.BAN);
             event.setCancelled(true);
             MessageComponent<?> message = ban.getCurrent().isPermanently()
-                    ? Messages.PUNISH_BAN_MESSAGE_PERMANENTLY : Messages.PUNISH_BAN_MESSAGE_TEMPORARY;
+                    ? Messages.PUNISH_MESSAGE_BAN_PERMANENTLY : Messages.PUNISH_MESSAGE_BAN_TEMPORARY;
             event.setCancelReason(message,VariableSet.create()
                     .addDescribed("ban",ban)
                     .addDescribed("punish",ban)
@@ -125,7 +125,7 @@ public class PlayerListener {
             result = builder.execute();
         }
         MessageComponent<?> message = result.isPermanently()
-                ? Messages.PUNISH_BAN_MESSAGE_PERMANENTLY : Messages.PUNISH_BAN_MESSAGE_TEMPORARY;
+                ? Messages.PUNISH_MESSAGE_BAN_PERMANENTLY : Messages.PUNISH_MESSAGE_BAN_TEMPORARY;
         event.setCancelReason(message,VariableSet.create()
                 .addDescribed("ban",result)
                 .addDescribed("punish",result)
@@ -307,7 +307,7 @@ public class PlayerListener {
 
     private void sendMutedMessage(OnlineMinecraftPlayer player, PlayerHistoryEntry mute) {
         MessageComponent<?> message = mute.getCurrent().isPermanently()
-                ? Messages.PUNISH_MUTE_MESSAGE_PERMANENTLY : Messages.PUNISH_MUTE_MESSAGE_TEMPORARY;
+                ? Messages.PUNISH_MESSAGE_MUTE_PERMANENTLY : Messages.PUNISH_MESSAGE_MUTE_TEMPORARY;
         player.sendMessage(message, VariableSet.create()
                 .addDescribed("mute",mute)
                 .addDescribed("punish",mute)

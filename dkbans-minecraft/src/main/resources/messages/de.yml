@@ -39,15 +39,20 @@ messages:
   dkbans.player.staff.status.not: '{prefix} &7Du bist nicht {statusFormatted}'
   dkbans.player.staff.status.login: '&aeingeloggt'
   dkbans.player.staff.status.logout: '&causgeloggt'
+
   dkbans.server.notFound: '${dkbans.prefix.network} &cDer Server &e{name} &cwurde nicht gefunden'
   dkbans.server.alreadyConnected: '${dkbans.prefix.network} &cDu bist bereits zum Server verbunden'
   dkbans.server.connecting: '${dkbans.prefix.network} &7Verbinde mit {server.name}...'
+
   dkbans.ping.self: '${dkbans.prefix.network} &7Dein Ping ist &e{ping}&7ms'
   dkbans.ping.other: '${dkbans.prefix.network} &7Der Ping von &e{player.displayName} &7ist &e{ping}&7ms'
+
   dkbans.onlineTime.self: '${dkbans.prefix.network} &7Deine Onlinezeit beträgt &e{online-time-formatted-short}'
   dkbans.onlineTime.other: '${dkbans.prefix.network} &7Die Onlinezeit von &e{player.displayName} &7beträgt &e{online-time-formatted-short}'
+
   dkbans.chat.filter.toFast: '${dkbans.prefix.chat} &cDu schreibst zu schnell!'
   dkbans.chat.filter.repeat: '${dkbans.prefix.chat} &cDu wiederholst dich!'
+
   dkbans.filter.blocked.command: '${dkbans.prefix.chat} &fUnbekannter Befehl. Gib "/help" für Hilfe ein.'
   dkbans.filter.blocked.insulting: '${dkbans.prefix.chat} &cBitte achte auf deine Wortwahl!'
   dkbans.filter.blocked.advertising: '${dkbans.prefix.chat} &cBitte mache keine Werbung!'
@@ -56,18 +61,20 @@ messages:
   &cDein Nutzername ist nicht erlaubt auf dem Server
   &7
   &aWenn du deinen Namen änderst, kann du wieder joinen :D'
+
   dkbans.punish.template.noPermission: '{prefix} &cDu hast nicht genügend Rechte, um diesen Grund zu nutzen'
   dkbans.punish.template.list: '{prefix} &7Verfügbare Gründe&8:
   @for("template" in {templates},${dkbans.punish.template.list.loop},"\n")'
   dkbans.punish.template.list.loop: '![" &8- &c{template.inGroupId} &8| &c{template.displayName} &8» &4&l{template.firstType.name}"]("run:///{command} {selectedPlayer} {template.inGroupId}")'
-  dkbans.punish.ban.message.permanently: '&e&lexample.net
+
+  dkbans.punish.message.ban.permanently: '&e&lexample.net
   &e
   &cDu wurdest &4&lpermanent &cgebannt von diesem Netzwerk!
   &3Grund&8: &4&l{ban.reason}
   &3BanID&8: &7{ban.id}
   &e
   &aEin Entbannungsantrag kannst du unter &eforum.example.net &astellen'
-  dkbans.punish.ban.message.temporary: '&e&lexample.net&r
+  dkbans.punish.message.ban.temporary: '&e&lexample.net&r
   &e
   &cDu wurdest &e&l{ban.durationFormatted} &cgebannt von diesem Netzwerk!
   &3Grund&8: &4&l{ban.reason}
@@ -76,45 +83,39 @@ messages:
   &3Verbleibende Zeit&8: &e{ban.remainingFormatted}
   &e
   &aEin Entbannungsantrag kannst du unter &eforum.example.net &astellen.'
-  dkbans.punish.ban.notify: '${dkbans.prefix} &9{player.displayName} &7wurde &cgebannt &7von &8{ban.staff.displayName} &7für &4{ban.reason}&7'
-  dkbans.punish.mute.message.permanently: '&5
+  dkbans.punish.message.mute.permanently: '&5
   ${dkbans.prefix} &cDu wurdest &4&lpermanent &cvom Chat gebannt!
   &8» &3Grund&8: &4&l{mute.reason}
   &8» &3BanID&8: &7{mute.id}
   &7'
-  dkbans.punish.mute.message.temporary: '&5
+  dkbans.punish.message.mute.temporary: '&5
   ${dkbans.prefix} &cDu wurdest &e&l{mute.durationFormatted} &cvom Chat gebannt!
   &8» &3Grund&8: &4&l{mute.reason}
   &8» &3BanID&8: &7{mute.id}
   &e
   &8» &3Verbleibende Zeit&8: &e{mute.remainingFormatted}
   &7'
-  dkbans.punish.mute.notify: '${dkbans.prefix} &9{player.displayName} &7wurde &9gemutet &7von &8{mute.staff.displayName} &7für &4{mute.reason}&7'
-  dkbans.punish.kick.message: '&e&lexample.net&r
+  dkbans.punish.message.kick: '&e&lexample.net&r
   &e
   &cDu wurdest vom Netzwerk gekickt!
   &3Reason&8: &4&l{kick.reason}'
-  dkbans.punish.kick.notify: '${dkbans.prefix} &9{player.displayName} &7wurde &egekickt &7von &8{kick.staff.displayName} &7für &4{kick.reason}&7'
-  dkbans.punish.warn.message.chat: '&5
+  dkbans.punish.message.warn.chat: '&5
   ${dkbans.prefix} &cDu wurdest verwarnt!
   &8» &3Grund&8: &4&l{warn.reason}
   &8» &3WarnID&8: &7{warn.id}
   &7'
-  dkbans.punish.warn.notify: '${dkbans.prefix} &9{player.displayName} &7wurde &6verwarnt &7von &8{warn.staff.displayName} &7für &4{warn.reason}&7'
+
+  dkbans.punish.notify.ban: '${dkbans.prefix} &9{player.displayName} &7wurde &cgebannt &7von &8{ban.staff.displayName} &7für &4{ban.reason}&7'
+  dkbans.punish.notify.mute: '${dkbans.prefix} &9{player.displayName} &7wurde &9gemutet &7von &8{mute.staff.displayName} &7für &4{mute.reason}&7'
+  dkbans.punish.notify.warn: '${dkbans.prefix} &9{player.displayName} &7wurde &6verwarnt &7von &8{warn.staff.displayName} &7für &4{warn.reason}&7'
+  dkbans.punish.notify.kick: '${dkbans.prefix} &9{player.displayName} &7wurde &egekickt &7von &8{kick.staff.displayName} &7für &4{kick.reason}&7'
+  dkbans.punish.notify.edit: '${dkbans.prefix} &7Bestrafung &e{entry.id} &8(&e{newSnapshot.punishmentType.color}{newSnapshot.punishmentType.name}&8) für &e{player.displayName} &7wurde von &8{warn.staff.displayName} &7geändert'
+
   dkbans.punish.success.ban: '${dkbans.prefix} &e{player.displayName} &7wurde gebannt'
   dkbans.punish.success.mute: '${dkbans.prefix} &e{player.displayName} &7was gemutet'
   dkbans.punish.success.kick: '${dkbans.prefix} &e{player.displayName} &7was gekickt'
   dkbans.punish.success.warn: '${dkbans.prefix} &e{player.displayName} &7was verwarnt'
-  dkbans.report.countInfo: '${dkbans.prefix.report} !["&7Offene Reports&8: &e{openReports}"]("run:///report list")'
-  dkbans.report.notFound: '${dkbans.prefix.report} &cEin Report von &e{player.name} &cwurde nicht gefunden'
-  dkbans.report.accepted: '${dkbans.prefix.report} &aDer Report über &e{report.player.displayName} &awurde angenommen'
-  dkbans.report.declined: '${dkbans.prefix.report} &cDer Report über &e{report.player.displayName} &cwurde abgelehnt'
-  dkbans.report.notify: '![${dkbans.report.notify.text};${dkbans.report.notify.hover}]("run:///report take {player.name}")'
-  dkbans.report.notify.text: '${dkbans.prefix.report} &e{player.displayName} &8&l>> &e{report.reason} &8[&7Klick&8]'
-  dkbans.report.notify.hover: '&8» &7Spieler&8: &c{player.displayName}
-  &8» &7Melder&8: &c{report.reporter.displayName}
-  &8» &7Grund&8: &c{report.reason}
-  &8» &7Server&8: &c{report.serverName}'
+
   dkbans.punish.list.ban: '${dkbans.prefix} &6Gebannte Spieler &8| &7{page} @for("punish" in {punishments},${dkbans.punish.list.loop},"\n","\n")'
   dkbans.punish.list.mute: '${dkbans.prefix} &6Gemutete Spieler &8| &7{page} @for("punish" in {punishments},${dkbans.punish.list.loop},"\n","\n")'
   dkbans.punish.list.loop: ' &8- &e{punish.history.player.displayName} &8- &7{punish.reason}'
@@ -134,6 +135,18 @@ messages:
   &aEin Entbannungsantrag kannst du unter &eforum.example.net &astellen'
   dkbans.unpunish.success.ban: '${dkbans.prefix} &e{player.displayName} &7wurde entbannt'
   dkbans.unpunish.success.mute: '${dkbans.prefix} &e{player.displayName} &7wurde entmutet'
+
+  dkbans.report.countInfo: '${dkbans.prefix.report} !["&7Offene Reports&8: &e{openReports}"]("run:///report list")'
+  dkbans.report.notFound: '${dkbans.prefix.report} &cEin Report von &e{player.name} &cwurde nicht gefunden'
+  dkbans.report.accepted: '${dkbans.prefix.report} &aDer Report über &e{report.player.displayName} &awurde angenommen'
+  dkbans.report.declined: '${dkbans.prefix.report} &cDer Report über &e{report.player.displayName} &cwurde abgelehnt'
+  dkbans.report.notify: '![${dkbans.report.notify.text};${dkbans.report.notify.hover}]("run:///report take {player.name}")'
+  dkbans.report.notify.text: '${dkbans.prefix.report} &e{player.displayName} &8&l>> &e{report.reason} &8[&7Klick&8]'
+  dkbans.report.notify.hover: '&8» &7Spieler&8: &c{player.displayName}
+  &8» &7Melder&8: &c{report.reporter.displayName}
+  &8» &7Grund&8: &c{report.reason}
+  &8» &7Server&8: &c{report.serverName}'
+
   dkbans.command.unpunish.help: '${dkbans.prefix} &cNutze&8: &7/{command} <player> [Reason]'
   dkbans.command.punish.help.temporary: '${dkbans.prefix} &7/{command} <player> <duration> <reason>'
   dkbans.command.punish.help.permanently: '${dkbans.prefix} &7/{command} <player> <reason>'
