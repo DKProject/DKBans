@@ -25,6 +25,7 @@ import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryEntrySnapshotBuilder;
 import net.pretronic.dkbans.api.player.history.PunishmentType;
 import net.pretronic.dkbans.api.template.Template;
+import net.pretronic.libraries.utility.annonations.Nullable;
 
 import java.util.Map;
 
@@ -41,4 +42,7 @@ public interface PunishmentTemplate extends Template {
     PunishmentTemplateEntry getNextEntry(DKBansPlayer player);
 
     PunishmentType getFirstType();
+
+    @Nullable
+    String getCustomMessageKey();
 }

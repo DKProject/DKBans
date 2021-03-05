@@ -128,10 +128,10 @@ public class DefaultReportTemplate extends DefaultTemplate implements ReportTemp
             Document data = Document.newDocument();
 
             if(template.getTargetTemplate() != null) {
-                data.add("targetPunishment", template.getTargetTemplate().getGroup().getName() + "@" + template.getTargetTemplate().getName());
+                data.set("targetPunishment", template.getTargetTemplate().getGroup().getName() + "@" + template.getTargetTemplate().getName());
             }
 
-            template.getProperties().forEach(data::add);
+            template.getProperties().forEach(data::set);
             return data;
         }
     }

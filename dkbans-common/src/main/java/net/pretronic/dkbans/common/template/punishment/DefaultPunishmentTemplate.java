@@ -120,6 +120,11 @@ public class DefaultPunishmentTemplate extends DefaultTemplate implements Punish
         return this.durations.values().iterator().next().getType();
     }
 
+    @Override
+    public String getCustomMessageKey() {
+        return getData().getString("messageKey");
+    }
+
     private Map<Integer, PunishmentTemplateEntry> loadDurations(Document data) {
         Map<Integer, PunishmentTemplateEntry> durations = new TreeMap<>(Integer::compare);
 
