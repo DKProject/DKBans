@@ -180,14 +180,13 @@ public class DefaultPunishmentTemplate extends DefaultTemplate implements Punish
         @Override
         public Document createData(Template template0) {
             DefaultPunishmentTemplate template = (DefaultPunishmentTemplate) template0;
+            Document data = template.getData();
 
-            Document data = Document.newDocument();
-
-            data.add("durations", entryToDocument(template));
-            data.add("points", Document.newDocument()
-                    .add("durations", entryToDocument(template))
-                    .add("addedPoints", template.addedPoints)
-                    .add("pointsDivider", template.pointsDivider));
+            data.set("durations", entryToDocument(template));
+            data.set("points", Document.newDocument()
+                    .set("durations", entryToDocument(template))
+                    .set("addedPoints", template.addedPoints)
+                    .set("pointsDivider", template.pointsDivider));
             return data;
         }
     }

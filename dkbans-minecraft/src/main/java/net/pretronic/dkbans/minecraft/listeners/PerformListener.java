@@ -41,6 +41,7 @@ import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.dkbans.minecraft.config.Permissions;
 import net.pretronic.dkbans.minecraft.integration.labymod.LabyModIntegration;
 import net.pretronic.dkbans.minecraft.joinme.MinecraftJoinMe;
+import net.pretronic.libraries.document.type.DocumentFileType;
 import net.pretronic.libraries.event.Listener;
 import net.pretronic.libraries.event.network.NetworkListener;
 import net.pretronic.libraries.message.MessageProvider;
@@ -162,6 +163,7 @@ public class PerformListener {
         if(snapshot.getTemplateId() >= 0){
             Template template = snapshot.getTemplate();
             System.out.println("Template: "+template);
+            System.out.println("Data:" + DocumentFileType.JSON.getWriter().write(template.getData(), true));
             if(template instanceof PunishmentTemplate && ((PunishmentTemplate) template).getCustomMessageKey() != null){
                 String key = ((PunishmentTemplate)template).getCustomMessageKey();
                 System.out.println("Key: "+key);

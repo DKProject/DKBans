@@ -125,7 +125,7 @@ public class DefaultReportTemplate extends DefaultTemplate implements ReportTemp
         @Override
         public Document createData(Template template0) {
             ReportTemplate template = (ReportTemplate)template0;
-            Document data = Document.newDocument();
+            Document data = template.getData();
 
             if(template.getTargetTemplate() != null) {
                 data.set("targetPunishment", template.getTargetTemplate().getGroup().getName() + "@" + template.getTargetTemplate().getName());
