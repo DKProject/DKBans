@@ -162,13 +162,9 @@ public class PerformListener {
         MessageComponent<?> message = null;
         if(snapshot.getTemplateId() >= 0){
             Template template = snapshot.getTemplate();
-            System.out.println("Template: "+template);
-            System.out.println("Data:" + DocumentFileType.JSON.getWriter().write(template.getData(), true));
             if(template instanceof PunishmentTemplate && ((PunishmentTemplate) template).getCustomMessageKey() != null){
                 String key = ((PunishmentTemplate)template).getCustomMessageKey();
-                System.out.println("Key: "+key);
                 Message raw = messageProvider.getMessage(key+"."+snapshot.getPunishmentType().getName().toLowerCase());
-                if(raw == null) raw = messageProvider.getMessage(key);
                 if(raw != null) message = new MessageKeyComponent(raw);
             }
         }
