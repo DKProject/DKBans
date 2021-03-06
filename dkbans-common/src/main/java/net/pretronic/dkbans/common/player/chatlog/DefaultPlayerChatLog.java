@@ -21,6 +21,8 @@
 package net.pretronic.dkbans.common.player.chatlog;
 
 import net.pretronic.databasequery.api.query.type.FindQuery;
+import net.pretronic.dkbans.api.DKBans;
+import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.chatlog.PlayerChatLog;
 import net.pretronic.dkbans.common.DefaultDKBans;
 import net.pretronic.libraries.utility.Validate;
@@ -39,6 +41,11 @@ public class DefaultPlayerChatLog extends DefaultChatLog implements PlayerChatLo
     @Override
     public UUID getPlayerId() {
         return this.playerId;
+    }
+
+    @Override
+    public DKBansPlayer getPlayer() {
+        return DKBans.getInstance().getPlayerManager().getPlayer(playerId);
     }
 
     @Override

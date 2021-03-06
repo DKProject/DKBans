@@ -46,6 +46,7 @@ public class Messages {
     public static MessageComponent<?> ERROR_TEMPLATE_NOT_EXISTS = Text.ofMessageKey("dkbans.error.template.notExists");
     public static MessageComponent<?> ERROR_INVALID_BROADCAST_ORDER = Text.ofMessageKey("dkbans.error.invalidBroadcastOrder");
     public static MessageComponent<?> ERROR_INVALID_SCOPE = Text.ofMessageKey("dkbans.error.invalidScope");
+    public static MessageComponent<?> ERROR_PUNISHMENT_TO_LONG = Text.ofMessageKey("dkbans.error.punishment.toLong");
 
     public static MessageComponent<?> PLAYER_NOT_FOUND = Text.ofMessageKey("dkbans.player.notFound");
     public static MessageComponent<?> PLAYER_NOT_ONLINE = Text.ofMessageKey("dkbans.player.notOnline");
@@ -85,12 +86,10 @@ public class Messages {
     public static MessageComponent<?> PUNISH_SUCCESS_KICK = Text.ofMessageKey("dkbans.punish.success.kick");
     public static MessageComponent<?> PUNISH_SUCCESS_WARN = Text.ofMessageKey("dkbans.punish.success.warn");
 
-
     public static MessageComponent<?> UNPUNISH_SUCCESS_BAN = Text.ofMessageKey("dkbans.unpunish.success.ban");
     public static MessageComponent<?> UNPUNISH_SUCCESS_MUTE = Text.ofMessageKey("dkbans.unpunish.success.mute");
     public static MessageComponent<?> UNPUNISH_SUCCESS_KICK = Text.ofMessageKey("dkbans.unpunish.success.kick");
     public static MessageComponent<?> UNPUNISH_SUCCESS_WARN = Text.ofMessageKey("dkbans.unpunish.success.warn");
-
 
     public static MessageComponent<?> TEAMCHAT_MESSAGE_FORMAT = Text.ofMessageKey("dkbans.teamchat.messageFormat");
 
@@ -101,23 +100,23 @@ public class Messages {
     public static MessageComponent<?> FILTER_BLOCKED_COMMAND = Text.ofMessageKey("dkbans.filter.blocked.command");
     public static MessageComponent<?> FILTER_BLOCKED_INSULTING = Text.ofMessageKey("dkbans.filter.blocked.insulting");
     public static MessageComponent<?> FILTER_BLOCKED_ADVERTISING = Text.ofMessageKey("dkbans.filter.blocked.advertising");
+    public static MessageComponent<?> FILTER_BLOCKED_NOTIFICATION = Text.ofMessageKey("dkbans.filter.blocked.notification");
 
-    public static MessageComponent<?> PUNISH_BAN_MESSAGE_PERMANENTLY = Text.ofMessageKey("dkbans.punish.ban.message.permanently");
-    public static MessageComponent<?> PUNISH_BAN_MESSAGE_TEMPORARY = Text.ofMessageKey("dkbans.punish.ban.message.temporary");
-    public static MessageComponent<?> PUNISH_BAN_NOTIFY = Text.ofMessageKey("dkbans.punish.ban.notify");
-
-    public static MessageComponent<?> PUNISH_MUTE_MESSAGE_PERMANENTLY = Text.ofMessageKey("dkbans.punish.mute.message.permanently");
-    public static MessageComponent<?> PUNISH_MUTE_MESSAGE_TEMPORARY = Text.ofMessageKey("dkbans.punish.mute.message.temporary");
-    public static MessageComponent<?> PUNISH_MUTE_NOTIFY = Text.ofMessageKey("dkbans.punish.mute.notify");
-
-    public static MessageComponent<?> PUNISH_KICK_MESSAGE = Text.ofMessageKey("dkbans.punish.kick.message");
-    public static MessageComponent<?> PUNISH_KICK_NOTIFY = Text.ofMessageKey("dkbans.punish.kick.notify");
-
-    public static MessageComponent<?> PUNISH_WARN_MESSAGE_CHAT = Text.ofMessageKey("dkbans.punish.warn.message.chat");
-    public static MessageComponent<?> PUNISH_WARN_NOTIFY = Text.ofMessageKey("dkbans.punish.warn.notify");
+    public static MessageComponent<?> PUNISH_MESSAGE_BAN_PERMANENTLY = Text.ofMessageKey("dkbans.punish.ban.message.permanently");
+    public static MessageComponent<?> PUNISH_MESSAGE_BAN_TEMPORARY = Text.ofMessageKey("dkbans.punish.ban.message.temporary");
+    public static MessageComponent<?> PUNISH_MESSAGE_MUTE_PERMANENTLY = Text.ofMessageKey("dkbans.punish.mute.message.permanently");
+    public static MessageComponent<?> PUNISH_MESSAGE_MUTE_TEMPORARY = Text.ofMessageKey("dkbans.punish.mute.message.temporary");
+    public static MessageComponent<?> PUNISH_MESSAGE_KICK= Text.ofMessageKey("dkbans.punish.kick.message");
+    public static MessageComponent<?> PUNISH_MESSAGE_WARN_CHAT = Text.ofMessageKey("dkbans.punish.warn.message.chat");
 
     public static MessageComponent<?> PUNISH_LIST_BAN = Text.ofMessageKey("dkbans.punish.list.ban");
     public static MessageComponent<?> PUNISH_LIST_MUTE = Text.ofMessageKey("dkbans.punish.list.mute");
+
+    public static MessageComponent<?> PUNISH_NOTIFY_KICK = Text.ofMessageKey("dkbans.punish.notify.kick");
+    public static MessageComponent<?> PUNISH_NOTIFY_MUTE = Text.ofMessageKey("dkbans.punish.notify.mute");
+    public static MessageComponent<?> PUNISH_NOTIFY_BAN = Text.ofMessageKey("dkbans.punish.notify.ban");
+    public static MessageComponent<?> PUNISH_NOTIFY_WARN= Text.ofMessageKey("dkbans.punish.notify.warn");
+    public static MessageComponent<?> PUNISH_NOTIFY_EDIT = Text.ofMessageKey("dkbans.punish.notify.edit");
 
     public static MessageComponent<?> PUNISH_NOT_FOUND = Text.ofMessageKey("dkbans.punish.notFound");
     public static MessageComponent<?> PUNISH_EMPTY = Text.ofMessageKey("dkbans.punish.empty");
@@ -298,13 +297,4 @@ public class Messages {
     public static MessageComponent<?> COMMAND_BROADCAST_EDIT_PROPERTY_HELP = Text.ofMessageKey("dkbans.command.broadcast.edit.property.help");
 
     public static MessageComponent<?> COMMAND_BROADCAST_INFO = Text.ofMessageKey("dkbans.command.broadcast.info");
-
-    public static MessageComponent<?> getPunishmentMessage(PlayerHistoryEntrySnapshot snapshot){
-        if(snapshot.getPunishmentType() == PunishmentType.BAN){
-            return snapshot.isPermanently() ? PUNISH_BAN_MESSAGE_PERMANENTLY : PUNISH_BAN_MESSAGE_TEMPORARY;
-        }else if(snapshot.getPunishmentType() == PunishmentType.MUTE){
-            return snapshot.isPermanently() ? PUNISH_MUTE_MESSAGE_PERMANENTLY : PUNISH_MUTE_MESSAGE_TEMPORARY;
-        }
-        throw new UnsupportedOperationException("Unknown punishment type");
-    }
 }

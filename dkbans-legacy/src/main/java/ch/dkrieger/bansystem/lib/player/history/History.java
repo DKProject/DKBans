@@ -51,11 +51,11 @@ public class History {
     }
 
     public List<HistoryEntry> getEntries(){
-        return new ArrayList<>(this.entries.values());
+        return getEntriesSorted();
     }
 
     public List<HistoryEntry> getEntriesSorted(){
-        List<HistoryEntry> entries = getEntries();
+        List<HistoryEntry> entries = new ArrayList<>(this.entries.values());
         entries.sort((o1, o2) -> o1.getTimeStamp() > o2.getTimeStamp()?1:-1);
         return entries;
     }

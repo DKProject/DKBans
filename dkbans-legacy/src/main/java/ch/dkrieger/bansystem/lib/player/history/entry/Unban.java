@@ -45,4 +45,9 @@ public class Unban extends HistoryEntry {
     public String getTypeName() {
         return "Unban";
     }
+
+    @Override
+    public String toString() {
+        return "Unban(uuid="+getUUID()+";"+"BanType="+banType.toString()+")";
+    }
 }

@@ -26,7 +26,7 @@ import net.pretronic.dkbans.api.player.history.PlayerHistoryEntry;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryEntrySnapshot;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryEntrySnapshotBuilder;
 import net.pretronic.dkbans.api.player.history.PunishmentType;
-import net.pretronic.dkbans.minecraft.commands.CommandUtil;
+import net.pretronic.dkbans.minecraft.commands.util.CommandUtil;
 import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.libraries.command.command.BasicCommand;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
@@ -74,7 +74,7 @@ public class PunishEditCommand extends BasicCommand {
             }else if(entries.size() == 1){
                 entry = entries.get(0);
             }else{
-                sender.sendMessage(Messages.COMMAND_PUNISH_INFO_MULTIPLE,VariableSet.create()
+                sender.sendMessage(Messages.COMMAND_PUNISH_EDIT_MULTIPLE,VariableSet.create()
                         .addDescribed("entries",entries)
                         .addDescribed("player",player));
                 return;
@@ -116,6 +116,7 @@ public class PunishEditCommand extends BasicCommand {
         PlayerHistoryEntrySnapshot result = builder.execute();
         sender.sendMessage(Messages.COMMAND_PUNISH_EDIT_DONE, VariableSet.create()
                 .addDescribed("entry",entry)
+                .addDescribed("player",entry.getHistory().getPlayer())
                 .addDescribed("snapshot",result));
     }
 }

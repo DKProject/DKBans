@@ -25,7 +25,7 @@ import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryEntrySnapshot;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryType;
 import net.pretronic.dkbans.api.player.history.PunishmentType;
-import net.pretronic.dkbans.minecraft.commands.CommandUtil;
+import net.pretronic.dkbans.minecraft.commands.util.CommandUtil;
 import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.libraries.command.command.BasicCommand;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
@@ -33,6 +33,7 @@ import net.pretronic.libraries.command.sender.CommandSender;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
 import org.mcnative.runtime.api.player.MinecraftPlayer;
+import org.mcnative.runtime.api.player.OnlineMinecraftPlayer;
 
 import java.time.Duration;
 
@@ -79,6 +80,7 @@ public class TemporaryPunishCommand extends BasicCommand {
         }
 
         Duration duration = CommandUtil.parseDuration(sender,arguments[1]);
+        if(sender instanceof OnlineMinecraftPlayer &&  CommandUtil.checkMaximumAllowedDuration((OnlineMinecraftPlayer) sender,punishmentType,duration));
 
         PlayerHistoryEntrySnapshot result = dkBansPlayer.punish()
                 .staff(CommandUtil.getExecutor(sender))

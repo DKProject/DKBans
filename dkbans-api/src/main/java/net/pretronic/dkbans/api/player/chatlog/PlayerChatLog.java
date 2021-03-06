@@ -20,9 +20,13 @@
 
 package net.pretronic.dkbans.api.player.chatlog;
 
+import net.pretronic.dkbans.api.player.DKBansPlayer;
+
 import java.util.UUID;
 
-public interface PlayerChatLog extends ChatLog{
+public interface PlayerChatLog extends ChatLog {
 
     UUID getPlayerId();
+
+    DKBansPlayer getPlayer();
 }

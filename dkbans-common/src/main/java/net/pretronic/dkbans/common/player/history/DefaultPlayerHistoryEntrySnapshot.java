@@ -28,7 +28,9 @@ import net.pretronic.dkbans.api.player.history.PlayerHistoryEntrySnapshot;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryType;
 import net.pretronic.dkbans.api.player.history.PunishmentType;
 import net.pretronic.dkbans.api.template.Template;
+import net.pretronic.dkbans.common.DefaultDKBans;
 import net.pretronic.libraries.document.Document;
+import net.pretronic.libraries.document.type.DocumentFileType;
 import net.pretronic.libraries.utility.annonations.Internal;
 import net.pretronic.libraries.utility.map.Pair;
 
@@ -52,7 +54,7 @@ public class DefaultPlayerHistoryEntrySnapshot implements PlayerHistoryEntrySnap
     private final int points;
     private final boolean active;
 
-    private final Document properties;
+    private Document properties;
     private final String revokeMessage;
     private final int revokeTemplateId;
 
@@ -162,7 +164,16 @@ public class DefaultPlayerHistoryEntrySnapshot implements PlayerHistoryEntrySnap
 
     @Override
     public Document getProperties() {
+        if(properties == null) properties = Document.newDocument();
         return properties;
+    }
+
+    @Override
+    public void updateProperties() {
+        DefaultDKBans.getInstance().getStorage().getHistoryVersion().update()
+                .set("Properties", DocumentFileType.JSON.getWriter().write(properties,false))
+                .where("Id",id)
+                .execute();
     }
 
     @Override
