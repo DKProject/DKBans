@@ -1,9 +1,8 @@
 /*
- * (C) Copyright 2020 The DKBans Project (Davide Wietlisbach & Philipp Elvin Friedhoff)
+ * (C) Copyright 2021 The DKBans Project (Davide Wietlisbach & Philipp Elvin Friedhoff)
  *
- * @author Philipp Elvin Friedhoff
- * @since 21.06.20, 17:26
- * @web %web%
+ * @author Davide Wietlisbach
+ * @since 01.03.21, 20:11
  *
  * The DKBans Project is under the Apache License, version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +17,7 @@
  * under the License.
  */
 
-package net.pretronic.dkbans.minecraft.commands;
+package net.pretronic.dkbans.minecraft.commands.util;
 
 import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
@@ -43,6 +42,7 @@ public class CommandUtil {
             "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
             "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." +
             "([01]?\\d\\d?|2[0-4]\\d|25[0-5])$");
+    private static final boolean DKPERMS = McNative.getInstance().getPluginManager().getPlugin("DKPerms") != null;
 
     public static DKBansExecutor getExecutor(CommandSender sender){
         if(sender instanceof MinecraftPlayer){
@@ -171,6 +171,11 @@ public class CommandUtil {
                     .add("statusFormatted", action ? Messages.STAFF_STATUS_LOGIN :  Messages.STAFF_STATUS_LOGOUT));
             player.setSetting("DKBans",settingKey,action);
         }
+    }
+
+    public static boolean checkMaximumAllowedDuration(OnlineMinecraftPlayer sender, PunishmentType type, Duration duration){
+        if(DKPERMS) return DKPermsUtil.checkMaximumAllowedDuration(sender, type, duration);
+        return false;
     }
 
 }

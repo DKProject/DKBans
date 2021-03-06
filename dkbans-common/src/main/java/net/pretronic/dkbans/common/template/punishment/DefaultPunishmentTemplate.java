@@ -120,6 +120,11 @@ public class DefaultPunishmentTemplate extends DefaultTemplate implements Punish
         return this.durations.values().iterator().next().getType();
     }
 
+    @Override
+    public String getCustomMessageKey() {
+        return getData().getString("messageKey");
+    }
+
     private Map<Integer, PunishmentTemplateEntry> loadDurations(Document data) {
         Map<Integer, PunishmentTemplateEntry> durations = new TreeMap<>(Integer::compare);
 
@@ -175,14 +180,13 @@ public class DefaultPunishmentTemplate extends DefaultTemplate implements Punish
         @Override
         public Document createData(Template template0) {
             DefaultPunishmentTemplate template = (DefaultPunishmentTemplate) template0;
+            Document data = template.getData();
 
-            Document data = Document.newDocument();
-
-            data.add("durations", entryToDocument(template));
-            data.add("points", Document.newDocument()
-                    .add("durations", entryToDocument(template))
-                    .add("addedPoints", template.addedPoints)
-                    .add("pointsDivider", template.pointsDivider));
+            data.set("durations", entryToDocument(template));
+            data.set("points", Document.newDocument()
+                    .set("durations", entryToDocument(template))
+                    .set("addedPoints", template.addedPoints)
+                    .set("pointsDivider", template.pointsDivider));
             return data;
         }
     }

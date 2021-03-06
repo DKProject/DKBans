@@ -69,6 +69,8 @@ public class DKBansConfig {
 
     public static boolean CHAT_FILTER_ENABLED = true;
 
+    public static boolean CHAT_FILTER_NOTIFICATION = true;
+
     @DocumentKey("chat.filter.repeatDelay")
     public static long CHAT_FILTER_REPEAT_DELAY = 1000;
 

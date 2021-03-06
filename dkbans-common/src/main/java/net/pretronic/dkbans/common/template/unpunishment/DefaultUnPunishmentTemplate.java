@@ -180,14 +180,14 @@ public class DefaultUnPunishmentTemplate extends DefaultTemplate implements UnPu
         public Document createData(Template template0) {
             DefaultUnPunishmentTemplate template = (DefaultUnPunishmentTemplate) template0;
 
-            Document data = Document.newDocument();
+            Document data = template.getData();
 
-            data.add("scopes", template.getScopes());
-            data.add("durations", entryToDocument(template));
-            data.add("points", Document.newDocument()
-                    .add("durations", entryToDocument(template))
-                    .add("removedPoints", template.removedPoints)
-                    .add("pointsDivider", template.pointsDivider));
+            data.set("scopes", template.getScopes());
+            data.set("durations", entryToDocument(template));
+            data.set("points", Document.newDocument()
+                    .set("durations", entryToDocument(template))
+                    .set("removedPoints", template.removedPoints)
+                    .set("pointsDivider", template.pointsDivider));
             return data;
         }
     }

@@ -23,6 +23,8 @@ package net.pretronic.dkbans.minecraft.commands;
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.player.chatlog.ChatLog;
 import net.pretronic.dkbans.api.player.chatlog.ChatLogEntry;
+import net.pretronic.dkbans.api.player.chatlog.PlayerChatLog;
+import net.pretronic.dkbans.api.player.chatlog.ServerChatLog;
 import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.libraries.command.command.BasicCommand;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
@@ -62,7 +64,7 @@ public class ChatLogCommand extends BasicCommand {
                 return;
             }
             ChatLog chatLog = DKBans.getInstance().getChatLogManager().getPlayerChatLog(player.getUniqueId());
-            printChatLog(sender, chatLog, args,Messages.COMMAND_CHATLOG_PLAYER_LIST);
+            printChatLog(sender, chatLog, args,Messages.COMMAND_CHATLOG_PLAYER_LIST,player);
         } else if(args[0].equalsIgnoreCase("server")) {
             ChatLog chatLog;
             String server0 = args[1];
@@ -72,21 +74,29 @@ public class ChatLogCommand extends BasicCommand {
             } catch (Exception ignored) {
                 chatLog = DKBans.getInstance().getChatLogManager().getServerChatLog(server0);
             }
-            printChatLog(sender, chatLog, args,Messages.COMMAND_CHATLOG_SERVER_LIST);
+            printChatLog(sender, chatLog, args,Messages.COMMAND_CHATLOG_SERVER_LIST,null);
         } else {
             sender.sendMessage(Messages.COMMAND_CHATLOG_USAGE);
         }
     }
 
-    private void printChatLog(CommandSender sender, ChatLog chatLog, String[] args, MessageComponent<?> message) {
+    private void printChatLog(CommandSender sender, ChatLog chatLog, String[] args, MessageComponent<?> message,MinecraftPlayer player) {
         int page = 1;
         if(args.length == 3) {
             page = Convert.toInteger(args[2]);
         }
         List<ChatLogEntry> entries = chatLog.getPage(page, 10);
-        sender.sendMessage(message, VariableSet.create()
+        VariableSet variableSet = VariableSet.create()
                 .add("page",page)
                 .add("prefix",Messages.PREFIX_CHAT)
-                .addDescribed("entries", entries));
+                .addDescribed("entries", entries);
+        if(player != null) variableSet.addDescribed("player",player);
+        if(chatLog instanceof PlayerChatLog) {
+            variableSet.addDescribed("player", ((PlayerChatLog)chatLog).getPlayer());
+        } else if(chatLog instanceof ServerChatLog) {
+            variableSet.add("serverName", ((ServerChatLog)chatLog).getServerName())
+                    .add("serverId", ((ServerChatLog)chatLog).getServerId().toString());
+        }
+        sender.sendMessage(message, variableSet);
     }
 }
