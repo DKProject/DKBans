@@ -141,6 +141,5 @@
             <version>1.7.20.213</version>
             <scope>compile</scope>
         </dependency>
-
     </dependencies>
 </project>
