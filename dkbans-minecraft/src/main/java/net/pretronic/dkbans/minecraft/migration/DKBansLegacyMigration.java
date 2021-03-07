@@ -349,6 +349,10 @@ public class DKBansLegacyMigration extends Migration {
 
     private void migrateUnbanEntry(PlayerHistoryEntrySnapshotBuilder builder, Map<BanType, PlayerHistoryEntry> tempHistory, Unban unban) {
         PlayerHistoryEntry historyEntry = tempHistory.get(unban.getBanType());
+        if(historyEntry == null) {
+            DKBans.getInstance().getLogger().warn("[DKBansLegacyMigration] Can't migrate " + unban.toString());
+            return;
+        }
         historyEntry.newSnapshot(getStuff(unban))
                 .active(false)
                 .execute();
