@@ -102,12 +102,12 @@ public class Messages {
     public static MessageComponent<?> FILTER_BLOCKED_ADVERTISING = Text.ofMessageKey("dkbans.filter.blocked.advertising");
     public static MessageComponent<?> FILTER_BLOCKED_NOTIFICATION = Text.ofMessageKey("dkbans.filter.blocked.notification");
 
-    public static MessageComponent<?> PUNISH_MESSAGE_BAN_PERMANENTLY = Text.ofMessageKey("dkbans.punish.ban.message.permanently");
-    public static MessageComponent<?> PUNISH_MESSAGE_BAN_TEMPORARY = Text.ofMessageKey("dkbans.punish.ban.message.temporary");
-    public static MessageComponent<?> PUNISH_MESSAGE_MUTE_PERMANENTLY = Text.ofMessageKey("dkbans.punish.mute.message.permanently");
-    public static MessageComponent<?> PUNISH_MESSAGE_MUTE_TEMPORARY = Text.ofMessageKey("dkbans.punish.mute.message.temporary");
-    public static MessageComponent<?> PUNISH_MESSAGE_KICK= Text.ofMessageKey("dkbans.punish.kick.message");
-    public static MessageComponent<?> PUNISH_MESSAGE_WARN_CHAT = Text.ofMessageKey("dkbans.punish.warn.message.chat");
+    public static MessageComponent<?> PUNISH_MESSAGE_BAN_PERMANENTLY = Text.ofMessageKey("dkbans.punish.message.ban.permanently");
+    public static MessageComponent<?> PUNISH_MESSAGE_BAN_TEMPORARY = Text.ofMessageKey("dkbans.punish.message.ban.temporary");
+    public static MessageComponent<?> PUNISH_MESSAGE_MUTE_PERMANENTLY = Text.ofMessageKey("dkbans.punish.message.mute.permanently");
+    public static MessageComponent<?> PUNISH_MESSAGE_MUTE_TEMPORARY = Text.ofMessageKey("dkbans.punish.message.mute.temporary");
+    public static MessageComponent<?> PUNISH_MESSAGE_KICK= Text.ofMessageKey("dkbans.punish.message.kick");
+    public static MessageComponent<?> PUNISH_MESSAGE_WARN_CHAT = Text.ofMessageKey("dkbans.punish.message.warn.chat");
 
     public static MessageComponent<?> PUNISH_LIST_BAN = Text.ofMessageKey("dkbans.punish.list.ban");
     public static MessageComponent<?> PUNISH_LIST_MUTE = Text.ofMessageKey("dkbans.punish.list.mute");
