@@ -27,7 +27,6 @@ import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.DKBansPlayerManager;
 import net.pretronic.dkbans.common.DefaultDKBans;
 import net.pretronic.dkbans.common.player.DefaultDKBansPlayer;
-import net.pretronic.libraries.caching.ArrayCache;
 import net.pretronic.libraries.caching.Cache;
 import net.pretronic.libraries.caching.CacheQuery;
 import net.pretronic.libraries.caching.ShadowArrayCache;
@@ -40,7 +39,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Predicate;
 
 public class MinecraftPlayerManager implements DKBansPlayerManager {
 
@@ -137,6 +135,7 @@ public class MinecraftPlayerManager implements DKBansPlayerManager {
             MinecraftPlayer player;
             if(identifier instanceof String) player = McNative.getInstance().getPlayerManager().getPlayer((String) identifier);
             else player = McNative.getInstance().getPlayerManager().getPlayer((UUID) identifier);
+            if(player == null) return null;
             return new DefaultDKBansPlayer(player.getUniqueId(), player.getName());
         }
     }
