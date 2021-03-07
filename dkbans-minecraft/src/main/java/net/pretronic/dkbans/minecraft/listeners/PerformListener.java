@@ -20,6 +20,7 @@
 
 package net.pretronic.dkbans.minecraft.listeners;
 
+import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.event.DKBansChannelBroadcastMessageReceiveEvent;
 import net.pretronic.dkbans.api.event.DKBansJoinMeCreateEvent;
@@ -179,6 +180,9 @@ public class PerformListener {
                 message = Messages.PUNISH_MESSAGE_WARN_CHAT;
             }else if(snapshot.getPunishmentType() == PunishmentType.KICK){
                 message = Messages.PUNISH_MESSAGE_KICK;
+            }else{
+                DKBans.getInstance().getLogger().error("Punish message is null");
+                return;
             }
         }
 
