@@ -43,4 +43,5 @@ public class Permissions {
     public static final String COMMAND_JOINME = "dkbans.joinme";
     public static final String COMMAND_CHAT_CLEAR = "dkbans.chatClear.all";
 
+
 }
