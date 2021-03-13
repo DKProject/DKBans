@@ -191,7 +191,7 @@ public class PerformListener {
                 .addDescribed("punish", snapshot)
                 .addDescribed("player", player);
 
-        boolean kick = snapshot.getPunishmentType() == PunishmentType.KICK || snapshot.getPunishmentType() == PunishmentType.BAN;
+        boolean kick = snapshot.getPunishmentType().equals(PunishmentType.KICK) || snapshot.getPunishmentType().equals(PunishmentType.BAN);
         if(kick) player.kick(message, variables);
         else player.sendMessage(message, variables);
     }
