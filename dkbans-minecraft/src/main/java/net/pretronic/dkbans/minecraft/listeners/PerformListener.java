@@ -71,7 +71,7 @@ public class PerformListener {
             MessageComponent<?> result = Messages.TEAMCHAT_MESSAGE_FORMAT;
             for (OnlineMinecraftPlayer staff : McNative.getInstance().getLocal().getOnlinePlayers()) {
                 DKBansExecutor executor = event.getExecutor();
-                if(staff.hasPermission(Permissions.TEAM)
+                if(staff.hasPermission(Permissions.COMMAND_TEAMCHAT_TEAM)
                         && staff.hasSetting("DKBans", PlayerSettingsKey.TEAM_CHAT_LOGIN,true)){
                     staff.sendMessage(result,VariableSet.create()
                             .add("message",event.getMessage())
@@ -142,7 +142,7 @@ public class PerformListener {
     public void onPlayerPunishUpdate(DKBansPlayerPunishUpdateEvent event){
         OnlineMinecraftPlayer player = McNative.getInstance().getLocal().getConnectedPlayer(event.getPlayer().getUniqueId());
         if(player != null){
-            if(event.getNewSnapshot().getPunishmentType() == PunishmentType.BAN){
+            if(event.getNewSnapshot().getPunishmentType().equals(PunishmentType.BAN)){
                 MessageComponent<?> message = event.getNewSnapshot().isPermanently()
                         ? Messages.PUNISH_MESSAGE_BAN_PERMANENTLY : Messages.PUNISH_MESSAGE_BAN_TEMPORARY;
 
@@ -170,15 +170,15 @@ public class PerformListener {
             }
         }
         if(message == null){
-            if(snapshot.getPunishmentType() == PunishmentType.BAN){
+            if(snapshot.getPunishmentType().equals(PunishmentType.BAN)){
                 if(snapshot.isPermanently()) message = Messages.PUNISH_MESSAGE_BAN_PERMANENTLY;
                 else message = Messages.PUNISH_MESSAGE_BAN_TEMPORARY;
-            }else if(snapshot.getPunishmentType() == PunishmentType.MUTE){
+            }else if(snapshot.getPunishmentType().equals(PunishmentType.MUTE)){
                 if(snapshot.isPermanently()) message = Messages.PUNISH_MESSAGE_MUTE_PERMANENTLY;
                 else message = Messages.PUNISH_MESSAGE_MUTE_TEMPORARY;
-            }else if(snapshot.getPunishmentType() == PunishmentType.WARN){
+            }else if(snapshot.getPunishmentType().equals(PunishmentType.WARN)){
                 message = Messages.PUNISH_MESSAGE_WARN_CHAT;
-            }else if(snapshot.getPunishmentType() == PunishmentType.KICK){
+            }else if(snapshot.getPunishmentType().equals(PunishmentType.KICK)){
                 message = Messages.PUNISH_MESSAGE_KICK;
             }else{
                 DKBans.getInstance().getLogger().error("Punish message is null");
@@ -199,10 +199,10 @@ public class PerformListener {
     private void sendPunishNotification(DKBansPlayerPunishEvent event) {
         MessageComponent<?> message;
 
-        if(event.getSnapshot().getPunishmentType() == PunishmentType.BAN) message = Messages.PUNISH_NOTIFY_BAN;
-        else if(event.getSnapshot().getPunishmentType() == PunishmentType.MUTE) message = Messages.PUNISH_NOTIFY_MUTE;
-        else if(event.getSnapshot().getPunishmentType() == PunishmentType.KICK) message = Messages.PUNISH_NOTIFY_KICK;
-        else if(event.getSnapshot().getPunishmentType() == PunishmentType.WARN) message = Messages.PUNISH_NOTIFY_WARN;
+        if(event.getSnapshot().getPunishmentType().equals(PunishmentType.BAN)) message = Messages.PUNISH_NOTIFY_BAN;
+        else if(event.getSnapshot().getPunishmentType().equals(PunishmentType.MUTE)) message = Messages.PUNISH_NOTIFY_MUTE;
+        else if(event.getSnapshot().getPunishmentType().equals(PunishmentType.KICK)) message = Messages.PUNISH_NOTIFY_KICK;
+        else if(event.getSnapshot().getPunishmentType().equals(PunishmentType.WARN)) message = Messages.PUNISH_NOTIFY_WARN;
         else return;//Unsupported
 
         sendToStaff(message, VariableSet.create()

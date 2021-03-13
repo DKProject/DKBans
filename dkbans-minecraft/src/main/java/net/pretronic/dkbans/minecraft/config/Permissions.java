@@ -25,29 +25,22 @@ public class Permissions {
     public static final String ADMIN = "dkbans.admin";
 
     public static final String BYPASS = "dkbans.bypass";
-
-    public static final String TEAM = "dkbans.team";
-
-    public static final String CHAT_BYPASS = "dkbans.chat.bypass";
-
-    public static final String CHAT_NOTIFICATION = "dkbans.chat.notification";
-
     public static final String BYPASS_IGNORE = "dkbans.bypass.ignore";
 
+    public static final String CHAT_BYPASS = "dkbans.chat.bypass";
+    public static final String CHAT_NOTIFICATION = "dkbans.chat.notification";
+
+
     public static final String PUNISH_OVERRIDE_OWN = "dkbans.punish.override";
-
     public static final String PUNISH_OVERRIDE_ALL = "dkbans.bypass.override.all";
-
     public static final String PUNISH_NOTIFY = "dkbans.punish.notify";
 
-    public static final String COMMAND_TEMPLATE = "dkbans.command.template";
-
+    public static final String COMMAND_TEAMCHAT_TEAM = "dkbans.teamchat.receive";
     public static final String COMMAND_TEAMCHAT_SEND = "dkbans.teamchat.send";
 
     public static final String COMMAND_REPORT_STAFF = "dkbans.report.staff";
 
     public static final String COMMAND_JOINME = "dkbans.joinme";
-
     public static final String COMMAND_CHAT_CLEAR = "dkbans.chatClear.all";
 
 }

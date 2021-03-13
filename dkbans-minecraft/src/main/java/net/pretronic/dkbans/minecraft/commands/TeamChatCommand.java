@@ -66,7 +66,8 @@ public class TeamChatCommand extends BasicCommand {
                 String message = CommandUtil.readStringFromArguments(arguments,0);
                 DKBans.getInstance().broadcastMessage(BroadcastMessageChannels.TEAM_CHAT,CommandUtil.getExecutor(sender),message);
             }else{
-                sender.sendMessage(Messages.ERROR_NO_PERMISSIONS);
+                sender.sendMessage(Messages.ERROR_NO_PERMISSIONS,VariableSet.create()
+                        .add("prefix",Messages.PREFIX_TEAMCHAT));
             }
         }else{
             String message = CommandUtil.readStringFromArguments(arguments,0);

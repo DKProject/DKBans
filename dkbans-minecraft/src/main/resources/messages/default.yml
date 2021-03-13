@@ -290,7 +290,6 @@ messages:
 
   dkbans.command.teamChat.help: '${dkbans.prefix.teamchat} &cUsage&8: &7/teamchat <login/logout/toggle/message>'
   dkbans.command.notify.help: '${dkbans.prefix.network} &cUsage&8: &7/notify <login/logout/toggle>'
-  dkbans.command.kick.help: '${dkbans.prefix.dkbans} &cUsage&8: &7/kick <player> <reason>'
   dkbans.command.jumpto.help: '${dkbans.prefix.network} &cUsage&8: &7/jumpto <player>'
 
   dkbans.command.help: '${dkbans.prefix.network} &7Information
