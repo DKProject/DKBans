@@ -42,7 +42,7 @@ public class EndsWithOperation implements FilterOperation {
 
     @Override
     public boolean matches(String input) {
-        return value.endsWith(input.toLowerCase());
+        return input.toLowerCase().endsWith(value);
     }
 
     public static class Factory implements FilterOperationFactory {
