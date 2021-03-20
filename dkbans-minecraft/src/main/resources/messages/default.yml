@@ -497,6 +497,7 @@ messages:
   ${dkbans.prefix.broadcast} {message}
   &a'
   dkbans.broadcast.actionbar: '{message}'
+  dkbans.broadcast.bossbar: '{message}'
   dkbans.broadcast.title: '{title}'
   dkbans.broadcast.title.sub: '{subTitle}'
 
