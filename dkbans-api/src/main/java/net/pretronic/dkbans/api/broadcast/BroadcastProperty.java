@@ -27,4 +27,5 @@ public class BroadcastProperty {
     public static final String STAY = "stay";
     public static final String FADE_IN = "fade-in";
     public static final String FADE_OUT = "fade-out";
+    public static final String BAR_COLOR = "bar-color";
 }

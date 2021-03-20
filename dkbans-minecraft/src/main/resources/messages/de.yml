@@ -260,7 +260,6 @@ messages:
   dkbans.command.filter.deleted: '${dkbans.prefix.chat} &7Der Filter &e{filter.id} &8- &e{filter.value} &7for &e{filter.affiliationArea} &7wúrde gelöscht'
   dkbans.command.teamChat.help: '${dkbans.prefix.teamchat} &cVerwende&8: &7/teamchat <login/logout/toggle/message>'
   dkbans.command.notify.help: '${dkbans.prefix.network} &cVerwende&8: &7/notify <login/logout/toggle>'
-  dkbans.command.kick.help: '${dkbans.prefix.dkbans} &cVerwende&8: &7/kick <player> <reason>'
   dkbans.command.jumpto.help: '${dkbans.prefix.network} &cVerwende&8: &7/jumpto <player>'
   dkbans.command.help: '${dkbans.prefix.network} &6Information
   &8» &e/hub &8| &7Verbinde zum Lobby-Server
@@ -443,6 +442,7 @@ messages:
   ${dkbans.prefix.broadcast} {message}
   &a'
   dkbans.broadcast.actionbar: '${dkbans.prefix.broadcast} {message}'
+  dkbans.broadcast.bossbar: '{message}'
   dkbans.broadcast.title: '{title}'
   dkbans.broadcast.title.sub: '{subTitle}'
   dkbans.command.broadcast.edit.help: '${dkbans.prefix} &cFalsche Verwendung von &eedit &ccommand&8:
@@ -458,10 +458,11 @@ messages:
 
   &7Standard properties&8:
     &8- &7text
-    &8- &7stay (actionbar, title)
+    &8- &7stay (actionbar, title, bossbar)
     &8- &7subtitle (title)
     &8- &7fade-in (title)
-    &8- &7fade-out (title)'
+    &8- &7fade-out (title)
+    &8- &7bar-color (bossbar)'
   dkbans.command.broadcast.edit.property.list: '${dkbans.prefix} &6Eigenschaften&8:
   @for("property" in {properties}, ${dkbans.command.broadcast.edit.property.list.loop},"\n","\n")'
   dkbans.command.broadcast.edit.property.list.loop: '&8» &e{property.key}&8:&e{property.value}'
