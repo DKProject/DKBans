@@ -515,10 +515,11 @@ messages:
 
   &7Default properties&8:
     &8- &7text
-    &8- &7stay (actionbar, title)
+    &8- &7stay (actionbar, title, bossbar)
     &8- &7subtitle (title)
     &8- &7fade-in (title)
-    &8- &7fade-out (title)'
+    &8- &7fade-out (title)
+    &8- &7bar-color (bossbar)'
 
   dkbans.command.broadcast.edit.property.list: '${dkbans.prefix} &7Properties&8:
   @for("property" in {properties}, ${dkbans.command.broadcast.edit.property.list.loop},"\n","\n")'
