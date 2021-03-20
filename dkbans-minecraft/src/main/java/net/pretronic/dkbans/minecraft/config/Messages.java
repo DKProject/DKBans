@@ -282,6 +282,7 @@ public class Messages {
 
     public static MessageComponent<?> BROADCAST_CHAT = Text.ofMessageKey("dkbans.broadcast.chat");
     public static MessageComponent<?> BROADCAST_ACTIONBAR = Text.ofMessageKey("dkbans.broadcast.actionbar");
+    public static MessageComponent<?> BROADCAST_BOSSBAR = Text.ofMessageKey("dkbans.broadcast.bossbar");
     public static MessageComponent<?> BROADCAST_TITLE = Text.ofMessageKey("dkbans.broadcast.title");
     public static MessageComponent<?> BROADCAST_TITLE_SUB = Text.ofMessageKey("dkbans.broadcast.title.sub");
 

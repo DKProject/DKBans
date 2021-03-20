@@ -20,33 +20,43 @@
 
 package net.pretronic.dkbans.minecraft;
 
-import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.broadcast.Broadcast;
 import net.pretronic.dkbans.api.broadcast.BroadcastAssignment;
 import net.pretronic.dkbans.api.broadcast.BroadcastProperty;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.common.broadcast.BroadcastSender;
 import net.pretronic.dkbans.minecraft.config.Messages;
+import net.pretronic.libraries.concurrent.Task;
 import net.pretronic.libraries.message.MessageProvider;
 import net.pretronic.libraries.message.bml.MessageProcessor;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
+import net.pretronic.libraries.utility.interfaces.ObjectOwner;
 import org.mcnative.runtime.api.McNative;
+import org.mcnative.runtime.api.player.ConnectedMinecraftPlayer;
 import org.mcnative.runtime.api.player.OnlineMinecraftPlayer;
 import org.mcnative.runtime.api.player.Title;
+import org.mcnative.runtime.api.player.bossbar.BarColor;
+import org.mcnative.runtime.api.player.bossbar.BarDivider;
+import org.mcnative.runtime.api.player.bossbar.BarFlag;
+import org.mcnative.runtime.api.player.bossbar.BossBar;
 import org.mcnative.runtime.api.utils.MinecraftTickConverter;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 
 public class MinecraftBroadcastSender implements BroadcastSender {
 
     private final MessageProcessor messageProcessor;
+    private final Collection<BossBar> activeBars;
+    private Task runningTask;
 
     public MinecraftBroadcastSender() {
-        this.messageProcessor = McNative.getInstance().getRegistry().getService(MessageProvider.class)
-                .getProcessor();
+        this.messageProcessor = McNative.getInstance().getRegistry().getService(MessageProvider.class).getProcessor();
+        this.activeBars = ConcurrentHashMap.newKeySet();
     }
 
     @Override
@@ -68,7 +78,7 @@ public class MinecraftBroadcastSender implements BroadcastSender {
         });
     }
 
-    private void sendMessage(OnlineMinecraftPlayer onlinePlayer, Broadcast broadcast) {
+    private void sendMessage(ConnectedMinecraftPlayer onlinePlayer, Broadcast broadcast) {
         switch (broadcast.getVisibility()) {
             case TITLE: {
                 Title title = Title.newTitle();
@@ -114,7 +124,35 @@ public class MinecraftBroadcastSender implements BroadcastSender {
                 return;
             }
             case BOSSBAR: {
-                DKBans.getInstance().getLogger().warn("Bossbar broadcast is not implemented at the moment. Chat broadcast is used as fallback.");
+                BossBar bossBar = BossBar.newBossBar();
+                bossBar.setProgress(100);
+                bossBar.setMaximum(100);
+                bossBar.setDivider(BarDivider.SOLID);
+                bossBar.setFlag(BarFlag.CREATE_FOG);
+                bossBar.setTitle(Messages.BROADCAST_BOSSBAR);
+
+                BarColor color = BarColor.WHITE;
+                try {
+                    color = BarColor.valueOf(broadcast.getProperties().getString(BroadcastProperty.BAR_COLOR).toUpperCase());
+                }catch (Exception ignored){}
+
+                bossBar.setColor(color);
+                bossBar.setVariables(buildVariableSet(broadcast,onlinePlayer));
+                activeBars.add(bossBar);
+                onlinePlayer.addBossBar(bossBar);
+
+                long stayTime = 5;
+                if(broadcast.getProperties().contains(BroadcastProperty.STAY)) {
+                    stayTime = broadcast.getProperties().getLong(BroadcastProperty.STAY);
+                }
+
+                McNative.getInstance().getScheduler().createTask(ObjectOwner.SYSTEM).delay(stayTime,TimeUnit.SECONDS).execute(() -> {
+                    List<ConnectedMinecraftPlayer> players = new ArrayList<>(bossBar.getReceivers());
+                    for (ConnectedMinecraftPlayer player : players) {
+                        player.removeBossBar(bossBar);
+                    }
+                });
+                return;
             }
             case CHAT: {
                 onlinePlayer.sendMessage(Messages.BROADCAST_CHAT, buildVariableSet(broadcast, onlinePlayer));
@@ -129,15 +167,23 @@ public class MinecraftBroadcastSender implements BroadcastSender {
                 .addDescribed("player", onlinePlayer);
     }
 
-    private Collection<DKBansPlayer> sendBroadcast(Predicate<OnlineMinecraftPlayer> playerConsumer) {
+    private Collection<DKBansPlayer> sendBroadcast(Predicate<ConnectedMinecraftPlayer> playerConsumer) {
         Collection<DKBansPlayer> sent = new ArrayList<>();
 
-        for (OnlineMinecraftPlayer onlinePlayer : McNative.getInstance().getLocal().getOnlinePlayers()) {
+        for (ConnectedMinecraftPlayer onlinePlayer : McNative.getInstance().getLocal().getConnectedPlayers()) {
             if(playerConsumer.test(onlinePlayer)){
                 sent.add(onlinePlayer.getAs(DKBansPlayer.class));
             }
         }
 
         return sent;
+    }
+
+    private void startBossBarTask(){
+        if(this.runningTask != null) return;
+        this.runningTask = McNative.getInstance().getScheduler().createTask(DKBansPlugin.getInstance())
+                .interval(1,TimeUnit.SECONDS).execute(() -> {
+
+                });
     }
 }
