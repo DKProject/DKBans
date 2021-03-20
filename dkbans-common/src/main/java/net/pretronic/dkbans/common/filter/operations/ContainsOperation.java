@@ -42,7 +42,7 @@ public class ContainsOperation implements FilterOperation {
 
     @Override
     public boolean matches(String input) {
-        return value.contains(input.toLowerCase());
+        return input.toLowerCase().contains(value);
     }
 
     public static class Factory implements FilterOperationFactory {

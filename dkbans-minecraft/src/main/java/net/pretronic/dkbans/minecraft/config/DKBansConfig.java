@@ -31,6 +31,7 @@ import net.pretronic.libraries.document.annotations.DocumentIgnored;
 import net.pretronic.libraries.document.annotations.DocumentKey;
 import net.pretronic.libraries.document.entry.DocumentEntry;
 import net.pretronic.libraries.utility.Convert;
+import net.pretronic.libraries.utility.GeneralUtil;
 import net.pretronic.libraries.utility.duration.DurationProcessor;
 import net.pretronic.libraries.utility.io.FileUtil;
 import net.pretronic.libraries.utility.map.Pair;
@@ -135,26 +136,51 @@ public class DKBansConfig {
         int groupCount = 0;
         DKBans.getInstance().getTemplateManager().clearCache();
         for (File file : FileUtil.getFilesHierarchically(templates)) {
-            TemplateGroup group = loadTemplateConfig(DKBans.getInstance(), Document.read(file));
+            DKBans.getInstance().getLogger().info("Loading template file " + file.getName());
+            TemplateGroup group = loadTemplateConfig(DKBans.getInstance(), Document.read(file), file.getName());
+            if(group == null) {
+                DKBans.getInstance().getLogger().error("Could not load templates");
+                continue;
+            }
             DKBans.getInstance().getTemplateManager().importTemplateGroup(group);
             groupCount++;
-            templateCount+=(group != null && group.getTemplates() != null ? group.getTemplates().size() : 0);
+            templateCount+= group.getTemplates() != null ? group.getTemplates().size() : 0;
+            DKBans.getInstance().getLogger().info("Successfully loaded templates");
         }
         DKBans.getInstance().getTemplateManager().loadTemplateGroups();
         return new Pair<>(groupCount, templateCount);
     }
 
-    private static TemplateGroup loadTemplateConfig(DKBans dkBans, Document document) {
+    private static TemplateGroup loadTemplateConfig(DKBans dkBans, Document document, String fileName) {
 
         String groupName = document.getString("name");
-        TemplateType templateType = TemplateType.byNameOrNull(document.getString("type"));
-
-        if(templateType == null) {
-            dkBans.getLogger().warn("Could not load template group {} with type {}", groupName, document.getString("type"));
+        if(groupName == null) {
+            DKBans.getInstance().getLogger().error("Error: group name is missing");
+            return null;
+        }
+        String templateType0 = document.getString("type");
+        if(templateType0 == null) {
+            DKBans.getInstance().getLogger().error("Error: type is missing");
             return null;
         }
 
-        CalculationType calculationType = CalculationType.byName(document.getString("calculation"));
+        TemplateType templateType = TemplateType.byNameOrNull(templateType0);
+        if(templateType == null) {
+            DKBans.getInstance().getLogger().error("Error: template type " + templateType0 + " does not exist");
+            return null;
+        }
+
+        String calculationType0 = document.getString("calculation");
+        if(calculationType0 == null) {
+            DKBans.getInstance().getLogger().error("Error: calculation is missing");
+            return null;
+        }
+
+        CalculationType calculationType = CalculationType.byName(calculationType0);
+        if(calculationType == null) {
+            DKBans.getInstance().getLogger().error("Error: calculation type " + calculationType0 + " does not exist");
+            return null;
+        }
 
         List<Template> templates = new ArrayList<>();
 
@@ -166,7 +192,24 @@ public class DKBansConfig {
         for (DocumentEntry entry0 : document.getDocument("templates")) {
             Document documentEntry = entry0.toDocument();
 
+            String inGroupId0 = documentEntry.getKey();
+            if(inGroupId0 == null) {
+                DKBans.getInstance().getLogger().error("Error: Template id is missing");
+                return null;
+            }
+
+            DKBans.getInstance().getLogger().info("Loading template with id " + inGroupId0);
+
+            if(!GeneralUtil.isNaturalNumber(inGroupId0)) {
+                DKBans.getInstance().getLogger().error("Error: Template id is not a valid number");
+                return null;
+            }
+
             int inGroupId = Convert.toInteger(documentEntry.getKey());
+            if(inGroupId < 1) {
+                DKBans.getInstance().getLogger().error("Error: Template id is not valid, must be greater or equals than 1");
+                return null;
+            }
 
             String name = null;
             String display = null;
@@ -232,6 +275,28 @@ public class DKBansConfig {
                     }
                 }
             }
+
+            if(name == null) {
+                DKBans.getInstance().getLogger().error("Error: name is missing");
+                return null;
+            }
+            if(display == null) {
+                DKBans.getInstance().getLogger().error("Error: display is missing");
+                return null;
+            }
+            if(permission == null) {
+                DKBans.getInstance().getLogger().error("Error: permission is missing");
+                return null;
+            }
+            if(category == null) {
+                DKBans.getInstance().getLogger().error("Error: category is missing");
+                return null;
+            }
+            if(templateType != TemplateType.REPORT && historyType == null) {
+                DKBans.getInstance().getLogger().error("Error: historytype is missing");
+                return null;
+            }
+
             Template template = TemplateFactory.create(templateType, -1, inGroupId, name, templateGroup, display, permission, aliases,
                     historyType, enabled, hidden, category, data);
             templates.add(template);

@@ -42,7 +42,7 @@ public class StartsWithOperation implements FilterOperation {
 
     @Override
     public boolean matches(String input) {
-        return value.startsWith(input.toLowerCase());
+        return input.toLowerCase().startsWith(value);
     }
 
     public static class Factory implements FilterOperationFactory {
