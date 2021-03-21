@@ -81,6 +81,8 @@ public class CommandUtil {
     public static boolean checkBypass(CommandSender sender,DKBansPlayer player){
         if(player.hasBypass() && !sender.hasPermission(Permissions.BYPASS_IGNORE)){
             sender.sendMessage(Messages.PLAYER_HAS_BYPASS,VariableSet.create().addDescribed("player",player));
+            McNative.getInstance().getNetwork().broadcast(Permissions.BYPASS_IGNORE,Messages.PLAYER_HAS_BYPASS_NOTIFICATION
+                    ,VariableSet.create().addDescribed("sender",sender).add("target",player));
             return true;
         }
         return false;

@@ -102,6 +102,7 @@ public class TemplatePunishCommand extends BasicCommand {
                 .add("command",getConfiguration().getName())
                 .add("selectedPlayer",selectedPlayer)
                 .add("prefix",Messages.PREFIX)
+                .add("group",templates.getCategories())
                 .add("templates",templates.getTemplates())
                 .add("command",getConfiguration().getName()));
     }

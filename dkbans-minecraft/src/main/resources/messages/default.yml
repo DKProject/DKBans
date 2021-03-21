@@ -33,6 +33,7 @@ messages:
   dkbans.player.notOnline: '{prefix} &cThe player &e{player.displayName} &cis not online'
   dkbans.player.notSelf: '{prefix} &cYou can''t interact with your self'
   dkbans.player.hasBypass: '{prefix} &cYou are not allowed to punish this player'
+  dkbans.player.hasBypass.notification: '{prefix} &c{sender.displayName} &ctried to punish &{target.displayName}'
 
   dkbans.player.staff.status.now: '{prefix} &7You are {statusFormatted}'
   dkbans.player.staff.status.already: '{prefix} &7You are already {statusFormatted}'
