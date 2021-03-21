@@ -24,6 +24,7 @@ import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.session.PlayerSession;
 import net.pretronic.dkbans.minecraft.commands.util.CommandUtil;
 import net.pretronic.dkbans.minecraft.config.Messages;
+import net.pretronic.libraries.command.Completable;
 import net.pretronic.libraries.command.command.BasicCommand;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
 import net.pretronic.libraries.command.sender.CommandSender;
@@ -32,9 +33,11 @@ import net.pretronic.libraries.utility.GeneralUtil;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
 import org.mcnative.runtime.api.player.MinecraftPlayer;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
-public class PlayerSessionsCommand extends BasicCommand {
+public class PlayerSessionsCommand extends BasicCommand implements Completable {
 
     public PlayerSessionsCommand(ObjectOwner owner, CommandConfiguration configuration) {
         super(owner, configuration);
@@ -61,5 +64,10 @@ public class PlayerSessionsCommand extends BasicCommand {
                 .add("page",page)
                 .addDescribed("player",player)
                 .addDescribed("sessions",sessions));
+    }
+
+    @Override
+    public Collection<String> complete(CommandSender sender, String[] args) {
+        return CommandUtil.completePlayer(args);
     }
 }

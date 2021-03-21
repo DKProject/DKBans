@@ -27,13 +27,19 @@ import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.dkbans.minecraft.config.Permissions;
 import net.pretronic.libraries.command.sender.CommandSender;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
+import net.pretronic.libraries.utility.Iterators;
 import net.pretronic.libraries.utility.duration.DurationProcessor;
 import org.mcnative.runtime.api.McNative;
+import org.mcnative.runtime.api.player.ConnectedMinecraftPlayer;
 import org.mcnative.runtime.api.player.MinecraftPlayer;
 import org.mcnative.runtime.api.player.OnlineMinecraftPlayer;
 import org.mcnative.runtime.api.text.components.MessageComponent;
 
 import java.time.Duration;
+import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
+import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
 public class CommandUtil {
@@ -176,6 +182,23 @@ public class CommandUtil {
     public static boolean checkMaximumAllowedDuration(OnlineMinecraftPlayer sender, PunishmentType type, Duration duration){
         if(DKPERMS) return DKPermsUtil.checkMaximumAllowedDuration(sender, type, duration);
         return false;
+    }
+
+    public static List<String> completeSimple(List<String> commands,String[] args) {
+        if(args.length == 0) return commands;
+        else if(args.length == 1) return Iterators.filter(commands, command -> command.startsWith(args[0].toLowerCase()));
+        return Collections.emptyList();
+    }
+
+    public static List<String> completePlayer(String[] args) {
+        if(args.length == 0){
+            return Iterators.map(McNative.getInstance().getLocal().getConnectedPlayers()
+                    , ConnectedMinecraftPlayer::getName);
+        }else if(args.length == 1){
+            return Iterators.map(McNative.getInstance().getLocal().getConnectedPlayers()
+                    , ConnectedMinecraftPlayer::getName
+                    , player -> player.getName().toLowerCase().startsWith(args[0].toLowerCase(Locale.ROOT)));
+        }else return Collections.emptyList();
     }
 
 }

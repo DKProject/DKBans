@@ -20,7 +20,9 @@
 
 package net.pretronic.dkbans.minecraft.commands;
 
+import net.pretronic.dkbans.minecraft.commands.util.CommandUtil;
 import net.pretronic.dkbans.minecraft.config.Messages;
+import net.pretronic.libraries.command.Completable;
 import net.pretronic.libraries.command.command.BasicCommand;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
 import net.pretronic.libraries.command.sender.CommandSender;
@@ -30,7 +32,10 @@ import org.mcnative.runtime.api.McNative;
 import org.mcnative.runtime.api.player.MinecraftPlayer;
 import org.mcnative.runtime.api.player.OnlineMinecraftPlayer;
 
-public class PingCommand extends BasicCommand {
+import java.util.Collection;
+import java.util.Collections;
+
+public class PingCommand extends BasicCommand implements Completable {
 
     public PingCommand(ObjectOwner owner, CommandConfiguration configuration) {
         super(owner, configuration);
@@ -69,5 +74,10 @@ public class PingCommand extends BasicCommand {
         sender.sendMessage(Messages.PING_OTHER, VariableSet.create()
                 .addDescribed("player",player)
                 .add("ping",ping));
+    }
+    @Override
+    public Collection<String> complete(CommandSender sender, String[] args) {
+        if(sender.hasPermission("dkbans.ping.other")) return CommandUtil.completePlayer(args);
+        return Collections.emptyList();
     }
 }

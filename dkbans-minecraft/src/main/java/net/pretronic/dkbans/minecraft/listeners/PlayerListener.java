@@ -81,7 +81,6 @@ public class PlayerListener {
         DKBansPlayer player = event.getPlayer().getAs(DKBansPlayer.class);
 
         if(player.hasActivePunish(PunishmentType.BAN)){
-
             PlayerHistoryEntry ban = player.getHistory().getActiveEntry(PunishmentType.BAN);
             event.setCancelled(true);
             MessageComponent<?> message = ban.getCurrent().isPermanently()

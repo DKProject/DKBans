@@ -49,6 +49,7 @@ import net.pretronic.dkbans.minecraft.commands.report.ReportCommand;
 import net.pretronic.dkbans.minecraft.commands.unpunish.UnpunishCommand;
 import net.pretronic.dkbans.minecraft.config.CommandConfig;
 import net.pretronic.dkbans.minecraft.config.DKBansConfig;
+import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.dkbans.minecraft.integration.DKBansPlaceholders;
 import net.pretronic.dkbans.minecraft.integration.labymod.LabyModServiceListener;
 import net.pretronic.dkbans.minecraft.joinme.MinecraftJoinMe;
@@ -58,11 +59,15 @@ import net.pretronic.dkbans.minecraft.listeners.PlayerListener;
 import net.pretronic.dkbans.minecraft.listeners.SyncListener;
 import net.pretronic.dkbans.minecraft.migration.DKBansLegacyMigration;
 import net.pretronic.dkbans.minecraft.player.MinecraftPlayerManager;
+import net.pretronic.libraries.command.NoPermissionHandler;
 import net.pretronic.libraries.command.command.Command;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
+import net.pretronic.libraries.command.sender.CommandSender;
 import net.pretronic.libraries.document.Document;
 import net.pretronic.libraries.document.DocumentRegistry;
 import net.pretronic.libraries.document.type.DocumentFileType;
+import net.pretronic.libraries.message.bml.Message;
+import net.pretronic.libraries.message.bml.variable.VariableSet;
 import net.pretronic.libraries.plugin.lifecycle.Lifecycle;
 import net.pretronic.libraries.plugin.lifecycle.LifecycleState;
 import net.pretronic.libraries.utility.io.FileUtil;
@@ -70,6 +75,7 @@ import org.mcnative.runtime.api.McNative;
 import org.mcnative.runtime.api.plugin.MinecraftPlugin;
 import org.mcnative.runtime.api.plugin.configuration.ConfigurationProvider;
 import org.mcnative.runtime.api.serviceprovider.placeholder.PlaceholderProvider;
+import org.mcnative.runtime.api.text.components.MessageComponent;
 
 import java.io.File;
 import java.util.Map;
@@ -198,7 +204,16 @@ public class DKBansPlugin extends MinecraftPlugin {
         } else {
             getRuntime().getLocal().getCommandManager().registerCommand(new ReportCommand(this, CommandConfig.COMMAND_REPORT, null));
         }
+
+        getRuntime().getLocal().getCommandManager().setNoPermissionHandler(this, (sender, permission, command, args) -> {
+            MessageComponent<?> prefix = Messages.PREFIX;
+            sender.sendMessage(Messages.ERROR_NO_PERMISSIONS, VariableSet.create()
+                    .add("prefix",prefix));
+        });
     }
+
+
+
     private void registerDocumentAdapters(){
         DocumentRegistry.getDefaultContext().registerMappingAdapter(JoinMe.class, MinecraftJoinMe.class);
         DocumentRegistry.getDefaultContext().registerMappingAdapter(PlayerReport.class, DefaultPlayerReport.class);

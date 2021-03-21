@@ -22,16 +22,26 @@ package net.pretronic.dkbans.minecraft.commands;
 
 import net.pretronic.dkbans.minecraft.commands.util.CommandUtil;
 import net.pretronic.dkbans.minecraft.config.Messages;
+import net.pretronic.libraries.command.Completable;
 import net.pretronic.libraries.command.command.BasicCommand;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
 import net.pretronic.libraries.command.sender.CommandSender;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
+import net.pretronic.libraries.utility.Iterators;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
+import org.mcnative.runtime.api.McNative;
 import org.mcnative.runtime.api.network.component.server.MinecraftServer;
+import org.mcnative.runtime.api.network.component.server.ServerStatusResponse;
+import org.mcnative.runtime.api.player.ConnectedMinecraftPlayer;
 import org.mcnative.runtime.api.player.MinecraftPlayer;
 import org.mcnative.runtime.api.player.OnlineMinecraftPlayer;
 
-public class JumptoCommand extends BasicCommand {
+import java.util.Collection;
+import java.util.Collections;
+import java.util.function.Function;
+import java.util.function.Predicate;
+
+public class JumptoCommand extends BasicCommand implements Completable {
 
     public JumptoCommand(ObjectOwner owner, CommandConfiguration configuration) {
         super(owner, configuration);
@@ -78,5 +88,22 @@ public class JumptoCommand extends BasicCommand {
                 .addDescribed("player",player)
                 .addDescribed("server",server));
         ((OnlineMinecraftPlayer) sender).connect(server);
+    }
+
+    @Override
+    public Collection<String> complete(CommandSender sender, String[] args) {
+        if(sender instanceof  OnlineMinecraftPlayer){
+            if(args.length == 0) {
+                return Iterators.map(McNative.getInstance().getLocal().getConnectedPlayers()
+                        , ConnectedMinecraftPlayer::getName
+                        , player -> !player.getServer().equals(((OnlineMinecraftPlayer) sender).getServer()));
+            }else if(args.length == 1) {
+                return Iterators.map(McNative.getInstance().getLocal().getConnectedPlayers()
+                        , ConnectedMinecraftPlayer::getName
+                        , player -> !player.getServer().equals(((OnlineMinecraftPlayer) sender).getServer())
+                                && player.getName().toLowerCase().startsWith(args[0].toLowerCase()));
+            }
+        }
+        return Collections.emptyList();
     }
 }

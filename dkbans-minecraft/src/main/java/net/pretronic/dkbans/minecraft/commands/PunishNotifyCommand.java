@@ -22,6 +22,7 @@ package net.pretronic.dkbans.minecraft.commands;
 import net.pretronic.dkbans.minecraft.PlayerSettingsKey;
 import net.pretronic.dkbans.minecraft.commands.util.CommandUtil;
 import net.pretronic.dkbans.minecraft.config.Messages;
+import net.pretronic.libraries.command.Completable;
 import net.pretronic.libraries.command.command.BasicCommand;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
 import net.pretronic.libraries.command.sender.CommandSender;
@@ -30,7 +31,13 @@ import net.pretronic.libraries.utility.interfaces.ObjectOwner;
 import org.mcnative.runtime.api.player.MinecraftPlayer;
 import org.mcnative.runtime.api.player.OnlineMinecraftPlayer;
 
-public class PunishNotifyCommand extends BasicCommand {
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+
+public class PunishNotifyCommand extends BasicCommand implements Completable {
+
+    private final static List<String> COMMANDS = Arrays.asList("login","logout","toggle");
 
     public PunishNotifyCommand(ObjectOwner owner, CommandConfiguration configuration) {
         super(owner, configuration);
@@ -64,5 +71,10 @@ public class PunishNotifyCommand extends BasicCommand {
 
     private void changeLogin(OnlineMinecraftPlayer player, boolean current, boolean action){
         CommandUtil.changeLogin(Messages.PREFIX, PlayerSettingsKey.PUNISH_NOTIFY_LOGIN,player,current,action);
+    }
+
+    @Override
+    public Collection<String> complete(CommandSender sender, String[] args) {
+        return CommandUtil.completeSimple(COMMANDS,args);
     }
 }
