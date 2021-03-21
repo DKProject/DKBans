@@ -270,8 +270,7 @@ public class DKBansLegacyMigration extends Migration {
         int players = 0;
         Collection<NetworkPlayer> legacyPlayers = BanSystem.getInstance().getStorage().getPlayers();
         for (NetworkPlayer player : legacyPlayers) {
-            if(McNative.getInstance().getPlayerManager().getPlayer(player.getUUID()) == null
-                    && McNative.getInstance().getPlayerManager().getPlayer(player.getName()) == null) {
+            if(McNative.getInstance().getPlayerManager().getPlayer(player.getUUID()) == null) {
 
                 playerDataProvider.createPlayerData(player.getName(), player.getUUID(), -1, player.getFirstLogin()
                         , player.getLastLogin(), null);
