@@ -61,9 +61,6 @@ public interface DKBansPlayer extends DKBansExecutor {
     long getOnlineTime();
 
 
-    DKBansScope getCurrentScope();//Ableitung von Active Session (Server)
-
-
     boolean hasBypass();
 
 

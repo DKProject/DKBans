@@ -73,7 +73,6 @@ public  class DefaultDKBansPlayer implements DKBansPlayer {
         this.name = name;
         this.history = new DefaultPlayerHistory(this);
 
-
         this.sessionList = new DefaultPlayerSessionList(this);
         this.noteList = new DefaultPlayerNoteList(this);
 
@@ -123,11 +122,6 @@ public  class DefaultDKBansPlayer implements DKBansPlayer {
             this.onlineTime = DKBans.getInstance().getStorage().getOnlineTime(uniqueId);
         }
         return this.onlineTime;
-    }
-
-    @Override
-    public DKBansScope getCurrentScope() {
-         throw new UnsupportedOperationException();
     }
 
     @Override
