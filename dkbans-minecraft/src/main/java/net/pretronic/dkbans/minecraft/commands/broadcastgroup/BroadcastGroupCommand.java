@@ -23,6 +23,7 @@ package net.pretronic.dkbans.minecraft.commands.broadcastgroup;
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.broadcast.BroadcastGroup;
 import net.pretronic.dkbans.minecraft.config.Messages;
+import net.pretronic.libraries.command.NoPermissionHandler;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
 import net.pretronic.libraries.command.command.object.DefinedNotFindable;
 import net.pretronic.libraries.command.command.object.MainObjectCommand;
@@ -75,5 +76,16 @@ public class BroadcastGroupCommand extends MainObjectCommand<BroadcastGroup> imp
         } else {
             listCommand.execute(commandSender, args);
         }
+    }
+
+    //@Todo why?
+    @Override
+    public NoPermissionHandler getNoPermissionHandler(ObjectOwner owner) {
+        return null;
+    }
+
+    @Override
+    public void setNoPermissionHandler(ObjectOwner owner, NoPermissionHandler noPermissionHandler) {
+
     }
 }
