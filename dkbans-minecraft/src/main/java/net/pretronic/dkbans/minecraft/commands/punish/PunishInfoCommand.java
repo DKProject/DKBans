@@ -25,6 +25,7 @@ import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryEntry;
 import net.pretronic.dkbans.minecraft.commands.util.CommandUtil;
 import net.pretronic.dkbans.minecraft.config.Messages;
+import net.pretronic.libraries.command.Completable;
 import net.pretronic.libraries.command.command.BasicCommand;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
 import net.pretronic.libraries.command.sender.CommandSender;
@@ -33,9 +34,10 @@ import net.pretronic.libraries.utility.GeneralUtil;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
 import org.mcnative.runtime.api.player.MinecraftPlayer;
 
+import java.util.Collection;
 import java.util.List;
 
-public class PunishInfoCommand extends BasicCommand {
+public class PunishInfoCommand extends BasicCommand{
 
     public PunishInfoCommand(ObjectOwner owner, CommandConfiguration configuration) {
         super(owner, configuration);

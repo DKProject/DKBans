@@ -192,11 +192,8 @@ public class DKBansPlugin extends MinecraftPlugin {
 
         for (Map.Entry<String, CommandConfiguration> entry : CommandConfig.COMMAND_PUNISH_TEMPLATE.entrySet()) {
             TemplateGroup group = dkBans.getTemplateManager().getTemplateGroup(entry.getKey());
-            if(group == null){
-                getLogger().warn("Configured template group "+entry.getKey()+" does not exist");
-            }else{
-                getRuntime().getLocal().getCommandManager().registerCommand(new TemplatePunishCommand(this,entry.getValue(),group));
-            }
+            if(group == null) getLogger().warn("Configured template group "+entry.getKey()+" does not exist");
+            else getRuntime().getLocal().getCommandManager().registerCommand(new TemplatePunishCommand(this,entry.getValue(),group));
         }
 
         if(CommandConfig.COMMAND_REPORT_MODE.equalsIgnoreCase("template") && CommandConfig.COMMAND_REPORT_TEMPLATE_NAME != null) {

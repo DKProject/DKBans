@@ -27,6 +27,7 @@ import net.pretronic.dkbans.api.player.history.PlayerHistoryType;
 import net.pretronic.dkbans.api.player.history.PunishmentType;
 import net.pretronic.dkbans.minecraft.commands.util.CommandUtil;
 import net.pretronic.dkbans.minecraft.config.Messages;
+import net.pretronic.libraries.command.Completable;
 import net.pretronic.libraries.command.command.BasicCommand;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
 import net.pretronic.libraries.command.sender.CommandSender;
@@ -34,7 +35,9 @@ import net.pretronic.libraries.message.bml.variable.VariableSet;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
 import org.mcnative.runtime.api.player.MinecraftPlayer;
 
-public class OneTimePunishCommand extends BasicCommand {
+import java.util.Collection;
+
+public class OneTimePunishCommand extends BasicCommand implements Completable {
 
     private final PunishmentType punishmentType;
     private final PlayerHistoryType historyType;
@@ -77,5 +80,10 @@ public class OneTimePunishCommand extends BasicCommand {
                 .reason(reason)
                 .execute();
         CommandUtil.sendPunishResultMessage(sender,dkBansPlayer,snapshot);
+    }
+
+    @Override
+    public Collection<String> complete(CommandSender sender, String[] args) {
+        return CommandUtil.completePlayer(args);
     }
 }

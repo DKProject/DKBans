@@ -36,6 +36,7 @@ public class BroadcastListCommand extends BasicCommand {
 
     @Override
     public void execute(CommandSender commandSender, String[] strings) {
-        commandSender.sendMessage(Messages.COMMAND_BROADCAST_LIST, VariableSet.create().add("broadcasts", DKBans.getInstance().getBroadcastManager().getBroadcasts()));
+        commandSender.sendMessage(Messages.COMMAND_BROADCAST_LIST, VariableSet.create()
+                .add("broadcasts", DKBans.getInstance().getBroadcastManager().getBroadcasts()));
     }
 }

@@ -27,6 +27,7 @@ import net.pretronic.dkbans.api.player.history.PlayerHistoryType;
 import net.pretronic.dkbans.api.player.history.PunishmentType;
 import net.pretronic.dkbans.minecraft.commands.util.CommandUtil;
 import net.pretronic.dkbans.minecraft.config.Messages;
+import net.pretronic.libraries.command.Completable;
 import net.pretronic.libraries.command.command.BasicCommand;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
 import net.pretronic.libraries.command.sender.CommandSender;
@@ -36,8 +37,10 @@ import org.mcnative.runtime.api.player.MinecraftPlayer;
 import org.mcnative.runtime.api.player.OnlineMinecraftPlayer;
 
 import java.time.Duration;
+import java.util.Collection;
 
-public class TemporaryPunishCommand extends BasicCommand {
+//@Solution for intelligent duration completion ?
+public class TemporaryPunishCommand extends BasicCommand implements Completable {
 
     private final PunishmentType punishmentType;
     private final PlayerHistoryType historyType;
@@ -91,5 +94,10 @@ public class TemporaryPunishCommand extends BasicCommand {
                 .reason(reason)
                 .execute();
         CommandUtil.sendPunishResultMessage(sender,dkBansPlayer,result);
+    }
+
+    @Override
+    public Collection<String> complete(CommandSender sender, String[] args) {
+        return CommandUtil.completePlayer(args);
     }
 }
