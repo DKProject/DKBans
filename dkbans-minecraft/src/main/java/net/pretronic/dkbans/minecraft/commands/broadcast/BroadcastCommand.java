@@ -49,11 +49,12 @@ public class BroadcastCommand extends MainObjectCommand<Broadcast> implements Ob
         super(owner, configuration);
         this.createCommand = new BroadcastCreateCommand(owner);
         this.listCommand = new BroadcastListCommand(owner);
+        this.infoCommand = new BroadcastInfoCommand(owner);
+
         registerCommand(new BroadcastDirectCommand(owner));
         registerCommand(new BroadcastDeleteCommand(owner));
         registerCommand(new BroadcastEditCommand(owner));
-
-        this.infoCommand = new BroadcastInfoCommand(owner);
+        registerCommand(createCommand);
         registerCommand(infoCommand);
     }
 

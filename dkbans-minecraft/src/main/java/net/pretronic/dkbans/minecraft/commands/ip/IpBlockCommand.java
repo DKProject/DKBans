@@ -55,7 +55,7 @@ public class IpBlockCommand extends BasicCommand {
         Duration duration = CommandUtil.parseDuration(sender,arguments[2]);
         if(duration == null) return;
 
-        IpAddressBlock result = null;
+        IpAddressBlock result;
         if(arguments.length > 3){
             String action = arguments[3];
             if(action.equalsIgnoreCase("template") && arguments.length > 4){

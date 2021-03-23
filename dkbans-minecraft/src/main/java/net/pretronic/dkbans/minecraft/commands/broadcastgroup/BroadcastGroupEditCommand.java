@@ -24,18 +24,24 @@ import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.DKBansScope;
 import net.pretronic.dkbans.api.broadcast.BroadcastGroup;
 import net.pretronic.dkbans.api.broadcast.BroadcastOrder;
+import net.pretronic.dkbans.api.broadcast.BroadcastVisibility;
 import net.pretronic.dkbans.minecraft.config.Messages;
+import net.pretronic.libraries.command.Completable;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
 import net.pretronic.libraries.command.command.object.ObjectCommand;
 import net.pretronic.libraries.command.sender.CommandSender;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
 import net.pretronic.libraries.utility.Convert;
+import net.pretronic.libraries.utility.Iterators;
 import net.pretronic.libraries.utility.duration.DurationProcessor;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
 
-import java.util.UUID;
+import java.util.*;
 
-public class BroadcastGroupEditCommand extends ObjectCommand<BroadcastGroup> {
+public class BroadcastGroupEditCommand extends ObjectCommand<BroadcastGroup> implements Completable {
+
+    private final static List<String> COMMANDS = Arrays.asList("name","enabled","permission","order","interval","scope");
+    private final static List<String> COMMANDS_BOOLEAN = Arrays.asList("true","false");
 
     public BroadcastGroupEditCommand(ObjectOwner owner) {
         super(owner, CommandConfiguration.name("edit"));
@@ -124,6 +130,26 @@ public class BroadcastGroupEditCommand extends ObjectCommand<BroadcastGroup> {
                 commandSender.sendMessage(Messages.COMMAND_BROADCAST_GROUP_EDIT_HELP);
             }
         }
+    }
+
+    @Override
+    public Collection<String> complete(CommandSender sender, String[] args) {
+        if(args.length == 0) return COMMANDS;
+        else if(args.length == 1){
+            return Iterators.filter(COMMANDS, command -> command.startsWith(args[0].toLowerCase()));
+        }else if(args.length == 2){
+            String command = args[0];
+            if(command.equalsIgnoreCase("enabled")){
+                return Iterators.filter(COMMANDS_BOOLEAN, command0 -> command0.startsWith(args[1].toLowerCase()));
+            }else if(command.equalsIgnoreCase("order")){
+                Collection<String> result = new ArrayList<>();
+                for (BroadcastOrder value : BroadcastOrder.values()){
+                    if(value.name().startsWith(args[0].toUpperCase())) result.add(value.name());
+                }
+                return result;
+            }
+        }
+        return Collections.emptyList();
     }
 
     private void sendEditedMessage(CommandSender sender, String property, Object value) {
