@@ -1006,7 +1006,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
         return database.createCollection("dkbans_history_notes")
                 .field("Id", DataType.INTEGER, FieldOption.PRIMARY_KEY, FieldOption.AUTO_INCREMENT)
                 .field("HistoryId", DataType.INTEGER, ForeignKey.of(this.history, "Id"), FieldOption.NOT_NULL,FieldOption.INDEX)
-                .field("SenderId", DataType.UUID, FieldOption.NOT_NULL)
+                .field("CreatorId", DataType.UUID, FieldOption.NOT_NULL)
                 .field("Time", DataType.LONG, FieldOption.NOT_NULL)
                 .field("Message", DataType.STRING, FieldOption.NOT_NULL)
                 .field("TypeId", DataType.INTEGER, FieldOption.NOT_NULL)

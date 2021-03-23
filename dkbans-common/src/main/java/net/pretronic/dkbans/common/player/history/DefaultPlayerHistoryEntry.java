@@ -31,6 +31,8 @@ import net.pretronic.dkbans.api.player.note.PlayerNoteList;
 import net.pretronic.dkbans.api.player.note.PlayerNoteType;
 import net.pretronic.dkbans.api.player.session.PlayerSession;
 import net.pretronic.dkbans.api.template.unpunishment.UnPunishmentTemplate;
+import net.pretronic.dkbans.common.DefaultDKBans;
+import net.pretronic.dkbans.common.player.note.DefaultPlayerNote;
 import net.pretronic.libraries.utility.Iterators;
 import net.pretronic.libraries.utility.Validate;
 import net.pretronic.libraries.utility.annonations.Internal;
@@ -130,12 +132,20 @@ public class DefaultPlayerHistoryEntry implements PlayerHistoryEntry {
 
     @Override
     public PlayerNoteList getNotes() {
-        throw new UnsupportedOperationException();
+        return new DefaultHistoryNoteList(this);
     }
 
     @Override
     public PlayerNote createNote(DKBansExecutor creator, String message, PlayerNoteType type) {
-        throw new UnsupportedOperationException();
+        Validate.notNull(creator,message,type);
+        DefaultDKBans.getInstance().getStorage().getPlayerNotes().insert()
+                .set("PlayerId",playerId)
+                .set("CreatorId",creator.getUniqueId())
+                .set("Time",System.currentTimeMillis())
+                .set("Message",message)
+                .set("TypeId",type.getId())
+                .executeAndGetGeneratedKeyAsInt("Id");
+        return new DefaultPlayerNote(id,type,System.currentTimeMillis(),message,creator.getUniqueId());
     }
 
     @Override
@@ -145,8 +155,10 @@ public class DefaultPlayerHistoryEntry implements PlayerHistoryEntry {
 
     @Override
     public PlayerHistoryEntrySnapshot unpunish(DKBansExecutor executor, String reason) {
-        return newSnapshot(executor).active(false)
-                .revokeReason(reason).execute();
+        return newSnapshot(executor)
+                .active(false)
+                .revokeReason(reason)
+                .execute();
     }
 
     @Override
