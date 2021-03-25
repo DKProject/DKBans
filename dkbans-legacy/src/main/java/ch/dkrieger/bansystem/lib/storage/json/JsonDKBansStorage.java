@@ -197,6 +197,11 @@ public class JsonDKBansStorage implements DKBansStorage {
     }
 
     @Override
+    public Collection<IPBan> getIpBans() {
+        return this.ipBans;
+    }
+
+    @Override
     public List<Filter> loadFilters() {
         Document document = Document.loadData(new File(storageFolder,"filters.json"));
         if(document.contains("filters")) return document.getObject("filters",new TypeToken<List<Filter>>(){}.getType());

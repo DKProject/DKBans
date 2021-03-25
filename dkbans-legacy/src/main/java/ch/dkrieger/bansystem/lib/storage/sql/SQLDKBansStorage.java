@@ -488,6 +488,23 @@ public class SQLDKBansStorage implements DKBansStorage {
     }
 
     @Override
+    public Collection<IPBan> getIpBans() {
+        return ipbans.selectAll().execute(result -> {
+            Collection<IPBan> ipBans = new ArrayList<>();
+            try{
+
+                while(result.next()){
+                    ipBans.add(new IPBan(result.getString("lastPlayer").equalsIgnoreCase("NULL")?null
+                            :UUID.fromString(result.getString("lastPlayer"))
+                            ,result.getString("ip"),result.getLong("timeStamp")
+                            ,result.getLong("timeOut")));
+                }
+            }catch (Exception ignored){}
+            return ipBans;
+        });
+    }
+
+    @Override
     public Document getSetting(String name) {
         return this.settings.select().where("name",name).execute(result -> {
             try{while(result.next()) return Document.loadData(result.getString("value"));
