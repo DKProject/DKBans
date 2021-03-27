@@ -233,6 +233,11 @@ public class MongoDBDKBansStorage implements DKBansStorage {
     }
 
     @Override
+    public Collection<IPBan> getIpBans() {
+        return MongoDBUtil.findALL(this.ipBanCollection, IPBan.class);
+    }
+
+    @Override
     public ch.dkrieger.bansystem.lib.utils.Document getSetting(String name) {
         Document result =  this.settingsCollection.find(eq("settingTypeName",name)).first();
         if(result != null){

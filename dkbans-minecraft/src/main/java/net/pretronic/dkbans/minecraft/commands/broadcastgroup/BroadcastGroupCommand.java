@@ -23,17 +23,23 @@ package net.pretronic.dkbans.minecraft.commands.broadcastgroup;
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.broadcast.BroadcastGroup;
 import net.pretronic.dkbans.minecraft.config.Messages;
+import net.pretronic.libraries.command.NoPermissionHandler;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
 import net.pretronic.libraries.command.command.object.DefinedNotFindable;
 import net.pretronic.libraries.command.command.object.MainObjectCommand;
+import net.pretronic.libraries.command.command.object.ObjectCompletable;
 import net.pretronic.libraries.command.command.object.ObjectNotFindable;
 import net.pretronic.libraries.command.sender.CommandSender;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
+import net.pretronic.libraries.utility.Iterators;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
 
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
-public class BroadcastGroupCommand extends MainObjectCommand<BroadcastGroup> implements ObjectNotFindable, DefinedNotFindable<BroadcastGroup> {
+public class BroadcastGroupCommand extends MainObjectCommand<BroadcastGroup> implements ObjectNotFindable, DefinedNotFindable<BroadcastGroup>, ObjectCompletable {
 
     private final BroadcastGroupCreateCommand createCommand;
     private final BroadcastGroupListCommand listCommand;
@@ -43,10 +49,12 @@ public class BroadcastGroupCommand extends MainObjectCommand<BroadcastGroup> imp
         super(owner, configuration);
         this.createCommand = new BroadcastGroupCreateCommand(owner);
         this.listCommand = new BroadcastGroupListCommand(owner);
+        this.infoCommand = new BroadcastGroupInfoCommand(owner);
+
         registerCommand(new BroadcastGroupAssignmentCommand(owner));
         registerCommand(new BroadcastGroupEditCommand(owner));
-        this.infoCommand = new BroadcastGroupInfoCommand(owner);
         registerCommand(infoCommand);
+        registerCommand(createCommand);
     }
 
     @Override
@@ -75,5 +83,23 @@ public class BroadcastGroupCommand extends MainObjectCommand<BroadcastGroup> imp
         } else {
             listCommand.execute(commandSender, args);
         }
+    }
+
+    //@Todo why?
+    @Override
+    public NoPermissionHandler getNoPermissionHandler(ObjectOwner owner) {
+        return null;
+    }
+
+    @Override
+    public void setNoPermissionHandler(ObjectOwner owner, NoPermissionHandler noPermissionHandler) {
+
+    }
+
+    @Override
+    public Collection<String> complete(CommandSender sender, String name) {
+        return Iterators.map(DKBans.getInstance().getBroadcastManager().getGroups()
+                ,BroadcastGroup::getName
+                ,assignments -> assignments.getName().toLowerCase().startsWith(name.toLowerCase()));
     }
 }

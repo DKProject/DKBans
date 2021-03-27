@@ -22,19 +22,27 @@ package net.pretronic.dkbans.minecraft.commands.punish;
 
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryEntrySnapshot;
+import net.pretronic.dkbans.api.template.Template;
 import net.pretronic.dkbans.api.template.TemplateGroup;
 import net.pretronic.dkbans.api.template.punishment.PunishmentTemplate;
 import net.pretronic.dkbans.api.template.punishment.PunishmentTemplateEntry;
 import net.pretronic.dkbans.minecraft.commands.util.CommandUtil;
 import net.pretronic.dkbans.minecraft.config.Messages;
+import net.pretronic.libraries.command.Completable;
 import net.pretronic.libraries.command.command.BasicCommand;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
 import net.pretronic.libraries.command.sender.CommandSender;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
+import net.pretronic.libraries.utility.Iterators;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
 import org.mcnative.runtime.api.player.MinecraftPlayer;
 
-public class TemplatePunishCommand extends BasicCommand {
+import java.util.Collection;
+import java.util.Locale;
+import java.util.function.Function;
+import java.util.function.Predicate;
+
+public class TemplatePunishCommand extends BasicCommand implements Completable {
 
     private final TemplateGroup templates;
 
@@ -102,7 +110,17 @@ public class TemplatePunishCommand extends BasicCommand {
                 .add("command",getConfiguration().getName())
                 .add("selectedPlayer",selectedPlayer)
                 .add("prefix",Messages.PREFIX)
+                .add("group",templates.getCategories())
                 .add("templates",templates.getTemplates())
                 .add("command",getConfiguration().getName()));
+    }
+
+    @Override
+    public Collection<String> complete(CommandSender sender, String[] args) {
+        if(args.length == 2){
+            return Iterators.map(templates.getTemplates()
+                    , Template::getName
+                    , template -> template.getName().toLowerCase().startsWith(args[1].toLowerCase(Locale.ROOT)));
+        }else return CommandUtil.completePlayer(args);
     }
 }

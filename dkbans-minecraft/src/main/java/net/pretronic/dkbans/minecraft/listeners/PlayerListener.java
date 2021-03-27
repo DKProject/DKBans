@@ -22,6 +22,7 @@ package net.pretronic.dkbans.minecraft.listeners;
 
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.DKBansExecutor;
+import net.pretronic.dkbans.api.event.DKBansBypassCheckEvent;
 import net.pretronic.dkbans.api.filter.FilterAffiliationArea;
 import net.pretronic.dkbans.api.filter.FilterManager;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
@@ -81,7 +82,6 @@ public class PlayerListener {
         DKBansPlayer player = event.getPlayer().getAs(DKBansPlayer.class);
 
         if(player.hasActivePunish(PunishmentType.BAN)){
-
             PlayerHistoryEntry ban = player.getHistory().getActiveEntry(PunishmentType.BAN);
             event.setCancelled(true);
             MessageComponent<?> message = ban.getCurrent().isPermanently()
@@ -195,6 +195,7 @@ public class PlayerListener {
     @Listener(execution = ExecutionType.ASYNC)
     public void onPlayerDisconnect(MinecraftPlayerLogoutEvent event) {
         DKBansPlayer player = event.getPlayer().getAs(DKBansPlayer.class);
+        event.getPlayer().setSetting("DKBans", PlayerSettingsKey.BYPASS,event.getPlayer().hasPermission(Permissions.BYPASS));
         if(player == null || event.getOnlinePlayer().getServer() == null) return;
         player.finishSession(event.getOnlinePlayer().getServer().getName(),
                 event.getOnlinePlayer().getServer().getIdentifier().getUniqueId());
@@ -301,6 +302,18 @@ public class PlayerListener {
             if(filterManager.checkFilter(FilterAffiliationArea.COMMAND_MUTE,event.getCommand())){
                 sendMutedMessage(event.getOnlinePlayer(),mute);
                 event.setCancelled(true);
+            }
+        }
+    }
+
+    @Listener
+    public void onBypassCheck(DKBansBypassCheckEvent event){
+        MinecraftPlayer player = McNative.getInstance().getPlayerManager().getPlayer(event.getPlayerId());
+        if(player != null){
+            if(player.isConnected()){
+                event.setBypass(player.hasPermission(Permissions.BYPASS));
+            }else{
+                event.setBypass(player.hasSetting("DKBans", PlayerSettingsKey.BYPASS,true));
             }
         }
     }

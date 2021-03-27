@@ -26,6 +26,7 @@ import net.pretronic.dkbans.api.player.ipaddress.IpAddressBlock;
 import net.pretronic.dkbans.api.player.ipaddress.IpAddressInfo;
 import net.pretronic.dkbans.minecraft.commands.util.CommandUtil;
 import net.pretronic.dkbans.minecraft.config.Messages;
+import net.pretronic.libraries.command.Completable;
 import net.pretronic.libraries.command.command.BasicCommand;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
 import net.pretronic.libraries.command.sender.CommandSender;
@@ -35,7 +36,7 @@ import org.mcnative.runtime.api.player.MinecraftPlayer;
 
 import java.util.Collection;
 
-public class IpInfoCommand extends BasicCommand {
+public class IpInfoCommand extends BasicCommand implements Completable {
 
     public IpInfoCommand(ObjectOwner owner, CommandConfiguration configuration) {
         super(owner, configuration);
@@ -79,5 +80,10 @@ public class IpInfoCommand extends BasicCommand {
                     .addDescribed("addresses", dkbansPlayer.getIpAddresses())
                     .addDescribed("player", player));
         }
+    }
+
+    @Override
+    public Collection<String> complete(CommandSender sender, String[] args) {
+        return CommandUtil.completePlayer(args);
     }
 }

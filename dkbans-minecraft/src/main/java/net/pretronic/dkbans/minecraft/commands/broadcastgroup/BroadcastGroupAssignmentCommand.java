@@ -33,6 +33,7 @@ import net.pretronic.libraries.utility.interfaces.ObjectOwner;
 
 import java.util.Arrays;
 
+//@Todo change to add and remove (+ tab completion) ... => simpler for user
 public class BroadcastGroupAssignmentCommand extends ObjectCommand<BroadcastGroup> {
 
     public BroadcastGroupAssignmentCommand(ObjectOwner owner) {

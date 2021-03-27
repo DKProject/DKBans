@@ -35,6 +35,8 @@ public interface TemplateGroup extends Iterable<Template> {
 
     CalculationType getCalculationType();
 
+    List<TemplateCategory> getCategories();
+
     List<Template> getTemplates();
 
     default Template getTemplate(String name){

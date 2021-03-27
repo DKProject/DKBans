@@ -23,7 +23,9 @@ package net.pretronic.dkbans.minecraft.migration;
 import ch.dkrieger.bansystem.lib.BanSystem;
 import ch.dkrieger.bansystem.lib.config.mode.BanMode;
 import ch.dkrieger.bansystem.lib.config.mode.ReasonMode;
+import ch.dkrieger.bansystem.lib.player.IPBan;
 import ch.dkrieger.bansystem.lib.player.NetworkPlayer;
+import ch.dkrieger.bansystem.lib.player.OnlineSession;
 import ch.dkrieger.bansystem.lib.player.history.BanType;
 import ch.dkrieger.bansystem.lib.player.history.entry.*;
 import ch.dkrieger.bansystem.lib.reason.*;
@@ -35,11 +37,13 @@ import net.pretronic.dkbans.api.migration.MigrationResult;
 import net.pretronic.dkbans.api.migration.MigrationResultBuilder;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.history.*;
+import net.pretronic.dkbans.api.player.ipaddress.IpAddressBlockType;
 import net.pretronic.dkbans.api.template.TemplateCategory;
 import net.pretronic.dkbans.api.template.TemplateFactory;
 import net.pretronic.dkbans.api.template.TemplateGroup;
 import net.pretronic.dkbans.api.template.TemplateType;
 import net.pretronic.dkbans.api.template.punishment.PunishmentTemplateEntry;
+import net.pretronic.dkbans.common.DefaultDKBans;
 import net.pretronic.dkbans.common.player.history.DefaultPlayerHistoryEntrySnapshotBuilder;
 import net.pretronic.dkbans.common.template.DefaultTemplateGroup;
 import net.pretronic.dkbans.common.template.punishment.DefaultPunishmentTemplate;
@@ -308,10 +312,32 @@ public class DKBansLegacyMigration extends Migration {
                     migrateWarnEntry(builder, ((Warn) entry));
                 }
             }
+
+            for (OnlineSession session : player.getOnlineSessions()) {
+                DefaultDKBans.getInstance().getStorage().getPlayerSessions().insert()
+                        .set("PlayerId", player.getUUID())
+                        .set("PlayerSessionName", player.getName())
+                        .set("IpAddress", session.getIp())
+                        .set("Country", session.getCountry())
+                        .set("Region", "none")
+                        .set("ProxyId", session.getProxy())
+                        .set("ProxyName", session.getProxy())
+                        .set("ClientEdition", "Java")
+                        .set("ClientProtocolVersion", session.getClientVersion())
+                        .set("ConnectTime", session.getConnected())
+                        .executeAndGetGeneratedKeyAsInt("Id");
+            }
+        }
+
+        int migratedIpBlocks = 0;
+        for (IPBan ipBan : BanSystem.getInstance().getPlayerManager().getIpBans()) {
+            DKBans.getInstance().getIpAddressManager().blockIpAddress(ipBan.getIp(), "none", ipBan.getTimeOut(), DKBansExecutor.IP_ADDRESS_BLOCK);
+            migratedIpBlocks++;
         }
 
         resultBuilder.addMigrated("McNativePlayers", mcNativeCount);
         resultBuilder.addMigrated("Players", players);
+        resultBuilder.addMigrated("IpBlocks", migratedIpBlocks);
     }
 
     private PlayerHistoryEntry migrateBanEntry(PlayerHistoryEntrySnapshotBuilder builder, Ban ban) {

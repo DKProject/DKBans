@@ -26,6 +26,7 @@ import net.pretronic.dkbans.minecraft.PlayerSettingsKey;
 import net.pretronic.dkbans.minecraft.commands.util.CommandUtil;
 import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.dkbans.minecraft.config.Permissions;
+import net.pretronic.libraries.command.Completable;
 import net.pretronic.libraries.command.command.BasicCommand;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
 import net.pretronic.libraries.command.sender.CommandSender;
@@ -34,7 +35,13 @@ import net.pretronic.libraries.utility.StringUtil;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
 import org.mcnative.runtime.api.player.OnlineMinecraftPlayer;
 
-public class TeamChatCommand extends BasicCommand {
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+
+public class TeamChatCommand extends BasicCommand implements Completable {
+
+    private final static List<String> COMMANDS = Arrays.asList("login","logout","toggle");
 
     public TeamChatCommand(ObjectOwner owner, CommandConfiguration configuration) {
         super(owner, configuration);
@@ -75,8 +82,14 @@ public class TeamChatCommand extends BasicCommand {
         }
     }
 
+    @Override
+    public Collection<String> complete(CommandSender sender, String[] args) {
+        return CommandUtil.completeSimple(COMMANDS,args);
+    }
+
     private void changeLogin(OnlineMinecraftPlayer player, boolean current, boolean action){
         CommandUtil.changeLogin(Messages.PREFIX_TEAMCHAT,PlayerSettingsKey.TEAM_CHAT_LOGIN,player,current,action);
     }
+
 
 }

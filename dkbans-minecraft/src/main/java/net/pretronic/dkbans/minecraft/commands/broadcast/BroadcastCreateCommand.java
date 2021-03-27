@@ -25,14 +25,18 @@ import net.pretronic.dkbans.api.broadcast.Broadcast;
 import net.pretronic.dkbans.api.broadcast.BroadcastProperty;
 import net.pretronic.dkbans.api.broadcast.BroadcastVisibility;
 import net.pretronic.dkbans.minecraft.config.Messages;
+import net.pretronic.libraries.command.Completable;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
 import net.pretronic.libraries.command.command.object.ObjectCommand;
 import net.pretronic.libraries.command.sender.CommandSender;
 import net.pretronic.libraries.document.Document;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
+import net.pretronic.libraries.utility.Iterators;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
 
-public class BroadcastCreateCommand extends ObjectCommand<String> {
+import java.util.*;
+
+public class BroadcastCreateCommand extends ObjectCommand<String> implements Completable {
 
     public BroadcastCreateCommand(ObjectOwner owner) {
         super(owner, CommandConfiguration.name("create"));
@@ -60,5 +64,20 @@ public class BroadcastCreateCommand extends ObjectCommand<String> {
         Broadcast broadcast = DKBans.getInstance().getBroadcastManager()
                 .createBroadcast(name, visibility, Document.newDocument().add(BroadcastProperty.TEXT, text.substring(1)));
         commandSender.sendMessage(Messages.COMMAND_BROADCAST_CREATED, VariableSet.create().addDescribed("broadcast", broadcast));
+    }
+
+    @Override
+    public Collection<String> complete(CommandSender sender, String[] args) {
+        if(args.length == 0){
+            Collection<String> result = new ArrayList<>();
+            for (BroadcastVisibility value : BroadcastVisibility.values()) result.add(value.name());
+            return result;
+        }else if(args.length == 1){
+            Collection<String> result = new ArrayList<>();
+            for (BroadcastVisibility value : BroadcastVisibility.values()){
+                if(value.name().startsWith(args[0].toUpperCase())) result.add(value.name());
+            }
+            return result;
+        }else return Collections.emptyList();
     }
 }

@@ -26,24 +26,32 @@ import net.pretronic.dkbans.api.player.chatlog.ChatLogEntry;
 import net.pretronic.dkbans.api.player.chatlog.PlayerChatLog;
 import net.pretronic.dkbans.api.player.chatlog.ServerChatLog;
 import net.pretronic.dkbans.minecraft.config.Messages;
+import net.pretronic.libraries.command.Completable;
 import net.pretronic.libraries.command.command.BasicCommand;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
 import net.pretronic.libraries.command.sender.CommandSender;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
 import net.pretronic.libraries.utility.Convert;
+import net.pretronic.libraries.utility.Iterators;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
 import org.mcnative.runtime.api.McNative;
+import org.mcnative.runtime.api.network.component.server.MinecraftServer;
+import org.mcnative.runtime.api.network.messaging.MessageReceiver;
+import org.mcnative.runtime.api.player.ConnectedMinecraftPlayer;
 import org.mcnative.runtime.api.player.MinecraftPlayer;
 import org.mcnative.runtime.api.text.components.MessageComponent;
 
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 /*
 - chatlog player <name> 1,2
 - chatlog server <name, id>
  */
-public class ChatLogCommand extends BasicCommand {
+public class ChatLogCommand extends BasicCommand implements Completable {
+
+    private final static List<String> COMMANDS = Arrays.asList("player","server");
 
     public ChatLogCommand(ObjectOwner owner, CommandConfiguration configuration) {
         super(owner, configuration);
@@ -78,6 +86,35 @@ public class ChatLogCommand extends BasicCommand {
         } else {
             sender.sendMessage(Messages.COMMAND_CHATLOG_USAGE);
         }
+    }
+
+    @Override
+    public Collection<String> complete(CommandSender sender, String[] args) {
+        if(args.length == 0) return COMMANDS;
+        else if(args.length == 1) return Iterators.filter(COMMANDS, command -> command.startsWith(args[0].toLowerCase()));
+        else if(args.length < 4){
+            String command = args[0];
+            if(command.equalsIgnoreCase("player")){
+                if(args.length == 3){
+                    return Iterators.map(McNative.getInstance().getLocal().getConnectedPlayers()
+                            , (MinecraftPlayer::getName)
+                            , player -> player.getName().toLowerCase().startsWith(args[2].toLowerCase()));
+                }else{
+                    return Iterators.map(McNative.getInstance().getLocal().getConnectedPlayers()
+                            , MinecraftPlayer::getName);
+                }
+            }else if(command.equalsIgnoreCase("server")){
+                if(args.length == 3){
+                    return Iterators.map(McNative.getInstance().getNetwork().getServers()
+                            , (MinecraftServer::getName)
+                            , server -> server.getName().toLowerCase().startsWith(args[2].toLowerCase()));
+                }else{
+                    return Iterators.map(McNative.getInstance().getNetwork().getServers()
+                            , MinecraftServer::getName);
+                }
+            }
+        }
+        return Collections.emptyList();
     }
 
     private void printChatLog(CommandSender sender, ChatLog chatLog, String[] args, MessageComponent<?> message,MinecraftPlayer player) {

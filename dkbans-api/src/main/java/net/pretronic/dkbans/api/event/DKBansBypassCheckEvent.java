@@ -20,14 +20,11 @@
 
 package net.pretronic.dkbans.api.event;
 
-import net.pretronic.dkbans.api.DKBansScope;
+public interface DKBansBypassCheckEvent extends DKBansPlayerEvent {
 
-public interface DKBansScopeCheckEvent extends DKBansEvent {
+    boolean hasBypass();
 
-    DKBansScope getScope();
+    void setBypass(boolean bypass);
 
-    boolean isValid();
-
-    void setValid(boolean valid);
 
 }

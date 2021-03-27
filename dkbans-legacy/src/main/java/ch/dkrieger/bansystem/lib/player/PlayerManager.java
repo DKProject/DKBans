@@ -124,6 +124,11 @@ public class PlayerManager {
         }
         else return ban;
     }
+
+    public Collection<IPBan> getIpBans() {
+        return BanSystem.getInstance().getStorage().getIpBans();
+    }
+
     public boolean isIPBanned(String ip){
         return getIpBan(ip) != null;
     }
