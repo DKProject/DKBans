@@ -34,7 +34,7 @@ import org.mcnative.runtime.api.player.MinecraftPlayer;
 
 import java.util.List;
 
-public class PlayerNoteCommand extends BasicCommand {
+public class PlayerNoteCommand extends BasicCommand{
 
     public PlayerNoteCommand(ObjectOwner owner, CommandConfiguration configuration) {
         super(owner, configuration);

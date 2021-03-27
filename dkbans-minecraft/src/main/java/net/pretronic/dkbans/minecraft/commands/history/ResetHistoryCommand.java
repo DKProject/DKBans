@@ -25,6 +25,7 @@ import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.history.PlayerHistory;
 import net.pretronic.dkbans.minecraft.commands.util.CommandUtil;
 import net.pretronic.dkbans.minecraft.config.Messages;
+import net.pretronic.libraries.command.Completable;
 import net.pretronic.libraries.command.command.BasicCommand;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
 import net.pretronic.libraries.command.sender.CommandSender;
@@ -35,8 +36,9 @@ import net.pretronic.libraries.utility.interfaces.ObjectOwner;
 import org.mcnative.runtime.api.player.MinecraftPlayer;
 
 import java.time.Duration;
+import java.util.Collection;
 
-public class ResetHistoryCommand extends BasicCommand {
+public class ResetHistoryCommand extends BasicCommand implements Completable {
 
     public ResetHistoryCommand(ObjectOwner owner, CommandConfiguration configuration) {
         super(owner, configuration);
@@ -94,5 +96,11 @@ public class ResetHistoryCommand extends BasicCommand {
             sender.sendMessage(Messages.COMMAND_RESET_HISTORY_MANY, VariableSet.create()
                     .addDescribed("player",dkBansPlayer));
         }
+    }
+
+    @Override
+    public Collection<String> complete(CommandSender sender, String[] args) {
+        //@Todo better completion
+        return CommandUtil.completePlayer(args);
     }
 }

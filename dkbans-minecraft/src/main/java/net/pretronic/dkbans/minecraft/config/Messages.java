@@ -52,6 +52,7 @@ public class Messages {
     public static MessageComponent<?> PLAYER_NOT_ONLINE = Text.ofMessageKey("dkbans.player.notOnline");
     public static MessageComponent<?> PLAYER_NOT_SELF = Text.ofMessageKey("dkbans.player.notSelf");
     public static MessageComponent<?> PLAYER_HAS_BYPASS = Text.ofMessageKey("dkbans.player.hasBypass");
+    public static MessageComponent<?> PLAYER_HAS_BYPASS_NOTIFICATION = Text.ofMessageKey("dkbans.player.hasBypass.notification");
 
     public static MessageComponent<?> STAFF_STATUS_NOW = Text.ofMessageKey("dkbans.player.staff.status.now");
     public static MessageComponent<?> STAFF_STATUS_ALREADY = Text.ofMessageKey("dkbans.player.staff.status.already");
@@ -167,6 +168,7 @@ public class Messages {
     public static MessageComponent<?> COMMAND_PUNISH_EDIT_DONE = Text.ofMessageKey("dkbans.command.punishedit.done");
 
     public static MessageComponent<?> COMMAND_FILTER_HELP = Text.ofMessageKey("dkbans.command.filter.help");
+    public static MessageComponent<?> COMMAND_FILTER_RELOADED = Text.ofMessageKey("dkbans.command.filter.reloaded");
     public static MessageComponent<?> COMMAND_FILTER_AFFILIATION_AREA_NOT_FOUND = Text.ofMessageKey("dkbans.command.filter.affiliationArea.notFound");
     public static MessageComponent<?> COMMAND_FILTER_OPERATION_NOT_FOUND = Text.ofMessageKey("dkbans.command.filter.operation.notFound");
     public static MessageComponent<?> COMMAND_FILTER_NOT_FOUND = Text.ofMessageKey("dkbans.command.filter.notFound");

@@ -76,6 +76,8 @@ public interface DKBansStorage {
 
     public IPBan getIpBan(String ip);
 
+    Collection<IPBan> getIpBans();
+
     public List<Filter> loadFilters();
 
     public List<Broadcast> loadBroadcasts();

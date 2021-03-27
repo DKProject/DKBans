@@ -24,17 +24,22 @@ import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.broadcast.Broadcast;
 import net.pretronic.dkbans.api.broadcast.BroadcastVisibility;
 import net.pretronic.dkbans.minecraft.config.Messages;
+import net.pretronic.libraries.command.Completable;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
 import net.pretronic.libraries.command.command.object.ObjectCommand;
 import net.pretronic.libraries.command.sender.CommandSender;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
+import net.pretronic.libraries.utility.Iterators;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
 import net.pretronic.libraries.utility.map.Pair;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.*;
+import java.util.function.Predicate;
 
-public class BroadcastEditCommand extends ObjectCommand<Broadcast> {
+public class BroadcastEditCommand extends ObjectCommand<Broadcast> implements Completable {
+
+    private final static List<String> COMMANDS = Arrays.asList("name","visibility","property");
+    private final static List<String> COMMANDS_PROPERTY = Arrays.asList("add","remove");
 
     public BroadcastEditCommand(ObjectOwner owner) {
         super(owner, CommandConfiguration.name("edit"));
@@ -126,5 +131,25 @@ public class BroadcastEditCommand extends ObjectCommand<Broadcast> {
 
     private void sendEditedMessage(CommandSender sender, String property, Object value) {
         sender.sendMessage(Messages.COMMAND_BROADCAST_EDIT_EDITED, VariableSet.create().add("property", property).add("value", value));
+    }
+
+    @Override
+    public Collection<String> complete(CommandSender sender, String[] args) {
+        if(args.length == 0) return COMMANDS;
+        else if(args.length == 1){
+            return Iterators.filter(COMMANDS, command -> command.startsWith(args[0].toLowerCase()));
+        }else if(args.length == 2){
+            String command = args[0];
+            if(command.equalsIgnoreCase("visibility")){
+                Collection<String> result = new ArrayList<>();
+                for (BroadcastVisibility value : BroadcastVisibility.values()){
+                    if(value.name().startsWith(args[1].toUpperCase())) result.add(value.name());
+                }
+                return result;
+            }else if(command.equalsIgnoreCase("property")){
+                return Iterators.filter(COMMANDS_PROPERTY, command0 -> command0.startsWith(args[1].toLowerCase()));
+            }
+        }
+        return Collections.emptyList();
     }
 }

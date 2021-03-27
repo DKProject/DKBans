@@ -21,16 +21,15 @@
 package net.pretronic.dkbans.common.template;
 
 import net.pretronic.dkbans.api.player.history.CalculationType;
-import net.pretronic.dkbans.api.template.Template;
-import net.pretronic.dkbans.api.template.TemplateFactory;
-import net.pretronic.dkbans.api.template.TemplateGroup;
-import net.pretronic.dkbans.api.template.TemplateType;
+import net.pretronic.dkbans.api.template.*;
 import net.pretronic.dkbans.common.DefaultDKBans;
 import net.pretronic.libraries.document.type.DocumentFileType;
+import net.pretronic.libraries.utility.Iterators;
 import net.pretronic.libraries.utility.Validate;
 import net.pretronic.libraries.utility.annonations.Internal;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -72,6 +71,17 @@ public class DefaultTemplateGroup implements TemplateGroup {
     @Override
     public CalculationType getCalculationType() {
         return this.calculationType;
+    }
+
+    @Override
+    public List<TemplateCategory> getCategories() {
+        List<TemplateCategory> categories = new ArrayList<>();
+        for (Template template : templates) {
+            if(!categories.contains(template.getCategory())){
+                categories.add(template.getCategory());
+            }
+        }
+        return categories;
     }
 
     @Override

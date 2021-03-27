@@ -20,18 +20,26 @@
 
 package net.pretronic.dkbans.minecraft.commands;
 
+import net.pretronic.dkbans.minecraft.commands.util.CommandUtil;
 import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.dkbans.minecraft.config.Permissions;
+import net.pretronic.libraries.command.Completable;
 import net.pretronic.libraries.command.command.BasicCommand;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
 import net.pretronic.libraries.command.sender.CommandSender;
+import net.pretronic.libraries.utility.Iterators;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
 import org.mcnative.runtime.api.McNative;
 import org.mcnative.runtime.api.network.component.server.MinecraftServer;
 import org.mcnative.runtime.api.player.OnlineMinecraftPlayer;
 import org.mcnative.runtime.api.text.Text;
 
-public class ChatClearCommand extends BasicCommand {
+import java.util.*;
+import java.util.function.Predicate;
+
+public class ChatClearCommand extends BasicCommand implements Completable {
+
+    private final static List<String> COMMANDS = Arrays.asList("local","global");
 
     public ChatClearCommand(ObjectOwner owner, CommandConfiguration configuration) {
         super(owner, configuration);
@@ -68,5 +76,10 @@ public class ChatClearCommand extends BasicCommand {
             }
             sender.sendMessage(Messages.COMMAND_CHAT_CLEAR_MY);
         }
+    }
+
+    @Override
+    public Collection<String> complete(CommandSender sender, String[] args) {
+        return CommandUtil.completeSimple(COMMANDS,args);
     }
 }

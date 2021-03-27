@@ -33,6 +33,8 @@ messages:
   dkbans.player.notOnline: '{prefix} &cDer Spieler &e{player.displayName} &cist nicht online'
   dkbans.player.notSelf: '{prefix} &cDu kannst nicht mit dir selbst interagieren'
   dkbans.player.hasBypass: '{prefix} &cDu hast keine Rechte um diesen Spieler zu bestrafen.'
+  dkbans.player.hasBypass.notification: '{prefix} &c{sender.displayName} &cversuchte &{target.displayName} &czu bestrafen'
+
   dkbans.player.staff.status.now: '{prefix} &7Du bist {statusFormatted}'
   dkbans.player.staff.status.already: '{prefix} &7Du bist bereits {statusFormatted}'
   dkbans.player.staff.status.change: '{prefix} &7Du hast dich {statusFormatted}'
@@ -235,6 +237,7 @@ messages:
   dkbans.command.report.list.loop: ' !["&8- &e{report.player.displayName} &7Anzahl&8: &e{report.count}"]("run:///report take {report.player.name}")'
   dkbans.command.filter.help: '${dkbans.prefix.chat} &6Filter help
   &7/filter list [area]
+  &7/filter reload
   &7/filter add <area> <value> <operation>
   &7/filter remove <id>
   &7
@@ -251,6 +254,7 @@ messages:
    &8- &eSTARTS_WITH
    &8- &eENDS_WITH
    &8- &eREGEX'
+  dkbans.command.filter.reloaded: '${dkbans.prefix.chat} &cFilter wurden neu geladen'
   dkbans.command.filter.affiliationArea.notFound: '${dkbans.prefix.chat} &cDer Zugehörigkeitsbereich &c{area} &cwurde nicht gefunden'
   dkbans.command.filter.operation.notFound: '${dkbans.prefix.chat} &cDie Filteroperation &c{operation} &cwurde nicht gefunden'
   dkbans.command.filter.notFound: '${dkbans.prefix.chat} &cDer Filter &c{id} &cwurde nicht gefunden'

@@ -29,4 +29,6 @@ public class PlayerSettingsKey {
     public static final String PUNISH_NOTIFY_LOGIN = "PunishNotifyLogin";
 
     public static final String JOINME_AMOUNT = "JoinMeAmount";
+
+    public static final String BYPASS = "bypass";
 }

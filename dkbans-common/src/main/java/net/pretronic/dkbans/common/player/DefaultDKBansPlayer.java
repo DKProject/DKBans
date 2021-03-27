@@ -26,6 +26,7 @@ import net.pretronic.databasequery.api.query.result.QueryResultEntry;
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.DKBansScope;
+import net.pretronic.dkbans.api.event.DKBansBypassCheckEvent;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.chatlog.PlayerChatLog;
 import net.pretronic.dkbans.api.player.history.*;
@@ -40,6 +41,7 @@ import net.pretronic.dkbans.api.player.session.PlayerSessionList;
 import net.pretronic.dkbans.api.template.punishment.PunishmentTemplate;
 import net.pretronic.dkbans.api.template.report.ReportTemplate;
 import net.pretronic.dkbans.common.DefaultDKBans;
+import net.pretronic.dkbans.common.event.DefaultDKBansBypassCheckEvent;
 import net.pretronic.dkbans.common.player.history.DefaultPlayerHistory;
 import net.pretronic.dkbans.common.player.history.DefaultPlayerHistoryEntrySnapshotBuilder;
 import net.pretronic.dkbans.common.player.note.DefaultPlayerNoteList;
@@ -70,7 +72,6 @@ public  class DefaultDKBansPlayer implements DKBansPlayer {
         this.uniqueId = uniqueId;
         this.name = name;
         this.history = new DefaultPlayerHistory(this);
-
 
         this.sessionList = new DefaultPlayerSessionList(this);
         this.noteList = new DefaultPlayerNoteList(this);
@@ -124,18 +125,15 @@ public  class DefaultDKBansPlayer implements DKBansPlayer {
     }
 
     @Override
-    public DKBansScope getCurrentScope() {
-         throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public boolean hasBypass() {//@Todo event
-        return false;
+    public boolean hasBypass() {
+        DefaultDKBansBypassCheckEvent event = new DefaultDKBansBypassCheckEvent(this,false);
+        DKBans.getInstance().getEventBus().callEvent(DKBansBypassCheckEvent.class,event);
+        return event.hasBypass();
     }
 
     @Override
     public PlayerChatLog getChatLog() {
-         throw new UnsupportedOperationException();
+         return DKBans.getInstance().getChatLogManager().getPlayerChatLog(uniqueId);
     }
 
     @Override

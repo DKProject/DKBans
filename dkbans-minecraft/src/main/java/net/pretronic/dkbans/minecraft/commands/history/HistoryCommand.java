@@ -25,6 +25,7 @@ import net.pretronic.dkbans.api.player.history.PlayerHistoryEntry;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryEntrySnapshot;
 import net.pretronic.dkbans.minecraft.commands.util.CommandUtil;
 import net.pretronic.dkbans.minecraft.config.Messages;
+import net.pretronic.libraries.command.Completable;
 import net.pretronic.libraries.command.command.BasicCommand;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
 import net.pretronic.libraries.command.sender.CommandSender;
@@ -35,7 +36,7 @@ import org.mcnative.runtime.api.player.MinecraftPlayer;
 
 import java.util.Collection;
 
-public class HistoryCommand extends BasicCommand {
+public class HistoryCommand extends BasicCommand implements Completable {
 
     public HistoryCommand(ObjectOwner owner, CommandConfiguration configuration) {
         super(owner, configuration);
@@ -102,5 +103,10 @@ public class HistoryCommand extends BasicCommand {
                     .addDescribed("player",player)
                     .addDescribed("entries",entries));
         }
+    }
+
+    @Override
+    public Collection<String> complete(CommandSender sender, String[] args) {
+        return CommandUtil.completePlayer(args);
     }
 }
