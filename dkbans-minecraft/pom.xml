@@ -140,7 +140,7 @@
             <groupId>net.pretronic.dkperms</groupId>
             <artifactId>dkperms-api</artifactId>
             <version>1.7.20.213</version>
-            <scope>compile</scope>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>
