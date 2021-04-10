@@ -83,7 +83,7 @@ public class TemporaryPunishCommand extends BasicCommand implements Completable 
         }
 
         Duration duration = CommandUtil.parseDuration(sender,arguments[1]);
-        if(sender instanceof OnlineMinecraftPlayer &&  CommandUtil.checkMaximumAllowedDuration((OnlineMinecraftPlayer) sender,punishmentType,duration));
+        if(sender instanceof OnlineMinecraftPlayer && CommandUtil.checkMaximumAllowedDuration((OnlineMinecraftPlayer) sender,punishmentType,duration)) return;
 
         PlayerHistoryEntrySnapshot result = dkBansPlayer.punish()
                 .staff(CommandUtil.getExecutor(sender))

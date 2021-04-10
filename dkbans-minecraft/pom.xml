@@ -25,7 +25,7 @@
     <parent>
         <artifactId>DKBans</artifactId>
         <groupId>net.pretronic.dkbans</groupId>
-        <version>1.12.5.395-BETA</version>
+        <version>1.13.3.402-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -140,8 +140,7 @@
             <groupId>net.pretronic.dkperms</groupId>
             <artifactId>dkperms-api</artifactId>
             <version>1.7.20.213</version>
-            <scope>compile</scope>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
-
 </project>
