@@ -194,8 +194,9 @@ public class PlayerListener {
 
     @Listener(execution = ExecutionType.ASYNC)
     public void onPlayerDisconnect(MinecraftPlayerLogoutEvent event) {
-        DKBansPlayer player = event.getPlayer().getAs(DKBansPlayer.class);
-        event.getPlayer().setSetting("DKBans", PlayerSettingsKey.BYPASS,event.getPlayer().hasPermission(Permissions.BYPASS));
+        MinecraftPlayer mcPlayer = event.getPlayer();
+        DKBansPlayer player = mcPlayer.getAs(DKBansPlayer.class);
+        event.getPlayer().setSetting("DKBans", PlayerSettingsKey.BYPASS,mcPlayer.hasPermission(Permissions.BYPASS));
         if(player == null || event.getOnlinePlayer().getServer() == null) return;
         player.finishSession(event.getOnlinePlayer().getServer().getName(),
                 event.getOnlinePlayer().getServer().getIdentifier().getUniqueId());

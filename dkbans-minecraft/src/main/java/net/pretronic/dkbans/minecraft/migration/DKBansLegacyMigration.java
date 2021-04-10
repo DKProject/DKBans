@@ -325,6 +325,7 @@ public class DKBansLegacyMigration extends Migration {
                         .set("ClientEdition", "Java")
                         .set("ClientProtocolVersion", session.getClientVersion())
                         .set("ConnectTime", session.getConnected())
+                        .set("DisconnectTime", session.getDisconnected())
                         .executeAndGetGeneratedKeyAsInt("Id");
             }
         }

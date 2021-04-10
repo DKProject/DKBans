@@ -37,7 +37,7 @@ public class DKPermsUtil {
         if(entry == null) return false;
         else{
             Duration max = DurationProcessor.getStandard().parse(entry.getValue());
-            boolean result = duration.getSeconds() >= max.getSeconds();
+            boolean result = duration.getSeconds() > max.getSeconds();
             if(result) sender.sendMessage(Messages.ERROR_PUNISHMENT_TO_LONG, VariableSet.create()
                     .addDescribed("type",type)
                     .add("prefix",Messages.PREFIX)
