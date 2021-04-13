@@ -24,8 +24,8 @@ import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.report.PlayerReport;
 import net.pretronic.dkbans.api.player.report.PlayerReportEntry;
 import net.pretronic.dkbans.minecraft.commands.util.CommandUtil;
+import net.pretronic.dkbans.minecraft.config.CommandConfig;
 import net.pretronic.dkbans.minecraft.config.Messages;
-import net.pretronic.dkbans.minecraft.config.Permissions;
 import net.pretronic.libraries.command.command.BasicCommand;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
 import net.pretronic.libraries.command.sender.CommandSender;
@@ -40,7 +40,7 @@ public class ReportTakeCommand extends BasicCommand {
         super(owner, CommandConfiguration.newBuilder()
                 .name("watch")
                 .aliases("take")
-                .permission(Permissions.COMMAND_REPORT_STAFF).create());
+                .permission(CommandConfig.PERMISSION_COMMAND_REPORT_STAFF).create());
     }
 
     @Override

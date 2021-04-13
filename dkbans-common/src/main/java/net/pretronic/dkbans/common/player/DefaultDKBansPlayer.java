@@ -147,6 +147,11 @@ public  class DefaultDKBansPlayer implements DKBansPlayer {
     }
 
     @Override
+    public void clearNotes() {
+        DefaultDKBans.getInstance().getStorage().getPlayerNotes().delete().where("PlayerId",uniqueId).execute();
+    }
+
+    @Override
     public PlayerHistoryEntrySnapshot punish(DKBansExecutor executor, PunishmentTemplate template) {
         Validate.notNull(executor,template);
         PlayerHistoryEntrySnapshotBuilder builder = punish();

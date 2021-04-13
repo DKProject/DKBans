@@ -75,6 +75,7 @@ public class PingCommand extends BasicCommand implements Completable {
                 .addDescribed("player",player)
                 .add("ping",ping));
     }
+
     @Override
     public Collection<String> complete(CommandSender sender, String[] args) {
         if(sender.hasPermission("dkbans.ping.other")) return CommandUtil.completePlayer(args);

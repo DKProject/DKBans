@@ -32,6 +32,7 @@ import net.pretronic.libraries.document.annotations.DocumentKey;
 import net.pretronic.libraries.document.entry.DocumentEntry;
 import net.pretronic.libraries.utility.Convert;
 import net.pretronic.libraries.utility.GeneralUtil;
+import net.pretronic.libraries.utility.Iterators;
 import net.pretronic.libraries.utility.duration.DurationProcessor;
 import net.pretronic.libraries.utility.io.FileUtil;
 import net.pretronic.libraries.utility.map.Pair;
@@ -43,8 +44,10 @@ import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Function;
 
 public class DKBansConfig {
 
@@ -69,11 +72,25 @@ public class DKBansConfig {
     public static String PLAYER_SESSION_RETENTION = "90d";
 
     public static boolean CHAT_FILTER_ENABLED = true;
-
     public static boolean CHAT_FILTER_NOTIFICATION = true;
+    public static boolean CHAT_FILTER_BLOCK_REPEAT = true;
+    public static boolean CHAT_FILTER_BLOCK_CAPSLOCK = true;
+    public static boolean CHAT_FILTER_BLOCK_TOFAST = true;
 
     @DocumentKey("chat.filter.repeatDelay")
-    public static long CHAT_FILTER_REPEAT_DELAY = 1000;
+    public static long CHAT_FILTER_TOFAST_DELAY = 1000;
+
+    @DocumentKey("chat.tabComplete.enabled")
+    public static boolean CHAT_TAB_COMPLETE_ENABLED = true;
+
+    @DocumentKey("chat.tabComplete.mode")
+    public static String CHAT_TAB_COMPLETE_MODE = "DYNAMIC";
+
+    @DocumentKey("chat.tabComplete.suggestion")
+    public static List<String> CHAT_TAB_COMPLETE_SUGGESTIONS_RAW = Arrays.asList("help","ping","dkbans","report","ban:dkbans.command.punish");
+
+    public static List<Pair<String,String>> CHAT_TAB_COMPLETE_SUGGESTIONS;
+
 
     @DocumentKey("joinme.headEnabled")
     public static boolean JOINME_HEAD_ENABLED = true;
@@ -127,6 +144,10 @@ public class DKBansConfig {
         if(DKBans.getInstance().getTemplateManager().getTemplateGroups().isEmpty()) {
             importTemplates();
         }
+        CHAT_TAB_COMPLETE_SUGGESTIONS = Iterators.map(CHAT_TAB_COMPLETE_SUGGESTIONS_RAW, input -> {
+            String[] parts = input.split(":");
+            return new Pair<>(parts[0],parts.length > 1 ? parts[1] : null);
+        });
     }
 
     public static Pair<Integer, Integer> importTemplates() {

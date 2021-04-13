@@ -74,6 +74,8 @@ public interface DKBansPlayer extends DKBansExecutor {
 
     PlayerNote createNote(DKBansExecutor creator, String message, PlayerNoteType type);
 
+    void clearNotes();
+
 
 
     default boolean hasActivePunish(PunishmentType type){

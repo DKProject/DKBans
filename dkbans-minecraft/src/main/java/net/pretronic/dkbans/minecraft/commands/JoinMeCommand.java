@@ -24,8 +24,8 @@ import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.joinme.JoinMe;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.minecraft.PlayerSettingsKey;
+import net.pretronic.dkbans.minecraft.config.CommandConfig;
 import net.pretronic.dkbans.minecraft.config.Messages;
-import net.pretronic.dkbans.minecraft.config.Permissions;
 import net.pretronic.libraries.command.command.BasicCommand;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
 import net.pretronic.libraries.command.sender.CommandSender;
@@ -52,7 +52,7 @@ public class JoinMeCommand extends BasicCommand {
         }
         OnlineMinecraftPlayer player = (OnlineMinecraftPlayer) sender;
         if(args.length == 0) {
-            if (!player.hasPermission(Permissions.COMMAND_JOINME)) {
+            if (!player.hasPermission(CommandConfig.PERMISSION_COMMAND_JOINME)) {
                 PlayerSetting setting = player.getSetting("DKBans", PlayerSettingsKey.JOINME_AMOUNT);
                 if (setting == null || setting.getIntValue() == 0) {
                     player.sendMessage(Messages.COMMAND_JOINME_NOT_ENOUGH_AMOUNT);

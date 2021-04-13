@@ -21,21 +21,21 @@
 package net.pretronic.dkbans.minecraft.commands;
 
 import net.pretronic.dkbans.minecraft.commands.util.CommandUtil;
+import net.pretronic.dkbans.minecraft.config.CommandConfig;
 import net.pretronic.dkbans.minecraft.config.Messages;
-import net.pretronic.dkbans.minecraft.config.Permissions;
 import net.pretronic.libraries.command.Completable;
 import net.pretronic.libraries.command.command.BasicCommand;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
 import net.pretronic.libraries.command.sender.CommandSender;
-import net.pretronic.libraries.utility.Iterators;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
 import org.mcnative.runtime.api.McNative;
 import org.mcnative.runtime.api.network.component.server.MinecraftServer;
 import org.mcnative.runtime.api.player.OnlineMinecraftPlayer;
 import org.mcnative.runtime.api.text.Text;
 
-import java.util.*;
-import java.util.function.Predicate;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
 public class ChatClearCommand extends BasicCommand implements Completable {
 
@@ -47,7 +47,7 @@ public class ChatClearCommand extends BasicCommand implements Completable {
 
     @Override
     public void execute(CommandSender sender, String[] arguments) {
-        if(arguments.length > 0 && sender.hasPermission(Permissions.COMMAND_CHAT_CLEAR)){
+        if(arguments.length > 0 && sender.hasPermission(CommandConfig.PERMISSION_COMMAND_CHAT_CLEAR_ALL)){
             if(arguments[0].equalsIgnoreCase("local")){
                 if(sender instanceof OnlineMinecraftPlayer){
                     OnlineMinecraftPlayer player = (OnlineMinecraftPlayer) sender;

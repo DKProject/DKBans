@@ -35,19 +35,19 @@ import net.pretronic.dkbans.api.player.ipaddress.IpAddressBlockType;
 import net.pretronic.dkbans.api.player.report.ReportState;
 import net.pretronic.dkbans.common.DKBansUtil;
 import net.pretronic.dkbans.minecraft.PlayerSettingsKey;
+import net.pretronic.dkbans.minecraft.config.CommandConfig;
 import net.pretronic.dkbans.minecraft.config.DKBansConfig;
 import net.pretronic.dkbans.minecraft.config.Messages;
-import net.pretronic.dkbans.minecraft.config.Permissions;
-import net.pretronic.dkbans.minecraft.integration.labymod.LabyModIntegration;
+import net.pretronic.libraries.command.command.Command;
+import net.pretronic.libraries.command.manager.CommandManager;
 import net.pretronic.libraries.event.EventPriority;
 import net.pretronic.libraries.event.Listener;
 import net.pretronic.libraries.event.execution.ExecutionType;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
+import net.pretronic.libraries.utility.Iterators;
 import net.pretronic.libraries.utility.map.Pair;
 import org.mcnative.runtime.api.McNative;
-import org.mcnative.runtime.api.event.player.MinecraftPlayerChatEvent;
-import org.mcnative.runtime.api.event.player.MinecraftPlayerCommandPreprocessEvent;
-import org.mcnative.runtime.api.event.player.MinecraftPlayerLogoutEvent;
+import org.mcnative.runtime.api.event.player.*;
 import org.mcnative.runtime.api.event.player.login.MinecraftPlayerLoginConfirmEvent;
 import org.mcnative.runtime.api.event.player.login.MinecraftPlayerLoginEvent;
 import org.mcnative.runtime.api.event.player.login.MinecraftPlayerPostLoginEvent;
@@ -58,11 +58,10 @@ import org.mcnative.runtime.api.player.OnlineMinecraftPlayer;
 import org.mcnative.runtime.api.text.Text;
 import org.mcnative.runtime.api.text.components.MessageComponent;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 public class PlayerListener {
 
@@ -143,7 +142,7 @@ public class PlayerListener {
     public void onPlayerPostLogin(MinecraftPlayerPostLoginEvent event){
         OnlineMinecraftPlayer player = event.getOnlinePlayer();
 
-        if(DKBansConfig.PLAYER_ON_JOIN_PUNISH_NOTIFY && player.hasPermission(Permissions.PUNISH_NOTIFY)){
+        if(DKBansConfig.PLAYER_ON_JOIN_PUNISH_NOTIFY && player.hasPermission(CommandConfig.PERMISSION_PUNISH_NOTIFY)){
             boolean teamChat = event.getPlayer().hasSetting("DKBans",PlayerSettingsKey.PUNISH_NOTIFY_LOGIN,true);
             player.sendMessage(Messages.STAFF_STATUS_NOW,VariableSet.create()
                     .add("prefix",Messages.PREFIX)
@@ -151,7 +150,7 @@ public class PlayerListener {
                     .add("statusFormatted", teamChat ? Messages.STAFF_STATUS_LOGIN :  Messages.STAFF_STATUS_LOGOUT));
         }
 
-        if(DKBansConfig.PLAYER_ON_JOIN_INFO_TEAMCHAT && player.hasPermission(Permissions.COMMAND_TEAMCHAT_TEAM)){
+        if(DKBansConfig.PLAYER_ON_JOIN_INFO_TEAMCHAT && player.hasPermission(CommandConfig.PERMISSION_COMMAND_TEAMCHAT_RECEIVE)){
             boolean teamChat = event.getPlayer().hasSetting("DKBans",PlayerSettingsKey.TEAM_CHAT_LOGIN,true);
             player.sendMessage(Messages.STAFF_STATUS_NOW,VariableSet.create()
                     .add("prefix",Messages.PREFIX_TEAMCHAT)
@@ -159,7 +158,7 @@ public class PlayerListener {
                     .add("statusFormatted", teamChat ? Messages.STAFF_STATUS_LOGIN :  Messages.STAFF_STATUS_LOGOUT));
         }
 
-        if(DKBansConfig.PLAYER_ON_JOIN_INFO_REPORT && player.hasPermission(Permissions.COMMAND_REPORT_STAFF)){
+        if(DKBansConfig.PLAYER_ON_JOIN_INFO_REPORT && player.hasPermission(CommandConfig.PERMISSION_COMMAND_REPORT_STAFF)){
             boolean report = event.getPlayer().hasSetting("DKBans", PlayerSettingsKey.REPORT_CHAT_LOGIN,true);
             player.sendMessage(Messages.STAFF_STATUS_NOW,VariableSet.create()
                     .add("prefix",Messages.PREFIX_REPORT)
@@ -167,7 +166,7 @@ public class PlayerListener {
                     .add("statusFormatted", report ? Messages.STAFF_STATUS_LOGIN :  Messages.STAFF_STATUS_LOGOUT));
         }
 
-        if(DKBansConfig.PLAYER_ON_JOIN_LIST_REPORTS && player.hasPermission(Permissions.COMMAND_REPORT_STAFF)){
+        if(DKBansConfig.PLAYER_ON_JOIN_LIST_REPORTS && player.hasPermission(CommandConfig.PERMISSION_COMMAND_REPORT_STAFF)){
             int openReports = DKBans.getInstance().getReportManager().getNewReports().size();
             player.sendMessage(Messages.REPORT_COUNT_INFO,VariableSet.create().add("openReports",openReports));
         }
@@ -196,7 +195,7 @@ public class PlayerListener {
     public void onPlayerDisconnect(MinecraftPlayerLogoutEvent event) {
         MinecraftPlayer mcPlayer = event.getPlayer();
         DKBansPlayer player = mcPlayer.getAs(DKBansPlayer.class);
-        event.getPlayer().setSetting("DKBans", PlayerSettingsKey.BYPASS,mcPlayer.hasPermission(Permissions.BYPASS));
+        event.getPlayer().setSetting("DKBans", PlayerSettingsKey.BYPASS,mcPlayer.hasPermission(CommandConfig.PERMISSION_BYPASS));
         if(player == null || event.getOnlinePlayer().getServer() == null) return;
         player.finishSession(event.getOnlinePlayer().getServer().getName(),
                 event.getOnlinePlayer().getServer().getIdentifier().getUniqueId());
@@ -209,16 +208,20 @@ public class PlayerListener {
     public void onPlayerChat(MinecraftPlayerChatEvent event){
         if(event.isCancelled()) return;
         DKBansPlayer player = event.getPlayer().getAs(DKBansPlayer.class);
-        boolean bypass = event.getPlayer().hasPermission(Permissions.CHAT_BYPASS);
-
-        if(DKBansConfig.CHAT_FILTER_ENABLED && !bypass && checkBasicFilters(event, player)) return;
 
         PlayerHistoryEntry mute = player.getHistory().getActiveEntry(PunishmentType.MUTE);
         if(mute != null){
             event.setCancelled(true);
             sendMutedMessage(event.getOnlinePlayer(), mute);
         }else{
-            String filterAffiliationArea = checkMessageBlocked(event);
+            boolean bypass = event.getPlayer().hasPermission(CommandConfig.PERMISSION_CHAT_BYPASS);
+
+            String filterAffiliationArea = null;
+            if(DKBansConfig.CHAT_FILTER_ENABLED && !bypass){
+                if(checkBasicFilters(event, player)) return;
+                filterAffiliationArea = checkMessageBlocked(event);
+            }
+
             DKBans.getInstance().getChatLogManager().createChatLogEntryAsync(event.getPlayer().getUniqueId(),
                     event.getMessage(),
                     System.currentTimeMillis(),
@@ -229,13 +232,27 @@ public class PlayerListener {
     }
 
     private boolean checkBasicFilters(MinecraftPlayerChatEvent event, DKBansPlayer player){
+        if(DKBansConfig.CHAT_FILTER_BLOCK_CAPSLOCK){
+            int index = 0;
+            for (char character : event.getMessage().toCharArray()) {
+                if(Character.isUpperCase(character)){
+                    index++;
+                    if(index == 4){
+                        event.setCancelled(true);
+                        event.getOnlinePlayer().sendMessage(Messages.CHAT_FILTER_SPAM_CAPSLOCK);
+                        return true;
+                    }
+                }else index = 0;
+            }
+        }
+
         LastMessage lastMessage = this.lastMessages.get(player.getUniqueId());
         if(lastMessage != null){
-            if(lastMessage.time+DKBansConfig.CHAT_FILTER_REPEAT_DELAY >= System.currentTimeMillis()){
+            if(DKBansConfig.CHAT_FILTER_BLOCK_TOFAST && lastMessage.time+DKBansConfig.CHAT_FILTER_TOFAST_DELAY >= System.currentTimeMillis()){
                 event.setCancelled(true);
                 event.getOnlinePlayer().sendMessage(Messages.CHAT_FILTER_SPAM_TOFAST);
                 return true;
-            }else if(lastMessage.time < (System.currentTimeMillis()+TimeUnit.MINUTES.toMillis(1))
+            }else if(DKBansConfig.CHAT_FILTER_BLOCK_REPEAT && lastMessage.time < (System.currentTimeMillis()+TimeUnit.MINUTES.toMillis(1))
                     && event.getMessage().equalsIgnoreCase(lastMessage.message)){
                 event.setCancelled(true);
                 event.getOnlinePlayer().sendMessage(Messages.CHAT_FILTER_SPAM_REPEAT);
@@ -275,7 +292,7 @@ public class PlayerListener {
             }else players = McNative.getInstance().getLocal().getOnlinePlayers();
 
             for (OnlineMinecraftPlayer staff : players) {
-                if (staff.hasPermission(Permissions.CHAT_NOTIFICATION)
+                if (staff.hasPermission(CommandConfig.PERMISSION_CHAT_NOTIFICATION)
                         && staff.hasSetting("DKBans", PlayerSettingsKey.PUNISH_NOTIFY_LOGIN, true)) {
                     staff.sendMessage(message0,variables);
                 }
@@ -283,7 +300,7 @@ public class PlayerListener {
         }
     }
 
-    @Listener(priority = EventPriority.HIGHEST)//@Todo async
+    @Listener(priority = EventPriority.HIGHEST)
     public void onPlayerCommand(MinecraftPlayerCommandPreprocessEvent event){
         if(event.isCancelled()) return;
         FilterManager filterManager = DKBans.getInstance().getFilterManager();
@@ -308,11 +325,35 @@ public class PlayerListener {
     }
 
     @Listener
+    public void onTabComplete(MinecraftPlayerTabCompleteResponseEvent event){
+        if(!DKBansConfig.CHAT_TAB_COMPLETE_ENABLED) return;
+        if(event.getCursor().startsWith("/") && !event.getCursor().contains(" ")){
+            boolean bypass = event.getPlayer().hasPermission(CommandConfig.PERMISSION_CHAT_BYPASS_TAB_COMPLETION);
+            if(!bypass){
+                event.getSuggestions().clear();
+                event.setCancelled(true);
+                List<String> suggestions = null;
+                if(DKBansConfig.CHAT_TAB_COMPLETE_MODE.equalsIgnoreCase("DYNAMIC")){
+                    List<Command> commands = McNative.getInstance().getLocal().getCommandManager().getCommands();
+                    suggestions = Iterators.map(commands, command -> command.getConfiguration().getName()
+                            , command -> event.getPlayer().hasPermission(command.getConfiguration().getPermission()));
+                }else if(DKBansConfig.CHAT_TAB_COMPLETE_MODE.equalsIgnoreCase("SUGGESTED")){
+                    suggestions = Iterators.map(DKBansConfig.CHAT_TAB_COMPLETE_SUGGESTIONS,Pair::getKey
+                            ,command -> event.getPlayer().hasPermission(command.getValue()));
+                }
+                if(suggestions != null){
+                    event.getSuggestions().addAll(suggestions);
+                }
+            }
+        }
+    }
+
+    @Listener
     public void onBypassCheck(DKBansBypassCheckEvent event){
         MinecraftPlayer player = McNative.getInstance().getPlayerManager().getPlayer(event.getPlayerId());
         if(player != null){
             if(player.isConnected()){
-                event.setBypass(player.hasPermission(Permissions.BYPASS));
+                event.setBypass(player.hasPermission(CommandConfig.PERMISSION_BYPASS));
             }else{
                 event.setBypass(player.hasSetting("DKBans", PlayerSettingsKey.BYPASS,true));
             }

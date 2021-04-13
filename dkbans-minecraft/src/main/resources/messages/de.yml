@@ -54,6 +54,7 @@ messages:
 
   dkbans.chat.filter.toFast: '${dkbans.prefix.chat} &cDu schreibst zu schnell!'
   dkbans.chat.filter.repeat: '${dkbans.prefix.chat} &cDu wiederholst dich!'
+  dkbans.chat.filter.capslock: '${dkbans.prefix.chat} &cBitte verwende kein CAPSLOCK!'
 
   dkbans.filter.blocked.command: '${dkbans.prefix.chat} &fUnbekannter Befehl. Gib "/help" für Hilfe ein.'
   dkbans.filter.blocked.insulting: '${dkbans.prefix.chat} &cBitte achte auf deine Wortwahl!'
@@ -312,6 +313,7 @@ messages:
   &7{note.message}'
   dkbans.command.playerNotes.added: '&8» &a+ &e{note.timeFormatted} &8- {note.creator.displayName}&8:
   &8> &7{note.message}'
+  dkbans.command.playerNotes.cleared: '${dkbans.prefix} &7Notizen von &e{player.displayName} &7wurden gelöscht'
   dkbans.command.chatlog.nutze: '${dkbans.prefix.chat} &cUngültige Verwendung von &e/chatlog&8:
   &7/chatlog player <name> [page]
   &7/chatlog server <name, id> [page]'
