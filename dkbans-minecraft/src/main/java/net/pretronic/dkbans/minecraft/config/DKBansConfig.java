@@ -89,6 +89,7 @@ public class DKBansConfig {
     @DocumentKey("chat.tabComplete.suggestion")
     public static List<String> CHAT_TAB_COMPLETE_SUGGESTIONS_RAW = Arrays.asList("help","ping","dkbans","report","ban:dkbans.command.punish");
 
+    @DocumentIgnored
     public static List<Pair<String,String>> CHAT_TAB_COMPLETE_SUGGESTIONS;
 
 
