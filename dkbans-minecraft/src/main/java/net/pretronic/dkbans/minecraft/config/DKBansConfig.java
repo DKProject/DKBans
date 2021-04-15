@@ -85,9 +85,9 @@ public class DKBansConfig {
 
     @DocumentKey("chat.tabComplete.mode")
     public static String CHAT_TAB_COMPLETE_MODE = "DYNAMIC";
-    
+
     @DocumentKey("chat.tabComplete.suggestions")
-    public static List<String> CHAT_TAB_COMPLETE_SUGGESTIONS_RAW = Arrays.asList("help","ping","dkbans","report","ban:dkbans.command.punish");
+    public static List<String> CHAT_TAB_COMPLETE_SUGGESTIONS_RAW = Arrays.asList("help","ping","dkbans","report","ban@dkbans.command.punish");
 
     @DocumentIgnored
     public static List<Pair<String,String>> CHAT_TAB_COMPLETE_SUGGESTIONS;
@@ -146,7 +146,7 @@ public class DKBansConfig {
             importTemplates();
         }
         CHAT_TAB_COMPLETE_SUGGESTIONS = Iterators.map(CHAT_TAB_COMPLETE_SUGGESTIONS_RAW, input -> {
-            String[] parts = input.split(":");
+            String[] parts = input.split("@");
             return new Pair<>(parts[0],parts.length > 1 ? parts[1] : null);
         });
     }

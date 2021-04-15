@@ -39,7 +39,6 @@ import net.pretronic.dkbans.minecraft.config.CommandConfig;
 import net.pretronic.dkbans.minecraft.config.DKBansConfig;
 import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.libraries.command.command.Command;
-import net.pretronic.libraries.command.manager.CommandManager;
 import net.pretronic.libraries.event.EventPriority;
 import net.pretronic.libraries.event.Listener;
 import net.pretronic.libraries.event.execution.ExecutionType;
@@ -47,7 +46,10 @@ import net.pretronic.libraries.message.bml.variable.VariableSet;
 import net.pretronic.libraries.utility.Iterators;
 import net.pretronic.libraries.utility.map.Pair;
 import org.mcnative.runtime.api.McNative;
-import org.mcnative.runtime.api.event.player.*;
+import org.mcnative.runtime.api.event.player.MinecraftPlayerChatEvent;
+import org.mcnative.runtime.api.event.player.MinecraftPlayerCommandPreprocessEvent;
+import org.mcnative.runtime.api.event.player.MinecraftPlayerLogoutEvent;
+import org.mcnative.runtime.api.event.player.MinecraftPlayerTabCompleteResponseEvent;
 import org.mcnative.runtime.api.event.player.login.MinecraftPlayerLoginConfirmEvent;
 import org.mcnative.runtime.api.event.player.login.MinecraftPlayerLoginEvent;
 import org.mcnative.runtime.api.event.player.login.MinecraftPlayerPostLoginEvent;
@@ -60,8 +62,6 @@ import org.mcnative.runtime.api.text.components.MessageComponent;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Function;
-import java.util.function.Predicate;
 
 public class PlayerListener {
 
@@ -326,6 +326,7 @@ public class PlayerListener {
 
     @Listener
     public void onTabComplete(MinecraftPlayerTabCompleteResponseEvent event){
+        System.out.println("TAB COMPLETE "+event.getCursor());
         if(!DKBansConfig.CHAT_TAB_COMPLETE_ENABLED) return;
         if(event.getCursor().startsWith("/") && !event.getCursor().contains(" ")){
             boolean bypass = event.getPlayer().hasPermission(CommandConfig.PERMISSION_CHAT_BYPASS_TAB_COMPLETION);
