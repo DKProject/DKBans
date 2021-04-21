@@ -30,7 +30,6 @@ import net.pretronic.dkbans.api.player.DKBansPlayerManager;
 import net.pretronic.dkbans.api.player.chatlog.ChatLogManager;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryManager;
 import net.pretronic.dkbans.api.player.ipaddress.IpAddressManager;
-import net.pretronic.dkbans.api.support.SupportTicketManager;
 import net.pretronic.dkbans.common.broadcast.BroadcastSender;
 import net.pretronic.dkbans.common.broadcast.DefaultBroadcastManager;
 import net.pretronic.dkbans.common.event.DefaultDKBansChannelBroadcastMessageReceiveEvent;
@@ -56,7 +55,6 @@ public class DefaultDKBans extends DKBans {
     private final DefaultDKBansStorage storage;
     private final PlayerHistoryManager historyManager;
     private final DefaultReportManager reportManager;
-    private final SupportTicketManager ticketManager;
     private final DefaultBroadcastManager broadcastManager;
     private final DefaultFilterManager filterManager;
     private final DefaultTemplateManager templateManager;
@@ -75,7 +73,6 @@ public class DefaultDKBans extends DKBans {
         this.joinMeManager = joinMeManager;
         this.historyManager = new DefaultPlayerHistoryManager(this);
         this.reportManager = new DefaultReportManager();
-        this.ticketManager = null;
         this.broadcastManager = new DefaultBroadcastManager(broadcastSender);
         this.filterManager = new DefaultFilterManager();
         this.templateManager = new DefaultTemplateManager();
@@ -118,11 +115,6 @@ public class DefaultDKBans extends DKBans {
     @Override
     public DefaultReportManager getReportManager() {
         return this.reportManager;
-    }
-
-    @Override
-    public SupportTicketManager getTicketManager() {
-        return this.ticketManager;
     }
 
     @Override
