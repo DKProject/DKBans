@@ -30,7 +30,6 @@ import net.pretronic.dkbans.api.player.history.PlayerHistoryManager;
 import net.pretronic.dkbans.api.player.ipaddress.IpAddressManager;
 import net.pretronic.dkbans.api.player.report.ReportManager;
 import net.pretronic.dkbans.api.storage.DKBansStorage;
-import net.pretronic.dkbans.api.support.SupportTicketManager;
 import net.pretronic.dkbans.api.template.TemplateManager;
 import net.pretronic.libraries.event.EventBus;
 import net.pretronic.libraries.logging.PretronicLogger;
@@ -55,8 +54,6 @@ public abstract class DKBans {
     public abstract PlayerHistoryManager getHistoryManager();
 
     public abstract ReportManager getReportManager();
-
-    public abstract SupportTicketManager getTicketManager();
 
 
     public abstract BroadcastManager getBroadcastManager();
