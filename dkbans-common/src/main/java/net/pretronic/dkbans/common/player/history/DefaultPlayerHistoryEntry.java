@@ -45,16 +45,18 @@ public class DefaultPlayerHistoryEntry implements PlayerHistoryEntry {
 
     private final int id;
     private final UUID playerId;
+    private final int sessionId;
     private final long created;
 
     private transient PlayerHistory history;
     private transient PlayerHistoryEntrySnapshot current;
     private transient List<PlayerHistoryEntrySnapshot> snapshots;
 
-    public DefaultPlayerHistoryEntry(int id, UUID playerId, long created, PlayerHistory history
+    public DefaultPlayerHistoryEntry(int id, UUID playerId,int sessionId, long created, PlayerHistory history
             ,PlayerHistoryEntrySnapshot current,List<PlayerHistoryEntrySnapshot> snapshots) {
         this.id = id;
         this.playerId = playerId;
+        this.sessionId = sessionId;
         this.created = created;
         this.history = history;
         this.current = current;
@@ -82,7 +84,7 @@ public class DefaultPlayerHistoryEntry implements PlayerHistoryEntry {
 
     @Override
     public int getSessionId() {
-        throw new UnsupportedOperationException();
+        return sessionId;
     }
 
     @Override

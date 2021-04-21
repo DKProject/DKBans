@@ -265,12 +265,20 @@ public class DefaultDKBansStorage implements DKBansStorage {
     @Override
     public Pair<PlayerHistoryEntry, Integer> createHistoryEntry(DKBansPlayer player, PlayerHistoryEntrySnapshot snapshot) {
         long created = System.currentTimeMillis();
+
+        Integer sessionId = null;
+        PlayerSession session = player.getActiveSession();
+        if(session != null) sessionId = session.getId();
+
         int id = history.insert()
                 .set("PlayerId",player.getUniqueId())
+                .set("SessionId",sessionId)
                 .set("Created",created)
                 .executeAndGetGeneratedKeyAsInt("Id");
         int snapId = buildSnapshotQuery(id,snapshot);
-        return new Pair<>(new DefaultPlayerHistoryEntry(id,player.getUniqueId(),created,player.getHistory(),snapshot,new ArrayList<>()),snapId);
+        return new Pair<>(new DefaultPlayerHistoryEntry(id,player.getUniqueId()
+                ,sessionId == null ? 0 : sessionId
+                ,created,player.getHistory(),snapshot,new ArrayList<>()),snapId);
     }
 
     @Override
@@ -352,6 +360,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
 
         DefaultPlayerHistoryEntry entry = new DefaultPlayerHistoryEntry(resultEntry.getInt("HistoryId"),
                 playerHistory.getPlayer().getUniqueId(),
+                resultEntry.getInt("SessionId"),
                 resultEntry.getLong("Created"),
                 playerHistory,
                 snapshot,null);
@@ -389,8 +398,11 @@ public class DefaultDKBansStorage implements DKBansStorage {
             PlayerHistory playerHistory = DKBans.getInstance().getPlayerManager()
                     .getPlayer(resultEntry.getUniqueId("PlayerId")).getHistory();
 
+            int sessionId = resultEntry.getInt("SessionId");
+
             DefaultPlayerHistoryEntry entry = new DefaultPlayerHistoryEntry(resultEntry.getInt("HistoryId"),
                     playerHistory.getPlayer().getUniqueId(),
+                    sessionId,
                     resultEntry.getLong("Created"),
                     playerHistory,
                     snapshot,null);
@@ -428,6 +440,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 DefaultPlayerHistoryEntry entry = new DefaultPlayerHistoryEntry(
                         resultEntry.getInt("HistoryId"),
                         playerHistory.getPlayer().getUniqueId(),
+                        resultEntry.getInt("SessionId"),
                         resultEntry.getLong("Created")
                         ,playerHistory,snapshot,null);
                 snapshot.setEntry(entry);
