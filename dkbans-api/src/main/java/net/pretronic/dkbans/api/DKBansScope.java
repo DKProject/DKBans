@@ -31,10 +31,10 @@ public class DKBansScope {
     private static final UUID ZERO_UUID = new UUID(0, 0);
 
     public static final DKBansScope GLOBAL = new DKBansScope("GLOBAL","GLOBAL",ZERO_UUID);
+
     public static final String DEFAULT_SERVER_GROUP = "SERVER_GROUP";
     public static final String DEFAULT_SERVER = "SERVER";
     public static final String DEFAULT_WORLD = "WORLD";
-
 
     private final String type;
     private final String name;

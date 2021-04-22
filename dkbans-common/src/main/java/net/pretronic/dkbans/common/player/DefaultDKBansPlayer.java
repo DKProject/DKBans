@@ -121,6 +121,13 @@ public  class DefaultDKBansPlayer implements DKBansPlayer {
         if(onlineTime == -1){
             this.onlineTime = DKBans.getInstance().getStorage().getOnlineTime(uniqueId);
         }
+
+        if(getActiveSession() != null){
+            PlayerSession session = getActiveSession();
+            long newOnlineTime = session.getDisconnectTime()-session.getConnectTime();
+            return this.onlineTime + newOnlineTime;
+        }
+
         return this.onlineTime;
     }
 
@@ -222,9 +229,7 @@ public  class DefaultDKBansPlayer implements DKBansPlayer {
         DKBans.getInstance().getStorage().completePlayerSession(session);
 
         long newOnlineTime = session.getDisconnectTime()-session.getConnectTime();
-        long local = getOnlineTime();
         DKBans.getInstance().getStorage().addOnlineTime(getUniqueId(), newOnlineTime);
-        this.onlineTime = local+newOnlineTime;
 
         this.sessionList.setActive(null);
     }
