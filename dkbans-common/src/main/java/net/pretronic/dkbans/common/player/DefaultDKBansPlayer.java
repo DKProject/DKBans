@@ -124,7 +124,7 @@ public  class DefaultDKBansPlayer implements DKBansPlayer {
 
         if(getActiveSession() != null){
             PlayerSession session = getActiveSession();
-            long newOnlineTime = session.getDisconnectTime()-session.getConnectTime();
+            long newOnlineTime = System.currentTimeMillis()-session.getConnectTime();
             return this.onlineTime + newOnlineTime;
         }
 
