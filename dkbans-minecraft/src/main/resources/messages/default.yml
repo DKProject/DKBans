@@ -429,7 +429,10 @@ messages:
 
   dkbans.command.broadcast.group.help: '${dkbans.prefix} &cInvalid usage of &ebroadcast group &ccommand&8:
   &7/broadcastgroup <name> create <interval>
-  &7/broadcastgroup <name> assignment
+  &7/broadcastgroup <name> assignment <name> add
+  &7/broadcastgroup <name> assignment <name> remove
+  &7/broadcastgroup <name> assignment <name> list
+  &7/broadcastgroup <name> assignment <name> [info]
   &7/broadcastgroup <name> edit
   &7/broadcastgroup list'
   dkbans.command.broadcast.group.create.help: '${dkbans.prefix} &cUsage&8: &7/broadcastgroup <name> create <interval>'

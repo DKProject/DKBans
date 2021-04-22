@@ -385,7 +385,10 @@ messages:
   dkbans.command.broadcast.group.notFound: '${dkbans.prefix} &cKeine Boradcast Gruppe für &e{group} &7gefunden'
   dkbans.command.broadcast.group.help: '${dkbans.prefix} &cFalsche Verwendung von &ebroadcast group &ccommand&8:
   &7/broadcastgroup <name> create <interval>
-  &7/broadcastgroup <name> assignment
+  &7/broadcastgroup <name> assignment <name> add
+  &7/broadcastgroup <name> assignment <name> remove
+  &7/broadcastgroup <name> assignment <name> list
+  &7/broadcastgroup <name> assignment <name> [info]
   &7/broadcastgroup <name> edit
   &7/broadcastgroup list'
   dkbans.command.broadcast.group.create.help: '${dkbans.prefix} &cFalche Verwendung von &ebroadcast group create &ccommand&8:
