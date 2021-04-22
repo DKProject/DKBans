@@ -122,8 +122,6 @@ public class DKBansPlugin extends MinecraftPlugin {
     }
 
     private void registerListeners(){
-        System.out.println("NETWORK: "+getRuntime().isNetworkAvailable());
-        System.out.println("PROXY: "+getRuntime().getPlatform().isProxy());
         if(getRuntime().isNetworkAvailable()){
             getRuntime().getNetwork().getEventBus().subscribe(this,new SyncListener(dkBans));
             if(getRuntime().getPlatform().isProxy()){
