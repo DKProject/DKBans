@@ -30,6 +30,9 @@ import net.pretronic.dkbans.common.player.DefaultDKBansPlayer;
 import net.pretronic.libraries.caching.Cache;
 import net.pretronic.libraries.caching.CacheQuery;
 import net.pretronic.libraries.caching.ShadowArrayCache;
+import net.pretronic.libraries.caching.synchronisation.ShadowArraySynchronizableCache;
+import net.pretronic.libraries.caching.synchronisation.SynchronizableCache;
+import net.pretronic.libraries.synchronisation.SynchronisationCaller;
 import net.pretronic.libraries.utility.Iterators;
 import net.pretronic.libraries.utility.Validate;
 import org.mcnative.runtime.api.McNative;
@@ -42,18 +45,24 @@ import java.util.concurrent.TimeUnit;
 
 public class MinecraftPlayerManager implements DKBansPlayerManager {
 
-    private final Cache<DKBansPlayer> players;
+    private final SynchronizableCache<DKBansPlayer,UUID> players;
     private final Collection<DKBansExecutor> specialExecutors;
 
     public MinecraftPlayerManager() {
-        this.players = new ShadowArrayCache<>();
+        this.players = new ShadowArraySynchronizableCache<>();
         this.players.setMaxSize(1024);
         this.players.setExpireAfterAccess(10, TimeUnit.MINUTES);
         this.players.registerQuery("get", new PlayerGetter());
+        this.players.setClearOnDisconnect(true);
+        this.players.setSkipOnDisconnect(true);
 
         this.specialExecutors = new ArrayList<>();
         this.specialExecutors.add(DKBansExecutor.CONSOLE);
         this.specialExecutors.add(DKBansExecutor.IP_ADDRESS_BLOCK);
+    }
+
+    public SynchronizableCache<DKBansPlayer,UUID> getPlayerCache() {
+        return players;
     }
 
     @Override
