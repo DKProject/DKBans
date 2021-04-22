@@ -191,7 +191,7 @@ public class PlayerListener {
         }
     }
 
-    @Listener(execution = ExecutionType.ASYNC)
+    @Listener
     public void onPlayerDisconnect(MinecraftPlayerLogoutEvent event) {
         MinecraftPlayer mcPlayer = event.getPlayer();
         DKBansPlayer player = mcPlayer.getAs(DKBansPlayer.class);

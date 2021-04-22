@@ -42,6 +42,7 @@ import net.pretronic.dkbans.minecraft.config.CommandConfig;
 import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.dkbans.minecraft.joinme.MinecraftJoinMe;
 import net.pretronic.libraries.event.Listener;
+import net.pretronic.libraries.event.execution.EventExecution;
 import net.pretronic.libraries.event.network.NetworkListener;
 import net.pretronic.libraries.message.MessageProvider;
 import net.pretronic.libraries.message.bml.Message;
@@ -127,7 +128,7 @@ public class PerformListener {
         }
     }
 
-    @Listener
+    //@Listener
     @NetworkListener
     public void onPlayerPunish(DKBansPlayerPunishEvent event){
         ConnectedMinecraftPlayer player = McNative.getInstance().getLocal().getConnectedPlayer(event.getPlayerId());
