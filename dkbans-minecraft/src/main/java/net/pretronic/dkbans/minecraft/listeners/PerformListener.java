@@ -128,7 +128,7 @@ public class PerformListener {
         }
     }
 
-    //@Listener
+    @Listener
     @NetworkListener
     public void onPlayerPunish(DKBansPlayerPunishEvent event){
         ConnectedMinecraftPlayer player = McNative.getInstance().getLocal().getConnectedPlayer(event.getPlayerId());
