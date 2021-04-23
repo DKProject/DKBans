@@ -118,7 +118,6 @@ public class DescriberRegistrar {
                         .append(group.getScope().getType())
                         .append(":")
                         .append(group.getScope().getName());
-                if(group.getScope().getId() != null) builder.append(":").append(group.getScope().getId());
                 builder.append("]");
                 return builder.toString();
             }

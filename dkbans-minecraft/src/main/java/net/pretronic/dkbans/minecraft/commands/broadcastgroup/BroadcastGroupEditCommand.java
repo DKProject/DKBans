@@ -122,7 +122,7 @@ public class BroadcastGroupEditCommand extends ObjectCommand<BroadcastGroup> imp
                         return;
                     }
                 }
-                group.setScope(new DKBansScope(type, name, id));
+                group.setScope(DKBansScope.of(type, name));
                 sendEditedMessage(commandSender, "scope", args[1]);
                 return;
             }

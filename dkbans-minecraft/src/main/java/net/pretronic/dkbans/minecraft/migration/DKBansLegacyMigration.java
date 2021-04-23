@@ -370,7 +370,7 @@ public class DKBansLegacyMigration extends Migration {
 
     private void migrateKickEntry(PlayerHistoryEntrySnapshotBuilder builder, Kick kick) {
         builder.punishmentType(PunishmentType.KICK)
-                .scope(new DKBansScope(DKBansScope.DEFAULT_SERVER, kick.getServer(), null))
+                .scope(DKBansScope.ofServer(kick.getServer()))
                 .execute();
     }
 

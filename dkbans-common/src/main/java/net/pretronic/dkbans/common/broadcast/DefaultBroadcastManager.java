@@ -168,13 +168,13 @@ public class DefaultBroadcastManager implements BroadcastManager {
     }
 
     @Override
-    public Collection<DKBansPlayer> sendBroadcast(Broadcast broadcast) {
-        return broadcastSender.sendBroadcast(broadcast);
+    public void sendBroadcast(Broadcast broadcast) {
+        broadcastSender.sendBroadcast(broadcast);
     }
 
     @Override
-    public Collection<DKBansPlayer> sendBroadcast(BroadcastAssignment broadcast) {
-        return broadcastSender.sendBroadcast(broadcast);
+    public void sendBroadcast(BroadcastAssignment broadcast) {
+        broadcastSender.sendBroadcast(broadcast);
     }
 
     @Override
@@ -220,7 +220,7 @@ public class DefaultBroadcastManager implements BroadcastManager {
             String rawScopeType = result.getString("ScopeType");
             String rawScopeName = result.getString("ScopeName");
             if(rawScopeType != null && rawScopeName != null) {
-                scope = new DKBansScope(rawScopeType, rawScopeName, result.getUniqueId("ScopeId"));
+                scope = DKBansScope.of(rawScopeType, rawScopeName);
             }
             return new DefaultBroadcastGroup(groupId,
                     result.getString("Name"),

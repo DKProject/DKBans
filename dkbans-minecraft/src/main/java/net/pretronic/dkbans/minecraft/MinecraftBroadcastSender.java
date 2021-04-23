@@ -20,13 +20,13 @@
 
 package net.pretronic.dkbans.minecraft;
 
+import net.pretronic.dkbans.api.DKBansScope;
 import net.pretronic.dkbans.api.broadcast.Broadcast;
 import net.pretronic.dkbans.api.broadcast.BroadcastAssignment;
+import net.pretronic.dkbans.api.broadcast.BroadcastGroup;
 import net.pretronic.dkbans.api.broadcast.BroadcastProperty;
-import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.common.broadcast.BroadcastSender;
 import net.pretronic.dkbans.minecraft.config.Messages;
-import net.pretronic.libraries.concurrent.Task;
 import net.pretronic.libraries.message.MessageProvider;
 import net.pretronic.libraries.message.bml.MessageProcessor;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
@@ -46,13 +46,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Predicate;
 
 public class MinecraftBroadcastSender implements BroadcastSender {
 
     private final MessageProcessor messageProcessor;
     private final Collection<BossBar> activeBars;
-    private Task runningTask;
 
     public MinecraftBroadcastSender() {
         this.messageProcessor = McNative.getInstance().getRegistry().getService(MessageProvider.class).getProcessor();
@@ -60,22 +58,31 @@ public class MinecraftBroadcastSender implements BroadcastSender {
     }
 
     @Override
-    public Collection<DKBansPlayer> sendBroadcast(Broadcast broadcast) {
-        return sendBroadcast(onlinePlayer -> {
-            sendMessage(onlinePlayer, broadcast);
-            return true;
-        });
+    public void sendBroadcast(Broadcast broadcast) {
+        Collection<ConnectedMinecraftPlayer> players = McNative.getInstance().getLocal().getConnectedPlayers();
+        for (ConnectedMinecraftPlayer player : players) {
+            sendMessage(player, broadcast);
+        }
     }
 
     @Override
-    public Collection<DKBansPlayer> sendBroadcast(BroadcastAssignment broadcastAssignment) {
-        return sendBroadcast(onlinePlayer -> {
-            if(onlinePlayer.hasPermission(broadcastAssignment.getGroup().getPermission())) {
-                sendMessage(onlinePlayer, broadcastAssignment.getBroadcast());
-                return true;
+    public void sendBroadcast(BroadcastAssignment assignment) {
+        Collection<ConnectedMinecraftPlayer> players = McNative.getInstance().getLocal().getConnectedPlayers();
+        for (ConnectedMinecraftPlayer player : players) {
+            if(player.hasPermission(assignment.getGroup().getPermission()) && isOnScope(player,assignment.getGroup().getScope())){
+                sendMessage(player, assignment.getBroadcast());
             }
-            return false;
-        });
+        }
+    }
+
+    private boolean isOnScope(ConnectedMinecraftPlayer player,DKBansScope scope){
+        if(scope == null || scope.isGlobal()) return true;
+        else if(scope.getType().equalsIgnoreCase(DKBansScope.DEFAULT_SERVER)){
+            return player.getServer() != null && player.getServer().getName().equalsIgnoreCase(scope.getName());
+        }else if(scope.getType().equalsIgnoreCase(DKBansScope.DEFAULT_SERVER_GROUP)){
+            return player.getServer() != null && player.getServer().getGroup().equalsIgnoreCase(scope.getName());
+        }
+        return false;
     }
 
     private void sendMessage(ConnectedMinecraftPlayer onlinePlayer, Broadcast broadcast) {
@@ -165,25 +172,5 @@ public class MinecraftBroadcastSender implements BroadcastSender {
         return VariableSet.create()
                 .add("message", messageProcessor.parse(broadcast.getProperties().getString(BroadcastProperty.TEXT)))
                 .addDescribed("player", onlinePlayer);
-    }
-
-    private Collection<DKBansPlayer> sendBroadcast(Predicate<ConnectedMinecraftPlayer> playerConsumer) {
-        Collection<DKBansPlayer> sent = new ArrayList<>();
-
-        for (ConnectedMinecraftPlayer onlinePlayer : McNative.getInstance().getLocal().getConnectedPlayers()) {
-            if(playerConsumer.test(onlinePlayer)){
-                sent.add(onlinePlayer.getAs(DKBansPlayer.class));
-            }
-        }
-
-        return sent;
-    }
-
-    private void startBossBarTask(){
-        if(this.runningTask != null) return;
-        this.runningTask = McNative.getInstance().getScheduler().createTask(DKBansPlugin.getInstance())
-                .interval(1,TimeUnit.SECONDS).execute(() -> {
-
-                });
     }
 }

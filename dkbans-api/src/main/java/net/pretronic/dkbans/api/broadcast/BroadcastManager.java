@@ -56,9 +56,9 @@ public interface BroadcastManager {
 
     void deleteGroup(BroadcastGroup group);
 
-    Collection<DKBansPlayer> sendBroadcast(Broadcast broadcast);
+    void sendBroadcast(Broadcast broadcast);
 
-    Collection<DKBansPlayer> sendBroadcast(BroadcastAssignment broadcast);
+    void sendBroadcast(BroadcastAssignment broadcast);
 
     void reload();
 }

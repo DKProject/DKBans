@@ -308,8 +308,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
        if(snapshot.getTemplateId() > 0) query.set("TemplateId",snapshot.getTemplateId());
        if(snapshot.getScope() != null){
            query.set("ScopeType",snapshot.getScope().getType())
-                   .set("ScopeName",snapshot.getScope().getName())
-                   .set("ScopeId",snapshot.getScope().getId());
+                   .set("ScopeName",snapshot.getScope().getName());
        }
        return query.executeAndGetGeneratedKeyAsInt("Id");
     }
@@ -427,7 +426,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
         return history.find()
                 .getAs(this.history, "Id", "HistoryId")
                 .getAs(this.historyVersion, "Id", "SnapshotId")
-                .get("Created","PlayerId", "Reason", "Timeout", "StaffId", "ScopeType", "ScopeName", "ScopeId"
+                .get("Created","PlayerId", "Reason", "Timeout", "StaffId", "ScopeType", "ScopeName"
                         , "Points", "Active", "Properties", "HistoryTypeId", "PunishmentType", "TemplateId"
                         , "RevokeTemplateId", "RevokeReason", "ModifiedTime", "ModifiedBy", "ModifiedActive")
                 .join(historyVersion).on(historyVersion,"HistoryId",history,"Id");
@@ -452,9 +451,8 @@ public class DefaultDKBansStorage implements DKBansStorage {
     private DefaultPlayerHistoryEntrySnapshot createSnapshot(QueryResultEntry resultEntry,PlayerHistoryEntry entry) {
         DKBansScope scope = null;
         if(resultEntry.getString("ScopeType") != null){
-            scope = new DKBansScope(resultEntry.getString("ScopeType")
-                    ,resultEntry.getString("ScopeName")
-                    ,resultEntry.getUniqueId("ScopeId"));
+            scope = DKBansScope.of(resultEntry.getString("ScopeType")
+                    ,resultEntry.getString("ScopeName"));
         }
 
         return new DefaultPlayerHistoryEntrySnapshot(resultEntry.getInt("SnapshotId"),
@@ -1000,7 +998,6 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 .field("StaffId", DataType.UUID, FieldOption.NOT_NULL)
                 .field("ScopeType", DataType.STRING)
                 .field("ScopeName", DataType.STRING)
-                .field("ScopeId", DataType.UUID)
                 .field("Points", DataType.INTEGER)
                 .field("Active", DataType.BOOLEAN, FieldOption.NOT_NULL,FieldOption.INDEX)
                 .field("Properties", DataType.LONG_TEXT, -1, FieldOption.NOT_NULL)
@@ -1124,7 +1121,6 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 .field("Order", DataType.STRING, FieldOption.NOT_NULL)
                 .field("ScopeType", DataType.STRING)
                 .field("ScopeName", DataType.STRING)
-                .field("ScopeId", DataType.UUID)
                 .field("Properties", DataType.LONG_TEXT, FieldOption.NOT_NULL)
                 .create();
     }

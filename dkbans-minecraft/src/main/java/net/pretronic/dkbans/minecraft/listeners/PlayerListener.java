@@ -22,6 +22,7 @@ package net.pretronic.dkbans.minecraft.listeners;
 
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.DKBansExecutor;
+import net.pretronic.dkbans.api.DKBansScope;
 import net.pretronic.dkbans.api.event.DKBansBypassCheckEvent;
 import net.pretronic.dkbans.api.filter.FilterAffiliationArea;
 import net.pretronic.dkbans.api.filter.FilterManager;
@@ -210,6 +211,13 @@ public class PlayerListener {
         DKBansPlayer player = event.getPlayer().getAs(DKBansPlayer.class);
 
         PlayerHistoryEntry mute = player.getHistory().getActiveEntry(PunishmentType.MUTE);
+        if(mute == null){
+            mute = player.getHistory().getActiveEntry(PunishmentType.MUTE,DKBansScope.ofServer(event.getOnlinePlayer().getServer().getName()));
+            if(mute == null){
+                mute = player.getHistory().getActiveEntry(PunishmentType.MUTE,DKBansScope.ofServerGroup(event.getOnlinePlayer().getServer().getGroup()));
+            }
+        }
+
         if(mute != null){
             event.setCancelled(true);
             sendMutedMessage(event.getOnlinePlayer(), mute);
