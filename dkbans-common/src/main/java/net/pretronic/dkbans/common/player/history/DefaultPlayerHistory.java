@@ -67,7 +67,7 @@ public class DefaultPlayerHistory implements PlayerHistory {
     @Override
     public PlayerHistoryEntry getActiveEntry(PunishmentType type, DKBansScope scope) {
         return Iterators.findOne(getActiveEntries(), entry -> entry.getCurrent().getPunishmentType() == type
-                && entry.getCurrent().getScope().matches(scope));
+                && entry.getCurrent().getScope().equals(scope));
     }
 
     @Override
@@ -112,7 +112,7 @@ public class DefaultPlayerHistory implements PlayerHistory {
     @Override
     public List<PlayerHistoryEntry> getActiveEntries(PunishmentType type, DKBansScope scope) {
         return Iterators.filter(getActiveEntries(), entry -> entry.getCurrent().getPunishmentType() == type
-                && entry.getCurrent().getScope().matches(scope));
+                && entry.getCurrent().getScope().equals(scope));
     }
 
     @Override
@@ -123,7 +123,7 @@ public class DefaultPlayerHistory implements PlayerHistory {
     @Override
     public List<PlayerHistoryEntry> getActiveEntries(PlayerHistoryType historyType, DKBansScope scope) {
         return Iterators.filter(getActiveEntries(), entry -> entry.getCurrent().getHistoryType() == historyType
-                && entry.getCurrent().getScope().matches(scope));
+                && entry.getCurrent().getScope().equals(scope));
     }
 
     @Override

@@ -86,10 +86,6 @@ public interface DKBansPlayer extends DKBansExecutor {
         return getHistory().hasActivePunish(type,scope);
     }
 
-    default boolean hasActivePunish(PunishmentType type, Collection<DKBansScope> scopes){
-        return getHistory().hasActivePunish(type,scopes);
-    }
-
 
     PlayerHistoryEntrySnapshot punish(DKBansExecutor executor, PunishmentTemplate template);
 

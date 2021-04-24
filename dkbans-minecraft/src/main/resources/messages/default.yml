@@ -205,6 +205,7 @@ messages:
   &8» &7Created&8: &e{entry.createdFormatted}
   &8» &7Active&8: &e@if({entry.active},"&cYes","&aNo &8(&7{entry.revokeReason}&8)")
   &8» &7Staff&8: &e{entry.staff.displayName}
+  &8» &7Scope&8: &e{entry.scope.name}
   &8» &7Reason&8: &e{entry.reason}
   &8» &7Duration&8: &e{entry.durationFormatted}
   &8» &7Remaining&8: &e{entry.remainingFormatted}
@@ -219,6 +220,7 @@ messages:
   &8» &7History&8: &e{snapshot.historyType.name}
   &8» &7Active&8: &e@if({entry.active},"&cYes","&aNo &8(&7{entry.revokeReason}&8)")
   &8» &7Staff&8: &e{snapshot.staff.displayName}
+  &8» &7Scope&8: &e{snapshot.scope.name}
   &8» &7Reason&8: &e{snapshot.reason}
   &8» &7Duration&8: &e{snapshot.durationFormatted}
   &8» &7Remaining&8: &e{snapshot.remainingFormatted}

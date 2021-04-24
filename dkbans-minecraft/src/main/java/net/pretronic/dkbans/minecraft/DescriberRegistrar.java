@@ -89,11 +89,14 @@ public class DescriberRegistrar {
         entryDescriber.registerFunction("createdFormatted", snapshot -> DKBansConfig.FORMAT_DATE.format(snapshot.getCreated()));
 
         VariableDescriber<DefaultPlayerHistoryEntrySnapshot> snapshotDescriber = VariableDescriberRegistry.registerDescriber(DefaultPlayerHistoryEntrySnapshot.class);
-        snapshotDescriber.registerFunction("revoked", snapshot -> !snapshot.isActive() || snapshot.getTimeout() <= System.currentTimeMillis());
+        snapshotDescriber.registerFunction("revoked", snapshot -> !snapshot.isActive() || (snapshot.getTimeout() > 0 && snapshot.getTimeout() <= System.currentTimeMillis()));
         snapshotDescriber.registerFunction("active", DefaultPlayerHistoryEntrySnapshot::isActive);
         snapshotDescriber.registerFunction("revokedReason", snapshot -> snapshot.getRevokeReason() == null ? "" : snapshot.getRevokeReason());
         snapshotDescriber.registerFunction("modifiedTimeFormatted",snapshot -> DKBansConfig.FORMAT_DATE.format(snapshot.getModifiedTime()));
-        snapshotDescriber.registerFunction("timeoutFormatted",snapshot -> DKBansConfig.FORMAT_DATE.format(snapshot.getTimeout()));
+        snapshotDescriber.registerFunction("timeoutFormatted",snapshot -> {
+            if(snapshot.getTimeout() > 0) return DKBansConfig.FORMAT_DATE.format(snapshot.getTimeout());
+            else return DKBansConfig.FORMAT_DATE_ENDLESSLY;
+        });
         snapshotDescriber.registerFunction("remainingFormatted", snapshot -> {
             long duration = snapshot.getTimeout()-System.currentTimeMillis();
             if(duration < 0 || !snapshot.getEntry().isActive()) return DKBansConfig.FORMAT_DATE_ENDLESSLY;

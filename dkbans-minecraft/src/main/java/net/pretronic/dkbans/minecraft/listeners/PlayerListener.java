@@ -81,8 +81,8 @@ public class PlayerListener {
 
         DKBansPlayer player = event.getPlayer().getAs(DKBansPlayer.class);
 
-        if(player.hasActivePunish(PunishmentType.BAN)){
-            PlayerHistoryEntry ban = player.getHistory().getActiveEntry(PunishmentType.BAN);
+        PlayerHistoryEntry ban = player.getHistory().getActiveEntry(PunishmentType.BAN,DKBansScope.GLOBAL);
+        if(ban != null){
             event.setCancelled(true);
             MessageComponent<?> message = ban.getCurrent().isPermanently()
                     ? Messages.PUNISH_MESSAGE_BAN_PERMANENTLY : Messages.PUNISH_MESSAGE_BAN_TEMPORARY;
@@ -210,7 +210,7 @@ public class PlayerListener {
         if(event.isCancelled()) return;
         DKBansPlayer player = event.getPlayer().getAs(DKBansPlayer.class);
 
-        PlayerHistoryEntry mute = player.getHistory().getActiveEntry(PunishmentType.MUTE);
+        PlayerHistoryEntry mute = player.getHistory().getActiveEntry(PunishmentType.MUTE,DKBansScope.GLOBAL);
         if(mute == null){
             mute = player.getHistory().getActiveEntry(PunishmentType.MUTE,DKBansScope.ofServer(event.getOnlinePlayer().getServer().getName()));
             if(mute == null){

@@ -73,15 +73,6 @@ public interface PlayerHistory {
         return false;
     }
 
-    default boolean hasActivePunish(PunishmentType type, Collection<DKBansScope> scopes){
-        for (PlayerHistoryEntry activeEntry : getActiveEntries(type)) {
-            if(activeEntry.getCurrent().getScope().equals(scopes)){
-                return true;
-            }
-        }
-        return false;
-    }
-
 
     int calculate(CalculationType calculationType, PlayerHistoryType type);
 
