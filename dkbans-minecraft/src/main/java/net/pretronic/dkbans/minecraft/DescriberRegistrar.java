@@ -11,6 +11,7 @@
 package net.pretronic.dkbans.minecraft;
 
 import net.pretronic.dkbans.api.DKBansExecutor;
+import net.pretronic.dkbans.api.DKBansScope;
 import net.pretronic.dkbans.api.player.history.PunishmentType;
 import net.pretronic.dkbans.common.broadcast.DefaultBroadcast;
 import net.pretronic.dkbans.common.broadcast.DefaultBroadcastAssignment;
@@ -57,6 +58,7 @@ public class DescriberRegistrar {
         VariableDescriberRegistry.registerDescriber(DefaultTemplateCategory.class);
         VariableDescriberRegistry.registerDescriber(DefaultTemplateGroup.class);
         VariableDescriberRegistry.registerDescriber(DefaultPunishmentTemplate.class);
+        VariableDescriberRegistry.registerDescriber(DKBansScope.class);
         VariableDescriber<?> punishmentDescriber = VariableDescriberRegistry.registerDescriber(PunishmentType.class);
         ColoredString.makeDescriberColored(punishmentDescriber);
 
