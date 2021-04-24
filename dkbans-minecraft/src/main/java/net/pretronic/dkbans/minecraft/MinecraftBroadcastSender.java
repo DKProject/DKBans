@@ -123,7 +123,7 @@ public class MinecraftBroadcastSender implements BroadcastSender {
                 return;
             }
             case ACTIONBAR: {
-                long stayTime = 5;
+                long stayTime = 10;
                 if(broadcast.getProperties().contains(BroadcastProperty.STAY)) {
                     stayTime = broadcast.getProperties().getLong(BroadcastProperty.STAY);
                 }

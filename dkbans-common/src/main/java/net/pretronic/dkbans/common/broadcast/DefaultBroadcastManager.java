@@ -216,12 +216,13 @@ public class DefaultBroadcastManager implements BroadcastManager {
             if(assignments == null) {
                 assignments = new ArrayList<>();
             }
-            DKBansScope scope = null;
+            DKBansScope scope;
             String rawScopeType = result.getString("ScopeType");
             String rawScopeName = result.getString("ScopeName");
             if(rawScopeType != null && rawScopeName != null) {
                 scope = DKBansScope.of(rawScopeType, rawScopeName);
-            }
+            }else scope = DKBansScope.GLOBAL;
+
             return new DefaultBroadcastGroup(groupId,
                     result.getString("Name"),
                     result.getBoolean("Enabled"),

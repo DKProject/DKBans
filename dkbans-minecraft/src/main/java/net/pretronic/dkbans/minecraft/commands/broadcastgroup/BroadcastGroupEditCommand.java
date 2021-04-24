@@ -42,7 +42,7 @@ public class BroadcastGroupEditCommand extends ObjectCommand<BroadcastGroup> imp
 
     private final static List<String> COMMANDS = Arrays.asList("name","enabled","permission","order","interval","scope");
     private final static List<String> COMMANDS_BOOLEAN = Arrays.asList("true","false");
-    private final static List<String> COMMANDS_SCOPE = Arrays.asList("server","serverGroup");
+    private final static List<String> COMMANDS_SCOPE = Arrays.asList("SERVER","SERVER_GROUP");
 
     public BroadcastGroupEditCommand(ObjectOwner owner) {
         super(owner, CommandConfiguration.name("edit"));

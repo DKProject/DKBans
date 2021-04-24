@@ -457,7 +457,7 @@ messages:
   &8» &7Permission&8: &e{group.permission}
   &8» &7Order&8: &e{group.order}
   &8» &7Interval&8: &e{group.intervalFormatted}
-  &8» &7Scope&8: &e{group.scopeFormatted}'
+  &8» &7Scope&8: &e{group.scope.name}'
 
   dkbans.command.broadcast.group.assignment.help: '${dkbans.prefix} &cInvalid usage of &eassignment &ccommand&8:
   &7/broadcastgroup <name> assignment <name>
@@ -476,7 +476,7 @@ messages:
   &8» &7Position&8: &e{assignment.position}'
 
   dkbans.command.broadcast.group.assignment.remove: '${dkbans.prefix} &7You have removed the assignment with id &e{assignment.id} &7from the group'
-  dkbans.command.broadcast.group.assignment.add: '${dkbans.prefix} &7You have added the broadcast with id &e{assignment.id} &to the group'
+  dkbans.command.broadcast.group.assignment.add: '${dkbans.prefix} &7You have added the broadcast with id &e{assignment.id} &eto the group'
 
   dkbans.command.broadcast.create.help: '${dkbans.prefix} &cUsage&8: &7/broadcast <name> create <visibility> <text>'
   dkbans.command.broadcast.visibility.notExists: '${dkbans.prefix} &cThe broadcast visibility &e{name} &cdoes not exists'
