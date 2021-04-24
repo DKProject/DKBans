@@ -31,5 +31,4 @@ public class PlayerSettingsKey {
     public static final String JOINME_AMOUNT = "JoinMeAmount";
 
     public static final String BYPASS = "bypass";
-
 }
