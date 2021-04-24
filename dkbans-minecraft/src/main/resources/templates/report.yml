@@ -1,3 +1,7 @@
+# <--- IMPORTANT --->
+# Don't forget to import your templates with ./dkbans template import
+# <--- IMPORTANT --->
+
 type: REPORT
 calculation: AMOUNT
 name: report

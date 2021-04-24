@@ -155,7 +155,6 @@ public class DefaultBroadcastGroup implements BroadcastGroup {
         DefaultDKBans.getInstance().getStorage().getBroadcastGroup().update()
                 .set("ScopeName", scope.getName())
                 .set("ScopeType", scope.getType())
-                .set("ScopeId", scope.getId())
                 .where("Id", getId())
                 .execute();
     }

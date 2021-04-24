@@ -23,6 +23,7 @@ package net.pretronic.dkbans.minecraft.commands.broadcastgroup;
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.broadcast.BroadcastGroup;
 import net.pretronic.dkbans.common.DefaultDKBans;
+import net.pretronic.dkbans.minecraft.commands.util.CommandUtil;
 import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
 import net.pretronic.libraries.command.command.object.ObjectCommand;
@@ -31,6 +32,8 @@ import net.pretronic.libraries.message.bml.variable.VariableSet;
 import net.pretronic.libraries.utility.GeneralUtil;
 import net.pretronic.libraries.utility.duration.DurationProcessor;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
+
+import java.time.Duration;
 
 public class BroadcastGroupCreateCommand extends ObjectCommand<String> {
 
@@ -49,18 +52,11 @@ public class BroadcastGroupCreateCommand extends ObjectCommand<String> {
             return;
         }
 
-        String rawInterval = args[0];
-        if(!GeneralUtil.isNaturalNumber(rawInterval)) {
-            sender.sendMessage(Messages.ERROR_INVALID_NUMBER, VariableSet.create().add("number", rawInterval));
-            return;
-        }
+        Duration duration = CommandUtil.parseDuration(sender,args[0]);
+        if(duration == null) return;
 
-        try {
-            long interval = DurationProcessor.getStandard().parse(rawInterval).getSeconds();
-            BroadcastGroup group = DefaultDKBans.getInstance().getBroadcastManager().createGroup(name, Math.toIntExact(interval));
-            sender.sendMessage(Messages.COMMAND_BROADCAST_GROUP_CREATED, VariableSet.create().addDescribed("group", group));
-        } catch (IllegalArgumentException exception) {
-            sender.sendMessage(Messages.ERROR_INVALID_DURATION_FORMAT, VariableSet.create().addDescribed("duration", rawInterval));
-        }
+        long interval = duration.getSeconds();
+        BroadcastGroup group = DefaultDKBans.getInstance().getBroadcastManager().createGroup(name, Math.toIntExact(interval));
+        sender.sendMessage(Messages.COMMAND_BROADCAST_GROUP_CREATED, VariableSet.create().addDescribed("group", group));
     }
 }

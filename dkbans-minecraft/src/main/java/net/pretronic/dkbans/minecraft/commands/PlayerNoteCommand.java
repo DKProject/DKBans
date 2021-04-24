@@ -23,6 +23,7 @@ import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.note.PlayerNote;
 import net.pretronic.dkbans.minecraft.commands.util.CommandUtil;
 import net.pretronic.dkbans.minecraft.config.Messages;
+import net.pretronic.libraries.command.Completable;
 import net.pretronic.libraries.command.command.BasicCommand;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
 import net.pretronic.libraries.command.sender.CommandSender;
@@ -32,9 +33,14 @@ import net.pretronic.libraries.utility.StringUtil;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
 import org.mcnative.runtime.api.player.MinecraftPlayer;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
-public class PlayerNoteCommand extends BasicCommand{
+public class PlayerNoteCommand extends BasicCommand implements Completable {
+
+    private final static List<String> COMMANDS = Arrays.asList("list","add","clear");
 
     public PlayerNoteCommand(ObjectOwner owner, CommandConfiguration configuration) {
         super(owner, configuration);
@@ -73,8 +79,18 @@ public class PlayerNoteCommand extends BasicCommand{
                     ,CommandUtil.readStringFromArguments(arguments,2));
             sender.sendMessage(Messages.COMMAND_PLAYER_NOTES_ADDED, VariableSet.create()
                     .addDescribed("note",note));
+        }else if(StringUtil.equalsOne(argument,"clear","c")){
+            dkBansPlayer.clearNotes();
+            sender.sendMessage(Messages.COMMAND_PLAYER_NOTES_CLEARED, VariableSet.create()
+                    .addDescribed("player",dkBansPlayer));
         }else {
             sender.sendMessage(Messages.COMMAND_PLAYER_NOTES_HELP);
         }
+    }
+
+    @Override
+    public Collection<String> complete(CommandSender sender, String[] args) {
+        if(args.length == 2) return COMMANDS;
+        else return CommandUtil.completePlayer(args);
     }
 }

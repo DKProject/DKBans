@@ -22,8 +22,8 @@ package net.pretronic.dkbans.minecraft.commands.report;
 
 import net.pretronic.dkbans.minecraft.PlayerSettingsKey;
 import net.pretronic.dkbans.minecraft.commands.util.CommandUtil;
+import net.pretronic.dkbans.minecraft.config.CommandConfig;
 import net.pretronic.dkbans.minecraft.config.Messages;
-import net.pretronic.dkbans.minecraft.config.Permissions;
 import net.pretronic.libraries.command.command.BasicCommand;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
 import net.pretronic.libraries.command.sender.CommandSender;
@@ -35,7 +35,7 @@ public class ReportToggleCommand extends BasicCommand {
     public ReportToggleCommand(ObjectOwner owner) {
         super(owner, CommandConfiguration.newBuilder()
                 .name("toggle")
-                .permission(Permissions.COMMAND_REPORT_STAFF).create());
+                .permission(CommandConfig.PERMISSION_COMMAND_REPORT_STAFF).create());
     }
 
     @Override

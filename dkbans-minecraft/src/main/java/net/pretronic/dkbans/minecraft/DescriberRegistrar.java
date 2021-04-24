@@ -11,6 +11,7 @@
 package net.pretronic.dkbans.minecraft;
 
 import net.pretronic.dkbans.api.DKBansExecutor;
+import net.pretronic.dkbans.api.DKBansScope;
 import net.pretronic.dkbans.api.player.history.PunishmentType;
 import net.pretronic.dkbans.common.broadcast.DefaultBroadcast;
 import net.pretronic.dkbans.common.broadcast.DefaultBroadcastAssignment;
@@ -57,6 +58,7 @@ public class DescriberRegistrar {
         VariableDescriberRegistry.registerDescriber(DefaultTemplateCategory.class);
         VariableDescriberRegistry.registerDescriber(DefaultTemplateGroup.class);
         VariableDescriberRegistry.registerDescriber(DefaultPunishmentTemplate.class);
+        VariableDescriberRegistry.registerDescriber(DKBansScope.class);
         VariableDescriber<?> punishmentDescriber = VariableDescriberRegistry.registerDescriber(PunishmentType.class);
         ColoredString.makeDescriberColored(punishmentDescriber);
 
@@ -89,11 +91,14 @@ public class DescriberRegistrar {
         entryDescriber.registerFunction("createdFormatted", snapshot -> DKBansConfig.FORMAT_DATE.format(snapshot.getCreated()));
 
         VariableDescriber<DefaultPlayerHistoryEntrySnapshot> snapshotDescriber = VariableDescriberRegistry.registerDescriber(DefaultPlayerHistoryEntrySnapshot.class);
-        snapshotDescriber.registerFunction("revoked", snapshot -> !snapshot.isActive() || snapshot.getTimeout() <= System.currentTimeMillis());
+        snapshotDescriber.registerFunction("revoked", snapshot -> !snapshot.isActive() || (snapshot.getTimeout() > 0 && snapshot.getTimeout() <= System.currentTimeMillis()));
         snapshotDescriber.registerFunction("active", DefaultPlayerHistoryEntrySnapshot::isActive);
         snapshotDescriber.registerFunction("revokedReason", snapshot -> snapshot.getRevokeReason() == null ? "" : snapshot.getRevokeReason());
         snapshotDescriber.registerFunction("modifiedTimeFormatted",snapshot -> DKBansConfig.FORMAT_DATE.format(snapshot.getModifiedTime()));
-        snapshotDescriber.registerFunction("timeoutFormatted",snapshot -> DKBansConfig.FORMAT_DATE.format(snapshot.getTimeout()));
+        snapshotDescriber.registerFunction("timeoutFormatted",snapshot -> {
+            if(snapshot.getTimeout() > 0) return DKBansConfig.FORMAT_DATE.format(snapshot.getTimeout());
+            else return DKBansConfig.FORMAT_DATE_ENDLESSLY;
+        });
         snapshotDescriber.registerFunction("remainingFormatted", snapshot -> {
             long duration = snapshot.getTimeout()-System.currentTimeMillis();
             if(duration < 0 || !snapshot.getEntry().isActive()) return DKBansConfig.FORMAT_DATE_ENDLESSLY;
@@ -118,7 +123,6 @@ public class DescriberRegistrar {
                         .append(group.getScope().getType())
                         .append(":")
                         .append(group.getScope().getName());
-                if(group.getScope().getId() != null) builder.append(":").append(group.getScope().getId());
                 builder.append("]");
                 return builder.toString();
             }

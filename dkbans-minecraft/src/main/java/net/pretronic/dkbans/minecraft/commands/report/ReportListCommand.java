@@ -22,8 +22,8 @@ package net.pretronic.dkbans.minecraft.commands.report;
 
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.player.report.PlayerReport;
+import net.pretronic.dkbans.minecraft.config.CommandConfig;
 import net.pretronic.dkbans.minecraft.config.Messages;
-import net.pretronic.dkbans.minecraft.config.Permissions;
 import net.pretronic.libraries.command.command.BasicCommand;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
 import net.pretronic.libraries.command.sender.CommandSender;
@@ -41,7 +41,7 @@ public class ReportListCommand extends BasicCommand {
     public ReportListCommand(ObjectOwner owner) {
         super(owner, CommandConfiguration.newBuilder()
                 .name("list")
-                .permission(Permissions.COMMAND_REPORT_STAFF).create());
+                .permission(CommandConfig.PERMISSION_COMMAND_REPORT_STAFF).create());
     }
 
     @Override

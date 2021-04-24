@@ -25,7 +25,7 @@
     <parent>
         <artifactId>DKBans</artifactId>
         <groupId>net.pretronic.dkbans</groupId>
-        <version>1.13.3.408</version>
+        <version>1.14.18.430-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -123,6 +123,12 @@
             <version>${dependency.mcnative.api}</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.mcnative.runtime.api</groupId>
+            <artifactId>mcnative-runtime-api-proxy</artifactId>
+            <version>${dependency.mcnative.api}</version>
+            <scope>provided</scope>
+        </dependency>
 
         <dependency>
             <groupId>net.pretronic.libraries</groupId>
@@ -143,4 +149,5 @@
             <scope>provided</scope>
         </dependency>
     </dependencies>
+
 </project>

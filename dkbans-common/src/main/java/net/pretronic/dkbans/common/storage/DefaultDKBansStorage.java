@@ -265,12 +265,20 @@ public class DefaultDKBansStorage implements DKBansStorage {
     @Override
     public Pair<PlayerHistoryEntry, Integer> createHistoryEntry(DKBansPlayer player, PlayerHistoryEntrySnapshot snapshot) {
         long created = System.currentTimeMillis();
+
+        Integer sessionId = null;
+        PlayerSession session = player.getActiveSession();
+        if(session != null) sessionId = session.getId();
+
         int id = history.insert()
                 .set("PlayerId",player.getUniqueId())
+                .set("SessionId",sessionId)
                 .set("Created",created)
                 .executeAndGetGeneratedKeyAsInt("Id");
         int snapId = buildSnapshotQuery(id,snapshot);
-        return new Pair<>(new DefaultPlayerHistoryEntry(id,player.getUniqueId(),created,player.getHistory(),snapshot,new ArrayList<>()),snapId);
+        return new Pair<>(new DefaultPlayerHistoryEntry(id,player.getUniqueId()
+                ,sessionId == null ? 0 : sessionId
+                ,created,player.getHistory(),snapshot,new ArrayList<>()),snapId);
     }
 
     @Override
@@ -300,8 +308,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
        if(snapshot.getTemplateId() > 0) query.set("TemplateId",snapshot.getTemplateId());
        if(snapshot.getScope() != null){
            query.set("ScopeType",snapshot.getScope().getType())
-                   .set("ScopeName",snapshot.getScope().getName())
-                   .set("ScopeId",snapshot.getScope().getId());
+                   .set("ScopeName",snapshot.getScope().getName());
        }
        return query.executeAndGetGeneratedKeyAsInt("Id");
     }
@@ -352,6 +359,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
 
         DefaultPlayerHistoryEntry entry = new DefaultPlayerHistoryEntry(resultEntry.getInt("HistoryId"),
                 playerHistory.getPlayer().getUniqueId(),
+                resultEntry.getInt("SessionId"),
                 resultEntry.getLong("Created"),
                 playerHistory,
                 snapshot,null);
@@ -389,8 +397,11 @@ public class DefaultDKBansStorage implements DKBansStorage {
             PlayerHistory playerHistory = DKBans.getInstance().getPlayerManager()
                     .getPlayer(resultEntry.getUniqueId("PlayerId")).getHistory();
 
+            int sessionId = resultEntry.getInt("SessionId");
+
             DefaultPlayerHistoryEntry entry = new DefaultPlayerHistoryEntry(resultEntry.getInt("HistoryId"),
                     playerHistory.getPlayer().getUniqueId(),
+                    sessionId,
                     resultEntry.getLong("Created"),
                     playerHistory,
                     snapshot,null);
@@ -415,7 +426,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
         return history.find()
                 .getAs(this.history, "Id", "HistoryId")
                 .getAs(this.historyVersion, "Id", "SnapshotId")
-                .get("Created","PlayerId", "Reason", "Timeout", "StaffId", "ScopeType", "ScopeName", "ScopeId"
+                .get("Created","PlayerId", "Reason", "Timeout", "StaffId", "ScopeType", "ScopeName"
                         , "Points", "Active", "Properties", "HistoryTypeId", "PunishmentType", "TemplateId"
                         , "RevokeTemplateId", "RevokeReason", "ModifiedTime", "ModifiedBy", "ModifiedActive")
                 .join(historyVersion).on(historyVersion,"HistoryId",history,"Id");
@@ -428,6 +439,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 DefaultPlayerHistoryEntry entry = new DefaultPlayerHistoryEntry(
                         resultEntry.getInt("HistoryId"),
                         playerHistory.getPlayer().getUniqueId(),
+                        resultEntry.getInt("SessionId"),
                         resultEntry.getLong("Created")
                         ,playerHistory,snapshot,null);
                 snapshot.setEntry(entry);
@@ -439,9 +451,8 @@ public class DefaultDKBansStorage implements DKBansStorage {
     private DefaultPlayerHistoryEntrySnapshot createSnapshot(QueryResultEntry resultEntry,PlayerHistoryEntry entry) {
         DKBansScope scope = null;
         if(resultEntry.getString("ScopeType") != null){
-            scope = new DKBansScope(resultEntry.getString("ScopeType")
-                    ,resultEntry.getString("ScopeName")
-                    ,resultEntry.getUniqueId("ScopeId"));
+            scope = DKBansScope.of(resultEntry.getString("ScopeType")
+                    ,resultEntry.getString("ScopeName"));
         }
 
         return new DefaultPlayerHistoryEntrySnapshot(resultEntry.getInt("SnapshotId"),
@@ -987,7 +998,6 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 .field("StaffId", DataType.UUID, FieldOption.NOT_NULL)
                 .field("ScopeType", DataType.STRING)
                 .field("ScopeName", DataType.STRING)
-                .field("ScopeId", DataType.UUID)
                 .field("Points", DataType.INTEGER)
                 .field("Active", DataType.BOOLEAN, FieldOption.NOT_NULL,FieldOption.INDEX)
                 .field("Properties", DataType.LONG_TEXT, -1, FieldOption.NOT_NULL)
@@ -1111,7 +1121,6 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 .field("Order", DataType.STRING, FieldOption.NOT_NULL)
                 .field("ScopeType", DataType.STRING)
                 .field("ScopeName", DataType.STRING)
-                .field("ScopeId", DataType.UUID)
                 .field("Properties", DataType.LONG_TEXT, FieldOption.NOT_NULL)
                 .create();
     }

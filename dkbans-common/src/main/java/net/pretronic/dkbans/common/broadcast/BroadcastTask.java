@@ -55,7 +55,7 @@ public class BroadcastTask implements Runnable {
                 BroadcastAssignment next = group.getNext(group.getCurrentBroadcast());
                 if(next != null) {
                     group.setCurrentBroadcast(next.getPosition());
-                    DefaultDKBans.getInstance().getBroadcastManager().sendBroadcast(next.getBroadcast());
+                    DefaultDKBans.getInstance().getBroadcastManager().sendBroadcast(next);
                 }
             }
         }
