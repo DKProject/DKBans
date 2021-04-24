@@ -69,10 +69,14 @@ public class MinecraftBroadcastSender implements BroadcastSender {
     public void sendBroadcast(BroadcastAssignment assignment) {
         Collection<ConnectedMinecraftPlayer> players = McNative.getInstance().getLocal().getConnectedPlayers();
         for (ConnectedMinecraftPlayer player : players) {
-            if(player.hasPermission(assignment.getGroup().getPermission()) && isOnScope(player,assignment.getGroup().getScope())){
+            if(hasPermission(player,assignment.getGroup().getPermission()) && isOnScope(player,assignment.getGroup().getScope())){
                 sendMessage(player, assignment.getBroadcast());
             }
         }
+    }
+
+    private boolean hasPermission(ConnectedMinecraftPlayer player,String permission){
+        return permission == null || player.hasPermission(permission);
     }
 
     private boolean isOnScope(ConnectedMinecraftPlayer player,DKBansScope scope){

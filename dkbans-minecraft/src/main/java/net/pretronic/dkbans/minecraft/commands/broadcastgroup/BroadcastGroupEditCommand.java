@@ -42,7 +42,7 @@ public class BroadcastGroupEditCommand extends ObjectCommand<BroadcastGroup> imp
 
     private final static List<String> COMMANDS = Arrays.asList("name","enabled","permission","order","interval","scope");
     private final static List<String> COMMANDS_BOOLEAN = Arrays.asList("true","false");
-    private final static List<String> COMMANDS_SCOPE = Arrays.asList("SERVER","SERVER_GROUP");
+    private final static List<String> COMMANDS_SCOPE = Arrays.asList("GLOBAL","SERVER","SERVER_GROUP");
 
     public BroadcastGroupEditCommand(ObjectOwner owner) {
         super(owner, CommandConfiguration.name("edit"));
@@ -105,12 +105,13 @@ public class BroadcastGroupEditCommand extends ObjectCommand<BroadcastGroup> imp
                 return;
             }
             case "scope": {
-                if(args.length < 3) {
+                String type = args[1];
+
+                if(!type.equalsIgnoreCase("global") && args.length < 3) {
                     commandSender.sendMessage(Messages.ERROR_INVALID_SCOPE, VariableSet.create().add("value", args[1]));
                     return;
                 }
-                String type = args[1];
-                String name = args[2];
+                String name = args.length < 3 ? "GLOBAL" : args[2];
 
                 group.setScope(DKBansScope.of(type, name));
                 sendEditedMessage(commandSender, "scope", args[1]+":"+args[2]);
