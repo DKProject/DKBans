@@ -85,7 +85,7 @@ public class BroadcastGroupCommand extends MainObjectCommand<BroadcastGroup> imp
         }
     }
 
-    //@Todo why?
+    //@Todo why? => Issue must be fixed in libraries project (priority=low)
     @Override
     public NoPermissionHandler getNoPermissionHandler(ObjectOwner owner) {
         return null;

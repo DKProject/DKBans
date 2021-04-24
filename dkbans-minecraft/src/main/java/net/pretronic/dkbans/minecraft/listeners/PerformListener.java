@@ -38,11 +38,9 @@ import net.pretronic.dkbans.api.template.Template;
 import net.pretronic.dkbans.api.template.punishment.PunishmentTemplate;
 import net.pretronic.dkbans.minecraft.BroadcastMessageChannels;
 import net.pretronic.dkbans.minecraft.PlayerSettingsKey;
+import net.pretronic.dkbans.minecraft.config.CommandConfig;
 import net.pretronic.dkbans.minecraft.config.Messages;
-import net.pretronic.dkbans.minecraft.config.Permissions;
-import net.pretronic.dkbans.minecraft.integration.labymod.LabyModIntegration;
 import net.pretronic.dkbans.minecraft.joinme.MinecraftJoinMe;
-import net.pretronic.libraries.document.type.DocumentFileType;
 import net.pretronic.libraries.event.Listener;
 import net.pretronic.libraries.event.network.NetworkListener;
 import net.pretronic.libraries.message.MessageProvider;
@@ -71,7 +69,7 @@ public class PerformListener {
             MessageComponent<?> result = Messages.TEAMCHAT_MESSAGE_FORMAT;
             for (OnlineMinecraftPlayer staff : McNative.getInstance().getLocal().getOnlinePlayers()) {
                 DKBansExecutor executor = event.getExecutor();
-                if(staff.hasPermission(Permissions.COMMAND_TEAMCHAT_TEAM)
+                if(staff.hasPermission(CommandConfig.PERMISSION_COMMAND_TEAMCHAT_RECEIVE)
                         && staff.hasSetting("DKBans", PlayerSettingsKey.TEAM_CHAT_LOGIN,true)){
                     staff.sendMessage(result,VariableSet.create()
                             .add("message",event.getMessage())
@@ -98,7 +96,7 @@ public class PerformListener {
     @NetworkListener
     public void onPlayerReportCreate(DKBansReportCreateEvent event) {
         for (ConnectedMinecraftPlayer player : McNative.getInstance().getLocal().getConnectedPlayers()) {
-            if(player.hasPermission(Permissions.COMMAND_REPORT_STAFF)) {
+            if(player.hasPermission(CommandConfig.PERMISSION_COMMAND_REPORT_STAFF)) {
                 player.sendMessage(Messages.REPORT_NOTIFY, VariableSet.create()
                         .addDescribed("player",event.getPlayer())
                         .addDescribed("report", event.getReportEntry()));
@@ -213,7 +211,7 @@ public class PerformListener {
 
     private void sendToStaff(MessageComponent<?> notification, VariableSet variables) {
         for (OnlineMinecraftPlayer staff : McNative.getInstance().getLocal().getOnlinePlayers()) {
-            if (staff.hasPermission(Permissions.PUNISH_NOTIFY)
+            if (staff.hasPermission(CommandConfig.PERMISSION_PUNISH_NOTIFY)
                     && staff.hasSetting("DKBans", PlayerSettingsKey.PUNISH_NOTIFY_LOGIN, true)) {
                 staff.sendMessage(notification, variables);
             }

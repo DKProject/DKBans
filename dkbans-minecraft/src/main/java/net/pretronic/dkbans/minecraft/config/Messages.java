@@ -96,6 +96,7 @@ public class Messages {
 
     public static MessageComponent<?> CHAT_FILTER_SPAM_TOFAST = Text.ofMessageKey("dkbans.chat.filter.toFast");
     public static MessageComponent<?> CHAT_FILTER_SPAM_REPEAT = Text.ofMessageKey("dkbans.chat.filter.repeat");
+    public static MessageComponent<?> CHAT_FILTER_SPAM_CAPSLOCK = Text.ofMessageKey("dkbans.chat.filter.capslock");
 
     public static MessageComponent<?> FILTER_BLOCKED_NAME = Text.ofMessageKey("dkbans.filter.blocked.name");
     public static MessageComponent<?> FILTER_BLOCKED_COMMAND = Text.ofMessageKey("dkbans.filter.blocked.command");
@@ -200,7 +201,7 @@ public class Messages {
     public static MessageComponent<?> COMMAND_PLAYER_NOTES_HELP = Text.ofMessageKey("dkbans.command.playerNotes.help");
     public static MessageComponent<?> COMMAND_PLAYER_NOTES_LIST = Text.ofMessageKey("dkbans.command.playerNotes.list");
     public static MessageComponent<?> COMMAND_PLAYER_NOTES_ADDED = Text.ofMessageKey("dkbans.command.playerNotes.added");
-
+    public static MessageComponent<?> COMMAND_PLAYER_NOTES_CLEARED = Text.ofMessageKey("dkbans.command.playerNotes.cleared");
 
     public static MessageComponent<?> COMMAND_MY_HISTORY_POINTS = Text.ofMessageKey("dkbans.command.myHistoryPoints");
 

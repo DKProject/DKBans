@@ -74,6 +74,8 @@ public interface DKBansPlayer extends DKBansExecutor {
 
     PlayerNote createNote(DKBansExecutor creator, String message, PlayerNoteType type);
 
+    void clearNotes();
+
 
 
     default boolean hasActivePunish(PunishmentType type){
@@ -82,10 +84,6 @@ public interface DKBansPlayer extends DKBansExecutor {
 
     default boolean hasActivePunish(PunishmentType type,DKBansScope scope){
         return getHistory().hasActivePunish(type,scope);
-    }
-
-    default boolean hasActivePunish(PunishmentType type, Collection<DKBansScope> scopes){
-        return getHistory().hasActivePunish(type,scopes);
     }
 
 

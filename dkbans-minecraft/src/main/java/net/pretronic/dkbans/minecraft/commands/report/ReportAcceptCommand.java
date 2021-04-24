@@ -23,8 +23,8 @@ package net.pretronic.dkbans.minecraft.commands.report;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.report.PlayerReport;
 import net.pretronic.dkbans.minecraft.commands.util.CommandUtil;
+import net.pretronic.dkbans.minecraft.config.CommandConfig;
 import net.pretronic.dkbans.minecraft.config.Messages;
-import net.pretronic.dkbans.minecraft.config.Permissions;
 import net.pretronic.libraries.command.command.BasicCommand;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
 import net.pretronic.libraries.command.sender.CommandSender;
@@ -37,7 +37,7 @@ public class ReportAcceptCommand extends BasicCommand {
     public ReportAcceptCommand(ObjectOwner owner) {
         super(owner, CommandConfiguration.newBuilder()
                 .name("accept")
-                .permission(Permissions.COMMAND_REPORT_STAFF).create());
+                .permission(CommandConfig.PERMISSION_COMMAND_REPORT_STAFF).create());
     }
 
     @Override

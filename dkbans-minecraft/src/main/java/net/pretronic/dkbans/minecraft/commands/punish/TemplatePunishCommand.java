@@ -101,6 +101,7 @@ public class TemplatePunishCommand extends BasicCommand implements Completable {
         }
 
         PlayerHistoryEntrySnapshot result = dkBansPlayer.punish(CommandUtil.getExecutor(sender),template);
+        System.out.println(result.getId());
         if(message != null) result.getEntry().createNote(CommandUtil.getExecutor(sender),message);
         CommandUtil.sendPunishResultMessage(sender,dkBansPlayer,result);
     }

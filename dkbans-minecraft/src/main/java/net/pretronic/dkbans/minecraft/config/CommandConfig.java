@@ -258,12 +258,38 @@ public class CommandConfig {
                 .create());
     }
 
+    public static final String PERMISSION_ADMIN = "dkbans.admin";
+
+    public static final String PERMISSION_BYPASS = "dkbans.bypass";
+    @DocumentKey("permission.bypassIgnore")
+    public static final String PERMISSION_BYPASS_IGNORE = "dkbans.bypass.ignore";
+
+    public static final String PERMISSION_CHAT_BYPASS = "dkbans.chat.bypass";
+    @DocumentKey("permission.chat.bypassTabComplete")
+    public static final String PERMISSION_CHAT_BYPASS_TAB_COMPLETION = "dkbans.chat.bypass.tabComplete";
+    public static final String PERMISSION_CHAT_NOTIFICATION = "dkbans.chat.notification";
+
+
+    public static final String PERMISSION_PUNISH_OVERRIDE_OWN = "dkbans.punish.override";
+    public static final String PERMISSION_PUNISH_OVERRIDE_ALL = "dkbans.bypass.override.all";
+    public static final String PERMISSION_PUNISH_NOTIFY = "dkbans.punish.notify";
+
+    public static final String PERMISSION_COMMAND_TEAMCHAT_RECEIVE = "dkbans.teamchat.receive";
+    public static final String PERMISSION_COMMAND_TEAMCHAT_SEND = "dkbans.teamchat.send";
+
+    public static final String PERMISSION_COMMAND_REPORT_STAFF = "dkbans.report.staff";
+
+    public static final String PERMISSION_COMMAND_JOINME = "dkbans.joinme";
+    @DocumentKey("permission.command.chatClear.all")
+    public static final String PERMISSION_COMMAND_CHAT_CLEAR_ALL = "dkbans.chatClear.all";
+
+
     public final static class PunishmentTypeConfiguration extends DefaultCommandConfiguration {
 
-        private String punishmentType;
-        private String historyType;
-        private String commandType;
-        private String scope;
+        private final String punishmentType;
+        private final String historyType;
+        private final String commandType;
+        private final String scope;
 
         public PunishmentTypeConfiguration(boolean enabled, String name, String permission
                 , String[] aliases, String punishmentType, String historyType, String commandType) {
@@ -291,7 +317,7 @@ public class CommandConfig {
         public DKBansScope getScope() {
             String[] parts = scope.split(":");
             if(parts.length == 2){
-                return new DKBansScope(parts[0],parts[1]);
+                return DKBansScope.of(parts[0],parts[1]);
             }
             throw new IllegalArgumentException("Invalid scope format (key:name)");
         }

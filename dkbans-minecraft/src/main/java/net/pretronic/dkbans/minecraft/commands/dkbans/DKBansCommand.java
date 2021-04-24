@@ -21,8 +21,8 @@
 package net.pretronic.dkbans.minecraft.commands.dkbans;
 
 import net.pretronic.dkbans.minecraft.commands.dkbans.template.TemplateCommand;
+import net.pretronic.dkbans.minecraft.config.CommandConfig;
 import net.pretronic.dkbans.minecraft.config.Messages;
-import net.pretronic.dkbans.minecraft.config.Permissions;
 import net.pretronic.libraries.command.NoPermissionAble;
 import net.pretronic.libraries.command.NotFindable;
 import net.pretronic.libraries.command.command.MainCommand;
@@ -37,7 +37,7 @@ public class DKBansCommand extends MainCommand implements NotFindable, NoPermiss
     public DKBansCommand(ObjectOwner owner) {
         super(owner,  CommandConfiguration.newBuilder()
                 .name("dkbans")
-                .permission(Permissions.ADMIN)
+                .permission(CommandConfig.PERMISSION_ADMIN)
                 .create());
         infoCommand = new InfoCommand(owner);
         registerCommand(new MigrationCommand(owner));

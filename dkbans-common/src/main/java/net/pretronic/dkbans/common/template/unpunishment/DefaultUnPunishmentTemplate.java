@@ -150,7 +150,7 @@ public class DefaultUnPunishmentTemplate extends DefaultTemplate implements UnPu
                 Document scope = scope0.toDocument();
                 if(scope.size() == 1) {
                     PrimitiveEntry firstEntry = scope.getEntry(0).toPrimitive();
-                    scopes.add(new DKBansScope(firstEntry.getKey(), firstEntry.getAsString(), null));
+                    scopes.add(DKBansScope.of(firstEntry.getKey(), firstEntry.getAsString()));
                 } else {
                     scopes.add(scope.getAsObject(DKBansScope.class));
                 }

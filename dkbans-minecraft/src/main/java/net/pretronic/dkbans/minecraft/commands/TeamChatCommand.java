@@ -24,8 +24,8 @@ import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.minecraft.BroadcastMessageChannels;
 import net.pretronic.dkbans.minecraft.PlayerSettingsKey;
 import net.pretronic.dkbans.minecraft.commands.util.CommandUtil;
+import net.pretronic.dkbans.minecraft.config.CommandConfig;
 import net.pretronic.dkbans.minecraft.config.Messages;
-import net.pretronic.dkbans.minecraft.config.Permissions;
 import net.pretronic.libraries.command.Completable;
 import net.pretronic.libraries.command.command.BasicCommand;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
@@ -61,7 +61,7 @@ public class TeamChatCommand extends BasicCommand implements Completable {
             if(StringUtil.equalsOne(action,"logout","out")) changeLogin(player,current,false);
             else if(StringUtil.equalsOne(action,"login","in")) changeLogin(player,current,true);
             else if(StringUtil.equalsOne(action,"toggle","tog")) changeLogin(player,current,!current);
-            else if(sender.hasPermission(Permissions.COMMAND_TEAMCHAT_SEND)){
+            else if(sender.hasPermission(CommandConfig.PERMISSION_COMMAND_TEAMCHAT_SEND)){
                 if(!current){
                     player.sendMessage(Messages.STAFF_STATUS_NOT, VariableSet.create()
                             .add("prefix",Messages.PREFIX_TEAMCHAT)

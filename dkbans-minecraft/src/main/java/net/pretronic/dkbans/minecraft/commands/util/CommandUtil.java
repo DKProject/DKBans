@@ -23,8 +23,8 @@ import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryEntrySnapshot;
 import net.pretronic.dkbans.api.player.history.PunishmentType;
+import net.pretronic.dkbans.minecraft.config.CommandConfig;
 import net.pretronic.dkbans.minecraft.config.Messages;
-import net.pretronic.dkbans.minecraft.config.Permissions;
 import net.pretronic.libraries.command.sender.CommandSender;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
 import net.pretronic.libraries.utility.Iterators;
@@ -79,9 +79,9 @@ public class CommandUtil {
     }
 
     public static boolean checkBypass(CommandSender sender,DKBansPlayer player){
-        if(player.hasBypass() && !sender.hasPermission(Permissions.BYPASS_IGNORE)){
+        if(player.hasBypass() && !sender.hasPermission(CommandConfig.PERMISSION_BYPASS_IGNORE)){
             sender.sendMessage(Messages.PLAYER_HAS_BYPASS,VariableSet.create().addDescribed("player",player));
-            McNative.getInstance().getNetwork().broadcast(Permissions.BYPASS_IGNORE,Messages.PLAYER_HAS_BYPASS_NOTIFICATION
+            McNative.getInstance().getNetwork().broadcast(CommandConfig.PERMISSION_BYPASS_IGNORE,Messages.PLAYER_HAS_BYPASS_NOTIFICATION
                     ,VariableSet.create().addDescribed("sender",sender).add("target",player));
             return true;
         }
@@ -108,8 +108,8 @@ public class CommandUtil {
     }
 
     public static boolean canOverridePunish(CommandSender sender,DKBansPlayer player, PunishmentType type){
-        if(sender.hasPermission(Permissions.PUNISH_OVERRIDE_ALL)) return true;
-        if(sender.hasPermission(Permissions.PUNISH_OVERRIDE_OWN)){
+        if(sender.hasPermission(CommandConfig.PERMISSION_PUNISH_OVERRIDE_ALL)) return true;
+        if(sender.hasPermission(CommandConfig.PERMISSION_PUNISH_OVERRIDE_OWN)){
             DKBansExecutor stuff = player.getHistory().getActiveEntry(type).getCurrent().getStaff();
             return stuff != null && stuff.equals(sender);
         }

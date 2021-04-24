@@ -24,32 +24,24 @@ import net.pretronic.libraries.document.Document;
 import net.pretronic.libraries.utility.Validate;
 
 import java.util.Collection;
+import java.util.Objects;
 import java.util.UUID;
 
 public class DKBansScope {
 
-    private static final UUID ZERO_UUID = new UUID(0, 0);
+    public static final DKBansScope GLOBAL = new DKBansScope("GLOBAL","GLOBAL");
 
-    public static final DKBansScope GLOBAL = new DKBansScope("GLOBAL","GLOBAL",ZERO_UUID);
     public static final String DEFAULT_SERVER_GROUP = "SERVER_GROUP";
     public static final String DEFAULT_SERVER = "SERVER";
-    public static final String DEFAULT_WORLD = "WORLD";
-
 
     private final String type;
     private final String name;
-    private final UUID id;
 
-    public DKBansScope(String type, String name) {
-        this(type,name,null);
-    }
-
-    public DKBansScope(String type, String name, UUID id) {
+    private DKBansScope(String type, String name) {
         Validate.notNull(type, "Scope type can't be null");
         Validate.notNull(name, "Scope name can't be null");
         this.type = type;
         this.name = name;
-        this.id = id == null ? ZERO_UUID : id;
     }
 
     public String getType() {
@@ -60,34 +52,37 @@ public class DKBansScope {
         return name;
     }
 
-    public UUID getId() {
-        return id;
-    }
-
-    public boolean matches(DKBansScope scope){
-        Validate.notNull(scope);
-        return getType().equalsIgnoreCase(scope.getType()) && getName().equalsIgnoreCase(scope.getName());
-    }
-
-    public boolean matches(Collection<DKBansScope> scopes){
-        Validate.notNull(scopes);
-        for (DKBansScope scope : scopes) if(matches(scope)) return true;
-        return false;
-    }
-
-    public boolean matchesExact(DKBansScope scope){
-        Validate.notNull(scope);
-        return matches(scope) && getId().equals(scope.getId());
-    }
-
-    public boolean matchesExact(Collection<DKBansScope> scopes){
-        Validate.notNull(scopes);
-        for (DKBansScope scope : scopes) if(matchesExact(scope)) return true;
-        return false;
+    public boolean isGlobal(){
+        return this.equals(GLOBAL);
     }
 
     public static DKBansScope fromData(Document data) {
         if(data == null || (!data.contains("scopeType") && !data.contains("scopeName"))) return null;
-        return new DKBansScope(data.getString("scopeType"), data.getString("scopeName"), ZERO_UUID);
+        return new DKBansScope(data.getString("scopeType"), data.getString("scopeName"));
+    }
+
+    public static DKBansScope of(String type, String name){
+        return new DKBansScope(type,name);
+    }
+
+    public static DKBansScope ofServer(String name){
+        return new DKBansScope(DEFAULT_SERVER,name);
+    }
+
+    public static DKBansScope ofServerGroup(String name){
+        return new DKBansScope(DEFAULT_SERVER_GROUP,name);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        DKBansScope that = (DKBansScope) o;
+        return getType().equalsIgnoreCase(that.getType()) && getName().equalsIgnoreCase(that.getName());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(type, name);
     }
 }

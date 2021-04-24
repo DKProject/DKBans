@@ -23,8 +23,8 @@ package net.pretronic.dkbans.minecraft.commands.dkbans;
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.migration.Migration;
 import net.pretronic.dkbans.api.migration.MigrationResult;
+import net.pretronic.dkbans.minecraft.config.CommandConfig;
 import net.pretronic.dkbans.minecraft.config.Messages;
-import net.pretronic.dkbans.minecraft.config.Permissions;
 import net.pretronic.libraries.command.command.BasicCommand;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
 import net.pretronic.libraries.command.sender.CommandSender;
@@ -37,7 +37,7 @@ import java.util.concurrent.TimeUnit;
 public class MigrationCommand extends BasicCommand {
 
     public MigrationCommand(ObjectOwner owner) {
-        super(owner, CommandConfiguration.newBuilder().name("migrate").permission(Permissions.ADMIN).create());
+        super(owner, CommandConfiguration.newBuilder().name("migrate").permission(CommandConfig.PERMISSION_ADMIN).create());
     }
 
     @Override

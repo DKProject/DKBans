@@ -56,6 +56,7 @@ import net.pretronic.dkbans.minecraft.joinme.MinecraftJoinMe;
 import net.pretronic.dkbans.minecraft.joinme.MinecraftJoinMeManager;
 import net.pretronic.dkbans.minecraft.listeners.PerformListener;
 import net.pretronic.dkbans.minecraft.listeners.PlayerListener;
+import net.pretronic.dkbans.minecraft.listeners.ProxyListener;
 import net.pretronic.dkbans.minecraft.listeners.SyncListener;
 import net.pretronic.dkbans.minecraft.migration.DKBansLegacyMigration;
 import net.pretronic.dkbans.minecraft.player.MinecraftPlayerManager;
@@ -116,6 +117,7 @@ public class DKBansPlugin extends MinecraftPlugin {
 
         getRuntime().getPlayerManager().registerPlayerAdapter(DKBansPlayer.class, player -> playerManager.getPlayer(player.getUniqueId()));
         getRuntime().getRegistry().getService(PlaceholderProvider.class).registerPlaceHolders(this,"dkbans",new DKBansPlaceholders());
+        getRuntime().getNetwork().registerStatusCallback(this,playerManager.getPlayerCache());
         DescriberRegistrar.register();
 
         getLogger().info("DKBans started successfully");
@@ -125,6 +127,7 @@ public class DKBansPlugin extends MinecraftPlugin {
         if(getRuntime().isNetworkAvailable()){
             getRuntime().getNetwork().getEventBus().subscribe(this,new SyncListener(dkBans));
             if(getRuntime().getPlatform().isProxy()){
+                getRuntime().getLocal().getEventBus().subscribe(this,new ProxyListener());
                 getRuntime().getLocal().getEventBus().subscribe(this,new PlayerListener());
                 getRuntime().getNetwork().getEventBus().subscribe(this,new PerformListener());
             }
@@ -249,10 +252,12 @@ public class DKBansPlugin extends MinecraftPlugin {
     }
 
     private void initBroadcast() {
-        McNative.getInstance().getScheduler().createTask(this)
-                .delay(5, TimeUnit.SECONDS)
-                .interval(1, TimeUnit.SECONDS)
-                .execute(new BroadcastTask().start());
+        if(!getRuntime().isNetworkAvailable() || getRuntime().getPlatform().isProxy()){
+            McNative.getInstance().getScheduler().createTask(this)
+                    .delay(5, TimeUnit.SECONDS)
+                    .interval(5, TimeUnit.SECONDS)
+                    .execute(new BroadcastTask().start());
+        }
     }
 
     public static DKBansPlugin getInstance() {

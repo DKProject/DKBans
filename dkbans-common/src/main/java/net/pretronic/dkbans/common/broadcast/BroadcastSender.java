@@ -28,7 +28,7 @@ import java.util.Collection;
 
 public interface BroadcastSender {
 
-    Collection<DKBansPlayer> sendBroadcast(Broadcast broadcast);
+    void sendBroadcast(Broadcast broadcast);
 
-    Collection<DKBansPlayer> sendBroadcast(BroadcastAssignment broadcast);
+    void sendBroadcast(BroadcastAssignment broadcast);
 }
