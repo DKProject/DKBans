@@ -173,6 +173,7 @@ messages:
   &8» &7Verlauf&8: &e{snapshot.punishmentType.color}
   &8» &7Aktiv&8: &e@if({entry.active},"&cJa","&aNein &8(&7{entry.revokeReason}&8)")
   &8» &7Bestraft von&8: &e{snapshot.staff.displayName}
+  &8» &7Bereich&8: &e{entry.scope.name}
   &8» &7Grund&8: &e{snapshot.reason}
   &8» &7Dauer&8: &e{snapshot.durationFormatted}
   &8» &7Verbleibend&8: &e{snapshot.remainingFormatted}
@@ -187,6 +188,7 @@ messages:
   &8» &7Erstellt&8: &e{entry.createdFormatted}
   &8» &7Aktiv&8: &e@if({entry.active},"&cJa","&aNein &8(&7{entry.revokeReason}&8)")
   &8» &7Bestraft von&8: &e{entry.staff.displayName}
+  &8» &7Bereich&8: &e{entry.scope.name}
   &8» &7Grund&8: &e{entry.reason}
   &8» &7Dauer&8: &e{entry.durationFormatted}
   &8» &7Verbleibend&8: &e{entry.remainingFormatted}
@@ -384,20 +386,19 @@ messages:
   dkbans.command.broadcast.notFound: '${dkbans.prefix} &cKeine Broadcasts gefunden &e{broadcast}'
   dkbans.command.broadcast.group.notFound: '${dkbans.prefix} &cKeine Boradcast Gruppe für &e{group} &7gefunden'
   dkbans.command.broadcast.group.help: '${dkbans.prefix} &cFalsche Verwendung von &ebroadcast group &ccommand&8:
+  &7/broadcastgroup list
   &7/broadcastgroup <name> create <interval>
   &7/broadcastgroup <name> assignment <name> add
   &7/broadcastgroup <name> assignment <name> remove
   &7/broadcastgroup <name> assignment <name> list
   &7/broadcastgroup <name> assignment <name> [info]
-  &7/broadcastgroup <name> edit
-  &7/broadcastgroup list'
+  &7/broadcastgroup <name> edit <setting> <value>'
   dkbans.command.broadcast.group.create.help: '${dkbans.prefix} &cFalche Verwendung von &ebroadcast group create &ccommand&8:
   &7/broadcastgroup <name> create <interval>'
   dkbans.command.broadcast.group.created: '${dkbans.prefix} &7Du hast die Broadcast Gruppe &e{group.name} &7erstellt'
   dkbans.command.broadcast.group.alreadyExists: '${dkbans.prefix} &cDie Broadcast Gruppe &e{name} &7existiert bereits'
   dkbans.command.broadcast.alreadyExists: '${dkbans.prefix} &cDer Broadcast &e{name} &7existiert bereits'
-  dkbans.command.broadcast.group.list: '${dkbans.prefix} &6Broadcast Gruppen&8:
-  @for("group" in {groups},${dkbans.command.broadcast.group.list.loop},"\n","\n")'
+  dkbans.command.broadcast.group.list: '${dkbans.prefix} &6Broadcast Gruppen&8: @for("group" in {groups},${dkbans.command.broadcast.group.list.loop},"\n","\n")'
   dkbans.command.broadcast.group.list.loop: '&8» &7Id&8: &e{group.id} &7Name&8: &e{group.name}'
   dkbans.command.broadcast.group.info: '${dkbans.prefix} &6Gruppen Information
   &8» &7Id&8: &e{group.id}
@@ -435,11 +436,10 @@ messages:
     &8- &7permission <permission>
     &8- &7order <order>
     &8- &7interval <interval>
-    &8- &7scope <type:name:[id]>'
+    &8- &7scope  <type> <name>'
   dkbans.command.broadcast.group.edit.edited: '${dkbans.prefix} &7Du hast die Eigenschaft &e{property} &7zu &e{value} &7geändert'
   dkbans.command.broadcast.edit.edited: '${dkbans.prefix} &7Du hast die Eigenschaft &e{property} &7zu &e{value} &7geändert'
-  dkbans.command.broadcast.list: '${dkbans.prefix} &6Broadcasts&8:
-  @for("broadcast" in {broadcasts}, ${dkbans.command.broadcast.list.loop},"\n","\n")'
+  dkbans.command.broadcast.list: '${dkbans.prefix} &6Broadcasts&8: @for("broadcast" in {broadcasts}, ${dkbans.command.broadcast.list.loop},"\n","\n")'
   dkbans.command.broadcast.list.loop: '&8» &7Id&8: &e{broadcast.id} &7Name&8: &e{broadcast.name} &7Sichtbarkeit&8: {broadcast.visibility}'
   dkbans.command.broadcast.direct: '${dkbans.prefix} &7Du hast die Nachricht versendet'
   dkbans.command.broadcast.help: '${dkbans.prefix} &cValsche Verwendung von &ebroadcast group &ccommand&8:

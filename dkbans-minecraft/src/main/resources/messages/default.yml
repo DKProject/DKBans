@@ -74,15 +74,17 @@ messages:
 
   dkbans.punish.message.ban.permanently: '&e&lexample.net
   &e
-  &cYou are &4&lpermanently banned &cfrom this network
+  &cYou are &4&lpermanently banned &cfrom this server
   &3Reason&8: &4&l{ban.reason}
+  &3Scope&8: &4&l{ban.scope.name}
   &3BanID&8: &7{ban.id}
   &e
   &aYou can make a unban request at &eforum.example.net.'
   dkbans.punish.message.ban.temporary: '&e&lexample.net&r
   &e
-  &cYou are &e&l{ban.durationFormatted} &cbanned from this network
+  &cYou are &e&l{ban.durationFormatted} &cbanned from this server
   &3Reason&8: &4&l{ban.reason}
+  &3Scope&8: &4&l{ban.scope.name}
   &3BanID&8: &7{ban.id}
   &e
   &3Remaining time&8: &e{ban.remainingFormatted}
@@ -92,11 +94,13 @@ messages:
   dkbans.punish.message.mute.permanently: '&5
   ${dkbans.prefix} &cYou are &4&lPermanently &cbanned from the chat
   &8» &3Reason&8: &4&l{mute.reason}
+  &8» &3Scope&8: &4&l{mute.scope.name}
   &8» &3BanID&8: &7{mute.id}
   &7'
   dkbans.punish.message.mute.temporary: '&5
   ${dkbans.prefix} &cYou are &e&l{mute.durationFormatted} &cbanned from the chat
   &8» &3Reason&8: &4&l{mute.reason}
+  &8» &3Scope&8: &4&l{mute.scope.name}
   &8» &3BanID&8: &7{mute.id}
   &e
   &8» &3Remaining time&8: &e{mute.remainingFormatted}
@@ -104,7 +108,7 @@ messages:
 
   dkbans.punish.message.kick: '&e&lexample.net&r
   &e
-  &cYou were kicked from the network
+  &cYou were kicked from the server
   &3Reason&8: &4&l{kick.reason}'
 
   dkbans.punish.message.warn.chat: '&5
@@ -430,21 +434,20 @@ messages:
   dkbans.command.broadcast.group.notFound: '${dkbans.prefix} &cNo broadcast group found for &e{group}'
 
   dkbans.command.broadcast.group.help: '${dkbans.prefix} &cInvalid usage of &ebroadcast group &ccommand&8:
+  &7/broadcastgroup list
   &7/broadcastgroup <name> create <interval>
   &7/broadcastgroup <name> assignment <name> add
   &7/broadcastgroup <name> assignment <name> remove
   &7/broadcastgroup <name> assignment <name> list
   &7/broadcastgroup <name> assignment <name> [info]
-  &7/broadcastgroup <name> edit
-  &7/broadcastgroup list'
+  &7/broadcastgroup <name> edit <setting> <value>'
   dkbans.command.broadcast.group.create.help: '${dkbans.prefix} &cUsage&8: &7/broadcastgroup <name> create <interval>'
   dkbans.command.broadcast.group.created: '${dkbans.prefix} &7You have successfully created the broadcast group &e{group.name}'
 
   dkbans.command.broadcast.group.alreadyExists: '${dkbans.prefix} &cA broadcast group with the name &e{name} already exists'
   dkbans.command.broadcast.alreadyExists: '${dkbans.prefix} &cA broadcast with the name &e{name} already exists'
 
-  dkbans.command.broadcast.group.list: '${dkbans.prefix} &7Broadcast groups&8:
-  @for("group" in {groups},${dkbans.command.broadcast.group.list.loop},"\n","\n")'
+  dkbans.command.broadcast.group.list: '${dkbans.prefix} &7Broadcast groups&8: @for("group" in {groups},${dkbans.command.broadcast.group.list.loop},"\n","\n")'
   dkbans.command.broadcast.group.list.loop: '&8» &7Id&8: &e{group.id} &7Name&8: &e{group.name}'
 
   dkbans.command.broadcast.group.info: '${dkbans.prefix} &7Group info
@@ -487,12 +490,11 @@ messages:
     &8- &7permission <permission>
     &8- &7order <order>
     &8- &7interval <interval>
-    &8- &7scope <type:name:[id]>'
+    &8- &7scope <type> <name>'
   dkbans.command.broadcast.group.edit.edited: '${dkbans.prefix} &7You have edited the property &e{property} &7to &e{value}'
   dkbans.command.broadcast.edit.edited: '${dkbans.prefix} &7You have edited the property &e{property} &7to &e{value}'
 
-  dkbans.command.broadcast.list: '${dkbans.prefix} &7Broadcasts&8:
-  @for("broadcast" in {broadcasts}, ${dkbans.command.broadcast.list.loop},"\n","\n")'
+  dkbans.command.broadcast.list: '${dkbans.prefix} &7Broadcasts&8: @for("broadcast" in {broadcasts}, ${dkbans.command.broadcast.list.loop},"\n","\n")'
   dkbans.command.broadcast.list.loop: '  &8- &e{broadcast.id} &8| &e{broadcast.visibility} &8| &e{broadcast.name}'
 
   dkbans.command.broadcast.direct: '${dkbans.prefix} &7You have successfully broadcast the message'

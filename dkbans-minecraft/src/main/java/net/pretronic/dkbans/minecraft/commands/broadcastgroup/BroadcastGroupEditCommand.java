@@ -42,6 +42,7 @@ public class BroadcastGroupEditCommand extends ObjectCommand<BroadcastGroup> imp
 
     private final static List<String> COMMANDS = Arrays.asList("name","enabled","permission","order","interval","scope");
     private final static List<String> COMMANDS_BOOLEAN = Arrays.asList("true","false");
+    private final static List<String> COMMANDS_SCOPE = Arrays.asList("server","serverGroup");
 
     public BroadcastGroupEditCommand(ObjectOwner owner) {
         super(owner, CommandConfiguration.name("edit"));
@@ -104,26 +105,15 @@ public class BroadcastGroupEditCommand extends ObjectCommand<BroadcastGroup> imp
                 return;
             }
             case "scope": {
-                String[] rawScope = args[1].split(":");
-                if(rawScope.length < 2) {
+                if(args.length < 3) {
                     commandSender.sendMessage(Messages.ERROR_INVALID_SCOPE, VariableSet.create().add("value", args[1]));
                     return;
                 }
-                String type = rawScope[0];
-                String name = rawScope[1];
+                String type = args[1];
+                String name = args[2];
 
-                String rawId = rawScope[2];
-                UUID id = null;
-                if(rawId != null) {
-                    try {
-                        id = Convert.toUUID(rawId);
-                    } catch (IllegalArgumentException exception) {
-                        commandSender.sendMessage(Messages.ERROR_INVALID_SCOPE, VariableSet.create().add("value", args[1]));
-                        return;
-                    }
-                }
                 group.setScope(DKBansScope.of(type, name));
-                sendEditedMessage(commandSender, "scope", args[1]);
+                sendEditedMessage(commandSender, "scope", args[1]+":"+args[2]);
                 return;
             }
             default: {
@@ -147,6 +137,8 @@ public class BroadcastGroupEditCommand extends ObjectCommand<BroadcastGroup> imp
                     if(value.name().startsWith(args[0].toUpperCase())) result.add(value.name());
                 }
                 return result;
+            }else if(command.equalsIgnoreCase("scope")){
+                return Iterators.filter(COMMANDS_SCOPE, command0 -> command0.startsWith(args[1].toLowerCase()));
             }
         }
         return Collections.emptyList();
