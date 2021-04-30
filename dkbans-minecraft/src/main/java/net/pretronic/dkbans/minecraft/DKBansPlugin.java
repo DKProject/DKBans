@@ -124,6 +124,7 @@ public class DKBansPlugin extends MinecraftPlugin {
         }
 
         getLogger().info("DKBans started successfully");
+
     }
 
     private void registerListeners(){
