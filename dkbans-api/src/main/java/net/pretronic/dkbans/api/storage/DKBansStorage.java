@@ -121,6 +121,8 @@ public interface DKBansStorage {
 
     List<PlayerSession> getPageSessions(DKBansPlayer player,int page, int pageSize);
 
+    PlayerSession getActiveSession(DKBansPlayer player);
+
 
     long getOnlineTime(UUID playerId);
 

@@ -179,7 +179,7 @@ public class PlayerListener {
             OnlineMinecraftPlayer player = event.getOnlinePlayer();
             DKBansPlayer dkBansPlayer = player.getAs(DKBansPlayer.class);
 
-            ConnectedMinecraftPlayer connectedPlayer = McNative.getInstance().getLocal().getConnectedPlayer(player.getUniqueId());
+            ConnectedMinecraftPlayer connectedPlayer = player.getAsConnectedPlayer();
 
             Pair<String,String> locationLookup = DKBansUtil.lookupLocation(player.getAddress().getAddress().getHostAddress());
 
@@ -334,7 +334,6 @@ public class PlayerListener {
 
     @Listener
     public void onTabComplete(MinecraftPlayerTabCompleteResponseEvent event){
-        System.out.println("TAB COMPLETE "+event.getCursor());
         if(!DKBansConfig.CHAT_TAB_COMPLETE_ENABLED) return;
         if(event.getCursor().startsWith("/") && !event.getCursor().contains(" ")){
             boolean bypass = event.getPlayer().hasPermission(CommandConfig.PERMISSION_CHAT_BYPASS_TAB_COMPLETION);

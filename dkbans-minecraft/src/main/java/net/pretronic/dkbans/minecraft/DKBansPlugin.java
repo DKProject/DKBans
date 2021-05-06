@@ -80,6 +80,7 @@ import org.mcnative.runtime.api.text.components.MessageComponent;
 
 import java.io.File;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 public class DKBansPlugin extends MinecraftPlugin {
@@ -121,6 +122,7 @@ public class DKBansPlugin extends MinecraftPlugin {
 
         if(McNative.getInstance().isNetworkAvailable()){
             getRuntime().getNetwork().registerStatusCallback(this,playerManager.getPlayerCache());
+            getRuntime().getNetwork().getMessenger().registerSynchronizingChannel("dkbans_players", this, UUID.class, playerManager.getPlayerCache());
         }
 
         getLogger().info("DKBans started successfully");

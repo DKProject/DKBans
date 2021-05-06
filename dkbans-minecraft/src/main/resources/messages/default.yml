@@ -243,6 +243,9 @@ messages:
   dkbans.command.resetHistory.many: '${dkbans.prefix} &7The history from &8{player.displayName} &7was reset'
   dkbans.command.resetHistory.one: '${dkbans.prefix} &7The history entry &c{id} from {player.displayName} &7was reset'
 
+  dkbans.command.myHistoryPoints: '${dkbans.prefix} &7Your history points&8: @for("entry" in {points}, ${dkbans.command.myHistoryPoints.loop},"\n") '
+  dkbans.command.myHistoryPoints.loop: '&8» &e{entry.type}&8: &7{entry.points}'
+
   dkbans.teamchat.messageFormat: '${dkbans.prefix.teamchat} &e{sender.displayName} &8» &7{message}'
 
   dkbans.command.report.help: '${dkbans.prefix} &cUsage&8: &7/report <player> <Reason>'
