@@ -80,6 +80,4 @@
         <plugin.maven.deploy>3.0.0-M1</plugin.maven.deploy>
     </properties>
 
-
-
 </project>
