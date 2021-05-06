@@ -617,6 +617,20 @@ public class DefaultDKBansStorage implements DKBansStorage {
                 .execute());
     }
 
+
+    @Override
+    public PlayerSession getActiveSession(DKBansPlayer player) {
+        QueryResult result = this.playerSessions.find()
+                .where("PlayerId",player.getUniqueId())
+                .whereIsNull("DisconnectTime")
+                .execute();
+        if(!result.isEmpty()){
+            return getPlayerSessionByResultEntry(player,result.first());
+        }
+
+        return null;
+    }
+
     @Override
     public long getOnlineTime(UUID playerId) {
         Validate.notNull(playerId);
