@@ -175,11 +175,12 @@ public class PlayerListener {
 
     @Listener
     public void onPlayerLoginConfirm(MinecraftPlayerLoginConfirmEvent event) {
+        System.out.println("CONFIRM LOGIN: "+DKBansConfig.PLAYER_SESSION_LOGGING);
         if(DKBansConfig.PLAYER_SESSION_LOGGING){
             OnlineMinecraftPlayer player = event.getOnlinePlayer();
             DKBansPlayer dkBansPlayer = player.getAs(DKBansPlayer.class);
 
-            ConnectedMinecraftPlayer connectedPlayer = McNative.getInstance().getLocal().getConnectedPlayer(player.getUniqueId());
+            ConnectedMinecraftPlayer connectedPlayer = player.getAsConnectedPlayer();
 
             Pair<String,String> locationLookup = DKBansUtil.lookupLocation(player.getAddress().getAddress().getHostAddress());
 
