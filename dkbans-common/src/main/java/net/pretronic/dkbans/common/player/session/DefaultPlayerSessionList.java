@@ -91,6 +91,9 @@ public class DefaultPlayerSessionList implements PlayerSessionList {
 
     @Override
     public PlayerSession getActive() {
+        if(active == null){
+            return DKBans.getInstance().getStorage().getActiveSession(player);
+        }
         return this.active;
     }
 
