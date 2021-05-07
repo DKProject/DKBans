@@ -231,7 +231,7 @@ public  class DefaultDKBansPlayer implements DKBansPlayer {
         long newOnlineTime = session.getDisconnectTime()-session.getConnectTime();
         DKBans.getInstance().getStorage().addOnlineTime(getUniqueId(), newOnlineTime);
 
-        if(onlineTime == -1){
+        if(onlineTime != -1){
             this.onlineTime = this.onlineTime + newOnlineTime;
         }
 

@@ -288,7 +288,7 @@ messages:
 
   &8» &7Erster Login&8: &e{player.firstLoginFormatted}
   &8» &7Server&8: &e{player.server}
-  &8» &7Onlinezeit&8: &e{player.onlineTime}
+  &8» &7Onlinezeit&8: &e{player.onlineTimeFormatted}
 
   &8» &7Ip&8: &e{player.activeSession.hostName}
   &8» &7Land&8: &e{player.activeSession.country}
