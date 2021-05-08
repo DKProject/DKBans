@@ -36,9 +36,9 @@ public class DKBansPlaceholders implements PlaceholderHook {
         }else if(parameter.equalsIgnoreCase("player_online-time-short")){
             return DurationProcessor.getStandard().formatShort(TimeUnit.MILLISECONDS.toSeconds(dkbansPlayer.getOnlineTime()));
         }else if(parameter.equalsIgnoreCase("player_online-time-h")){
-            return TimeUnit.MICROSECONDS.toHours(dkbansPlayer.getOnlineTime());
+            return TimeUnit.MILLISECONDS.toHours(dkbansPlayer.getOnlineTime());
         }else if(parameter.equalsIgnoreCase("player_online-time-d")){
-            return TimeUnit.MICROSECONDS.toDays(dkbansPlayer.getOnlineTime());
+            return TimeUnit.MILLISECONDS.toDays(dkbansPlayer.getOnlineTime());
         }else if(parameter.equalsIgnoreCase("player_country")){
             PlayerSession session = dkbansPlayer.getActiveSession();
             return session != null ? session.getCountry() : "Unknown";
