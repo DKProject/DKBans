@@ -514,7 +514,9 @@ public class DefaultDKBansStorage implements DKBansStorage {
 
     @Override
     public int startPlayerSession(PlayerSession session) {
-        this.playerSessions.delete().whereIsNull("DisconnectTime").execute();
+        this.playerSessions.delete()
+                .where("PlayerId",session.getPlayer().getUniqueId())
+                .whereIsNull("DisconnectTime").execute();
 
         return this.playerSessions.insert()
                 .set("PlayerId", session.getPlayer().getUniqueId())
