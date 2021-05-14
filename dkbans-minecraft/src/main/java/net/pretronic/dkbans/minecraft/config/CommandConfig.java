@@ -279,6 +279,8 @@ public class CommandConfig {
 
     public static final String PERMISSION_COMMAND_REPORT_STAFF = "dkbans.report.staff";
 
+    public static final String PERMISSION_PING_OTHER = "dkbans.ping.other";
+
     public static final String PERMISSION_COMMAND_JOINME = "dkbans.joinme";
     @DocumentKey("permission.command.chatClear.all")
     public static final String PERMISSION_COMMAND_CHAT_CLEAR_ALL = "dkbans.chatClear.all";
