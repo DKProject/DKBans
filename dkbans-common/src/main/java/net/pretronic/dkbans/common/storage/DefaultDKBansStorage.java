@@ -268,6 +268,8 @@ public class DefaultDKBansStorage implements DKBansStorage {
         PlayerSession session = player.getActiveSession();
         if(session != null && session.getId() > 0) sessionId = session.getId();
 
+        System.out.println("[DEBUG] Session Id for Punishment! "+sessionId);
+
         int id = history.insert()
                 .set("PlayerId",player.getUniqueId())
                 .set("SessionId",sessionId)

@@ -21,6 +21,7 @@
 package net.pretronic.dkbans.minecraft.commands;
 
 import net.pretronic.dkbans.minecraft.commands.util.CommandUtil;
+import net.pretronic.dkbans.minecraft.config.CommandConfig;
 import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.libraries.command.Completable;
 import net.pretronic.libraries.command.command.BasicCommand;
@@ -43,7 +44,7 @@ public class PingCommand extends BasicCommand implements Completable {
 
     @Override
     public void execute(CommandSender sender, String[] arguments) {
-        if(arguments.length < 1 || !sender.hasPermission("dkbans.ping.other")){
+        if(arguments.length < 1 || !sender.hasPermission(CommandConfig.PERMISSION_PING_OTHER)){
             if(!(sender instanceof MinecraftPlayer)){
                 sender.sendMessage(Messages.ERROR_ONLY_PLAYER);
                 return;
