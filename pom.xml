@@ -27,7 +27,7 @@
     <groupId>net.pretronic.dkbans</groupId>
     <artifactId>DKBans</artifactId>
     <packaging>pom</packaging>
-    <version>1.15.2.449-BETA</version>
+    <version>1.16.6.460-SNAPSHOT</version>
 
     <modules>
         <module>dkbans-api</module>
@@ -79,6 +79,5 @@
         <plugin.maven.shade>3.2.2</plugin.maven.shade>
         <plugin.maven.deploy>3.0.0-M1</plugin.maven.deploy>
     </properties>
-
 
 </project>
