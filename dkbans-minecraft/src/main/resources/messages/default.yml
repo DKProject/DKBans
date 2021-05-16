@@ -441,7 +441,7 @@ messages:
   &7/broadcastgroup <name> create <interval>
   &7/broadcastgroup <name> assignment <name> add
   &7/broadcastgroup <name> assignment <name> remove
-  &7/broadcastgroup <name> assignment <name> list
+  &7/broadcastgroup <name> assignment list
   &7/broadcastgroup <name> assignment <name> [info]
   &7/broadcastgroup <name> edit <setting> <value>'
   dkbans.command.broadcast.group.create.help: '${dkbans.prefix} &cUsage&8: &7/broadcastgroup <name> create <interval>'

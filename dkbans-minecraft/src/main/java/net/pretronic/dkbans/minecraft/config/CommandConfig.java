@@ -70,7 +70,7 @@ public class CommandConfig {
     public static CommandConfiguration COMMAND_TEAMCHAT = CommandConfiguration.newBuilder()
             .name("teamchat")
             .aliases("team","tc","sc","staffchat")
-            .permission("dkbans.command.teamchat")
+            .permission("dkbans.teamchat.receive")
             .create();
 
     public static CommandConfiguration COMMAND_HELP = CommandConfiguration.newBuilder()
@@ -95,7 +95,7 @@ public class CommandConfig {
     public static CommandConfiguration COMMAND_PUNISH_NOTIFY  = CommandConfiguration.newBuilder()
             .name("punishNotify")
             .aliases("banNotify","pn")
-            .permission("dkbans.command.punishNotify")
+            .permission("dkbans.punish.notify")
             .create();
 
     public static CommandConfiguration COMMAND_NOTIFY  = CommandConfiguration.newBuilder()
@@ -213,7 +213,7 @@ public class CommandConfig {
 
         COMMAND_PUNISH_DIRECT.add(new PunishmentTypeConfiguration(true,"banlist"
                 ,"dkbans.command.punish.ban.list"
-                ,new String[]{"blist"}
+                ,new String[]{"blist","bans"}
                 ,"BAN",null,"COMMAND_LIST"));
 
 
@@ -235,7 +235,7 @@ public class CommandConfig {
 
         COMMAND_PUNISH_DIRECT.add(new PunishmentTypeConfiguration(true,"mutelist"
                 ,"dkbans.command.punish.mute.list"
-                ,new String[]{"mlist"}
+                ,new String[]{"mlist","mutes"}
                 ,"MUTE",null,"COMMAND_LIST"));
 
 
@@ -278,6 +278,8 @@ public class CommandConfig {
     public static final String PERMISSION_COMMAND_TEAMCHAT_SEND = "dkbans.teamchat.send";
 
     public static final String PERMISSION_COMMAND_REPORT_STAFF = "dkbans.report.staff";
+
+    public static final String PERMISSION_PING_OTHER = "dkbans.ping.other";
 
     public static final String PERMISSION_COMMAND_JOINME = "dkbans.joinme";
     @DocumentKey("permission.command.chatClear.all")

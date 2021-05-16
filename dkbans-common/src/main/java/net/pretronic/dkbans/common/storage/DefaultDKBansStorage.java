@@ -256,8 +256,6 @@ public class DefaultDKBansStorage implements DKBansStorage {
         }
     }
 
-
-
     private Collection<String> loadAliases(String aliases0) {
         return new ArrayList<>(Arrays.asList(aliases0.split(",")));
     }
@@ -268,7 +266,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
 
         Integer sessionId = null;
         PlayerSession session = player.getActiveSession();
-        if(session != null) sessionId = session.getId();
+        if(session != null && session.getId() > 0) sessionId = session.getId();
 
         int id = history.insert()
                 .set("PlayerId",player.getUniqueId())
@@ -514,7 +512,9 @@ public class DefaultDKBansStorage implements DKBansStorage {
 
     @Override
     public int startPlayerSession(PlayerSession session) {
-        this.playerSessions.delete().whereIsNull("DisconnectTime").execute();
+        this.playerSessions.delete()
+                .where("PlayerId",session.getPlayer().getUniqueId())
+                .whereIsNull("DisconnectTime").execute();
 
         return this.playerSessions.insert()
                 .set("PlayerId", session.getPlayer().getUniqueId())
