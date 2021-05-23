@@ -131,8 +131,10 @@ public class ChatLogCommand extends BasicCommand implements Completable {
         if(chatLog instanceof PlayerChatLog) {
             variableSet.addDescribed("player", ((PlayerChatLog)chatLog).getPlayer());
         } else if(chatLog instanceof ServerChatLog) {
-            variableSet.add("serverName", ((ServerChatLog)chatLog).getServerName())
-                    .add("serverId", ((ServerChatLog)chatLog).getServerId().toString());
+            variableSet.add("serverName", ((ServerChatLog)chatLog).getServerName());
+            if(((ServerChatLog)chatLog).getServerId() != null){
+                variableSet.add("serverId", ((ServerChatLog)chatLog).getServerId().toString());
+            }
         }
         sender.sendMessage(message, variableSet);
     }
