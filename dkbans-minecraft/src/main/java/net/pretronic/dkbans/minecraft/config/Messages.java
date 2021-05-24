@@ -153,6 +153,7 @@ public class Messages {
     public static MessageComponent<?> COMMAND_JUMPTO_HELP = Text.ofMessageKey("dkbans.command.jumpto.help");
     public static MessageComponent<?> COMMAND_NOTIFY_HELP = Text.ofMessageKey("dkbans.command.notify.help");
     public static MessageComponent<?> COMMAND_TEAM_CHAT_HELP = Text.ofMessageKey("dkbans.command.teamChat.help");
+    public static MessageComponent<?> COMMAND_ALERT_HELP = Text.ofMessageKey("dkbans.command.alert.help");
 
 
     public static MessageComponent<?> COMMAND_PUNISH_HELP_TEMPORARY = Text.ofMessageKey("dkbans.command.punish.help.temporary");

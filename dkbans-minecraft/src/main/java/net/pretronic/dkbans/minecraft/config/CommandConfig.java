@@ -155,6 +155,11 @@ public class CommandConfig {
             .permission("dkbans.command.chatclear")
             .create();
 
+    public static CommandConfiguration COMMAND_ALERT = CommandConfiguration.newBuilder()
+            .name("alert")
+            .permission("dkbans.command.alert")
+            .create();
+
     public static CommandConfiguration COMMAND_BROADCAST = CommandConfiguration.newBuilder()
             .name("broadcast")
             .aliases("bc")

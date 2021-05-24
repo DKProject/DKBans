@@ -177,6 +177,7 @@ public class DKBansPlugin extends MinecraftPlugin {
         getRuntime().getLocal().getCommandManager().registerCommand(new IpBlockCommand(this, CommandConfig.COMMAND_IP_BLOCK));
         getRuntime().getLocal().getCommandManager().registerCommand(new IpUnblockCommand(this, CommandConfig.COMMAND_IP_UNBLOCK));
 
+        getRuntime().getLocal().getCommandManager().registerCommand(new AlterCommand(this, CommandConfig.COMMAND_ALERT));
         getRuntime().getLocal().getCommandManager().registerCommand(new BroadcastCommand(this, CommandConfig.COMMAND_BROADCAST));
         getRuntime().getLocal().getCommandManager().registerCommand(new BroadcastGroupCommand(this, CommandConfig.COMMAND_BROADCAST_GROUP));
 
