@@ -339,7 +339,6 @@ public class PlayerListener {
             boolean bypass = DKBansConfig.CHAT_TAB_COMPLETE_MODE_ALLOW_BYPASS && event.getPlayer().hasPermission(CommandConfig.PERMISSION_CHAT_BYPASS_TAB_COMPLETION);;
             if(!bypass){
                 event.getSuggestions().clear();
-                event.setCancelled(true);
                 List<String> suggestions = null;
                 if(DKBansConfig.CHAT_TAB_COMPLETE_MODE.equalsIgnoreCase("DYNAMIC")){
                     List<Command> commands = McNative.getInstance().getLocal().getCommandManager().getCommands();
