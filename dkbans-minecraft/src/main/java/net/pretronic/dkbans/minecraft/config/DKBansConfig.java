@@ -149,7 +149,7 @@ public class DKBansConfig {
         }
         CHAT_TAB_COMPLETE_SUGGESTIONS = Iterators.map(CHAT_TAB_COMPLETE_SUGGESTIONS_RAW, input -> {
             String[] parts = input.split("@");
-            return new Pair<>(parts[0],parts.length > 1 ? parts[1] : null);
+            return new Pair<>(parts[0].startsWith("/") ? parts[0] : "/"+parts[0],parts.length > 1 ? parts[1] : null);
         });
     }
 
