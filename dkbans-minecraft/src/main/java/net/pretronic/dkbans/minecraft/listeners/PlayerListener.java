@@ -344,11 +344,11 @@ public class PlayerListener {
                     List<Command> commands = McNative.getInstance().getLocal().getCommandManager().getCommands();
                     suggestions = Iterators.map(commands, command -> command.getConfiguration().getName()
                             , command -> (command.getConfiguration().getPermission() == null || event.getPlayer().hasPermission(command.getConfiguration().getPermission()))
-                                    && command.getConfiguration().getName().startsWith(event.getCursor().substring(1)));
+                                    && command.getConfiguration().getName().toLowerCase().startsWith(event.getCursor().substring(1).toLowerCase()));
                 }else if(DKBansConfig.CHAT_TAB_COMPLETE_MODE.equalsIgnoreCase("SUGGESTED")){
                     suggestions = Iterators.map(DKBansConfig.CHAT_TAB_COMPLETE_SUGGESTIONS,Pair::getKey
-                            ,command -> (command.getValue() == null || event.getPlayer().hasPermission(command.getValue())
-                                    && command.getKey().startsWith(event.getCursor())));
+                            ,command -> (command.getValue() == null || event.getPlayer().hasPermission(command.getValue()))
+                                    && command.getKey().toLowerCase().startsWith(event.getCursor().toLowerCase()));
                 }
                 if(suggestions != null){
                     event.getSuggestions().addAll(suggestions);
