@@ -85,6 +85,8 @@ public class DKBansConfig {
 
     @DocumentKey("chat.tabComplete.mode")
     public static String CHAT_TAB_COMPLETE_MODE = "DYNAMIC";
+    @DocumentKey("chat.tabComplete.allowBypass")
+    public static boolean CHAT_TAB_COMPLETE_MODE_ALLOW_BYPASS = true;
 
     @DocumentKey("chat.tabComplete.suggestions")
     public static List<String> CHAT_TAB_COMPLETE_SUGGESTIONS_RAW = Arrays.asList("help","ping","dkbans","report","ban@dkbans.command.punish");
