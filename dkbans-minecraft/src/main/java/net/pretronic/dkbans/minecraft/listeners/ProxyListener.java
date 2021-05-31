@@ -32,7 +32,7 @@ import org.mcnative.runtime.api.text.components.MessageComponent;
 
 public class ProxyListener {
 
-    @Listener(priority = EventPriority.HIGHEST)
+    @Listener(priority = EventPriority.LOWEST)
     public void onServerConnect(MinecraftPlayerServerConnectEvent event){
         if(event.isCancelled() || event.getTarget() == null) return;
 
