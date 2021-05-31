@@ -24,6 +24,7 @@ import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.history.PlayerHistoryEntry;
 import net.pretronic.dkbans.api.player.history.PunishmentType;
 import net.pretronic.dkbans.minecraft.config.Messages;
+import net.pretronic.libraries.event.EventPriority;
 import net.pretronic.libraries.event.Listener;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
 import org.mcnative.runtime.api.proxy.event.player.MinecraftPlayerServerConnectEvent;
@@ -31,7 +32,7 @@ import org.mcnative.runtime.api.text.components.MessageComponent;
 
 public class ProxyListener {
 
-    @Listener
+    @Listener(priority = EventPriority.HIGHEST)
     public void onServerConnect(MinecraftPlayerServerConnectEvent event){
         if(event.isCancelled() || event.getTarget() == null) return;
 

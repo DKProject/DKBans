@@ -111,7 +111,7 @@ public class TemplatePunishCommand extends BasicCommand implements Completable {
                 .add("selectedPlayer",selectedPlayer)
                 .add("prefix",Messages.PREFIX)
                 .add("group",templates.getCategories())
-                .add("templates",templates.getTemplates())
+                .add("templates",Iterators.filter(templates.getTemplates(), template -> !template.isHidden()))
                 .add("command",getConfiguration().getName()));
     }
 
