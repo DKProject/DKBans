@@ -139,7 +139,7 @@ public class PlayerListener {
         }
     }
 
-    @Listener(priority = EventPriority.HIGHEST,execution = ExecutionType.ASYNC)
+    @Listener(priority = EventPriority.HIGH,execution = ExecutionType.ASYNC)
     public void onPlayerPostLogin(MinecraftPlayerPostLoginEvent event){
         OnlineMinecraftPlayer player = event.getOnlinePlayer();
 
@@ -336,18 +336,19 @@ public class PlayerListener {
     public void onTabComplete(MinecraftPlayerTabCompleteResponseEvent event){
         if(!DKBansConfig.CHAT_TAB_COMPLETE_ENABLED) return;
         if(event.getCursor().startsWith("/") && !event.getCursor().contains(" ")){
-            boolean bypass = event.getPlayer().hasPermission(CommandConfig.PERMISSION_CHAT_BYPASS_TAB_COMPLETION);
+            boolean bypass = DKBansConfig.CHAT_TAB_COMPLETE_MODE_ALLOW_BYPASS && event.getPlayer().hasPermission(CommandConfig.PERMISSION_CHAT_BYPASS_TAB_COMPLETION);;
             if(!bypass){
                 event.getSuggestions().clear();
-                event.setCancelled(true);
                 List<String> suggestions = null;
                 if(DKBansConfig.CHAT_TAB_COMPLETE_MODE.equalsIgnoreCase("DYNAMIC")){
                     List<Command> commands = McNative.getInstance().getLocal().getCommandManager().getCommands();
                     suggestions = Iterators.map(commands, command -> command.getConfiguration().getName()
-                            , command -> event.getPlayer().hasPermission(command.getConfiguration().getPermission()));
+                            , command -> (command.getConfiguration().getPermission() == null || event.getPlayer().hasPermission(command.getConfiguration().getPermission()))
+                                    && command.getConfiguration().getName().toLowerCase().startsWith(event.getCursor().substring(1).toLowerCase()));
                 }else if(DKBansConfig.CHAT_TAB_COMPLETE_MODE.equalsIgnoreCase("SUGGESTED")){
                     suggestions = Iterators.map(DKBansConfig.CHAT_TAB_COMPLETE_SUGGESTIONS,Pair::getKey
-                            ,command -> event.getPlayer().hasPermission(command.getValue()));
+                            ,command -> (command.getValue() == null || event.getPlayer().hasPermission(command.getValue()))
+                                    && command.getKey().toLowerCase().startsWith(event.getCursor().toLowerCase()));
                 }
                 if(suggestions != null){
                     event.getSuggestions().addAll(suggestions);

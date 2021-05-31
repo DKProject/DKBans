@@ -58,7 +58,7 @@ public class DefaultPlayerHistoryEntrySnapshotBuilder implements PlayerHistoryEn
     private DKBansExecutor modifier;
     private long modifiedTime;
 
-    public DefaultPlayerHistoryEntrySnapshotBuilder(DKBansPlayer player, PlayerHistoryEntry entry) {
+    public DefaultPlayerHistoryEntrySnapshotBuilder(DKBansPlayer player,PlayerHistoryEntry entry) {
         this.player = player;
         this.history = player.getHistory();
         this.entry = entry;

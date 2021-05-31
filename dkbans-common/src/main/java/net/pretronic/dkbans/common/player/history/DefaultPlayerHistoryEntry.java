@@ -129,7 +129,7 @@ public class DefaultPlayerHistoryEntry implements PlayerHistoryEntry {
     @Override
     public PlayerHistoryEntrySnapshotBuilder newSnapshot(DKBansExecutor executor) {
         Validate.notNull(executor);
-        return new DefaultPlayerHistoryEntrySnapshotBuilder(history.getPlayer(),this);
+        return new DefaultPlayerHistoryEntrySnapshotBuilder(history.getPlayer(),this).modifiedBy(executor);
     }
 
     @Override

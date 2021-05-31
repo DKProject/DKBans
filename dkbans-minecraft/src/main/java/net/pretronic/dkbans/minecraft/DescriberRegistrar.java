@@ -13,6 +13,7 @@ package net.pretronic.dkbans.minecraft;
 import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.DKBansScope;
 import net.pretronic.dkbans.api.player.history.PunishmentType;
+import net.pretronic.dkbans.api.player.report.PlayerReportEntry;
 import net.pretronic.dkbans.common.broadcast.DefaultBroadcast;
 import net.pretronic.dkbans.common.broadcast.DefaultBroadcastAssignment;
 import net.pretronic.dkbans.common.broadcast.DefaultBroadcastGroup;
@@ -37,22 +38,25 @@ import net.pretronic.dkbans.common.template.punishment.DefaultPunishmentTemplate
 import net.pretronic.dkbans.minecraft.config.DKBansConfig;
 import net.pretronic.libraries.message.bml.variable.describer.VariableDescriber;
 import net.pretronic.libraries.message.bml.variable.describer.VariableDescriberRegistry;
+import net.pretronic.libraries.utility.Iterators;
 import net.pretronic.libraries.utility.duration.DurationProcessor;
 import net.pretronic.libraries.utility.map.Pair;
 import org.mcnative.runtime.api.McNative;
 import org.mcnative.runtime.api.player.MinecraftPlayer;
 import org.mcnative.runtime.api.text.format.ColoredString;
 
+import java.util.HashSet;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
 
 public class DescriberRegistrar {
 
     public static void register(){
+        VariableDescriberRegistry.registerDescriber(Pair.class);
         VariableDescriberRegistry.registerDescriber(DefaultPlayerHistory.class);
         VariableDescriberRegistry.registerDescriber(DefaultPlayerHistoryType.class);
         VariableDescriberRegistry.registerDescriber(DefaultPlayerChatLog.class);
         VariableDescriberRegistry.registerDescriber(DefaultFilter.class);
-        VariableDescriberRegistry.registerDescriber(DefaultPlayerReport.class);
         VariableDescriberRegistry.registerDescriber(DefaultPlayerReportEntry.class);
         VariableDescriberRegistry.registerDescriber(DefaultTemplate.class);
         VariableDescriberRegistry.registerDescriber(DefaultTemplateCategory.class);
@@ -135,7 +139,8 @@ public class DescriberRegistrar {
         sessionDescriber.registerFunction("disconnectedFormatted", entry -> DKBansConfig.FORMAT_DATE.format(entry.getDisconnectTime()));
         sessionDescriber.registerFunction("durationFormatted", entry -> DurationProcessor.getStandard().formatShort(entry.getDuration()));
 
-        VariableDescriberRegistry.registerDescriber(Pair.class);
+        VariableDescriber<DefaultPlayerReport> reportDescriber = VariableDescriberRegistry.registerDescriber(DefaultPlayerReport.class);
+        reportDescriber.registerFunction("reasons", report -> new HashSet<>(Iterators.map(report.getEntries(), (Function<PlayerReportEntry, Object>) PlayerReportEntry::getReason)));
     }
 
 }

@@ -31,7 +31,7 @@ import net.pretronic.libraries.utility.interfaces.ObjectOwner;
 public class BroadcastDirectCommand extends ObjectCommand<Broadcast> {
 
     public BroadcastDirectCommand(ObjectOwner owner) {
-        super(owner, CommandConfiguration.name("direct"));
+        super(owner, CommandConfiguration.name("direct","send"));
     }
 
     @Override

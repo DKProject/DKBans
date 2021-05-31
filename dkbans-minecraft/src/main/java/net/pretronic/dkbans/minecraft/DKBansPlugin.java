@@ -60,14 +60,11 @@ import net.pretronic.dkbans.minecraft.listeners.ProxyListener;
 import net.pretronic.dkbans.minecraft.listeners.SyncListener;
 import net.pretronic.dkbans.minecraft.migration.DKBansLegacyMigration;
 import net.pretronic.dkbans.minecraft.player.MinecraftPlayerManager;
-import net.pretronic.libraries.command.NoPermissionHandler;
 import net.pretronic.libraries.command.command.Command;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
-import net.pretronic.libraries.command.sender.CommandSender;
 import net.pretronic.libraries.document.Document;
 import net.pretronic.libraries.document.DocumentRegistry;
 import net.pretronic.libraries.document.type.DocumentFileType;
-import net.pretronic.libraries.message.bml.Message;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
 import net.pretronic.libraries.plugin.lifecycle.Lifecycle;
 import net.pretronic.libraries.plugin.lifecycle.LifecycleState;
@@ -177,6 +174,7 @@ public class DKBansPlugin extends MinecraftPlugin {
         getRuntime().getLocal().getCommandManager().registerCommand(new IpBlockCommand(this, CommandConfig.COMMAND_IP_BLOCK));
         getRuntime().getLocal().getCommandManager().registerCommand(new IpUnblockCommand(this, CommandConfig.COMMAND_IP_UNBLOCK));
 
+        getRuntime().getLocal().getCommandManager().registerCommand(new AlterCommand(this, CommandConfig.COMMAND_ALERT));
         getRuntime().getLocal().getCommandManager().registerCommand(new BroadcastCommand(this, CommandConfig.COMMAND_BROADCAST));
         getRuntime().getLocal().getCommandManager().registerCommand(new BroadcastGroupCommand(this, CommandConfig.COMMAND_BROADCAST_GROUP));
 

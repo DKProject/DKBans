@@ -168,6 +168,14 @@ public class DefaultBroadcastManager implements BroadcastManager {
     }
 
     @Override
+    public void sendBroadcast(String broadcast) {
+        //@Todo broadcasts need to be synchronized access networks (local (scheduled) and network broadcasts (manual))
+        Document properties = Document.newDocument();
+        properties.set(BroadcastProperty.TEXT,broadcast);
+        sendBroadcast(new DefaultBroadcast(-1,"ALERT",BroadcastVisibility.CHAT,properties));
+    }
+
+    @Override
     public void sendBroadcast(Broadcast broadcast) {
         broadcastSender.sendBroadcast(broadcast);
     }
