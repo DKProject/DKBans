@@ -125,8 +125,8 @@ public  class DefaultDKBansPlayer implements DKBansPlayer {
             this.onlineTimeTimeout = System.currentTimeMillis()+TimeUnit.MINUTES.toMinutes(10);
         }
 
-        if(getActiveSession() != null){
-            PlayerSession session = getActiveSession();
+        PlayerSession session = getActiveSession();
+        if(session != null){
             long newOnlineTime = System.currentTimeMillis()-session.getConnectTime();
             return this.onlineTime + newOnlineTime;
         }
@@ -222,7 +222,7 @@ public  class DefaultDKBansPlayer implements DKBansPlayer {
 
     @Override
     public void finishSession(String lastServerName, UUID lastServerId) {
-        DefaultPlayerSession session = (DefaultPlayerSession) getActiveSession();
+        DefaultPlayerSession session = sessionList.getLocalActive();
         if(session == null) return;
 
         session.setDisconnectTime();
