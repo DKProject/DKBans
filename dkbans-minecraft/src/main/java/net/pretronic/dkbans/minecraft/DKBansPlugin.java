@@ -54,10 +54,7 @@ import net.pretronic.dkbans.minecraft.integration.DKBansPlaceholders;
 import net.pretronic.dkbans.minecraft.integration.labymod.LabyModServiceListener;
 import net.pretronic.dkbans.minecraft.joinme.MinecraftJoinMe;
 import net.pretronic.dkbans.minecraft.joinme.MinecraftJoinMeManager;
-import net.pretronic.dkbans.minecraft.listeners.PerformListener;
-import net.pretronic.dkbans.minecraft.listeners.PlayerListener;
-import net.pretronic.dkbans.minecraft.listeners.ProxyListener;
-import net.pretronic.dkbans.minecraft.listeners.SyncListener;
+import net.pretronic.dkbans.minecraft.listeners.*;
 import net.pretronic.dkbans.minecraft.migration.DKBansLegacyMigration;
 import net.pretronic.dkbans.minecraft.player.MinecraftPlayerManager;
 import net.pretronic.libraries.command.command.Command;
@@ -127,6 +124,7 @@ public class DKBansPlugin extends MinecraftPlugin {
     }
 
     private void registerListeners(){
+        getRuntime().getLocal().getEventBus().subscribe(this,new GeneralListener());
         if(getRuntime().isNetworkAvailable()){
             getRuntime().getNetwork().getEventBus().subscribe(this,new SyncListener(dkBans));
             if(getRuntime().getPlatform().isProxy()){
