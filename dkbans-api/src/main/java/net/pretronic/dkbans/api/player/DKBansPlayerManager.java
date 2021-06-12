@@ -29,6 +29,8 @@ public interface DKBansPlayerManager {
 
     Collection<DKBansPlayer> getLoadedPlayers();
 
+    DKBansPlayer getLoadedPlayer(UUID uniqueId);
+
     DKBansPlayer getPlayer(UUID uniqueId);
 
     DKBansPlayer getPlayer(String name);
