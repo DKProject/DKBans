@@ -39,9 +39,9 @@ import org.mcnative.runtime.api.player.OnlineMinecraftPlayer;
 import java.util.Collection;
 import java.util.Collections;
 
-public class AlterCommand extends BasicCommand {
+public class AlertCommand extends BasicCommand {
 
-    public AlterCommand(ObjectOwner owner, CommandConfiguration configuration) {
+    public AlertCommand(ObjectOwner owner, CommandConfiguration configuration) {
         super(owner, configuration);
     }
 

@@ -97,6 +97,10 @@ public class DefaultPlayerSessionList implements PlayerSessionList {
         return this.active;
     }
 
+    public DefaultPlayerSession getLocalActive() {
+        return (DefaultPlayerSession) this.active;
+    }
+
     @Internal
     public void setActive(PlayerSession session) {
         this.active = session;

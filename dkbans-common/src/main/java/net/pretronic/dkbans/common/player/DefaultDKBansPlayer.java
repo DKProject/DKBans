@@ -54,6 +54,7 @@ import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 public  class DefaultDKBansPlayer implements DKBansPlayer {
 
@@ -67,6 +68,7 @@ public  class DefaultDKBansPlayer implements DKBansPlayer {
     private final DefaultPlayerNoteList noteList;
 
     private long onlineTime;
+    private long onlineTimeTimeout;
 
     public DefaultDKBansPlayer(UUID uniqueId, String name) {
         this.uniqueId = uniqueId;
@@ -118,12 +120,13 @@ public  class DefaultDKBansPlayer implements DKBansPlayer {
 
     @Override
     public long getOnlineTime() {
-        if(onlineTime == -1){
+        if(onlineTime == -1 || System.currentTimeMillis() > onlineTimeTimeout){
             this.onlineTime = DKBans.getInstance().getStorage().getOnlineTime(uniqueId);
+            this.onlineTimeTimeout = System.currentTimeMillis()+TimeUnit.MINUTES.toMinutes(10);
         }
 
-        if(getActiveSession() != null){
-            PlayerSession session = getActiveSession();
+        PlayerSession session = getActiveSession();
+        if(session != null){
             long newOnlineTime = System.currentTimeMillis()-session.getConnectTime();
             return this.onlineTime + newOnlineTime;
         }
@@ -219,7 +222,7 @@ public  class DefaultDKBansPlayer implements DKBansPlayer {
 
     @Override
     public void finishSession(String lastServerName, UUID lastServerId) {
-        DefaultPlayerSession session = (DefaultPlayerSession) getActiveSession();
+        DefaultPlayerSession session = sessionList.getLocalActive();
         if(session == null) return;
 
         session.setDisconnectTime();
@@ -256,5 +259,9 @@ public  class DefaultDKBansPlayer implements DKBansPlayer {
     @Override
     public boolean equals(Object o) {
         return o instanceof DKBansPlayer && ((DKBansPlayer)o).getUniqueId().equals(getUniqueId());
+    }
+
+    public void uncacheOnlineTime(){
+        this.onlineTime = -1;
     }
 }
