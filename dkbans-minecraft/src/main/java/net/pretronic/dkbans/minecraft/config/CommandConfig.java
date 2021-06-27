@@ -197,7 +197,7 @@ public class CommandConfig {
     @DocumentKey("command.punishNote")
     public static CommandConfiguration COMMAND_PUNISH_NOTE_CONFIGURATION = CommandConfiguration.newBuilder()
             .name("punishnote")
-            .aliases("banenote","mutenote","pnote","bnote","mnote")
+            .aliases("banenote","mutenote","punote","bnote","mnote")
             .permission("dkbans.command.punishNote")
             .create();
 

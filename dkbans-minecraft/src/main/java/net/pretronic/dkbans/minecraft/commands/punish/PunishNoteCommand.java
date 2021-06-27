@@ -81,6 +81,7 @@ public class PunishNoteCommand extends BasicCommand implements Completable {
             List<PlayerNote> notes = entry.getNotes().getPage(page,15);
             sender.sendMessage(Messages.COMMAND_PUNISH_NOTES_LIST, VariableSet.create()
                     .addDescribed("player",player)
+                    .addDescribed("entry",entry)
                     .addDescribed("page",page)
                     .addDescribed("nextPage",page+1)
                     .addDescribed("previousPage",page == 1 ? 1 : page-1)
@@ -90,10 +91,12 @@ public class PunishNoteCommand extends BasicCommand implements Completable {
             PlayerNote note = entry.createNote(CommandUtil.getExecutor(sender)
                     ,CommandUtil.readStringFromArguments(arguments,2));
             sender.sendMessage(Messages.COMMAND_PUNISH_NOTES_ADDED, VariableSet.create()
+                    .addDescribed("entry",entry)
                     .addDescribed("note",note));
         }else if(StringUtil.equalsOne(argument,"clear","c")){
             entry.clearNotes();
             sender.sendMessage(Messages.COMMAND_PUNISH_NOTES_CLEARED, VariableSet.create()
+                    .addDescribed("entry",entry)
                     .addDescribed("player",player));
         }else {
             sender.sendMessage(Messages.COMMAND_PUNISH_NOTES_HELP);
