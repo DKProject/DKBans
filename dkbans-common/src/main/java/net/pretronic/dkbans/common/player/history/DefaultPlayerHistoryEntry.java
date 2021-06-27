@@ -140,14 +140,19 @@ public class DefaultPlayerHistoryEntry implements PlayerHistoryEntry {
     @Override
     public PlayerNote createNote(DKBansExecutor creator, String message, PlayerNoteType type) {
         Validate.notNull(creator,message,type);
-        DefaultDKBans.getInstance().getStorage().getPlayerNotes().insert()
-                .set("PlayerId",playerId)
+        int noteId = DefaultDKBans.getInstance().getStorage().getHistoryNotes().insert()
+                .set("HistoryId",id)
                 .set("CreatorId",creator.getUniqueId())
                 .set("Time",System.currentTimeMillis())
                 .set("Message",message)
                 .set("TypeId",type.getId())
                 .executeAndGetGeneratedKeyAsInt("Id");
-        return new DefaultPlayerNote(id,type,System.currentTimeMillis(),message,creator.getUniqueId());
+        return new DefaultPlayerNote(noteId,type,System.currentTimeMillis(),message,creator.getUniqueId());
+    }
+
+    @Override
+    public void clearNotes() {
+        DefaultDKBans.getInstance().getStorage().getHistoryNotes().delete().where("HistoryId",id).execute();
     }
 
     @Override

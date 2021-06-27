@@ -194,6 +194,13 @@ public class CommandConfig {
             .permission("dkbans.command.punishEdit")
             .create();
 
+    @DocumentKey("command.punishNote")
+    public static CommandConfiguration COMMAND_PUNISH_NOTE_CONFIGURATION = CommandConfiguration.newBuilder()
+            .name("punishnote")
+            .aliases("banenote","mutenote","pnote","bnote","mnote")
+            .permission("dkbans.command.punishNote")
+            .create();
+
     public static String COMMAND_REPORT_TEMPLATE_NAME = "report";
 
     public static String COMMAND_REPORT_MODE = "TEMPLATE";

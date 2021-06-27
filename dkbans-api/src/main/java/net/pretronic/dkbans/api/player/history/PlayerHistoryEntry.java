@@ -69,6 +69,8 @@ public interface PlayerHistoryEntry extends Iterable<PlayerHistoryEntrySnapshot>
 
     PlayerNote createNote(DKBansExecutor creator, String message, PlayerNoteType type);
 
+    void clearNotes();
+
 
     PlayerHistoryEntrySnapshot unpunish(DKBansExecutor executor, UnPunishmentTemplate template);
 
