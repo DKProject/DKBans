@@ -194,6 +194,13 @@ public class CommandConfig {
             .permission("dkbans.command.punishEdit")
             .create();
 
+    @DocumentKey("command.punishNote")
+    public static CommandConfiguration COMMAND_PUNISH_NOTE_CONFIGURATION = CommandConfiguration.newBuilder()
+            .name("punishnote")
+            .aliases("banenote","mutenote","punote","bnote","mnote")
+            .permission("dkbans.command.punishNote")
+            .create();
+
     public static String COMMAND_REPORT_TEMPLATE_NAME = "report";
 
     public static String COMMAND_REPORT_MODE = "TEMPLATE";
@@ -270,6 +277,8 @@ public class CommandConfig {
     public static final String PERMISSION_BYPASS_IGNORE = "dkbans.bypass.ignore";
 
     public static final String PERMISSION_CHAT_BYPASS = "dkbans.chat.bypass";
+    @DocumentKey("permission.chat.bypassCommandBlock")
+    public static final String PERMISSION_CHAT_BYPASS_COMMAND_BLOCK = "dkbans.chat.bypass.commandBlock";
     @DocumentKey("permission.chat.bypassTabComplete")
     public static final String PERMISSION_CHAT_BYPASS_TAB_COMPLETION = "dkbans.chat.bypass.tabComplete";
     public static final String PERMISSION_CHAT_NOTIFICATION = "dkbans.chat.notification";

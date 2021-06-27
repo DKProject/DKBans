@@ -311,6 +311,10 @@ public class PlayerListener {
     @Listener(priority = EventPriority.HIGHEST)
     public void onPlayerCommand(MinecraftPlayerCommandPreprocessEvent event){
         if(event.isCancelled()) return;
+
+        boolean bypass = event.getPlayer().hasPermission(CommandConfig.PERMISSION_CHAT_BYPASS_COMMAND_BLOCK);
+        if(bypass) return;
+
         FilterManager filterManager = DKBans.getInstance().getFilterManager();
 
         if(filterManager.checkFilter(FilterAffiliationArea.COMMAND,event.getCommand())){
@@ -335,7 +339,7 @@ public class PlayerListener {
     @Listener
     public void onTabComplete(MinecraftPlayerTabCompleteResponseEvent event){
         if(!DKBansConfig.CHAT_TAB_COMPLETE_ENABLED) return;
-        if(event.getCursor().startsWith("/") && !event.getCursor().contains(" ")){
+        if(event.getCursor() != null && event.getCursor().startsWith("/") && !event.getCursor().contains(" ")){
             boolean bypass = DKBansConfig.CHAT_TAB_COMPLETE_MODE_ALLOW_BYPASS && event.getPlayer().hasPermission(CommandConfig.PERMISSION_CHAT_BYPASS_TAB_COMPLETION);;
             if(!bypass){
                 event.getSuggestions().clear();
