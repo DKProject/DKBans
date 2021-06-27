@@ -398,7 +398,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
             PlayerHistory history = player.getHistory();
 
             int sessionId = resultEntry.getInt("SessionId");
-F
+
             DefaultPlayerHistoryEntry entry = new DefaultPlayerHistoryEntry(resultEntry.getInt("HistoryId"),
                     history.getPlayer().getUniqueId(),
                     sessionId,
