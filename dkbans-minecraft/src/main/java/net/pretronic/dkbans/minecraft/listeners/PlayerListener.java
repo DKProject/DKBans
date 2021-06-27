@@ -311,6 +311,10 @@ public class PlayerListener {
     @Listener(priority = EventPriority.HIGHEST)
     public void onPlayerCommand(MinecraftPlayerCommandPreprocessEvent event){
         if(event.isCancelled()) return;
+
+        boolean bypass = event.getPlayer().hasPermission(CommandConfig.PERMISSION_CHAT_BYPASS_COMMAND_BLOCK);
+        if(bypass) return;
+
         FilterManager filterManager = DKBans.getInstance().getFilterManager();
 
         if(filterManager.checkFilter(FilterAffiliationArea.COMMAND,event.getCommand())){

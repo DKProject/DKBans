@@ -270,6 +270,8 @@ public class CommandConfig {
     public static final String PERMISSION_BYPASS_IGNORE = "dkbans.bypass.ignore";
 
     public static final String PERMISSION_CHAT_BYPASS = "dkbans.chat.bypass";
+    @DocumentKey("permission.chat.bypassCommandBlock")
+    public static final String PERMISSION_CHAT_BYPASS_COMMAND_BLOCK = "dkbans.chat.bypass.commandBlock";
     @DocumentKey("permission.chat.bypassTabComplete")
     public static final String PERMISSION_CHAT_BYPASS_TAB_COMPLETION = "dkbans.chat.bypass.tabComplete";
     public static final String PERMISSION_CHAT_NOTIFICATION = "dkbans.chat.notification";
