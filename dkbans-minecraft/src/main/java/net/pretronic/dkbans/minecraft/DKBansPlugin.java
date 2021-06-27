@@ -161,6 +161,7 @@ public class DKBansPlugin extends MinecraftPlugin {
         getRuntime().getLocal().getCommandManager().registerCommand(new MyHistoryPointsCommand(this, CommandConfig.COMMAND_MY_HISTORY_POINTS));
         getRuntime().getLocal().getCommandManager().registerCommand(new PunishInfoCommand(this, CommandConfig.COMMAND_PUNISH_INFO_CONFIGURATION));
         getRuntime().getLocal().getCommandManager().registerCommand(new PunishEditCommand(this, CommandConfig.COMMAND_PUNISH_EDIT_CONFIGURATION));
+        getRuntime().getLocal().getCommandManager().registerCommand(new PunishNoteCommand(this, CommandConfig.COMMAND_PUNISH_NOTE_CONFIGURATION));
 
         getRuntime().getLocal().getCommandManager().registerCommand(new HelpCommand(this, CommandConfig.COMMAND_HELP));
         getRuntime().getLocal().getCommandManager().registerCommand(new FilterCommand(this, CommandConfig.COMMAND_FILTER));

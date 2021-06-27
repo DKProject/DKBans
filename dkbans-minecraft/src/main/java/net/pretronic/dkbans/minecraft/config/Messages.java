@@ -169,6 +169,11 @@ public class Messages {
     public static MessageComponent<?> COMMAND_PUNISH_EDIT_MULTIPLE = Text.ofMessageKey("dkbans.command.punishedit.multiple");
     public static MessageComponent<?> COMMAND_PUNISH_EDIT_DONE = Text.ofMessageKey("dkbans.command.punishedit.done");
 
+    public static MessageComponent<?> COMMAND_PUNISH_NOTES_HELP = Text.ofMessageKey("dkbans.command.punishNotes.help");
+    public static MessageComponent<?> COMMAND_PUNISH_NOTES_LIST = Text.ofMessageKey("dkbans.command.punishNotes.list");
+    public static MessageComponent<?> COMMAND_PUNISH_NOTES_ADDED = Text.ofMessageKey("dkbans.command.punishNotes.added");
+    public static MessageComponent<?> COMMAND_PUNISH_NOTES_CLEARED = Text.ofMessageKey("dkbans.command.punishNotes.cleared");
+
     public static MessageComponent<?> COMMAND_FILTER_HELP = Text.ofMessageKey("dkbans.command.filter.help");
     public static MessageComponent<?> COMMAND_FILTER_RELOADED = Text.ofMessageKey("dkbans.command.filter.reloaded");
     public static MessageComponent<?> COMMAND_FILTER_AFFILIATION_AREA_NOT_FOUND = Text.ofMessageKey("dkbans.command.filter.affiliationArea.notFound");
