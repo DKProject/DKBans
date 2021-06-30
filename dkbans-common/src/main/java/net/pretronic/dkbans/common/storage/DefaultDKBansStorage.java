@@ -1000,7 +1000,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
         return database.createCollection("dkbans_history")
                 .field("Id", DataType.INTEGER, FieldOption.PRIMARY_KEY, FieldOption.AUTO_INCREMENT)
                 .field("PlayerId", DataType.UUID, FieldOption.NOT_NULL,FieldOption.INDEX)
-                .field("SessionId", DataType.INTEGER, ForeignKey.of(this.playerSessions, "Id"))
+                .field("SessionId", DataType.INTEGER, ForeignKey.of(this.playerSessions, "Id", ForeignKey.Option.SET_NULL, ForeignKey.Option.SET_NULL))
                 .field("Created", DataType.LONG, FieldOption.NOT_NULL)
                 .create();
     }
