@@ -997,14 +997,12 @@ public class DefaultDKBansStorage implements DKBansStorage {
     }
 
     private DatabaseCollection createHistoryCollection() {
-        QueryResult result = database.createCollection("dkbans_history")
+        return database.createCollection("dkbans_history")
                 .field("Id", DataType.INTEGER, FieldOption.PRIMARY_KEY, FieldOption.AUTO_INCREMENT)
                 .field("PlayerId", DataType.UUID, FieldOption.NOT_NULL,FieldOption.INDEX)
                 .field("SessionId", DataType.INTEGER, ForeignKey.of(this.playerSessions, "Id", ForeignKey.Option.SET_NULL, ForeignKey.Option.SET_NULL))
                 .field("Created", DataType.LONG, FieldOption.NOT_NULL)
-                .execute();
-        result.getProperties().forEach((s, o) -> System.out.println(s+":"+o));
-        return database.getCollection("dkbans_history");
+                .create();
     }
 
     private DatabaseCollection createHistoryVersionCollection() {
