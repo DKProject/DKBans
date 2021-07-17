@@ -35,6 +35,7 @@ import net.pretronic.dkbans.common.template.DefaultTemplate;
 import net.pretronic.dkbans.common.template.DefaultTemplateCategory;
 import net.pretronic.dkbans.common.template.DefaultTemplateGroup;
 import net.pretronic.dkbans.common.template.punishment.DefaultPunishmentTemplate;
+import net.pretronic.dkbans.minecraft.commands.history.HistoryResultEntry;
 import net.pretronic.dkbans.minecraft.config.DKBansConfig;
 import net.pretronic.libraries.message.bml.variable.describer.VariableDescriber;
 import net.pretronic.libraries.message.bml.variable.describer.VariableDescriberRegistry;
@@ -63,6 +64,7 @@ public class DescriberRegistrar {
         VariableDescriberRegistry.registerDescriber(DefaultTemplateGroup.class);
         VariableDescriberRegistry.registerDescriber(DefaultPunishmentTemplate.class);
         VariableDescriberRegistry.registerDescriber(DKBansScope.class);
+        VariableDescriberRegistry.registerDescriber(HistoryResultEntry.class);
         VariableDescriber<?> punishmentDescriber = VariableDescriberRegistry.registerDescriber(PunishmentType.class);
         ColoredString.makeDescriberColored(punishmentDescriber);
 

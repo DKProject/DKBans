@@ -50,32 +50,13 @@ public class MyHistoryPointsCommand extends BasicCommand {
         OnlineMinecraftPlayer player = (OnlineMinecraftPlayer) sender;
         DKBansPlayer dkBansPlayer = player.getAs(DKBansPlayer.class);
 
-        Collection<ResultEntry> points = new ArrayList<>();
+        Collection<HistoryResultEntry> points = new ArrayList<>();
         for (PlayerHistoryType type : DKBans.getInstance().getHistoryManager().getHistoryTypes()) {
             int result = dkBansPlayer.getHistory().calculate(CalculationType.POINTS,type);
-            points.add(new ResultEntry(type,result));
+            points.add(new HistoryResultEntry(type,result));
         }
 
         sender.sendMessage(Messages.COMMAND_MY_HISTORY_POINTS, VariableSet.create()
                 .addDescribed("points",points));
-    }
-
-    public static class ResultEntry {
-
-        private final PlayerHistoryType type;
-        private final int points;
-
-        public ResultEntry(PlayerHistoryType type, int points) {
-            this.type = type;
-            this.points = points;
-        }
-
-        public PlayerHistoryType getType() {
-            return type;
-        }
-
-        public int getPoints() {
-            return points;
-        }
     }
 }
