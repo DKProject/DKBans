@@ -60,7 +60,7 @@ public class MyHistoryPointsCommand extends BasicCommand {
                 .addDescribed("points",points));
     }
 
-    private static class ResultEntry {
+    public static class ResultEntry {
 
         private final PlayerHistoryType type;
         private final int points;
