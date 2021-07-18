@@ -258,7 +258,6 @@ messages:
   dkbans.command.report.list.details: '&8- &e{report.player.displayName} &8[@for("reason" in {report.reasons}, ${dkbans.command.report.list.details.loop},"&8, ")&8]'
   dkbans.command.report.list.details.loop: '&e{reason}'
 
-
   dkbans.command.filter.help: '${dkbans.prefix.chat} &6Filter help
   &7/filter list [area]
   &7/filter reload

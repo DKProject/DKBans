@@ -195,8 +195,8 @@ public class DefaultPlayerHistoryEntrySnapshotBuilder implements PlayerHistoryEn
 
             Pair<PlayerHistoryEntry, Integer> result = DKBans.getInstance().getStorage().createHistoryEntry(player, snapshot);
             snapshot.setInsertResult(result);
-            DKBans.getInstance().getEventBus().callEvent(DKBansPlayerPunishEvent.class,new DefaultDKBansPlayerPunishEvent(snapshot,player.getUniqueId(),player));
             ((DefaultPlayerHistory)history).push(result.getKey());
+            DKBans.getInstance().getEventBus().callEvent(DKBansPlayerPunishEvent.class,new DefaultDKBansPlayerPunishEvent(snapshot,player.getUniqueId(),player));
             if(player.getReport() != null){
                 player.getReport().accept(this.staff);
             }
