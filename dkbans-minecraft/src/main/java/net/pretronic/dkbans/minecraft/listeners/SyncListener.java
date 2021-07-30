@@ -55,13 +55,13 @@ public class SyncListener {
 
     @NetworkListener(priority = EventPriority.LOWEST,onlyRemote = true)
     public void onPlayerPunish(DKBansPlayerPunishEvent event){
-        DKBansPlayer player = ((MinecraftPlayerManager)dkbans.getPlayerManager()).getLoadedPlayer(event.getPlayerId());
+        DKBansPlayer player = dkbans.getPlayerManager().getLoadedPlayer(event.getPlayerId());
         if(player != null) ((DefaultPlayerHistory)player.getHistory()).push(event.getEntry());
     }
 
     @NetworkListener(priority = EventPriority.LOWEST,onlyRemote = true)
     public void onPlayerPunishUpdate(DKBansPlayerPunishUpdateEvent event){
-        DKBansPlayer player = ((MinecraftPlayerManager)dkbans.getPlayerManager()).getLoadedPlayer(event.getPlayerId());
+        DKBansPlayer player = dkbans.getPlayerManager().getLoadedPlayer(event.getPlayerId());
         if(player != null){
             PlayerHistoryEntry entry = ((DefaultPlayerHistory)player.getHistory()).getLoadedEntry(event.getNewSnapshot().getEntryId());
             if(entry != null) ((DefaultPlayerHistoryEntry)entry).setCurrent(event.getNewSnapshot());
