@@ -93,6 +93,7 @@ public class Messages {
     public static MessageComponent<?> UNPUNISH_SUCCESS_WARN = Text.ofMessageKey("dkbans.unpunish.success.warn");
 
     public static MessageComponent<?> TEAMCHAT_MESSAGE_FORMAT = Text.ofMessageKey("dkbans.teamchat.messageFormat");
+    public static MessageComponent<?> TEAMCHAT_LIST = Text.ofMessageKey("dkbans.teamchat.list");
 
     public static MessageComponent<?> CHAT_FILTER_SPAM_TOFAST = Text.ofMessageKey("dkbans.chat.filter.toFast");
     public static MessageComponent<?> CHAT_FILTER_SPAM_REPEAT = Text.ofMessageKey("dkbans.chat.filter.repeat");

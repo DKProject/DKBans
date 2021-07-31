@@ -25,23 +25,28 @@ import net.pretronic.dkbans.minecraft.BroadcastMessageChannels;
 import net.pretronic.dkbans.minecraft.PlayerSettingsKey;
 import net.pretronic.dkbans.minecraft.commands.util.CommandUtil;
 import net.pretronic.dkbans.minecraft.config.CommandConfig;
+import net.pretronic.dkbans.minecraft.config.DKBansConfig;
 import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.libraries.command.Completable;
 import net.pretronic.libraries.command.command.BasicCommand;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
 import net.pretronic.libraries.command.sender.CommandSender;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
+import net.pretronic.libraries.utility.Iterators;
 import net.pretronic.libraries.utility.StringUtil;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
+import org.mcnative.runtime.api.McNative;
 import org.mcnative.runtime.api.player.OnlineMinecraftPlayer;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
+import java.util.function.Predicate;
 
 public class TeamChatCommand extends BasicCommand implements Completable {
 
-    private final static List<String> COMMANDS = Arrays.asList("login","logout","toggle");
+    private final static List<String> COMMANDS = Arrays.asList("login","logout","toggle","list");
 
     public TeamChatCommand(ObjectOwner owner, CommandConfiguration configuration) {
         super(owner, configuration);
@@ -61,6 +66,7 @@ public class TeamChatCommand extends BasicCommand implements Completable {
             if(StringUtil.equalsOne(action,"logout","out")) changeLogin(player,current,false);
             else if(StringUtil.equalsOne(action,"login","in")) changeLogin(player,current,true);
             else if(StringUtil.equalsOne(action,"toggle","tog")) changeLogin(player,current,!current);
+            else if(StringUtil.equalsOne(action,"list","l")) sendOnlineList(player);
             else if(sender.hasPermission(CommandConfig.PERMISSION_COMMAND_TEAMCHAT_SEND)){
                 if(!current){
                     player.sendMessage(Messages.STAFF_STATUS_NOT, VariableSet.create()
@@ -89,6 +95,23 @@ public class TeamChatCommand extends BasicCommand implements Completable {
 
     private void changeLogin(OnlineMinecraftPlayer player, boolean current, boolean action){
         CommandUtil.changeLogin(Messages.PREFIX_TEAMCHAT,PlayerSettingsKey.TEAM_CHAT_LOGIN,player,current,action);
+    }
+
+    private void sendOnlineList(OnlineMinecraftPlayer player){
+        Collection<OnlineMinecraftPlayer> players;
+        if(McNative.getInstance().isNetworkAvailable()){
+            players = McNative.getInstance().getNetwork().getOnlinePlayers();
+        }else{
+            players = McNative.getInstance().getLocal().getOnlinePlayers();
+        }
+
+        List<OnlineMinecraftPlayer> members = Iterators.filter(players, player1 ->
+                player1.hasPermission(CommandConfig.PERMISSION_COMMAND_TEAMCHAT_RECEIVE)
+                && player1.hasSetting("DKBans", PlayerSettingsKey.TEAM_CHAT_LOGIN,true));
+        members.sort(Comparator.comparingInt(o -> o.getDesign().getPriority()));
+
+        player.sendMessage(Messages.TEAMCHAT_LIST,VariableSet.create().addDescribed("players",members));
+
     }
 
 

@@ -235,6 +235,8 @@ messages:
   dkbans.command.myHistoryPoints.loop: '&8» &e{entry.type}&8: &7{entry.points}'
 
   dkbans.teamchat.messageFormat: '${dkbans.prefix.teamchat} &e{sender.displayName} &8» &7{message}'
+  dkbans.teamchat.list: '${dkbans.prefix.teamchat} &7Eingeloggte team members&8: @for("player" in {players}, ${dkbans.teamchat.list.loop},"\n","\n")'
+  dkbans.teamchat.list.loop: ' &8- &e{player.displayName}'
 
   dkbans.command.report.help: '${dkbans.prefix} &cNutze&8: &7/report <player> <Reason>'
   dkbans.command.report.template.notExist: '${dkbans.prefix.report} &cDer Reportgrund &e{name} &cexistiert nicht.'
