@@ -232,12 +232,10 @@ public  class DefaultDKBansPlayer implements DKBansPlayer {
 
         long newOnlineTime = session.getDisconnectTime()-session.getConnectTime();
 
-        if(onlineTime == -1){
-            this.onlineTime = DKBans.getInstance().getStorage().getOnlineTime(uniqueId);
-        }
-
+        this.onlineTime = DKBans.getInstance().getStorage().getOnlineTime(uniqueId);
         DKBans.getInstance().getStorage().addOnlineTime(getUniqueId(), newOnlineTime);
         this.onlineTime = this.onlineTime + newOnlineTime;
+        this.onlineTimeTimeout = System.currentTimeMillis()+TimeUnit.MINUTES.toMinutes(10);
 
         this.sessionList.setActive(null);
     }
