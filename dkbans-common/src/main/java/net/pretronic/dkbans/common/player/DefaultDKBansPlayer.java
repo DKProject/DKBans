@@ -25,7 +25,6 @@ import net.pretronic.databasequery.api.query.result.QueryResult;
 import net.pretronic.databasequery.api.query.result.QueryResultEntry;
 import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.DKBansExecutor;
-import net.pretronic.dkbans.api.DKBansScope;
 import net.pretronic.dkbans.api.event.DKBansBypassCheckEvent;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.chatlog.PlayerChatLog;
@@ -232,11 +231,13 @@ public  class DefaultDKBansPlayer implements DKBansPlayer {
         DKBans.getInstance().getStorage().completePlayerSession(session);
 
         long newOnlineTime = session.getDisconnectTime()-session.getConnectTime();
-        DKBans.getInstance().getStorage().addOnlineTime(getUniqueId(), newOnlineTime);
 
-        if(onlineTime != -1){
-            this.onlineTime = this.onlineTime + newOnlineTime;
+        if(onlineTime == -1){
+            this.onlineTime = DKBans.getInstance().getStorage().getOnlineTime(uniqueId);
         }
+
+        DKBans.getInstance().getStorage().addOnlineTime(getUniqueId(), newOnlineTime);
+        this.onlineTime = this.onlineTime + newOnlineTime;
 
         this.sessionList.setActive(null);
     }
