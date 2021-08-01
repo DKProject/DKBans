@@ -258,7 +258,7 @@ messages:
 
   dkbans.teamchat.messageFormat: '${dkbans.prefix.teamchat} &e{sender.displayName} &8» &7{message}'
   dkbans.teamchat.list: '${dkbans.prefix.teamchat} &7Logged in team members&8: @for("player" in {players}, ${dkbans.teamchat.list.loop},"\n","\n")'
-  dkbans.teamchat.list.loop: ' &8- &e{player.displayName}'
+  dkbans.teamchat.list.loop: ' &8- &e{player.displayName} &8(&e{player.server.name}&8)'
 
   dkbans.command.report.help: '${dkbans.prefix} &cUsage&8: &7/report <player> <Reason>'
   dkbans.command.report.template.notExist: '${dkbans.prefix.report} &cThe report template &e{name} &cdoes not exist'

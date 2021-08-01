@@ -125,6 +125,11 @@ public class CommandConfig {
             .permission("dkbans.command.myhistorypoints")
             .create();
 
+    @DocumentKey("command.myHistory")
+    public static CommandConfiguration COMMAND_MY_HISTORY = CommandConfiguration.newBuilder()
+            .name("myhistory")
+            .permission("dkbans.command.myhistory")
+            .create();
 
     public static CommandConfiguration COMMAND_JOINME = CommandConfiguration.newBuilder()
             .name("joinme")
