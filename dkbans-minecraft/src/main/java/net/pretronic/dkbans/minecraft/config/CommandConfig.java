@@ -339,11 +339,7 @@ public class CommandConfig {
         }
 
         public DKBansScope getScope() {
-            String[] parts = scope.split(":");
-            if(parts.length == 2){
-                return DKBansScope.of(parts[0],parts[1]);
-            }
-            throw new IllegalArgumentException("Invalid scope format (key:name)");
+            return DKBansScope.parse(scope);
         }
     }
 }

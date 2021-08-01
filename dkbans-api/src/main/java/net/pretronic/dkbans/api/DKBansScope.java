@@ -23,9 +23,7 @@ package net.pretronic.dkbans.api;
 import net.pretronic.libraries.document.Document;
 import net.pretronic.libraries.utility.Validate;
 
-import java.util.Collection;
 import java.util.Objects;
-import java.util.UUID;
 
 public class DKBansScope {
 
@@ -61,6 +59,15 @@ public class DKBansScope {
         return new DKBansScope(data.getString("scopeType"), data.getString("scopeName"));
     }
 
+    public static DKBansScope parse(String scope){
+        if(scope == null) return null;
+        String[] parts = scope.split(":");
+        if(parts.length == 2){
+            return DKBansScope.of(parts[0],parts[1]);
+        }
+        throw new IllegalArgumentException("Invalid scope format (type:name)");
+    }
+
     public static DKBansScope of(String type, String name){
         return new DKBansScope(type,name);
     }
@@ -84,5 +91,10 @@ public class DKBansScope {
     @Override
     public int hashCode() {
         return Objects.hash(type, name);
+    }
+
+    @Override
+    public String toString() {
+        return type+":"+name;
     }
 }

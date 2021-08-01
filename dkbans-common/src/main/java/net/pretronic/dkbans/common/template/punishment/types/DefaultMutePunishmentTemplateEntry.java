@@ -58,7 +58,7 @@ public class DefaultMutePunishmentTemplateEntry extends DefaultPunishmentTemplat
                 } else {
                     duration = DurationProcessor.getStandard().parse(rawDuration);
                 }
-                return new DefaultMutePunishmentTemplateEntry(DKBansScope.fromData(data),duration);
+                return new DefaultMutePunishmentTemplateEntry(DKBansScope.parse(data.getString("scope")),duration);
             } catch (IllegalArgumentException exception) {
                 throw new IllegalArgumentException(String.format("Can't parse duration (%s) of mute punishment template entry", rawDuration));
             }
@@ -70,10 +70,7 @@ public class DefaultMutePunishmentTemplateEntry extends DefaultPunishmentTemplat
             Document data = Document.newDocument()
                     .add("type", entry.getType().getName())
                     .add("duration", DurationProcessor.getStandard().format(entry.getDuration()));
-            if(entry.getScope() != null) {
-                data.add("scopeType", entry.getScope().getType())
-                        .add("scopeName", entry.getScope().getName());
-            }
+            if(entry.getScope() != null) data.set("scope",entry.getScope().toString());
             return data;
         }
     }

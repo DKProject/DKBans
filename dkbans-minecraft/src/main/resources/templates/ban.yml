@@ -98,6 +98,31 @@ templates:
     points:
       addedPoints: 7
       pointsDivider: 2.0
+  6:
+    name: CityBuild
+    display: CityBuild (fraud)
+    permission: dkbans.ban.reason.citybuild
+    aliases:
+      - fraud
+      - cb
+    hidden: false
+    historyType: NETWORK
+    category: Bans
+    durations:
+      1:
+        type: BAN
+        duration: 14d
+        scope: 'SERVER_GROUP:CityBuild'
+      2:
+        type: BAN
+        duration: 30d
+        scope: 'SERVER_GROUP:CityBuild'
+      3:
+        type: BAN
+        duration: 30d
+    points:
+      addedPoints: 7
+      pointsDivider: 2.0
   5:
     name: Permanently
     display: Permanently
@@ -110,7 +135,7 @@ templates:
     category: Bans
     durations:
       1:
-        type: MUTE
+        type: BAN
         duration: -1
     points:
       addedPoints: 7

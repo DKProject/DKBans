@@ -51,7 +51,6 @@ public class DefaultBanPunishmentTemplateEntry extends DefaultPunishmentTemplate
         public PunishmentTemplateEntry create(Document data) {
             String rawDuration = data.getString("duration");
             try {
-
                 Duration duration;
                 if(rawDuration == null || rawDuration.trim().equals("-1") || rawDuration.trim().equals("-1.0")
                         || rawDuration.trim().equals("0") || rawDuration.trim().equals("0.0")) {
@@ -59,7 +58,7 @@ public class DefaultBanPunishmentTemplateEntry extends DefaultPunishmentTemplate
                 } else {
                     duration = DurationProcessor.getStandard().parse(rawDuration);
                 }
-                return new DefaultBanPunishmentTemplateEntry(DKBansScope.fromData(data),duration);
+                return new DefaultBanPunishmentTemplateEntry(DKBansScope.parse(data.getString("scope")),duration);
             } catch (IllegalArgumentException exception) {
                 throw new IllegalArgumentException(String.format("Can't parse duration (%s) of ban punishment template entry", rawDuration));
             }
@@ -72,10 +71,7 @@ public class DefaultBanPunishmentTemplateEntry extends DefaultPunishmentTemplate
             Document data = Document.newDocument()
                     .add("type", entry.getType().getName())
                     .add("duration", DurationProcessor.getStandard().format(entry.getDuration()));
-            if(entry.getScope() != null) {
-                data.add("scopeType", entry.getScope().getType())
-                        .add("scopeName", entry.getScope().getName());
-            }
+            if(entry.getScope() != null) data.set("scope",entry.getScope().toString());
             return data;
         }
     }
