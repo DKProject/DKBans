@@ -12,6 +12,7 @@ package net.pretronic.dkbans.minecraft;
 
 import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.DKBansScope;
+import net.pretronic.dkbans.api.player.OnlineTimeTopResult;
 import net.pretronic.dkbans.api.player.history.PunishmentType;
 import net.pretronic.dkbans.api.player.report.PlayerReportEntry;
 import net.pretronic.dkbans.common.broadcast.DefaultBroadcast;
@@ -143,6 +144,10 @@ public class DescriberRegistrar {
 
         VariableDescriber<DefaultPlayerReport> reportDescriber = VariableDescriberRegistry.registerDescriber(DefaultPlayerReport.class);
         reportDescriber.registerFunction("reasons", report -> new HashSet<>(Iterators.map(report.getEntries(), (Function<PlayerReportEntry, Object>) PlayerReportEntry::getReason)));
+
+        VariableDescriber<OnlineTimeTopResult> onlineTimeDescriber = VariableDescriberRegistry.registerDescriber(OnlineTimeTopResult.class);
+        onlineTimeDescriber.registerFunction("formattedShort",  time -> DurationProcessor.getStandard().formatShort(TimeUnit.MILLISECONDS.toSeconds(time.getOnlineTime())));
+        onlineTimeDescriber.registerFunction("formattedLong",  time -> DurationProcessor.getStandard().format(TimeUnit.MILLISECONDS.toSeconds(time.getOnlineTime())));
     }
 
 }

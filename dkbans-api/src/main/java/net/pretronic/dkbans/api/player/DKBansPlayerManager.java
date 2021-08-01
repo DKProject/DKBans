@@ -23,6 +23,7 @@ package net.pretronic.dkbans.api.player;
 import net.pretronic.dkbans.api.DKBansExecutor;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 public interface DKBansPlayerManager {
@@ -41,6 +42,7 @@ public interface DKBansPlayerManager {
 
     DKBansExecutor getExecutor(String name);
 
+    List<OnlineTimeTopResult> getTopOnlineTime(int page,int pageSize);
 
 
     void registerSpecialExecutor(DKBansExecutor executor);

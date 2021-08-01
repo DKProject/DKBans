@@ -296,6 +296,9 @@ public class CommandConfig {
     public static final String PERMISSION_COMMAND_TEAMCHAT_RECEIVE = "dkbans.teamchat.receive";
     public static final String PERMISSION_COMMAND_TEAMCHAT_SEND = "dkbans.teamchat.send";
 
+    public static final String PERMISSION_ONLINETIME_OTHER = "dkbans.onlinetime.other";
+    public static final String PERMISSION_ONLINETIME_TOP = "dkbans.onlinetime.top";
+
     public static final String PERMISSION_COMMAND_REPORT_STAFF = "dkbans.report.staff";
 
     public static final String PERMISSION_PING_OTHER = "dkbans.ping.other";

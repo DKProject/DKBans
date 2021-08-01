@@ -217,8 +217,6 @@ public class DKBansPlugin extends MinecraftPlugin {
         });
     }
 
-
-
     private void registerDocumentAdapters(){
         DocumentRegistry.getDefaultContext().registerMappingAdapter(JoinMe.class, MinecraftJoinMe.class);
         DocumentRegistry.getDefaultContext().registerMappingAdapter(PlayerReport.class, DefaultPlayerReport.class);
