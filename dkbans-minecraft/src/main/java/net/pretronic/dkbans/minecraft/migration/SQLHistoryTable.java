@@ -30,7 +30,7 @@ import net.pretronic.dkbans.common.DefaultDKBans;
 
 public class SQLHistoryTable extends Migration {
 
-    private static final String FOREIGN_KEY_GETTER_QUERY = "SELECT CONSTRAINT_NAME,concat('ALTER TABLE ',CONSTRAINT_SCHEMA,'.', TABLE_NAME, ' DROP FOREIGN KEY ', CONSTRAINT_NAME, ';')\n" +
+    private static final String FOREIGN_KEY_GETTER_QUERY = "SELECT CONSTRAINT_NAME,concat('USE ',CONSTRAINT_SCHEMA,';ALTER TABLE ',CONSTRAINT_SCHEMA,'.', TABLE_NAME, ' DROP FOREIGN KEY ', CONSTRAINT_NAME, ';')\n" +
             "FROM information_schema.key_column_usage\n" +
             "WHERE CONSTRAINT_SCHEMA = '%database%'\n" +
             "AND TABLE_NAME='dkbans_history'\n" +
