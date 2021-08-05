@@ -57,6 +57,7 @@ import net.pretronic.dkbans.minecraft.joinme.MinecraftJoinMe;
 import net.pretronic.dkbans.minecraft.joinme.MinecraftJoinMeManager;
 import net.pretronic.dkbans.minecraft.listeners.*;
 import net.pretronic.dkbans.minecraft.migration.DKBansLegacyMigration;
+import net.pretronic.dkbans.minecraft.migration.SQLHistoryTable;
 import net.pretronic.dkbans.minecraft.player.MinecraftPlayerManager;
 import net.pretronic.libraries.command.command.Command;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
@@ -105,6 +106,7 @@ public class DKBansPlugin extends MinecraftPlugin {
 
         dkBans.getFilterManager().initialize();
         dkBans.getMigrationManager().registerMigration(new DKBansLegacyMigration());
+        dkBans.getMigrationManager().registerMigration(new SQLHistoryTable());
         initBroadcast();
 
         registerListeners();
