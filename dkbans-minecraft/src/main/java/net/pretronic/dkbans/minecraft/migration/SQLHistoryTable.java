@@ -36,10 +36,9 @@ public class SQLHistoryTable extends Migration {
             "AND TABLE_NAME='dkbans_history'\n" +
             "AND REFERENCED_TABLE_NAME IS NOT NULL;";
 
-    private static final String CREATE_FOREIGN_KEY_QUERY = "alter table %database%.dkbans_history " +
+    private static final String CREATE_FOREIGN_KEY_QUERY = "alter table `%database%`.`dkbans_history` " +
             "add constraint `%constraint_name%` " +
-            "foreign key (SessionId) references %database%.dkbans_player_sessions (Id) " +
-            "on update set null on delete set null;";
+            "foreign key (SessionId) references `%database%`.`dkbans_player_sessions` (Id) on update set null on delete set null;\n";
 
     public SQLHistoryTable() {
         super("sql-history-table");
