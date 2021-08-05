@@ -88,5 +88,12 @@
             <version>${dependency.pretronic.libraries}</version>
             <scope>provided</scope>
         </dependency>
+        <!--Temporary for migration-->
+        <dependency>
+            <groupId>net.pretronic.databasequery</groupId>
+            <artifactId>pretronicdatabasequery-sql</artifactId>
+            <version>${dependency.pretronic.databasequery}</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 </project>
