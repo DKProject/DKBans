@@ -186,6 +186,7 @@ public class Messages {
     public static MessageComponent<?> COMMAND_FILTER_CREATED = Text.ofMessageKey("dkbans.command.filter.created");
 
     public static MessageComponent<?> COMMAND_TEMPLATE_IMPORT = Text.ofMessageKey("dkbans.command.dkbans.template.import");
+    public static MessageComponent<?> COMMAND_TEMPLATE_EXPORT = Text.ofMessageKey("dkbans.command.dkbans.template.export");
 
     public static MessageComponent<?> COMMAND_REPORT_HELP = Text.ofMessageKey("dkbans.command.report.help");
     public static MessageComponent<?> COMMAND_REPORT_TEMPLATE_NOT_EXIST = Text.ofMessageKey("dkbans.command.report.template.notExist");

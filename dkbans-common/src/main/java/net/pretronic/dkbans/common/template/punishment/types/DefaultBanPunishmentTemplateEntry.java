@@ -70,7 +70,7 @@ public class DefaultBanPunishmentTemplateEntry extends DefaultPunishmentTemplate
 
             Document data = Document.newDocument()
                     .add("type", entry.getType().getName())
-                    .add("duration", DurationProcessor.getStandard().format(entry.getDuration()));
+                    .add("duration", DurationProcessor.getStandard().formatShort(entry.getDuration()));
             if(entry.getScope() != null) data.set("scope",entry.getScope().toString());
             return data;
         }
