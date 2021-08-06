@@ -137,12 +137,6 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>net.pretronic.dkbans</groupId>
-            <artifactId>dkbans-legacy</artifactId>
-            <version>${project.version}</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
             <groupId>net.pretronic.dkperms</groupId>
             <artifactId>dkperms-api</artifactId>
             <version>1.7.20.213</version>

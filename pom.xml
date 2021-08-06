@@ -33,7 +33,6 @@
         <module>dkbans-api</module>
         <module>dkbans-common</module>
         <module>dkbans-minecraft</module>
-        <module>dkbans-legacy</module>
     </modules>
 
     <distributionManagement>
