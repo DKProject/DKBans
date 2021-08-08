@@ -140,7 +140,7 @@ public class PerformListener {
     public void onPlayerPunishUpdate(DKBansPlayerPunishUpdateEvent event){
         OnlineMinecraftPlayer player = McNative.getInstance().getLocal().getConnectedPlayer(event.getPlayer().getUniqueId());
         if(player != null){
-            if(event.getNewSnapshot().getPunishmentType().equals(PunishmentType.BAN)){
+            if(event.getNewSnapshot().getPunishmentType().equals(PunishmentType.BAN) && event.getNewSnapshot().isActive()){
                 MessageComponent<?> message = event.getNewSnapshot().isPermanently()
                         ? Messages.PUNISH_MESSAGE_BAN_PERMANENTLY : Messages.PUNISH_MESSAGE_BAN_TEMPORARY;
 
@@ -190,7 +190,9 @@ public class PerformListener {
                 .addDescribed("player", player);
 
         boolean kick = snapshot.getPunishmentType().equals(PunishmentType.KICK) || snapshot.getPunishmentType().equals(PunishmentType.BAN);
+        boolean kickServer = kick && !snapshot.getScope().isGlobal();
         if(kick) player.kick(message, variables);
+      //  else if(kickServer) player.getServer().
         else player.sendMessage(message, variables);
     }
 
