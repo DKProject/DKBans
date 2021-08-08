@@ -105,6 +105,7 @@ public class DefaultPlayerHistoryEntry implements PlayerHistoryEntry {
 
     @Override
     public PlayerHistoryEntrySnapshot getCurrent() {
+        if(current == null) throw new IllegalArgumentException("Latest snapshot is not present (Might be a synchronization issue)");
         return current;
     }
 
