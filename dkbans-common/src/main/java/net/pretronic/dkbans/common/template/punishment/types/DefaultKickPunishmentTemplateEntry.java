@@ -38,17 +38,14 @@ public class DefaultKickPunishmentTemplateEntry extends DefaultPunishmentTemplat
 
         @Override
         public PunishmentTemplateEntry create(Document data) {
-            return new DefaultKickPunishmentTemplateEntry(DKBansScope.fromData(data));
+            return new DefaultKickPunishmentTemplateEntry(DKBansScope.parse(data.getString("scope")));
         }
 
         @Override
         public Document createData(PunishmentTemplateEntry entry) {
             Document data = Document.newDocument()
                     .add("type", entry.getType().getName());
-            if(entry.getScope() != null) {
-                data.add("scopeType", entry.getScope().getType())
-                        .add("scopeName", entry.getScope().getName());
-            }
+            if(entry.getScope() != null) data.set("scope",entry.getScope().toString());
             return data;
         }
     }

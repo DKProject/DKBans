@@ -82,7 +82,7 @@ public class TemplatePunishCommand extends BasicCommand implements Completable {
         }
 
         boolean override = arguments.length >= 3 && arguments[2].equalsIgnoreCase("--override");
-        int messageIndex = override ? 4 : 3;
+        int messageIndex = override ? 3 : 2;
         String message = null;
 
         if(arguments.length > messageIndex){

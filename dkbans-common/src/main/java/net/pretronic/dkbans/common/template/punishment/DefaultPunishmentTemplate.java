@@ -87,9 +87,8 @@ public class DefaultPunishmentTemplate extends DefaultTemplate implements Punish
                 .reason(getDisplayName())
                 .template(this)
                 .points(addedPoints);
-        if(entry instanceof DurationAble) {
-            builder.duration(((DurationAble)entry).getDuration());
-        }
+        if(entry.getScope() != null) builder.scope(entry.getScope());
+        if(entry instanceof DurationAble) builder.duration(((DurationAble)entry).getDuration());
     }
 
     @Override
@@ -184,7 +183,6 @@ public class DefaultPunishmentTemplate extends DefaultTemplate implements Punish
 
             data.set("durations", entryToDocument(template));
             data.set("points", Document.newDocument()
-                    .set("durations", entryToDocument(template))
                     .set("addedPoints", template.addedPoints)
                     .set("pointsDivider", template.pointsDivider));
             return data;

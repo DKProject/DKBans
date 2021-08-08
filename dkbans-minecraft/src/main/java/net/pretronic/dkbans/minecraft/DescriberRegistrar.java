@@ -12,6 +12,7 @@ package net.pretronic.dkbans.minecraft;
 
 import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.DKBansScope;
+import net.pretronic.dkbans.api.player.OnlineTimeTopResult;
 import net.pretronic.dkbans.api.player.history.PunishmentType;
 import net.pretronic.dkbans.api.player.report.PlayerReportEntry;
 import net.pretronic.dkbans.common.broadcast.DefaultBroadcast;
@@ -35,6 +36,7 @@ import net.pretronic.dkbans.common.template.DefaultTemplate;
 import net.pretronic.dkbans.common.template.DefaultTemplateCategory;
 import net.pretronic.dkbans.common.template.DefaultTemplateGroup;
 import net.pretronic.dkbans.common.template.punishment.DefaultPunishmentTemplate;
+import net.pretronic.dkbans.minecraft.commands.history.HistoryResultEntry;
 import net.pretronic.dkbans.minecraft.config.DKBansConfig;
 import net.pretronic.libraries.message.bml.variable.describer.VariableDescriber;
 import net.pretronic.libraries.message.bml.variable.describer.VariableDescriberRegistry;
@@ -63,6 +65,7 @@ public class DescriberRegistrar {
         VariableDescriberRegistry.registerDescriber(DefaultTemplateGroup.class);
         VariableDescriberRegistry.registerDescriber(DefaultPunishmentTemplate.class);
         VariableDescriberRegistry.registerDescriber(DKBansScope.class);
+        VariableDescriberRegistry.registerDescriber(HistoryResultEntry.class);
         VariableDescriber<?> punishmentDescriber = VariableDescriberRegistry.registerDescriber(PunishmentType.class);
         ColoredString.makeDescriberColored(punishmentDescriber);
 
@@ -141,6 +144,10 @@ public class DescriberRegistrar {
 
         VariableDescriber<DefaultPlayerReport> reportDescriber = VariableDescriberRegistry.registerDescriber(DefaultPlayerReport.class);
         reportDescriber.registerFunction("reasons", report -> new HashSet<>(Iterators.map(report.getEntries(), (Function<PlayerReportEntry, Object>) PlayerReportEntry::getReason)));
+
+        VariableDescriber<OnlineTimeTopResult> onlineTimeDescriber = VariableDescriberRegistry.registerDescriber(OnlineTimeTopResult.class);
+        onlineTimeDescriber.registerFunction("formattedShort",  time -> DurationProcessor.getStandard().formatShort(TimeUnit.MILLISECONDS.toSeconds(time.getOnlineTime())));
+        onlineTimeDescriber.registerFunction("formattedLong",  time -> DurationProcessor.getStandard().format(TimeUnit.MILLISECONDS.toSeconds(time.getOnlineTime())));
     }
 
 }

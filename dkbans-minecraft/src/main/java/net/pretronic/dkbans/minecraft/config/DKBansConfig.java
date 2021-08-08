@@ -175,6 +175,7 @@ public class DKBansConfig {
         return new Pair<>(groupCount, templateCount);
     }
 
+    //@Todo Methode to long, please optimize
     private static TemplateGroup loadTemplateConfig(DKBans dkBans, Document document, String fileName) {
 
         String groupName = document.getString("name");

@@ -33,5 +33,6 @@ public class TemplateCommand extends MainCommand {
                 .permission(CommandConfig.PERMISSION_ADMIN)
                 .create());
         registerCommand(new TemplateImportCommand(owner));
+        registerCommand(new TemplateExportCommand(owner));
     }
 }

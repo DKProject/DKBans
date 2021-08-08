@@ -185,7 +185,6 @@ public class DefaultUnPunishmentTemplate extends DefaultTemplate implements UnPu
             data.set("scopes", template.getScopes());
             data.set("durations", entryToDocument(template));
             data.set("points", Document.newDocument()
-                    .set("durations", entryToDocument(template))
                     .set("removedPoints", template.removedPoints)
                     .set("pointsDivider", template.pointsDivider));
             return data;

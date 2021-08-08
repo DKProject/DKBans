@@ -125,6 +125,11 @@ public class CommandConfig {
             .permission("dkbans.command.myhistorypoints")
             .create();
 
+    @DocumentKey("command.myHistory")
+    public static CommandConfiguration COMMAND_MY_HISTORY = CommandConfiguration.newBuilder()
+            .name("myhistory")
+            .permission("dkbans.command.myhistory")
+            .create();
 
     public static CommandConfiguration COMMAND_JOINME = CommandConfiguration.newBuilder()
             .name("joinme")
@@ -291,6 +296,9 @@ public class CommandConfig {
     public static final String PERMISSION_COMMAND_TEAMCHAT_RECEIVE = "dkbans.teamchat.receive";
     public static final String PERMISSION_COMMAND_TEAMCHAT_SEND = "dkbans.teamchat.send";
 
+    public static final String PERMISSION_ONLINETIME_OTHER = "dkbans.onlinetime.other";
+    public static final String PERMISSION_ONLINETIME_TOP = "dkbans.onlinetime.top";
+
     public static final String PERMISSION_COMMAND_REPORT_STAFF = "dkbans.report.staff";
 
     public static final String PERMISSION_PING_OTHER = "dkbans.ping.other";
@@ -331,11 +339,7 @@ public class CommandConfig {
         }
 
         public DKBansScope getScope() {
-            String[] parts = scope.split(":");
-            if(parts.length == 2){
-                return DKBansScope.of(parts[0],parts[1]);
-            }
-            throw new IllegalArgumentException("Invalid scope format (key:name)");
+            return DKBansScope.parse(scope);
         }
     }
 }

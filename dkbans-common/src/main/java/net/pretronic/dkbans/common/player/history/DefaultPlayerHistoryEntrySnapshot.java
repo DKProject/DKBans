@@ -32,6 +32,7 @@ import net.pretronic.dkbans.common.DefaultDKBans;
 import net.pretronic.libraries.document.Document;
 import net.pretronic.libraries.document.type.DocumentFileType;
 import net.pretronic.libraries.utility.annonations.Internal;
+import net.pretronic.libraries.utility.exception.OperationFailedException;
 import net.pretronic.libraries.utility.map.Pair;
 
 import java.util.UUID;
@@ -113,6 +114,7 @@ public class DefaultPlayerHistoryEntrySnapshot implements PlayerHistoryEntrySnap
 
     @Override
     public PunishmentType getPunishmentType() {
+        if(punishmentType == null) throw new OperationFailedException("Punishment type not defined");
         return punishmentType;
     }
 
