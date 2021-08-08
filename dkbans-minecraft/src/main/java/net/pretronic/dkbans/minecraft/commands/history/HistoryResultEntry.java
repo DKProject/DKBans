@@ -1,9 +1,8 @@
 /*
- * (C) Copyright 2019 The DKBans Project (Davide Wietlisbach)
+ * (C) Copyright 2021 The DKBans Project (Davide Wietlisbach & Philipp Elvin Friedhoff)
  *
  * @author Davide Wietlisbach
- * @since 03.01.19 13:55
- * @Website https://github.com/DevKrieger/DKBans
+ * @since 17.07.21, 11:52
  *
  * The DKBans Project is under the Apache License, version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,23 +17,26 @@
  * under the License.
  */
 
-package ch.dkrieger.bansystem.lib.player.history;
+package net.pretronic.dkbans.minecraft.commands.history;
 
-public class HistoryPoints {
+import net.pretronic.dkbans.api.player.history.PlayerHistoryType;
 
-    private int points;
-    private BanType historyType;
+public class HistoryResultEntry {
 
-    public HistoryPoints(int points, BanType historyType) {
+    private final PlayerHistoryType type;
+    private final int points;
+
+    public HistoryResultEntry(PlayerHistoryType type, int points) {
+        this.type = type;
         this.points = points;
-        this.historyType = historyType;
+    }
+
+    public PlayerHistoryType getType() {
+        return type;
     }
 
     public int getPoints() {
         return points;
     }
 
-    public BanType getHistoryType() {
-        return historyType;
-    }
 }

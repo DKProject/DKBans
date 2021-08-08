@@ -139,7 +139,7 @@ public class PlayerListener {
         }
     }
 
-    @Listener(priority = EventPriority.HIGH,execution = ExecutionType.ASYNC)
+    @Listener(priority = EventPriority.LOW,execution = ExecutionType.ASYNC)
     public void onPlayerPostLogin(MinecraftPlayerPostLoginEvent event){
         OnlineMinecraftPlayer player = event.getOnlinePlayer();
 

@@ -23,6 +23,7 @@ package net.pretronic.dkbans.api.storage;
 import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.filter.Filter;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
+import net.pretronic.dkbans.api.player.OnlineTimeTopResult;
 import net.pretronic.dkbans.api.player.chatlog.ChatLogEntry;
 import net.pretronic.dkbans.api.player.history.*;
 import net.pretronic.dkbans.api.player.ipaddress.IpAddressBlock;
@@ -125,6 +126,8 @@ public interface DKBansStorage {
 
 
     long getOnlineTime(UUID playerId);
+
+    List<OnlineTimeTopResult> getTopOnlineTime(int page, int pageSize);
 
     void addOnlineTime(UUID playerId, long onlineTime);
 

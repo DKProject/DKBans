@@ -22,9 +22,11 @@ package net.pretronic.dkbans.minecraft.player;
 
 import net.pretronic.databasequery.api.query.result.QueryResult;
 import net.pretronic.databasequery.api.query.result.QueryResultEntry;
+import net.pretronic.dkbans.api.DKBans;
 import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.api.player.DKBansPlayerManager;
+import net.pretronic.dkbans.api.player.OnlineTimeTopResult;
 import net.pretronic.dkbans.common.DefaultDKBans;
 import net.pretronic.dkbans.common.player.DefaultDKBansPlayer;
 import net.pretronic.libraries.caching.Cache;
@@ -40,6 +42,7 @@ import org.mcnative.runtime.api.player.MinecraftPlayer;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -104,6 +107,11 @@ public class MinecraftPlayerManager implements DKBansPlayerManager {
         DKBansExecutor executor = Iterators.findOne(this.specialExecutors, o -> o.getName().equalsIgnoreCase(name));
         if(executor != null) return executor;
         return getPlayer(name);
+    }
+
+    @Override
+    public List<OnlineTimeTopResult> getTopOnlineTime(int page, int pageSize) {
+        return DKBans.getInstance().getStorage().getTopOnlineTime(page,pageSize);
     }
 
     @Override

@@ -35,6 +35,7 @@ import net.pretronic.dkbans.api.DKBansExecutor;
 import net.pretronic.dkbans.api.DKBansScope;
 import net.pretronic.dkbans.api.filter.Filter;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
+import net.pretronic.dkbans.api.player.OnlineTimeTopResult;
 import net.pretronic.dkbans.api.player.chatlog.ChatLogEntry;
 import net.pretronic.dkbans.api.player.history.*;
 import net.pretronic.dkbans.api.player.ipaddress.IpAddressBlock;
@@ -69,6 +70,7 @@ import net.pretronic.libraries.utility.map.Pair;
 import java.net.InetAddress;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Function;
 
 public class DefaultDKBansStorage implements DKBansStorage {
 
@@ -650,6 +652,20 @@ public class DefaultDKBansStorage implements DKBansStorage {
     }
 
     @Override
+    public List<OnlineTimeTopResult> getTopOnlineTime(int page, int pageSize) {
+        QueryResult result = this.onlinetime.find().orderBy("OnlineTime",SearchOrder.DESC).page(page,pageSize).execute();
+        List<OnlineTimeTopResult> resultList = new ArrayList<>();
+        int index = ((page-1)*pageSize)+1;
+        for (QueryResultEntry entry : result) {
+            resultList.add(new OnlineTimeTopResult(index
+                    ,DKBans.getInstance().getPlayerManager().getPlayer(entry.getUniqueId("PlayerId"))
+                    ,entry.getLong("OnlineTIme")));
+            index++;
+        }
+        return resultList;
+    }
+
+    @Override
     public void addOnlineTime(UUID playerId, long onlineTime) {
         Validate.notNull(playerId);
         this.onlinetime.update().add("OnlineTime", onlineTime).where("PlayerId", playerId).execute();
@@ -1000,7 +1016,7 @@ public class DefaultDKBansStorage implements DKBansStorage {
         return database.createCollection("dkbans_history")
                 .field("Id", DataType.INTEGER, FieldOption.PRIMARY_KEY, FieldOption.AUTO_INCREMENT)
                 .field("PlayerId", DataType.UUID, FieldOption.NOT_NULL,FieldOption.INDEX)
-                .field("SessionId", DataType.INTEGER, ForeignKey.of(this.playerSessions, "Id"))
+                .field("SessionId", DataType.INTEGER, ForeignKey.of(this.playerSessions, "Id", ForeignKey.Option.SET_NULL, ForeignKey.Option.SET_NULL))
                 .field("Created", DataType.LONG, FieldOption.NOT_NULL)
                 .create();
     }

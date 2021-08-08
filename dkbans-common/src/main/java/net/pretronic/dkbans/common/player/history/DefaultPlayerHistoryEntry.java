@@ -47,9 +47,9 @@ public class DefaultPlayerHistoryEntry implements PlayerHistoryEntry {
     private final UUID playerId;
     private final int sessionId;
     private final long created;
+    private PlayerHistoryEntrySnapshot current;
 
     private transient PlayerHistory history;
-    private transient PlayerHistoryEntrySnapshot current;
     private transient List<PlayerHistoryEntrySnapshot> snapshots;
 
     public DefaultPlayerHistoryEntry(int id, UUID playerId,int sessionId, long created, PlayerHistory history
@@ -105,6 +105,7 @@ public class DefaultPlayerHistoryEntry implements PlayerHistoryEntry {
 
     @Override
     public PlayerHistoryEntrySnapshot getCurrent() {
+        if(current == null) throw new IllegalArgumentException("Latest snapshot is not present (Might be a synchronization issue)");
         return current;
     }
 

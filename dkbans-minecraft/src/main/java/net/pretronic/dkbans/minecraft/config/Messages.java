@@ -70,6 +70,7 @@ public class Messages {
 
     public static MessageComponent<?> ONLINE_TIME_SELF = Text.ofMessageKey("dkbans.onlineTime.self");
     public static MessageComponent<?> ONLINE_TIME_OTHER = Text.ofMessageKey("dkbans.onlineTime.other");
+    public static MessageComponent<?> ONLINE_TIME_TOP = Text.ofMessageKey("dkbans.onlineTime.top");
 
     public static MessageComponent<?> PUNISH_TEMPLATE_NO_PERMISSION = Text.ofMessageKey("dkbans.punish.template.noPermission");
     public static MessageComponent<?> PUNISH_TEMPLATE_LIST = Text.ofMessageKey("dkbans.punish.template.list");
@@ -93,6 +94,7 @@ public class Messages {
     public static MessageComponent<?> UNPUNISH_SUCCESS_WARN = Text.ofMessageKey("dkbans.unpunish.success.warn");
 
     public static MessageComponent<?> TEAMCHAT_MESSAGE_FORMAT = Text.ofMessageKey("dkbans.teamchat.messageFormat");
+    public static MessageComponent<?> TEAMCHAT_LIST = Text.ofMessageKey("dkbans.teamchat.list");
 
     public static MessageComponent<?> CHAT_FILTER_SPAM_TOFAST = Text.ofMessageKey("dkbans.chat.filter.toFast");
     public static MessageComponent<?> CHAT_FILTER_SPAM_REPEAT = Text.ofMessageKey("dkbans.chat.filter.repeat");
@@ -184,6 +186,7 @@ public class Messages {
     public static MessageComponent<?> COMMAND_FILTER_CREATED = Text.ofMessageKey("dkbans.command.filter.created");
 
     public static MessageComponent<?> COMMAND_TEMPLATE_IMPORT = Text.ofMessageKey("dkbans.command.dkbans.template.import");
+    public static MessageComponent<?> COMMAND_TEMPLATE_EXPORT = Text.ofMessageKey("dkbans.command.dkbans.template.export");
 
     public static MessageComponent<?> COMMAND_REPORT_HELP = Text.ofMessageKey("dkbans.command.report.help");
     public static MessageComponent<?> COMMAND_REPORT_TEMPLATE_NOT_EXIST = Text.ofMessageKey("dkbans.command.report.template.notExist");

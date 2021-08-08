@@ -39,6 +39,7 @@ import net.pretronic.dkbans.minecraft.commands.broadcast.BroadcastCommand;
 import net.pretronic.dkbans.minecraft.commands.broadcastgroup.BroadcastGroupCommand;
 import net.pretronic.dkbans.minecraft.commands.dkbans.DKBansCommand;
 import net.pretronic.dkbans.minecraft.commands.history.HistoryCommand;
+import net.pretronic.dkbans.minecraft.commands.history.MyHistoryCommand;
 import net.pretronic.dkbans.minecraft.commands.history.MyHistoryPointsCommand;
 import net.pretronic.dkbans.minecraft.commands.history.ResetHistoryCommand;
 import net.pretronic.dkbans.minecraft.commands.ip.IpBlockCommand;
@@ -55,7 +56,7 @@ import net.pretronic.dkbans.minecraft.integration.labymod.LabyModServiceListener
 import net.pretronic.dkbans.minecraft.joinme.MinecraftJoinMe;
 import net.pretronic.dkbans.minecraft.joinme.MinecraftJoinMeManager;
 import net.pretronic.dkbans.minecraft.listeners.*;
-import net.pretronic.dkbans.minecraft.migration.DKBansLegacyMigration;
+import net.pretronic.dkbans.minecraft.migration.SQLHistoryTable;
 import net.pretronic.dkbans.minecraft.player.MinecraftPlayerManager;
 import net.pretronic.libraries.command.command.Command;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
@@ -103,7 +104,7 @@ public class DKBansPlugin extends MinecraftPlugin {
         loadConfigs();
 
         dkBans.getFilterManager().initialize();
-        dkBans.getMigrationManager().registerMigration(new DKBansLegacyMigration());
+        dkBans.getMigrationManager().registerMigration(new SQLHistoryTable());
         initBroadcast();
 
         registerListeners();
@@ -159,6 +160,7 @@ public class DKBansPlugin extends MinecraftPlugin {
         getRuntime().getLocal().getCommandManager().registerCommand(new HistoryCommand(this, CommandConfig.COMMAND_HISTORY));
         getRuntime().getLocal().getCommandManager().registerCommand(new ResetHistoryCommand(this, CommandConfig.COMMAND_RESET_HISTORY));
         getRuntime().getLocal().getCommandManager().registerCommand(new MyHistoryPointsCommand(this, CommandConfig.COMMAND_MY_HISTORY_POINTS));
+        getRuntime().getLocal().getCommandManager().registerCommand(new MyHistoryCommand(this, CommandConfig.COMMAND_MY_HISTORY));
         getRuntime().getLocal().getCommandManager().registerCommand(new PunishInfoCommand(this, CommandConfig.COMMAND_PUNISH_INFO_CONFIGURATION));
         getRuntime().getLocal().getCommandManager().registerCommand(new PunishEditCommand(this, CommandConfig.COMMAND_PUNISH_EDIT_CONFIGURATION));
         getRuntime().getLocal().getCommandManager().registerCommand(new PunishNoteCommand(this, CommandConfig.COMMAND_PUNISH_NOTE_CONFIGURATION));
@@ -214,8 +216,6 @@ public class DKBansPlugin extends MinecraftPlugin {
                     .add("prefix",prefix));
         });
     }
-
-
 
     private void registerDocumentAdapters(){
         DocumentRegistry.getDefaultContext().registerMappingAdapter(JoinMe.class, MinecraftJoinMe.class);
