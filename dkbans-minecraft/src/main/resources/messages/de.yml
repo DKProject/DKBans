@@ -52,7 +52,7 @@ messages:
   dkbans.onlineTime.self: '${dkbans.prefix.network} &7Deine Onlinezeit beträgt &e{online-time-formatted-short}'
   dkbans.onlineTime.other: '${dkbans.prefix.network} &7Die Onlinezeit von &e{player.displayName} &7beträgt &e{online-time-formatted-short}'
   dkbans.onlineTime.top: '${dkbans.prefix.network} &7Höchste online time &8| &e{page} @for("time" in {onlineTimes},${dkbans.onlineTime.top.loop},"\n","\n")'
-  dkbans.onlineTime.top.loop: ' &8{time.position} &e{time.player.displayName}&8: &e{time.formattedShort}'
+  dkbans.onlineTime.top.loop: ' &8{time.position} &e{time.player.displayName}&8: &7{time.formattedShort}'
 
   dkbans.chat.filter.toFast: '${dkbans.prefix.chat} &cDu schreibst zu schnell!'
   dkbans.chat.filter.repeat: '${dkbans.prefix.chat} &cDu wiederholst dich!'
