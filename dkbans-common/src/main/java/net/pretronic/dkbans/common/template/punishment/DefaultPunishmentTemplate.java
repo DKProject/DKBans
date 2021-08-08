@@ -87,6 +87,7 @@ public class DefaultPunishmentTemplate extends DefaultTemplate implements Punish
                 .reason(getDisplayName())
                 .template(this)
                 .points(addedPoints);
+        System.out.println("SCOPE: "+entry.getScope());
         if(entry.getScope() != null) builder.scope(entry.getScope());
         if(entry instanceof DurationAble) builder.duration(((DurationAble)entry).getDuration());
     }

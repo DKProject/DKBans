@@ -58,6 +58,7 @@ public class DefaultBanPunishmentTemplateEntry extends DefaultPunishmentTemplate
                 } else {
                     duration = DurationProcessor.getStandard().parse(rawDuration);
                 }
+                System.out.println("loaded SCOPE: "+data.getString("scope")+" "+DKBansScope.parse(data.getString("scope")));
                 return new DefaultBanPunishmentTemplateEntry(DKBansScope.parse(data.getString("scope")),duration);
             } catch (IllegalArgumentException exception) {
                 throw new IllegalArgumentException(String.format("Can't parse duration (%s) of ban punishment template entry", rawDuration));
