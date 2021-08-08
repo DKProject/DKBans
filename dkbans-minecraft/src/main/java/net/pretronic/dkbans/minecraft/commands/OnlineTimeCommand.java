@@ -53,7 +53,7 @@ public class OnlineTimeCommand extends BasicCommand implements Completable {
         if(arguments.length > 0){
             if(arguments[0].equalsIgnoreCase("top") && sender.hasPermission(CommandConfig.PERMISSION_ONLINETIME_TOP)){
                 int page = 1;
-                if(arguments.length > 1 && GeneralUtil.isNaturalNumber(arguments[0])) page = Integer.parseInt(arguments[1]);
+                if(arguments.length > 1 && GeneralUtil.isNaturalNumber(arguments[1])) page = Integer.parseInt(arguments[1]);
 
                 List<OnlineTimeTopResult> result = DKBans.getInstance().getPlayerManager().getTopOnlineTime(page,10);
 
