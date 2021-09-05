@@ -102,6 +102,9 @@ public class DKBansConfig {
     public static boolean JOINME_MULTIPLE_LINES = true;
 
     @DocumentKey("joinme.disabledScopes")
+    public static Collection<String> JOINME_DISABLED_SCOPES_NAMES = new ArrayList<>();
+
+    @DocumentIgnored
     public static Collection<DKBansScope> JOINME_DISABLED_SCOPES = new ArrayList<>();
 
     public static String JOINME_COOLDOWN = DurationProcessor.getStandard().formatShort(Duration.ofMinutes(15));
@@ -128,6 +131,8 @@ public class DKBansConfig {
         FORMAT_DATE = new SimpleDateFormat(FORMAT_DATE_PATTERN);
         JOINME_COOLDOWN_DURATION = DurationProcessor.getStandard().parse(JOINME_COOLDOWN).toMillis();
         IP_ADDRESS_BLOCK_ALT_MIN_PLAYTIME_TIME = DurationProcessor.getStandard().parse(IP_ADDRESS_BLOCK_ALT_MIN_PLAYTIME).toMillis();
+
+        for (String scope : JOINME_DISABLED_SCOPES_NAMES) JOINME_DISABLED_SCOPES.add(DKBansScope.parse(scope));
 
         File templates = new File("plugins/DKBans/templates/");
 

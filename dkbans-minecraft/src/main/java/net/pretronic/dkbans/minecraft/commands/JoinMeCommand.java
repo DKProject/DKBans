@@ -21,10 +21,12 @@
 package net.pretronic.dkbans.minecraft.commands;
 
 import net.pretronic.dkbans.api.DKBans;
+import net.pretronic.dkbans.api.DKBansScope;
 import net.pretronic.dkbans.api.joinme.JoinMe;
 import net.pretronic.dkbans.api.player.DKBansPlayer;
 import net.pretronic.dkbans.minecraft.PlayerSettingsKey;
 import net.pretronic.dkbans.minecraft.config.CommandConfig;
+import net.pretronic.dkbans.minecraft.config.DKBansConfig;
 import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.libraries.command.command.BasicCommand;
 import net.pretronic.libraries.command.command.configuration.CommandConfiguration;
@@ -60,6 +62,20 @@ public class JoinMeCommand extends BasicCommand {
                 }
                 player.setSetting("DKBans", PlayerSettingsKey.JOINME_AMOUNT, setting.getIntValue() - 1);
             }
+
+            MinecraftServer server = player.getServer();
+            if(server != null){
+                for (DKBansScope scope : DKBansConfig.JOINME_DISABLED_SCOPES) {
+                    if(scope.getType().equals(DKBansScope.DEFAULT_SERVER) && scope.getName().equalsIgnoreCase(server.getName())){
+                        player.sendMessage(Messages.COMMAND_JOINME_DISABLED,VariableSet.create().addDescribed("server",server.getName()));
+                        return;
+                    }else if(scope.getType().equals(DKBansScope.DEFAULT_SERVER_GROUP) && scope.getName().equalsIgnoreCase(server.getGroup())){
+                        player.sendMessage(Messages.COMMAND_JOINME_DISABLED,VariableSet.create().addDescribed("server",server.getName()));
+                        return;
+                    }
+                }
+            }
+
             sendJoinMe(player);
         } else if(args.length == 1) {
             try {
