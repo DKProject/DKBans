@@ -66,10 +66,10 @@ public class JoinMeCommand extends BasicCommand {
             MinecraftServer server = player.getServer();
             if(server != null){
                 for (DKBansScope scope : DKBansConfig.JOINME_DISABLED_SCOPES) {
-                    if(scope.getType().equals(DKBansScope.DEFAULT_SERVER) && scope.getName().equalsIgnoreCase(server.getName())){
+                    if(scope.getType().equalsIgnoreCase(DKBansScope.DEFAULT_SERVER) && scope.getName().equalsIgnoreCase(server.getName())){
                         player.sendMessage(Messages.COMMAND_JOINME_DISABLED,VariableSet.create().addDescribed("server",server.getName()));
                         return;
-                    }else if(scope.getType().equals(DKBansScope.DEFAULT_SERVER_GROUP) && scope.getName().equalsIgnoreCase(server.getGroup())){
+                    }else if(scope.getType().equalsIgnoreCase(DKBansScope.DEFAULT_SERVER_GROUP) && scope.getName().equalsIgnoreCase(server.getGroup())){
                         player.sendMessage(Messages.COMMAND_JOINME_DISABLED,VariableSet.create().addDescribed("server",server.getName()));
                         return;
                     }
