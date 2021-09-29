@@ -97,7 +97,7 @@ public class MinecraftJoinMe implements JoinMe {
             try{
                 BufferedImage image;
                 try{
-                    image = ImageIO.read(new URL("https://mc-heads.net/avatar/"+playerId+"/8.png"));
+                    image = ImageIO.read(new URL(DKBansConfig.JOINME_HEAD_SOURCE.replace("{uuid}",playerId.toString())));
                 }catch (Exception exception) {
                     throw new OperationFailedException("Could not load joinme image from player "+playerId, exception);
                 }

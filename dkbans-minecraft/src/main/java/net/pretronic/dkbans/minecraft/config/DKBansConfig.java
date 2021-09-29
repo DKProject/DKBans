@@ -98,6 +98,10 @@ public class DKBansConfig {
     @DocumentKey("joinme.headEnabled")
     public static boolean JOINME_HEAD_ENABLED = true;
 
+    //https://mc-heads.net/avatar/"+playerId+"/8.png"  https://minotar.net/avatar/"+playerId+"/8.png
+    @DocumentKey("joinme.headSource")
+    public static String JOINME_HEAD_SOURCE = "https://minotar.net/avatar/{uuid}/8.png";
+
     @DocumentKey("joinme.multipleLines")
     public static boolean JOINME_MULTIPLE_LINES = true;
 
