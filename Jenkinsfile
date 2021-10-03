@@ -120,23 +120,10 @@ pipeline {
                 }
                script {
                     sh """
-                    cp translations/Translations/${PROJECT_NAME}/* translations/ -r -n
-                    rm -Rf translations/Translations
+                    cp translations/Translations/${PROJECT_NAME}/* dkbans-minecraft/src/main/resources/messages/ -r -n --exclude-from=default.yml
+                    rm -Rf translations/
                     """
-                    def files1 = findFiles()
 
-                    files1.each { file1 ->
-                       println "${file1.name}"
-                    }
-                    dir('translations') {
-                        def files = findFiles()
-
-                        files.each { file ->
-                           println "${file.name}"
-                        }
-
-
-                   }
                }
             }
         }
