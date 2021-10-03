@@ -100,7 +100,7 @@ public class MinecraftJoinMe implements JoinMe {
                 BufferedImage image;
                 try{
                     HttpClient client = new HttpClient();
-                    client.setUrl("https://mc-heads.net/avatar/{uuid}/8.png".replace("{uuid}",playerId.toString()));
+                    client.setUrl(DKBansConfig.JOINME_HEAD_SOURCE.replace("{uuid}",playerId.toString()));
                     HttpResult result = client.connect();
                     image = ImageIO.read(result.getInputStream());
                 }catch (Exception exception) {
