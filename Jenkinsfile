@@ -123,9 +123,7 @@ pipeline {
                         def files = findFiles()
 
                         files.each { file ->
-                           if(!file.directory) {
-                              println "${file.name}"
-                           }
+                           println "${file.name}"
                         }
                    }
                }
