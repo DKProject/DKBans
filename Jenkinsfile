@@ -119,11 +119,20 @@ pipeline {
                     """
                 }
                script {
+                    String messageDir = PROJECT_NAME.toLowerCase()+"-minecraft/src/main/resources/messages/"
                     sh """
-                    cp translations/Translations/${PROJECT_NAME}/* dkbans-minecraft/src/main/resources/messages/ -n
+                    cp translations/Translations/${PROJECT_NAME}/* ${messageDir} -n
                     rm -Rf translations/
                     """
+                    dir(messageDir) {
+                       def files = findFiles()
 
+                       files.each{ file ->
+                          if(!file.name.equalsIgnoreCase("default.yml")) {
+                            sh "rm ${file.name}"
+                          }
+                       }
+                    }
                }
             }
         }
