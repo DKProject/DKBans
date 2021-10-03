@@ -119,7 +119,10 @@ pipeline {
                     """
                 }
                script {
-                    sh "cp translations/Translations/${PROJECT_NAME}/* translations/ -r -n"
+                    sh """
+                    cp translations/Translations/${PROJECT_NAME}/* translations/ -r -n
+                    rm -Rf translations/Translations
+                    """
                     dir('translations') {
                         def files = findFiles()
 
