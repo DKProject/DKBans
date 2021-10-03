@@ -29,6 +29,7 @@ String MIRROR_SERVER_TOKEN_CREDENTIAL_ID = "120a9a64-81a7-4557-80bf-161e3ab8b976
 String JAVADOCS_TOKEN_CREDENTIAL_ID = "120a9a64-81a7-4557-80bf-161e3ab8b976"
 String PRETRONIC_CI_SSH_KEY_CREDENTIAL_ID = "1c1bd183-26c9-48aa-94ab-3fe4f0bb39ae"
 
+String MINECRAFT_MESSAGES_DIRECTORY = PROJECT_NAME.toLowerCase()+"-minecraft/src/main/resources/messages/"
 
 //Internal
 String PROJECT_SSH = "UNDEFINED"
@@ -57,6 +58,8 @@ pipeline {
                     if (name == CI_NAME && email == CI_EMAIL) {
                         SKIP = true;
                     }
+                    String change = sh script: 'git diff --name-only MINECRAFT_MESSAGES_DIRECTORY/default.yml', returnStdout: true
+                    println change
                 }
             }
         }
@@ -119,9 +122,9 @@ pipeline {
                     """
                 }
                script {
-                    String messageDir = PROJECT_NAME.toLowerCase()+"-minecraft/src/main/resources/messages/"
+
                     sh """
-                    cp translations/Translations/${PROJECT_NAME}/* ${messageDir} -n
+                    cp translations/Translations/${PROJECT_NAME}/* ${MINECRAFT_MESSAGES_DIRECTORY} -n
                     rm -Rf translations/
                     """
                }
@@ -138,8 +141,7 @@ pipeline {
         stage('Clean Translations') {
             steps {
                 script {
-                    String messageDir = PROJECT_NAME.toLowerCase()+"-minecraft/src/main/resources/messages/"
-                    dir(messageDir) {
+                    dir(MINECRAFT_MESSAGES_DIRECTORY) {
                        def files = findFiles()
 
                        files.each{ file ->
