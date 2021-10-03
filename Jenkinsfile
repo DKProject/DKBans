@@ -118,10 +118,10 @@ pipeline {
                     git clone --single-branch --branch main git@github.com:DKProject/Translations.git
                     """
                 }
-                dir('translations/Translations/${PROJECT_NAME}/') {
+                dir('translations/Translations/${PROJECT_NAME}') {
                    def files = findFiles()
 
-                   files.each{ file ->
+                   files.each { file ->
                       if(!file.directory) {
                          println "${file.name}"
                       }
