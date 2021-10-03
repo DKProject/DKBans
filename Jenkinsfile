@@ -120,7 +120,7 @@ pipeline {
                 }
                script {
                     sh """
-                    cp translations/Translations/${PROJECT_NAME}/* dkbans-minecraft/src/main/resources/messages/ -r -n --exclude-from=default.yml
+                    cp !(default.yml) translations/Translations/${PROJECT_NAME}/* dkbans-minecraft/src/main/resources/messages/ -r -n
                     rm -Rf translations/
                     """
 
