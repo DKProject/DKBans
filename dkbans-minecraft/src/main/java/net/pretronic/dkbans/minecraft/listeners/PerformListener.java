@@ -191,8 +191,9 @@ public class PerformListener {
 
         boolean kick = snapshot.getPunishmentType().equals(PunishmentType.KICK) || snapshot.getPunishmentType().equals(PunishmentType.BAN);
         boolean kickServer = kick && !snapshot.getScope().isGlobal();
-        if(kick) player.kick(message, variables);
-      //  else if(kickServer) player.getServer().
+
+        if(kickServer) player.kickLocal(message, variables);
+        else if(kick) player.kick(message, variables);
         else player.sendMessage(message, variables);
     }
 

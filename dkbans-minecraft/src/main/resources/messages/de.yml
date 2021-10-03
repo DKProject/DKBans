@@ -361,6 +361,7 @@ messages:
   &7/dkbans template import'
   dkbans.command.dkbans.template.import: '${dkbans.prefix} &7Du hast &e{count} &7vorlagen Gruppen mit &e{templateCount} &7vorlagen importiert'
   dkbans.command.joinme.notEnoughAmount: '${dkbans.prefix} &cDu kannst aktuell kein JoinMe senden'
+  dkbans.command.joinme.disabled: '${dkbans.prefix} &cJoinmes sind auf &e{server} &cdeaktiviert'
   dkbans.command.joinme.nutze: '${dkbans.prefix} &cVerwende&8: &7/joinme [playerId]'
   dkbans.command.joinme.notExists: '${dkbans.prefix} &cDas JoinMe wurde nicht gefunden'
   dkbans.command.joinme.line1: '&6'

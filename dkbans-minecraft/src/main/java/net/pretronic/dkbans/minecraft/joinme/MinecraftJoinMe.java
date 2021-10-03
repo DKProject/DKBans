@@ -27,6 +27,8 @@ import net.pretronic.dkbans.minecraft.config.CommandConfig;
 import net.pretronic.dkbans.minecraft.config.DKBansConfig;
 import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.libraries.utility.exception.OperationFailedException;
+import net.pretronic.libraries.utility.http.HttpClient;
+import net.pretronic.libraries.utility.http.HttpResult;
 import org.mcnative.runtime.api.text.ImageText;
 import org.mcnative.runtime.api.text.components.MessageComponent;
 import org.mcnative.runtime.api.text.components.TextComponent;
@@ -97,7 +99,10 @@ public class MinecraftJoinMe implements JoinMe {
             try{
                 BufferedImage image;
                 try{
-                    image = ImageIO.read(new URL("https://mc-heads.net/avatar/"+playerId+"/8.png"));
+                    HttpClient client = new HttpClient();
+                    client.setUrl(DKBansConfig.JOINME_HEAD_SOURCE.replace("{uuid}",playerId.toString()));
+                    HttpResult result = client.connect();
+                    image = ImageIO.read(result.getInputStream());
                 }catch (Exception exception) {
                     throw new OperationFailedException("Could not load joinme image from player "+playerId, exception);
                 }

@@ -98,10 +98,17 @@ public class DKBansConfig {
     @DocumentKey("joinme.headEnabled")
     public static boolean JOINME_HEAD_ENABLED = true;
 
+    //https://mc-heads.net/avatar/"+playerId+"/8.png"  https://minotar.net/avatar/"+playerId+"/8.png
+    @DocumentKey("joinme.headSource")
+    public static String JOINME_HEAD_SOURCE = "https://mc-heads.net/avatar/{uuid}/8.png";
+
     @DocumentKey("joinme.multipleLines")
     public static boolean JOINME_MULTIPLE_LINES = true;
 
     @DocumentKey("joinme.disabledScopes")
+    public static Collection<String> JOINME_DISABLED_SCOPES_NAMES = new ArrayList<>();
+
+    @DocumentIgnored
     public static Collection<DKBansScope> JOINME_DISABLED_SCOPES = new ArrayList<>();
 
     public static String JOINME_COOLDOWN = DurationProcessor.getStandard().formatShort(Duration.ofMinutes(15));
@@ -128,6 +135,8 @@ public class DKBansConfig {
         FORMAT_DATE = new SimpleDateFormat(FORMAT_DATE_PATTERN);
         JOINME_COOLDOWN_DURATION = DurationProcessor.getStandard().parse(JOINME_COOLDOWN).toMillis();
         IP_ADDRESS_BLOCK_ALT_MIN_PLAYTIME_TIME = DurationProcessor.getStandard().parse(IP_ADDRESS_BLOCK_ALT_MIN_PLAYTIME).toMillis();
+
+        for (String scope : JOINME_DISABLED_SCOPES_NAMES) JOINME_DISABLED_SCOPES.add(DKBansScope.parse(scope));
 
         File templates = new File("plugins/DKBans/templates/");
 
