@@ -227,6 +227,7 @@ public class Messages {
     public static MessageComponent<?> COMMAND_JOINME_NOT_ENOUGH_AMOUNT = Text.ofMessageKey("dkbans.command.joinme.notEnoughAmount");
     public static MessageComponent<?> COMMAND_JOINME_USAGE = Text.ofMessageKey("dkbans.command.joinme.usage");
     public static MessageComponent<?> COMMAND_JOINME_NOT_EXIST = Text.ofMessageKey("dkbans.command.joinme.notExists");
+    public static MessageComponent<?> COMMAND_JOINME_DISABLED = Text.ofMessageKey("dkbans.command.joinme.disabled");
 
     public static MessageComponent<?> COMMAND_JOINME_LINE_1 = Text.ofMessageKey("dkbans.command.joinme.line1");
     public static MessageComponent<?> COMMAND_JOINME_LINE_2 = Text.ofMessageKey("dkbans.command.joinme.line2");

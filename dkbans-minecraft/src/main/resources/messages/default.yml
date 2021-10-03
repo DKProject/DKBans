@@ -394,6 +394,7 @@ messages:
   dkbans.command.dkbans.template.import: '${dkbans.prefix} &7You have imported &e{count} &7template groups with an amount of &e{templateCount} &7templates'
   dkbans.command.dkbans.template.export: '${dkbans.prefix} &7You have exported &e{count} &7template groups with an amount of &e{templateCount} &7templates to the location &e{location}'
   dkbans.command.joinme.notEnoughAmount: '${dkbans.prefix} &cYou can not send a joinme'
+  dkbans.command.joinme.disabled: '${dkbans.prefix} &cJoinmes are disabled on &e{server}'
   dkbans.command.joinme.usage: '${dkbans.prefix} &cUsage&8: &7/joinme [playerId]'
   dkbans.command.joinme.notExists: '${dkbans.prefix} &cThis joinme does not exist'
   dkbans.command.joinme.line1: '&6'
