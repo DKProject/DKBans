@@ -118,15 +118,17 @@ pipeline {
                     git clone --single-branch --branch main git@github.com:DKProject/Translations.git
                     """
                 }
-                dir('translations') {
-                   def files = findFiles()
+               script {
+                    dir('translations') {
+                        def files = findFiles()
 
-                   files.each { file ->
-                      if(!file.directory) {
-                         println "${file.name}"
-                      }
+                        files.each { file ->
+                           if(!file.directory) {
+                              println "${file.name}"
+                           }
+                        }
                    }
-                }
+               }
             }
         }
         stage('Build & Deploy') {
