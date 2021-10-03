@@ -106,7 +106,31 @@ pipeline {
                 }
             }
         }
+        stage('Checkout Translations') {
+            when { equals expected: false, actual: SKIP }
+            steps {
+                sshagent([PRETRONIC_CI_SSH_KEY_CREDENTIAL_ID]) {
+                    sh """
+                    if [ -d "translations" ]; then rm -Rf translations; fi
+                    mkdir translations
 
+                    cd translations/
+                    git clone --single-branch --branch main git@github.com:DKProject/Translations.git
+
+
+                    """
+                }
+                dir('translations/Translations/${PROJECT_NAME}/') {
+                   def files = findFiles()
+
+                   files.each{ file ->
+                      if(!file.directory) {
+                         println "${file.name}"
+                      }
+                   }
+                }
+            }
+        }
         stage('Build & Deploy') {
             when { equals expected: false, actual: SKIP }
             steps {
