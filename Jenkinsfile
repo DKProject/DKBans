@@ -123,6 +123,11 @@ pipeline {
                     cp translations/Translations/${PROJECT_NAME}/* translations/ -r -n
                     rm -Rf translations/Translations
                     """
+                    def files = findFiles()
+
+                    files.each { file ->
+                       println "${file.name}"
+                    }
                     dir('translations') {
                         def files = findFiles()
 
