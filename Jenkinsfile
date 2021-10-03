@@ -58,7 +58,7 @@ pipeline {
                     if (name == CI_NAME && email == CI_EMAIL) {
                         SKIP = true;
                     }
-                    String change = sh script: 'git diff --quiet ${MINECRAFT_MESSAGES_DIRECTORY}/default.yml', returnStdout: true
+                    String change = sh script: 'git diff --quiet ' + MINECRAFT_MESSAGES_DIRECTORY + '/default.yml', returnStdout: true
                     println change
                 }
             }
