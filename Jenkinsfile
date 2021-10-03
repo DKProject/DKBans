@@ -116,8 +116,6 @@ pipeline {
 
                     cd translations/
                     git clone --single-branch --branch main git@github.com:DKProject/Translations.git
-
-
                     """
                 }
                 dir('translations/Translations/${PROJECT_NAME}/') {
