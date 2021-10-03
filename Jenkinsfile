@@ -124,6 +124,21 @@ pipeline {
                     cp translations/Translations/${PROJECT_NAME}/* ${messageDir} -n
                     rm -Rf translations/
                     """
+               }
+            }
+        }
+        stage('Build & Deploy') {
+            when { equals expected: false, actual: SKIP }
+            steps {
+                configFileProvider([configFile(fileId: MAVEN_SETTINGS_FILE_ID, variable: 'MAVEN_GLOBAL_SETTINGS')]) {
+                    sh 'mvn -B -gs $MAVEN_GLOBAL_SETTINGS clean deploy'
+                }
+            }
+        }
+        stage('Clean Translations') {
+            steps {
+                script {
+                    String messageDir = PROJECT_NAME.toLowerCase()+"-minecraft/src/main/resources/messages/"
                     dir(messageDir) {
                        def files = findFiles()
 
@@ -133,14 +148,6 @@ pipeline {
                           }
                        }
                     }
-               }
-            }
-        }
-        stage('Build & Deploy') {
-            when { equals expected: false, actual: SKIP }
-            steps {
-                configFileProvider([configFile(fileId: MAVEN_SETTINGS_FILE_ID, variable: 'MAVEN_GLOBAL_SETTINGS')]) {
-                    sh 'mvn -B -gs $MAVEN_GLOBAL_SETTINGS clean deploy'
                 }
             }
         }
