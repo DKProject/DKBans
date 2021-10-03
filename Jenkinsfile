@@ -59,7 +59,7 @@ pipeline {
                         SKIP = true;
                     }
                     String change = sh script: 'git diff --quiet ' + MINECRAFT_MESSAGES_DIRECTORY + '/default.yml', returnStdout: true
-                    println change
+                    println "Changes:"+change
                 }
             }
         }
