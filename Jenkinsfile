@@ -153,6 +153,12 @@ pipeline {
                 }
             }
         }
+        stage('Update default.yml') {
+            when { changeset MINECRAFT_MESSAGES_DIRECTORY + 'default.yml' }
+            steps {
+                println "Default.yml changed"
+            }
+        }
         stage('Publish javadoc') {
             when { equals expected: false, actual: SKIP }
             steps {
