@@ -152,8 +152,12 @@ pipeline {
             }
         }
         stage('Update default.yml to Translation Repository') {
-            when { equals expected: false, actual: SKIP }
-            when { changeset MINECRAFT_MESSAGES_DIRECTORY + 'default.yml' }
+            when {
+              allOf {
+                equals expected: false, actual: SKIP
+                changeset MINECRAFT_MESSAGES_DIRECTORY + 'default.yml'
+              }
+            }
             steps {
                 println "Default.yml changed"
             }
