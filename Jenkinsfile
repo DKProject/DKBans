@@ -166,6 +166,7 @@ pipeline {
                     cd translations/
                     git clone --single-branch --branch main git@github.com:DKProject/Translations.git
 
+                    rm Translations/${PROJECT_NAME}/default.yml
                     cp ../${MINECRAFT_MESSAGES_DIRECTORY}default.yml Translations/${PROJECT_NAME}/default.yml -r -n
 
                     cd Translations/
