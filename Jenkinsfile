@@ -118,9 +118,8 @@ pipeline {
                     cd translations/
                     git clone --single-branch --branch main git@github.com:DKProject/Translations.git
                     """
-                }
+               }
                script {
-
                     sh """
                     cp translations/Translations/${PROJECT_NAME}/* ${MINECRAFT_MESSAGES_DIRECTORY} -n
                     rm -Rf translations/
@@ -159,7 +158,29 @@ pipeline {
               }
             }
             steps {
-                println "Default.yml changed"
+                sshagent([PRETRONIC_CI_SSH_KEY_CREDENTIAL_ID]) {
+                    sh """
+                    if [ -d "translations" ]; then rm -Rf translations; fi
+                    mkdir translations
+
+                    cd translations/
+                    git clone --single-branch --branch main git@github.com:DKProject/Translations.git
+
+                    cp ${MINECRAFT_MESSAGES_DIRECTORY}default.yml translations/Translations/${PROJECT_NAME}/default.yml -r -n
+
+                    cd Translations/
+
+                    git add ${MINECRAFT_MESSAGES_DIRECTORY}default.yml -v
+                    git commit -m 'Updated default.yml' -v
+                    git push origin HEAD:main -v
+                    """
+                }
+                script {
+                    sh """
+                    cp translations/Translations/${PROJECT_NAME}/* ${MINECRAFT_MESSAGES_DIRECTORY} -n
+                    rm -Rf translations/
+                    """
+                }
             }
         }
         stage('Publish javadoc') {
