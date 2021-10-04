@@ -58,8 +58,6 @@ pipeline {
                     if (name == CI_NAME && email == CI_EMAIL) {
                         SKIP = true;
                     }
-                    String change = sh script: 'git diff ' + MINECRAFT_MESSAGES_DIRECTORY + 'default.yml', returnStdout: true
-                    println "Changes:"+change
                 }
             }
         }
@@ -153,7 +151,8 @@ pipeline {
                 }
             }
         }
-        stage('Update default.yml') {
+        stage('Update default.yml to Translation Repository') {
+            when { equals expected: false, actual: SKIP }
             when { changeset MINECRAFT_MESSAGES_DIRECTORY + 'default.yml' }
             steps {
                 println "Default.yml changed"
