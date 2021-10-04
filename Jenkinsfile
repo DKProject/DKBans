@@ -143,7 +143,7 @@ pipeline {
 
                        files.each{ file ->
                           if(!file.name.equalsIgnoreCase("default.yml")) {
-                            sh "rm ${file.name}"
+                            sh "rm ${MINECRAFT_MESSAGES_DIRECTORY}${file.name}"
                           }
                        }
                     }
