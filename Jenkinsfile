@@ -178,7 +178,6 @@ pipeline {
                 }
                 script {
                     sh """
-                    cp translations/Translations/${PROJECT_NAME}/* ${MINECRAFT_MESSAGES_DIRECTORY} -n
                     rm -Rf translations/
                     """
                 }
