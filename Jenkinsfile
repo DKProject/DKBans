@@ -170,7 +170,7 @@ pipeline {
 
                     cd Translations/
 
-                    git add ../${MINECRAFT_MESSAGES_DIRECTORY}default.yml -v
+                    git add . -v
                     git commit -m 'Updated default.yml' -v
                     git push origin HEAD:main -v
                     """
