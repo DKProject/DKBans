@@ -29,7 +29,7 @@ String MIRROR_SERVER_TOKEN_CREDENTIAL_ID = "120a9a64-81a7-4557-80bf-161e3ab8b976
 String JAVADOCS_TOKEN_CREDENTIAL_ID = "120a9a64-81a7-4557-80bf-161e3ab8b976"
 String PRETRONIC_CI_SSH_KEY_CREDENTIAL_ID = "1c1bd183-26c9-48aa-94ab-3fe4f0bb39ae"
 
-String MINECRAFT_MESSAGES_DIRECTORY = "dkbans-minecraft/src/main/resources/messages/"
+String MINECRAFT_MESSAGES_DIRECTORY = PROJECT_NAME.toLowerCase()+"-minecraft/src/main/resources/messages/"
 
 //Internal
 String PROJECT_SSH = "UNDEFINED"
