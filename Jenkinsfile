@@ -29,6 +29,7 @@ String MIRROR_SERVER_TOKEN_CREDENTIAL_ID = "120a9a64-81a7-4557-80bf-161e3ab8b976
 String JAVADOCS_TOKEN_CREDENTIAL_ID = "120a9a64-81a7-4557-80bf-161e3ab8b976"
 String PRETRONIC_CI_SSH_KEY_CREDENTIAL_ID = "1c1bd183-26c9-48aa-94ab-3fe4f0bb39ae"
 
+String MINECRAFT_MESSAGES_DIRECTORY = PROJECT_NAME.toLowerCase()+"-minecraft/src/main/resources/messages/"
 
 //Internal
 String PROJECT_SSH = "UNDEFINED"
@@ -106,12 +107,79 @@ pipeline {
                 }
             }
         }
+        stage('Checkout Translations') {
+            when { equals expected: false, actual: SKIP }
+            steps {
+                sshagent([PRETRONIC_CI_SSH_KEY_CREDENTIAL_ID]) {
+                    sh """
+                    if [ -d "translations" ]; then rm -Rf translations; fi
+                    mkdir translations
 
+                    cd translations/
+                    git clone --single-branch --branch main git@github.com:DKProject/Translations.git
+                    """
+               }
+               script {
+                    sh """
+                    cp translations/Translations/${PROJECT_NAME}/* ${MINECRAFT_MESSAGES_DIRECTORY} -n
+                    rm -Rf translations/
+                    """
+               }
+            }
+        }
         stage('Build & Deploy') {
             when { equals expected: false, actual: SKIP }
             steps {
                 configFileProvider([configFile(fileId: MAVEN_SETTINGS_FILE_ID, variable: 'MAVEN_GLOBAL_SETTINGS')]) {
                     sh 'mvn -B -gs $MAVEN_GLOBAL_SETTINGS clean deploy'
+                }
+            }
+        }
+        stage('Clean Translations') {
+            steps {
+                script {
+                    dir(MINECRAFT_MESSAGES_DIRECTORY) {
+                       def files = findFiles()
+
+                       files.each{ file ->
+                          if(!file.name.equalsIgnoreCase("default.yml")) {
+                            sh "rm ${file.name}"
+                          }
+                       }
+                    }
+                }
+            }
+        }
+        stage('Update default.yml to Translation Repository') {
+            when {
+              allOf {
+                equals expected: false, actual: SKIP
+                changeset MINECRAFT_MESSAGES_DIRECTORY + 'default.yml'
+              }
+            }
+            steps {
+                sshagent([PRETRONIC_CI_SSH_KEY_CREDENTIAL_ID]) {
+                    sh """
+                    if [ -d "translations" ]; then rm -Rf translations; fi
+                    mkdir translations
+
+                    cd translations/
+                    git clone --single-branch --branch main git@github.com:DKProject/Translations.git
+
+                    rm Translations/${PROJECT_NAME}/default.yml
+                    cp ../${MINECRAFT_MESSAGES_DIRECTORY}default.yml Translations/${PROJECT_NAME}/default.yml -r -n
+
+                    cd Translations/
+
+                    git add . -v
+                    git commit -m 'Updated default.yml' -v
+                    git push origin HEAD:main -v
+                    """
+                }
+                script {
+                    sh """
+                    rm -Rf translations/
+                    """
                 }
             }
         }
