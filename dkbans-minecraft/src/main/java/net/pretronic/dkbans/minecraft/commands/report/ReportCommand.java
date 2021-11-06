@@ -132,7 +132,6 @@ public class ReportCommand extends MainCommand implements NotFindable {
         }
     }
 
-
     private void report(OnlineMinecraftPlayer player, OnlineMinecraftPlayer target, PlayerReportEntry reportEntry) {
         if(reportEntry == null) {
             player.sendMessage(Messages.COMMAND_REPORT_ALREADY_REPORTED, VariableSet.create().addDescribed("player", target));
