@@ -27,6 +27,7 @@ import net.pretronic.dkbans.api.template.Template;
 import net.pretronic.dkbans.api.template.TemplateGroup;
 import net.pretronic.dkbans.api.template.report.ReportTemplate;
 import net.pretronic.dkbans.minecraft.commands.util.CommandUtil;
+import net.pretronic.dkbans.minecraft.config.CommandConfig;
 import net.pretronic.dkbans.minecraft.config.Messages;
 import net.pretronic.libraries.command.NotFindable;
 import net.pretronic.libraries.command.command.MainCommand;
@@ -38,6 +39,7 @@ import net.pretronic.libraries.utility.interfaces.ObjectOwner;
 import org.mcnative.runtime.api.player.MinecraftPlayer;
 import org.mcnative.runtime.api.player.OnlineMinecraftPlayer;
 
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
@@ -144,5 +146,11 @@ public class ReportCommand extends MainCommand implements NotFindable {
         player.sendMessage(Messages.COMMAND_REPORT_REPORTED, VariableSet.create()
                 .addDescribed("player", target)
                 .add("reason", reason));
+    }
+
+    @Override
+    public Collection<String> complete(CommandSender sender, String[] args) {
+        if(sender.hasPermission(CommandConfig.PERMISSION_COMMAND_REPORT_STAFF)) return super.complete(sender, args);
+        return CommandUtil.completePlayer(args);
     }
 }
