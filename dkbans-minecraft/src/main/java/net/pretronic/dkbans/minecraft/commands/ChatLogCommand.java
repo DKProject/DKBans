@@ -73,7 +73,7 @@ public class ChatLogCommand extends BasicCommand implements Completable {
             }
             ChatLog chatLog = DKBans.getInstance().getChatLogManager().getPlayerChatLog(player.getUniqueId());
             printChatLog(sender, chatLog, args,Messages.COMMAND_CHATLOG_PLAYER_LIST,player);
-        } else if(args[0].equalsIgnoreCase("server")) {
+        }else if(args[0].equalsIgnoreCase("server")) {
             ChatLog chatLog;
             String server0 = args[1];
             try {
