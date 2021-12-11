@@ -56,14 +56,8 @@ public class FilterCommand extends BasicCommand implements Completable {
                 DKBans.getInstance().getFilterManager().reload();
                 sender.sendMessage(Messages.COMMAND_FILTER_RELOADED);
             }else if(StringUtil.equalsOne(argument,"list","l")){
-
-                int page = 1;
-                if(arguments.length >= 2 && GeneralUtil.isNaturalNumber(arguments[1])){
-                    page = Integer.parseInt(arguments[1]);
-                }
-
                 List<Filter> filters;
-                if(arguments.length >= 2){
+                if(arguments.length >= 2 && !GeneralUtil.isNaturalNumber(arguments[1])){
                     String area = arguments[1];
                     if(!manager.hasAffiliationArea(area)){
                         sender.sendMessage(Messages.COMMAND_FILTER_AFFILIATION_AREA_NOT_FOUND, VariableSet.create()
@@ -74,6 +68,14 @@ public class FilterCommand extends BasicCommand implements Completable {
                 }else{
                     filters = new ArrayList<>(manager.getFilters());
                 }
+
+                int page = 1;
+                if(arguments.length >= 3 && GeneralUtil.isNaturalNumber(arguments[2])){
+                    page = Integer.parseInt(arguments[2]);
+                }else if(arguments.length >= 2 && GeneralUtil.isNaturalNumber(arguments[1])){
+                    page = Integer.parseInt(arguments[1]);
+                }
+
                 int start = (page-1)*25;
                 int end = start+25;
                 if(filters.size() > start){
