@@ -152,12 +152,15 @@ pipeline {
         }
         stage('Update default.yml to Translation Repository') {
             when {
-              allOf {
                 equals expected: false, actual: SKIP
-                changeset MINECRAFT_MESSAGES_DIRECTORY + 'default.yml'
-              }
             }
             steps {
+                script {
+                    String location = MINECRAFT_MESSAGES_DIRECTORY + "default.yml"
+                    String exitCode = sh script: 'git diff -s --exit-code ${location}', returnStdout: true
+                    echo "${exitCode}"
+                }
+
                 sshagent([PRETRONIC_CI_SSH_KEY_CREDENTIAL_ID]) {
                     sh """
                     if [ -d "translations" ]; then rm -Rf translations; fi
