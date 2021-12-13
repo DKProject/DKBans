@@ -136,6 +136,7 @@ pipeline {
             }
         }
         stage('Clean Translations') {
+            when { equals expected: false, actual: SKIP }
             steps {
                 script {
                     dir(MINECRAFT_MESSAGES_DIRECTORY) {
@@ -152,15 +153,12 @@ pipeline {
         }
         stage('Update default.yml to Translation Repository') {
             when {
-                equals expected: false, actual: SKIP
+                allOf {
+                    equals expected: false, actual: SKIP
+                    isGitPathUpdated(MINECRAFT_MESSAGES_DIRECTORY + "default.yml")
+                }
             }
             steps {
-                script {
-                    String location = MINECRAFT_MESSAGES_DIRECTORY + "default.yml"
-                    String exitCode = isGitPathUpdated(location)
-                    echo "${exitCode}"
-                }
-
                 sshagent([PRETRONIC_CI_SSH_KEY_CREDENTIAL_ID]) {
                     sh """
                     if [ -d "translations" ]; then rm -Rf translations; fi
