@@ -157,7 +157,7 @@ pipeline {
             }
             steps {
                 script {
-                    if(isGitPathUpdated(MINECRAFT_MESSAGES_DIRECTORY + "default.yml")) return
+                    if(!isGitPathUpdated(MINECRAFT_MESSAGES_DIRECTORY + "default.yml")) return
                     sshagent([PRETRONIC_CI_SSH_KEY_CREDENTIAL_ID]) {
                         sh """
                         if [ -d "translations" ]; then rm -Rf translations; fi
