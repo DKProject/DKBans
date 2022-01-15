@@ -119,6 +119,7 @@ public class PlayerListener {
         } else {
             PlayerHistoryEntrySnapshotBuilder builder = player.punish().staff(DKBansExecutor.IP_ADDRESS_BLOCK);
             builder.reason(ipAddressBlock.getForReason())
+                    .punishmentType(PunishmentType.BAN)
                     .staff(DKBansExecutor.IP_ADDRESS_BLOCK)
                     .historyType(DKBans.getInstance().getHistoryManager().getHistoryType(DKBansConfig.IP_ADDRESS_BLOCK_HISTORY_TYPE_NAME))
                     .timeout(System.currentTimeMillis()+ipAddressBlock.getForDuration());
