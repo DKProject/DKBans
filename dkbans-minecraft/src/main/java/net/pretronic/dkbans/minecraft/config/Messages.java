@@ -37,6 +37,7 @@ public class Messages {
     public static MessageComponent<?> ERROR_INVALID_DURATION_FORMAT  = Text.ofMessageKey("dkbans.error.invalid.durationFormat");
     public static MessageComponent<?> ERROR_INVALID_NUMBER  = Text.ofMessageKey("dkbans.error.invalid.number");
     public static MessageComponent<?> ERROR_INVALID_BOOLEAN  = Text.ofMessageKey("dkbans.error.invalid.boolean");
+    public static MessageComponent<?> ERROR_INVALID_ID = Text.ofMessageKey("dkbans.error.invalid.id");
     public static MessageComponent<?> ERROR_ONLY_PLAYER = Text.ofMessageKey("dkbans.error.onlyPlayer");
     public static MessageComponent<?> ERROR_ONLY_CONSOLE = Text.ofMessageKey("dkbans.error.onlyConsole");
     public static MessageComponent<?> ERROR_NO_PERMISSIONS = Text.ofMessageKey("dkbans.error.noPermissions");
@@ -216,8 +217,10 @@ public class Messages {
 
 
     public static MessageComponent<?> COMMAND_CHATLOG_USAGE = Text.ofMessageKey("dkbans.command.chatlog.usage");
+    public static MessageComponent<?> COMMAND_CHATLOG_ENTRY_NOT_FOUND = Text.ofMessageKey("dkbans.command.chatlogEntry.notFound");
     public static MessageComponent<?> COMMAND_CHATLOG_PLAYER_LIST = Text.ofMessageKey("dkbans.command.chatlog.player.list");
     public static MessageComponent<?> COMMAND_CHATLOG_SERVER_LIST = Text.ofMessageKey("dkbans.command.chatlog.server.list");
+    public static MessageComponent<?> COMMAND_CHATLOG_ENTRY = Text.ofMessageKey("dkbans.command.chatlog.entry");
 
 
     public static MessageComponent<?> COMMAND_DKBANS_HELP = Text.ofMessageKey("dkbans.command.dkbans.help");

@@ -22,5 +22,4 @@ package net.pretronic.dkbans.api.player.chatlog;
 
 import net.pretronic.dkbans.api.Pagination;
 
-public interface ChatLog extends Pagination<ChatLogEntry> {
-}
+public interface ChatLog extends Pagination<ChatLogEntry> { }
