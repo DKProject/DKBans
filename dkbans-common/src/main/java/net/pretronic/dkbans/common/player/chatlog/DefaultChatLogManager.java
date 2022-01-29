@@ -20,16 +20,28 @@
 
 package net.pretronic.dkbans.common.player.chatlog;
 
+import net.pretronic.databasequery.api.query.result.QueryResultEntry;
 import net.pretronic.dkbans.api.DKBans;
-import net.pretronic.dkbans.api.player.chatlog.ChatLogEntry;
-import net.pretronic.dkbans.api.player.chatlog.ChatLogManager;
-import net.pretronic.dkbans.api.player.chatlog.PlayerChatLog;
-import net.pretronic.dkbans.api.player.chatlog.ServerChatLog;
+import net.pretronic.dkbans.api.player.chatlog.*;
+import net.pretronic.dkbans.common.DefaultDKBans;
 
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 public class DefaultChatLogManager implements ChatLogManager {
+
+    @Override
+    public ChatLogEntry getChatLogEntry(int id) {
+        QueryResultEntry entry = DefaultDKBans.getInstance().getStorage().getPlayerChatLog().find().where("Id", id).execute().firstOrNull();
+        if(entry == null) return null;
+        return new DefaultChatLogEntry(entry.getInt("Id"),
+                entry.getUniqueId("PlayerId"),
+                entry.getString("Message"),
+                entry.getLong("Time"),
+                entry.getString("ServerName"),
+                entry.getUniqueId("ServerId"),
+                entry.getString("FilterAffiliationArea"));
+    }
 
     @Override
     public ServerChatLog getServerChatLog(String serverName, UUID serverId) {

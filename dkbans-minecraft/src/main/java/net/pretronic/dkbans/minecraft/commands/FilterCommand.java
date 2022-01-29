@@ -34,6 +34,7 @@ import net.pretronic.libraries.utility.GeneralUtil;
 import net.pretronic.libraries.utility.StringUtil;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -55,20 +56,37 @@ public class FilterCommand extends BasicCommand implements Completable {
                 DKBans.getInstance().getFilterManager().reload();
                 sender.sendMessage(Messages.COMMAND_FILTER_RELOADED);
             }else if(StringUtil.equalsOne(argument,"list","l")){
-
-                Collection<Filter> filters;
-                if(arguments.length >= 2){
+                List<Filter> filters;
+                if(arguments.length >= 2 && !GeneralUtil.isNaturalNumber(arguments[1])){
                     String area = arguments[1];
                     if(!manager.hasAffiliationArea(area)){
                         sender.sendMessage(Messages.COMMAND_FILTER_AFFILIATION_AREA_NOT_FOUND, VariableSet.create()
                                 .add("area",area));
                         return;
                     }
-                    filters = manager.getFilters(area);
+                    filters = new ArrayList<>(manager.getFilters(area));
                 }else{
-                    filters = manager.getFilters();
+                    filters = new ArrayList<>(manager.getFilters());
                 }
+
+                int page = 1;
+                if(arguments.length >= 3 && GeneralUtil.isNaturalNumber(arguments[2])){
+                    page = Integer.parseInt(arguments[2]);
+                }else if(arguments.length >= 2 && GeneralUtil.isNaturalNumber(arguments[1])){
+                    page = Integer.parseInt(arguments[1]);
+                }
+
+                int start = (page-1)*25;
+                int end = start+25;
+                if(filters.size() > start){
+                    filters = filters.subList(start,end >= filters.size() ? filters.size()-1 : end);
+                }else{
+                    filters = new ArrayList<>();
+                }
+
                 sender.sendMessage(Messages.COMMAND_FILTER_LIST,VariableSet.create()
+                        .add("page",page)
+                        .add("nextPage",page+1)
                         .addDescribed("filters",filters));
                 return;
 

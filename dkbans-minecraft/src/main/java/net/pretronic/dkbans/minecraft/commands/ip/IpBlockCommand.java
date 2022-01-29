@@ -88,7 +88,7 @@ public class IpBlockCommand extends BasicCommand {
                         ,duration,CommandUtil.getExecutor(sender), CommandUtil.readStringFromArguments(arguments,6),forDuration);
             }else if(action.equalsIgnoreCase("permanently") && arguments.length > 4){
                 result = DKBans.getInstance().getIpAddressManager().blockIpAddress(IpAddressBlockType.BAN,address,reason
-                        ,duration,CommandUtil.getExecutor(sender), CommandUtil.readStringFromArguments(arguments,5));
+                        ,duration,CommandUtil.getExecutor(sender), CommandUtil.readStringFromArguments(arguments,4));
             }else{
                 sender.sendMessage(Messages.COMMAND_IP_BLOCK_HELP);
                 return;

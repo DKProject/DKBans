@@ -128,7 +128,9 @@ public class ReportCommand extends MainCommand implements NotFindable {
             List<Template> availableTemplates = Iterators.filter(this.templateGroup.getTemplates(), template -> !template.isHidden()
                     && template instanceof ReportTemplate && player.hasPermission(template.getPermission()));
             availableTemplates.sort(Comparator.comparingInt(Template::getInGroupId));
-            player.sendMessage(Messages.COMMAND_REPORT_LIST_TEMPLATE, VariableSet.create().addDescribed("templates", availableTemplates));
+            player.sendMessage(Messages.COMMAND_REPORT_LIST_TEMPLATE, VariableSet.create()
+                    .add("command",getConfiguration().getName())
+                    .addDescribed("templates", availableTemplates));
         }
     }
 

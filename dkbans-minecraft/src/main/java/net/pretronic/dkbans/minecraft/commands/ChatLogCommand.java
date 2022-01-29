@@ -59,11 +59,15 @@ public class ChatLogCommand extends BasicCommand implements Completable {
 
     @Override
     public void execute(CommandSender sender, String[] args) {
-        if(args.length < 2) {
+        if(args.length < 1) {
             sender.sendMessage(Messages.COMMAND_CHATLOG_USAGE);
             return;
         }
         if(args[0].equalsIgnoreCase("player")) {
+            if(args.length < 2) {
+                sender.sendMessage(Messages.COMMAND_CHATLOG_USAGE);
+                return;
+            }
             String playerName = args[1];
             MinecraftPlayer player = McNative.getInstance().getPlayerManager().getPlayer(playerName);
             if(player == null) {
@@ -72,8 +76,16 @@ public class ChatLogCommand extends BasicCommand implements Completable {
                 return;
             }
             ChatLog chatLog = DKBans.getInstance().getChatLogManager().getPlayerChatLog(player.getUniqueId());
-            printChatLog(sender, chatLog, args,Messages.COMMAND_CHATLOG_PLAYER_LIST,player);
-        } else if(args[0].equalsIgnoreCase("server")) {
+            int page = 1;
+            if(args.length == 3) {
+                page = Convert.toInteger(args[2]);
+            }
+            printChatLog(sender, chatLog, page);
+        }else if(args[0].equalsIgnoreCase("server")) {
+            if(args.length < 2) {
+                sender.sendMessage(Messages.COMMAND_CHATLOG_USAGE);
+                return;
+            }
             ChatLog chatLog;
             String server0 = args[1];
             try {
@@ -82,9 +94,26 @@ public class ChatLogCommand extends BasicCommand implements Completable {
             } catch (Exception ignored) {
                 chatLog = DKBans.getInstance().getChatLogManager().getServerChatLog(server0);
             }
-            printChatLog(sender, chatLog, args,Messages.COMMAND_CHATLOG_SERVER_LIST,null);
+            int page = 1;
+            if(args.length == 3) {
+                page = Convert.toInteger(args[2]);
+            }
+            printChatLog(sender, chatLog, page);
         } else {
-            sender.sendMessage(Messages.COMMAND_CHATLOG_USAGE);
+            String rawChatLogId = args[0];
+            int chatLogId;
+            try {
+                chatLogId = Convert.toInteger(rawChatLogId);
+            } catch (IllegalArgumentException ignored) {
+                sender.sendMessage(Messages.COMMAND_CHATLOG_USAGE);
+                return;
+            }
+            ChatLogEntry chatLogEntry = DKBans.getInstance().getChatLogManager().getChatLogEntry(chatLogId);
+            if(chatLogEntry == null) {
+                sender.sendMessage(Messages.COMMAND_CHATLOG_ENTRY_NOT_FOUND, VariableSet.create().add("id", chatLogId));
+                return;
+            }
+            sender.sendMessage(Messages.COMMAND_CHATLOG_ENTRY, VariableSet.create().addDescribed("entry", chatLogEntry));
         }
     }
 
@@ -117,24 +146,25 @@ public class ChatLogCommand extends BasicCommand implements Completable {
         return Collections.emptyList();
     }
 
-    private void printChatLog(CommandSender sender, ChatLog chatLog, String[] args, MessageComponent<?> message,MinecraftPlayer player) {
-        int page = 1;
-        if(args.length == 3) {
-            page = Convert.toInteger(args[2]);
-        }
+    private void printChatLog(CommandSender sender, ChatLog chatLog, int page) {
+        MessageComponent<?> message;
+
         List<ChatLogEntry> entries = chatLog.getPage(page, 10);
         VariableSet variableSet = VariableSet.create()
                 .add("page",page)
                 .add("prefix",Messages.PREFIX_CHAT)
                 .addDescribed("entries", entries);
-        if(player != null) variableSet.addDescribed("player",player);
         if(chatLog instanceof PlayerChatLog) {
+            message = Messages.COMMAND_CHATLOG_PLAYER_LIST;
             variableSet.addDescribed("player", ((PlayerChatLog)chatLog).getPlayer());
         } else if(chatLog instanceof ServerChatLog) {
+            message = Messages.COMMAND_CHATLOG_SERVER_LIST;
             variableSet.add("serverName", ((ServerChatLog)chatLog).getServerName());
             if(((ServerChatLog)chatLog).getServerId() != null){
                 variableSet.add("serverId", ((ServerChatLog)chatLog).getServerId().toString());
             }
+        } else {
+            throw new IllegalArgumentException("Can't print chat log for " + chatLog);
         }
         sender.sendMessage(message, variableSet);
     }
