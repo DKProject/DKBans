@@ -202,7 +202,7 @@ pipeline {
                                     responseHandle: 'NONE',
                                     uploadFile: "target/${name}-${VERSION}-javadoc.jar",
                                     customHeaders:[[name:'token', value:"${SECRET}", maskValue:true]],
-                                    url: "https://pretronic.net/javadoc/${JAVADOCS_NAME}/${VERSION}/create")
+                                    url: "https://192.168.1.26:8001/javadoc/${JAVADOCS_NAME}/${VERSION}/create")
                         }
                     }
                 }
