@@ -157,28 +157,33 @@ pipeline {
             }
             steps {
                 script {
-                    if(!isGitPathUpdated(MINECRAFT_MESSAGES_DIRECTORY + "default.yml")) return
-                    sshagent([PRETRONIC_CI_SSH_KEY_CREDENTIAL_ID]) {
-                        sh """
-                        if [ -d "translations" ]; then rm -Rf translations; fi
-                        mkdir translations
+                        try {
+                            sshagent([PRETRONIC_CI_SSH_KEY_CREDENTIAL_ID]) {
+                                sh """
+                                if [ -d "translations" ]; then rm -Rf translations; fi
+                                mkdir translations
 
-                        cd translations/
-                        git clone --single-branch --branch main git@github.com:DKProject/Translations.git
+                                cd translations/
+                                git clone --single-branch --branch main git@github.com:DKProject/Translations.git
 
-                        rm Translations/${PROJECT_NAME}/default.yml
-                        cp ../${MINECRAFT_MESSAGES_DIRECTORY}default.yml Translations/${PROJECT_NAME}/default.yml -r -n
+                                rm Translations/${PROJECT_NAME}/default.yml
+                                cp ../${MINECRAFT_MESSAGES_DIRECTORY}default.yml Translations/${PROJECT_NAME}/default.yml -r -n
 
-                        cd Translations/
+                                cd Translations/
 
-                        git add . -v
-                        git commit -m 'Updated default.yml' -v
-                        git push origin HEAD:main -v
-                        """
+                                git add . -v
+                                git commit -m 'Updated default.yml' -v
+                                git push origin HEAD:main -v
+                                """
+                            }
+                            sh """
+                            rm -Rf translations/
+                            """
+                        } catch(err) {
+                            echo err.getMessage();
+                        }
+
                     }
-                    sh """
-                    rm -Rf translations/
-                    """
                 }
             }
         }
@@ -327,7 +332,7 @@ pipeline {
                                 mkdir tempDevelopment
                                 cd tempDevelopment/
                                 git clone --single-branch --branch $BRANCH_DEVELOPMENT $PROJECT_SSH
-                                
+
                                 cd $PROJECT_NAME/
                                 mvn versions:set -DgenerateBackupPoms=false -DnewVersion=$version
                                 git add . -v
