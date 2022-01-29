@@ -136,6 +136,7 @@ pipeline {
             }
         }
         stage('Clean Translations') {
+            when { equals expected: false, actual: SKIP }
             steps {
                 script {
                     dir(MINECRAFT_MESSAGES_DIRECTORY) {
@@ -152,34 +153,35 @@ pipeline {
         }
         stage('Update default.yml to Translation Repository') {
             when {
-              allOf {
                 equals expected: false, actual: SKIP
-                changeset MINECRAFT_MESSAGES_DIRECTORY + 'default.yml'
-              }
             }
             steps {
-                sshagent([PRETRONIC_CI_SSH_KEY_CREDENTIAL_ID]) {
-                    sh """
-                    if [ -d "translations" ]; then rm -Rf translations; fi
-                    mkdir translations
-
-                    cd translations/
-                    git clone --single-branch --branch main git@github.com:DKProject/Translations.git
-
-                    rm Translations/${PROJECT_NAME}/default.yml
-                    cp ../${MINECRAFT_MESSAGES_DIRECTORY}default.yml Translations/${PROJECT_NAME}/default.yml -r -n
-
-                    cd Translations/
-
-                    git add . -v
-                    git commit -m 'Updated default.yml' -v
-                    git push origin HEAD:main -v
-                    """
-                }
                 script {
-                    sh """
-                    rm -Rf translations/
-                    """
+                    try {
+                        sshagent([PRETRONIC_CI_SSH_KEY_CREDENTIAL_ID]) {
+                            sh """
+                            if [ -d "translations" ]; then rm -Rf translations; fi
+                            mkdir translations
+
+                            cd translations/
+                            git clone --single-branch --branch main git@github.com:DKProject/Translations.git
+
+                            rm Translations/${PROJECT_NAME}/default.yml
+                            cp ../${MINECRAFT_MESSAGES_DIRECTORY}default.yml Translations/${PROJECT_NAME}/default.yml -r -n
+
+                            cd Translations/
+
+                            git add . -v
+                            git commit -m 'Updated default.yml' -v
+                            git push origin HEAD:main -v
+                            """
+                        }
+                        sh """
+                        rm -Rf translations/
+                        """
+                    } catch(err) {
+                        echo err.getMessage();
+                    }
                 }
             }
         }
@@ -198,7 +200,7 @@ pipeline {
                                     responseHandle: 'NONE',
                                     uploadFile: "target/${name}-${VERSION}-javadoc.jar",
                                     customHeaders:[[name:'token', value:"${SECRET}", maskValue:true]],
-                                    url: "https://pretronic.net/javadoc/${JAVADOCS_NAME}/${VERSION}/create")
+                                    url: "https://192.168.1.26:8001/javadoc/${JAVADOCS_NAME}/${VERSION}/create")
                         }
                     }
                 }
@@ -328,7 +330,7 @@ pipeline {
                                 mkdir tempDevelopment
                                 cd tempDevelopment/
                                 git clone --single-branch --branch $BRANCH_DEVELOPMENT $PROJECT_SSH
-                                
+
                                 cd $PROJECT_NAME/
                                 mvn versions:set -DgenerateBackupPoms=false -DnewVersion=$version
                                 git add . -v
@@ -344,5 +346,20 @@ pipeline {
                 }
             }
         }
+    }
+}
+
+/*
+ * Check a folder if changed in the latest commit.
+ * Returns true if changed, or false if no changes.
+ */
+def isGitPathUpdated(path) {
+    try {
+        // git diff will return 1 for changes (failure) which is caught in catch, or
+        // 0 meaning no changes
+        sh "git diff --quiet --exit-code HEAD~1..HEAD ${path}"
+        return false
+    } catch (err) {
+        return true
     }
 }
