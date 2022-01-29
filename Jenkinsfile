@@ -157,32 +157,30 @@ pipeline {
             }
             steps {
                 script {
-                        try {
-                            sshagent([PRETRONIC_CI_SSH_KEY_CREDENTIAL_ID]) {
-                                sh """
-                                if [ -d "translations" ]; then rm -Rf translations; fi
-                                mkdir translations
-
-                                cd translations/
-                                git clone --single-branch --branch main git@github.com:DKProject/Translations.git
-
-                                rm Translations/${PROJECT_NAME}/default.yml
-                                cp ../${MINECRAFT_MESSAGES_DIRECTORY}default.yml Translations/${PROJECT_NAME}/default.yml -r -n
-
-                                cd Translations/
-
-                                git add . -v
-                                git commit -m 'Updated default.yml' -v
-                                git push origin HEAD:main -v
-                                """
-                            }
+                    try {
+                        sshagent([PRETRONIC_CI_SSH_KEY_CREDENTIAL_ID]) {
                             sh """
-                            rm -Rf translations/
-                            """
-                        } catch(err) {
-                            echo err.getMessage();
-                        }
+                            if [ -d "translations" ]; then rm -Rf translations; fi
+                            mkdir translations
 
+                            cd translations/
+                            git clone --single-branch --branch main git@github.com:DKProject/Translations.git
+
+                            rm Translations/${PROJECT_NAME}/default.yml
+                            cp ../${MINECRAFT_MESSAGES_DIRECTORY}default.yml Translations/${PROJECT_NAME}/default.yml -r -n
+
+                            cd Translations/
+
+                            git add . -v
+                            git commit -m 'Updated default.yml' -v
+                            git push origin HEAD:main -v
+                            """
+                        }
+                        sh """
+                        rm -Rf translations/
+                        """
+                    } catch(err) {
+                        echo err.getMessage();
                     }
                 }
             }
