@@ -25,6 +25,8 @@ import java.util.concurrent.CompletableFuture;
 
 public interface ChatLogManager {
 
+    ChatLogEntry getChatLogEntry(int id);
+
     ServerChatLog getServerChatLog(String serverName, UUID serverId);
 
     ServerChatLog getServerChatLog(String serverName);

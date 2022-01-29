@@ -80,6 +80,7 @@ public class DescriberRegistrar {
 
         VariableDescriber<DefaultChatLogEntry> chatEntryDescriber = VariableDescriberRegistry.registerDescriber(DefaultChatLogEntry.class);
         chatEntryDescriber.registerFunction("timeFormatted", entry -> DKBansConfig.FORMAT_DATE.format(entry.getTime()));
+        chatEntryDescriber.registerFunction("blocked", DefaultChatLogEntry::isBlocked);
 
         VariableDescriber<DefaultDKBansPlayer> playerDescriber = VariableDescriberRegistry.registerDescriber(DefaultDKBansPlayer.class);
         playerDescriber.setForwardFunction(player -> McNative.getInstance().getPlayerManager().getPlayer(player.getUniqueId()));
