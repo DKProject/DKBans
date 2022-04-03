@@ -80,18 +80,18 @@ public class CommandUtil {
     public static boolean checkBypass(CommandSender sender, DKBansPlayer player) {
         if (player.hasBypass() && !sender.hasPermission(CommandConfig.PERMISSION_BYPASS_IGNORE)) {
             sender.sendMessage(Messages.PLAYER_HAS_BYPASS, VariableSet.create().addDescribed("player", player));
-            if(McNative.getInstance().isNetworkAvailable()) {
+            if (McNative.getInstance().isNetworkAvailable()) {
                 McNative.getInstance().getNetwork().broadcast(CommandConfig.PERMISSION_BYPASS_IGNORE, Messages.PLAYER_HAS_BYPASS_NOTIFICATION
                         , VariableSet.create()
                                 .addDescribed("sender", sender)
-                                .add("target", player)
-                                .add("prefix", Messages.PREFIX));
+                                .addDescribed("target", player)
+                                .addDescribed("prefix", Messages.PREFIX));
             } else {
                 McNative.getInstance().getLocal().broadcast(CommandConfig.PERMISSION_BYPASS_IGNORE, Messages.PLAYER_HAS_BYPASS_NOTIFICATION
                         , VariableSet.create()
                                 .addDescribed("sender", sender)
-                                .add("target", player)
-                                .add("prefix", Messages.PREFIX));
+                                .addDescribed("target", player)
+                                .addDescribed("prefix", Messages.PREFIX));
             }
             return true;
         }
