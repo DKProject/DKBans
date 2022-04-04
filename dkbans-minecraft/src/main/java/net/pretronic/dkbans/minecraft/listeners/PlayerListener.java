@@ -340,7 +340,8 @@ public class PlayerListener {
     @Listener
     public void onTabComplete(MinecraftPlayerTabCompleteResponseEvent event){
         if(!DKBansConfig.CHAT_TAB_COMPLETE_ENABLED) return;
-        if(event.getCursor() != null && event.getCursor().startsWith("/") && !event.getCursor().contains(" ")){
+        String[] args = event.getCursor().split(" ");
+        if(args.length == 1 && args[0].startsWith("/")){
             boolean bypass = DKBansConfig.CHAT_TAB_COMPLETE_MODE_ALLOW_BYPASS && event.getPlayer().hasPermission(CommandConfig.PERMISSION_CHAT_BYPASS_TAB_COMPLETION);;
             if(!bypass){
                 event.getSuggestions().clear();
