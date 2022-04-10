@@ -113,6 +113,7 @@ public class JoinMeCommand extends BasicCommand {
     }
 
     private void sendJoinMe(OnlineMinecraftPlayer player) {
+        DKBans.getInstance().getJoinMeManager().removeJoinMeIfExits(player.getUniqueId());
         DKBans.getInstance().getJoinMeManager().sendJoinMe(player.getAs(DKBansPlayer.class), player.getServer().getName(), 5*1000*60);
     }
 }

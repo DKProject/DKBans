@@ -56,6 +56,7 @@ public class ReportDeclineCommand extends BasicCommand {
 
         report.decline(CommandUtil.getExecutor(sender));
         sender.sendMessage(Messages.COMMAND_REPORT_DECLINE, VariableSet.create()
-                .addDescribed("report", report));
+                .addDescribed("report", report)
+                .addDescribed("target", report.getPlayer()));
     }
 }
