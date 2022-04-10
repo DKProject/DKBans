@@ -60,6 +60,15 @@ public class MinecraftJoinMeManager implements JoinMeManager {
     }
 
     @Override
+    public void removeJoinMeIfExits(UUID playerID) {
+        Iterators.forEach(joinMes, joinMe -> {
+            if(joinMe.getPlayer().getUniqueId().equals(playerID)) {
+                joinMes.remove(joinMe);
+            }
+        });
+    }
+
+    @Override
     public JoinMe sendJoinMe(DKBansPlayer player, String server, long timeout) {
         MinecraftJoinMe joinMe = new MinecraftJoinMe(player, server, timeout);
         DKBans.getInstance().getEventBus().callEvent(DKBansJoinMeCreateEvent.class,new DefaultDKBansJoinMeCreateEvent(joinMe));

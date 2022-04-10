@@ -27,7 +27,7 @@
     <groupId>net.pretronic.dkbans</groupId>
     <artifactId>DKBans</artifactId>
     <packaging>pom</packaging>
-    <version>1.23.7.629</version>
+    <version>1.24.7.639-BETA</version>
 
     <modules>
         <module>dkbans-api</module>
@@ -67,7 +67,7 @@
         <dependency.pretronic.databasequery>1.2.59.86-SNAPSHOT</dependency.pretronic.databasequery>
 
         <dependency.mcnative.runtime>1.15.16.211-SNAPSHOT</dependency.mcnative.runtime>
-        <dependency.mcnative.api>1.7.5.216-SNAPSHOT</dependency.mcnative.api>
+        <dependency.mcnative.api>1.7.9.220-SNAPSHOT</dependency.mcnative.api>
         <dependency.mcnative.licensing>1.0.2.4-SNAPSHOT</dependency.mcnative.licensing>
         <dependency.mcnative.buildtool>1.0.0.5</dependency.mcnative.buildtool>
         <dependency.mcnative.loader>1.7.75.45</dependency.mcnative.loader>
@@ -78,5 +78,4 @@
         <plugin.maven.shade>3.2.2</plugin.maven.shade>
         <plugin.maven.deploy>3.0.0-M1</plugin.maven.deploy>
     </properties>
-
 </project>
