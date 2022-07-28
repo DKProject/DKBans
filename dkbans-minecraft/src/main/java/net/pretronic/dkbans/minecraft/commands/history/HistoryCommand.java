@@ -129,15 +129,15 @@ public class HistoryCommand extends BasicCommand implements Completable {
         int maxEntries;
 
         if(page != 0)
-            maxEntries = page * 22;
+            maxEntries = page * 21;
         else
-            maxEntries = 22;
+            maxEntries = 21;
 
         boolean hasNextPage = entries.size() > maxEntries;
         boolean hasPreviousPage = page != 0;
 
         //remove all irrelevant entries
-        entries.removeIf(entry -> entries.indexOf(entry) < (maxEntries - 22) || entries.indexOf(entry) > maxEntries);
+        entries.removeIf(entry -> entries.indexOf(entry) < (maxEntries - 21) || entries.indexOf(entry) > maxEntries);
 
         //send the message
         sender.sendMessage(Messages.COMMAND_HISTORY_LIST, VariableSet.create()
