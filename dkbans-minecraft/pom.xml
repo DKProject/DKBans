@@ -103,7 +103,6 @@
             <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
-
         <dependency>
             <groupId>net.pretronic.dkbans</groupId>
             <artifactId>dkbans-common</artifactId>

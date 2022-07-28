@@ -32,9 +32,11 @@ import net.pretronic.libraries.command.sender.CommandSender;
 import net.pretronic.libraries.message.bml.variable.VariableSet;
 import net.pretronic.libraries.utility.GeneralUtil;
 import net.pretronic.libraries.utility.interfaces.ObjectOwner;
+import org.bukkit.entity.Player;
 import org.mcnative.runtime.api.player.MinecraftPlayer;
 
 import java.util.Collection;
+import java.util.List;
 
 public class HistoryCommand extends BasicCommand implements Completable {
 
@@ -55,12 +57,27 @@ public class HistoryCommand extends BasicCommand implements Completable {
 
         PlayerHistory history = dkBansPlayer.getHistory();
 
+        int page = 0;
+
         if(arguments.length > 1){
-            if(!GeneralUtil.isNaturalNumber(arguments[1])){
+
+            if(arguments[1].startsWith("--page:")) {
+
+                try {
+                    page = Integer.parseInt(arguments[1].split(":")[1]);
+                } catch (NumberFormatException e) {
+                    //ignore
+                }
+                this.sendHistoryMessage(sender, player, page, history.getEntries());
+                return;
+            }
+
+            if(!GeneralUtil.isNaturalNumber(arguments[1])) {
                 sender.sendMessage(Messages.ERROR_INVALID_NUMBER,VariableSet.create()
                         .add("prefix",Messages.PREFIX));
                return;
             }
+
             int id = Integer.parseInt(arguments[1]);
 
             PlayerHistoryEntry entry = history.getEntry(id);
@@ -98,15 +115,39 @@ public class HistoryCommand extends BasicCommand implements Completable {
                         .addDescribed("entry",entry));
             }
         }else{
-            Collection<PlayerHistoryEntry> entries = history.getEntries();
-            sender.sendMessage(Messages.COMMAND_HISTORY_LIST, VariableSet.create()
-                    .addDescribed("player",player)
-                    .addDescribed("entries",entries));
+            this.sendHistoryMessage(sender, player, page, history.getEntries());
         }
     }
 
     @Override
     public Collection<String> complete(CommandSender sender, String[] args) {
         return CommandUtil.completePlayer(args);
+    }
+
+    private void sendHistoryMessage(CommandSender sender, MinecraftPlayer player, int page, List<PlayerHistoryEntry> entries) {
+
+        int maxEntries;
+
+        if(page != 0)
+            maxEntries = page * 22;
+        else
+            maxEntries = 22;
+
+        boolean hasNextPage = entries.size() > maxEntries;
+        boolean hasPreviousPage = page != 0;
+
+        //remove all irrelevant entries
+        entries.removeIf(entry -> entries.indexOf(entry) < (maxEntries - 22) || entries.indexOf(entry) > maxEntries);
+
+        //send the message
+        sender.sendMessage(Messages.COMMAND_HISTORY_LIST, VariableSet.create()
+                .add("prefix",Messages.PREFIX)
+                .addDescribed("hasPages", hasNextPage || hasPreviousPage)
+                .addDescribed("previous", page-1)
+                .addDescribed("next", page+1)
+                .addDescribed("hasNext", hasNextPage)
+                .addDescribed("hasPrevious", hasPreviousPage)
+                .addDescribed("player", player)
+                .addDescribed("entries", entries));
     }
 }
