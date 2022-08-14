@@ -72,6 +72,7 @@
         <dependency.mcnative.buildtool>1.0.0.5</dependency.mcnative.buildtool>
         <dependency.mcnative.loader>1.7.75.45</dependency.mcnative.loader>
 
+
         <!-- Maven plugins -->
         <plugin.maven.compiler>3.8.1</plugin.maven.compiler>
         <plugin.maven.source>3.2.1</plugin.maven.source>
